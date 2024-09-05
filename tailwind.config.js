@@ -13,7 +13,17 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                poppins : ['Poppins', ...defaultTheme.fontFamily.sans],
+                lidlSemibold : ['Lidl Font Cond Pro Semibold',...defaultTheme.fontFamily.sans],
+                lidl : ['Lidl Font Cond Pro',...defaultTheme.fontFamily.sans],
             },
+            width : {
+                '116' : '29rem',
+            },
+            height : {
+                '136' : '38rem',
+                '135' : '37.5rem'
+            }
         },
     },
 

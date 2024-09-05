@@ -1,3 +1,21 @@
+@font-face {
+    font-family: 'Lidl Font Cond Pro Semibold';
+    src: url("/resources/fonts/Lidl Font Cond Pro Semibold/Lidl Font Cond Pro Semibold.ttf") format("truetype");
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+}
+
+@font-face {
+    font-family: 'Lidl Font Cond Pro';
+    src: url("/resources/fonts/Lidl Font Cond Pro/Lidl Font Cond Pro.ttf") format("truetype");
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+}
+
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
