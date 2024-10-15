@@ -1,0 +1,24 @@
+{
+    "clicks": [
+        {
+            "data": {
+                "url": "https://example.com/product-1",
+                "title": "Product 1"
+            },
+            "x": 100,
+            "y": 200,
+            "width": 150,
+            "height": 50
+        },
+        {
+            "data": {
+                "url": "https://example.com/product-2",
+                "title": "Product 2"
+            },
+            "x": 300,
+            "y": 250,
+            "width": 200,
+            "height": 80
+        }
+    ]
+}

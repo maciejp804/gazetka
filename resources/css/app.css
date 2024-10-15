@@ -1,3 +1,10 @@
+@import '@fortawesome/fontawesome-free/css/brands.css';
+@import '@fortawesome/fontawesome-free/css/solid.css';
+@import '@fortawesome/fontawesome-free/css/regular.css';
+@import '@fortawesome/fontawesome-free/css/fontawesome.css';
+
+
+
 @font-face {
     font-family: 'Lidl Font Cond Pro Semibold';
     src: url("/resources/fonts/Lidl Font Cond Pro Semibold/Lidl Font Cond Pro Semibold.ttf") format("truetype");
@@ -14,8 +21,18 @@
     font-display:swap;
 }
 
+[x-cloak] { display: none !important; }
 
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.hidden-slide {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+/* ... */
+
