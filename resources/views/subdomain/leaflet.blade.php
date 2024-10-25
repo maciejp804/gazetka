@@ -24,7 +24,7 @@
 
     </style>
     <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs>Gazetka promocyjna z Dino "Najbliżej Ciebie" (ważna od 10-10 do 16-10-2024)</x-breadcrumbs>
+    <x-breadcrumbs :subdomain="$subdomain">Gazetka promocyjna z Dino "Najbliżej Ciebie" (ważna od 10-10 do 16-10-2024)</x-breadcrumbs>
     <x-ad-1/>
     <div class="flex mb-2">
 
@@ -39,9 +39,9 @@
     </div>
     <div class="flex mb-5">
         <x-ad-2 justify="justify-end mt-10"/>
-        <x-div-1060>
+        <x-div-1060-leaftet>
             <x-section>
-                <x-leaflet-subdomain swiperClass="swiper-container" :is-mobile="$isMobile" :pages="$pages" :inserts="$inserts" :ads="$ads" :insert-data="$insertData" :width="$width" :height="$height"/>
+                <x-leaflet-subdomain swiperClass="swiper-container" :is-mobile="$isMobile" :pages="$pages" :inserts="$inserts" :ads="$ads" :insert-data="$insertData"/>
             </x-section>
 
             <x-section class="my-4">
@@ -51,15 +51,11 @@
             </x-section>
 
             <x-section class="my-4">
-                <x-h2-title class="flex" >Inne gazetki danej sieci</x-h2-title>
-                <x-swiper-leaflets-promo />
-                <x-see-more class="lg:hidden pb-2" href="#">Zobacz wszystkie</x-see-more>
+               <x-swiper-leaflets-promo title="Inne gazetki danej sieci"/>
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex" >Zobacz inne aktualne gazetki</x-h2-title>
-                <x-swiper-leaflets-promo />
-                <x-see-more class="lg:hidden pb-2" href="#">Zobacz wszystkie</x-see-more>
+                <x-swiper-leaflets-promo title="Zobacz inne aktualne gazetki"/>
             </x-section>
 
             <x-section class="bg-gray-200 rounded">
@@ -70,7 +66,7 @@
 
             <x-ad-1/>
 
-        </x-div-1060>
+        </x-div-1060-leaftet>
 
         <x-ad-2 justify="justify-star mt-10"/>
 

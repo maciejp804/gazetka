@@ -41,7 +41,8 @@ export default {
             ,
             fontSize: {
                 '1xs' : '0.625rem',
-                '1xl' : '1.375rem'
+                '1xl' : '1.375rem',
+                'extreme' : ['4rem', '3rem']
             },
             width : {
                 '0.5' : '0.125rem',
@@ -69,6 +70,10 @@ export default {
             },
             minWidth: {
                 '265' : '66.25rem', /* 1060px */
+                '280' : '70rem', /* 1120px */
+            },
+            maxWidth: {
+                '8xl': '88.75rem', /* 1420px */
             },
             height : {
                 '0.5' : '2px',

@@ -10,14 +10,10 @@
     <x-breadcrumbs>Gazetki promocyjne</x-breadcrumbs>
     <x-ad-1/>
     <div class="flex">
-        <div class="w-full my-5">
-            <div class="hidden 2xl:flex justify-end">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex 2xl:hidden justify-end">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+
+        {{-- Reklama pionowa po lewej stronie --}}
+        <x-ad-3-vertical site="justify-end"/>
+
         <div class="flex flex-col w-full 1xl:w-265 m-auto">
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
@@ -32,7 +28,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
                         @for($i=1; $i<=12; $i++)
                             <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
-                                <x-leaflet class="relative"/>
+                                <x-leaflet-slide class="relative"/>
                             </div>
                         @endfor
                     </div>
@@ -49,12 +45,16 @@
             </x-section>
 
             <x-section>
-                <x-swiper-network title="Kategorie produktów" image="{{asset('build/assets/nabial-B3NPvtdH.png')}}" name="Nabiał" offer="10 produktów"/>
+                <x-swiper-category title="Kategorie produktów" image="{{asset('build/assets/nabial-B3NPvtdH.png')}}"
+                                  name="Nabiał" offer="10 produktów" :link="route('main.products')"
+                />
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex" >Najczęściej szukane produkty</x-h2-title>
-                <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory" offer="od 11.59 zł"/>
+                <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
+                          offer="od 11.59 zł" title="Najczęściej szukane produkty" :link="route('main.products')"
+                          :uri="route('main.product',['name' => 'pomidory', 'id' => 1])"
+                />
             </x-section>
 
 
@@ -62,19 +62,14 @@
             <x-ad-1/>
 
         </div>
-        <div class="w-full my-5">
-            <div class="hidden 2xl:flex justify-start">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex 2xl:hidden justify-start">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+
+        {{-- Reklama pionowa po prawej stronie --}}
+        <x-ad-3-vertical site="justify-start"/>
 
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-        <x-descripton/>
+        <x-descripton :items="$descriptions"/>
         <x-faq/>
     </div>
 

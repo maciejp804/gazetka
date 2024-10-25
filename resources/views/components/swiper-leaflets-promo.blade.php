@@ -1,21 +1,8 @@
-@props(['swiperClass' => 'leafletPromo'])
-<div class="w-full">
-    <div class="swiper {{$swiperClass}}">
-        <!-- Additional required wrapper -->
-        <div class="swiper-wrapper h-full mb-8">
-            @for($i=1; $i<=12; $i++)
-                <x-leaflet class="swiper-slide"/>
-            @endfor
-        </div>
-        <!-- If we need pagination -->
-        <div class="swiper-pagination"></div>
+@props(['swiperClass' => 'leafletPromo', 'title' => 'Brak', 'link' => '#'])
 
-        <!-- If we need navigation buttons -->
-        <div class="swiper-button-prev 3xs:!hidden lg:!flex"></div>
-        <div class="swiper-button-next 3xs:!hidden lg:!flex"></div>
+<x-h2-title class="hidden lg:flex" :link="$link">{!! $title !!}</x-h2-title>
 
-        <!-- If we need scrollbar -->
+<x-swiper-leaflets :swiperClass="$swiperClass"/>
 
-    </div>
-</div>
+<x-see-more class="lg:hidden pb-2" :link="$link">Zobacz wszystkie</x-see-more>
 

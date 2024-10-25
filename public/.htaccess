@@ -9,6 +9,19 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Przekierowanie wielkich liter na małe w URL (case-insensitive URLs)
+#    RewriteMap lc int:tolower
+#    RewriteCond %{REQUEST_URI} [A-Z]
+#    RewriteRule ^(.*)$ ${lc:$1} [L,R=301]
+
+    # Przekierowanie z URL w formacie /w-gazetce/[produkt],[id]/ na /w-gazetce/[produkt]
+    RewriteCond %{REQUEST_URI} ^/w-gazetce/([a-zA-Z0-9_-]+),\d+/?$
+    RewriteRule ^w-gazetce/([a-zA-Z0-9_-]+),\d+/?$ /w-gazetce/%1 [L,R=301]
+
+    # Elastyczne przekierowanie z URL kończącego się ',[nazwa],[liczba]' na wersję skróconą
+    RewriteCond %{REQUEST_URI} ^/kupony-rabatowe-[^/]+,\d+$
+    RewriteRule ^kupony-rabatowe-[^/]+,\d+$ /kupony-rabatowe [L,R=301]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
@@ -19,3 +32,6 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+
+

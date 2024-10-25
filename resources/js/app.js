@@ -25,6 +25,7 @@ import 'swiper/css/grid';
 import 'swiper/css/scrollbar';
 import 'swiper/css/zoom';
 import 'swiper/css/history';
+import 'swiper/css/free-mode';
 
 
 

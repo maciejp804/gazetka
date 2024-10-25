@@ -9,19 +9,13 @@
     <x-h1-title :h1Title="$h1Title"/>
     <x-ad-1/>
     <div class="flex">
-        <div class="w-full my-5">
-            <div class="hidden 2xl:flex justify-end">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex 2xl:hidden justify-end">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+
+        {{-- Reklama pionowa po lewej stronie --}}
+        <x-ad-3-vertical site="justify-end"/>
+
         <div class="w-full 1xl:w-265 m-auto">
             <x-section>
-                <x-h2-title class="hidden lg:flex" >Najnowsze gazetki promocyjne</x-h2-title>
-                <x-swiper-leaflets-promo />
-                <x-see-more class="lg:hidden pb-2" href="#">Zobacz wszystkie</x-see-more>
+                <x-swiper-leaflets-promo title="Najnowsze gazetki promocyjne" :link="route('main.leaflets')"/>
             </x-section>
 
             <x-section>
@@ -29,19 +23,20 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex">Sieci handlowe</x-h2-title>
-                <x-swiper image="https://hoian.pl/assets/image/store/biedronka.png" name="Biedronka" offer="5 ofert"/>
-                <x-see-more class="lg:hidden" href="#">Zobacz wszystkie</x-see-more>
+                <x-swiper image="https://hoian.pl/assets/image/store/biedronka.png" name="Biedronka" offer="5 ofert" title="Sieci handlowe" :link="route('main.retailers')"/>
             </x-section>
+
             <x-section>
                 <x-city-descripton image="/build/assets/poznan-D9MWgM2z.png" bg="bg-white"/>
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex">Najczęściej szukane produkty</x-h2-title>
-                <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory" offer="od 11.59 zł"/>
-                <x-see-more class="lg:hidden" href="#">Zobacz wszystkie</x-see-more>
+                <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
+                          offer="od 11.59 zł" title="Najczęściej szukane produkty" :link="route('main.products')"
+                          :uri="route('main.product',['name' => 'pomidory', 'id' => 1])"
+                />
             </x-section>
+
             <x-section>
                 <x-shop-list/>
             </x-section>
@@ -51,13 +46,11 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex">Sieci handlowe online</x-h2-title>
-                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert"/>
-                <x-see-more class="lg:hidden" href="#">Zobacz wszystkie</x-see-more>
+                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"/
             </x-section>
 
             <x-section>
-                <x-swiper-network title="Kategorie sieci handlowych" image="https://hoian.pl/assets/image/category/default.png" name="Ogród" offer="10 ofert"/>
+                <x-swiper-category title="Kategorie sieci handlowych" image="https://hoian.pl/assets/image/category/default.png" name="Ogród" offer="10 ofert"/>
             </x-section>
 
             <x-section class="bg-gray-200 rounded">
@@ -67,9 +60,7 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex">Kupony rabatowe</x-h2-title>
-                <x-swiper-vouchers swiper-class="vouchers-swiper-promo"/>
-
+                <x-swiper-vouchers swiper-class="vouchers-swiper-promo" title="Kupony rabatowe" :link="route('main.coupons')"/>
             </x-section>
 
             <x-ad-1/>
@@ -83,7 +74,7 @@
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-swiper-leaflets-promo swiper-class="leaflet"/>
+                <x-swiper-leaflets swiper-class="leaflet"/>
                 <x-see-more class="lg:hidden pb-2" href="#">Zobacz wszystkie</x-see-more>
             </x-section>
 
@@ -93,14 +84,9 @@
 
             <x-ad-1/>
         </div>
-        <div class="w-full my-5">
-            <div class="hidden 2xl:flex justify-start">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex 2xl:hidden justify-start">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+
+        {{-- Reklama pionowa po prawej stronie --}}
+        <x-ad-3-vertical site="justify-start"/>
 
     </div>
 
@@ -108,7 +94,7 @@
         <div class="bg-gray-200 rounded my-4 ">
             <x-about class="1xl:w-265 lg:m-auto"/>
         </div>
-        <x-descripton/>
+        <x-descripton :items="$descriptions"/>
         <x-faq/>
     </div>
 

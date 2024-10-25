@@ -10,20 +10,14 @@
     <x-breadcrumbs>Dino Poznań</x-breadcrumbs>
     <x-ad-1/>
     <div class="flex">
-        <div class="w-full my-4">
-            <div class="hidden 2xl:flex justify-end">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex 2xl:hidden justify-end">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+
+        {{-- Reklama pionowa po lewej stronie --}}
+        <x-ad-3-vertical site="justify-end"/>
 
         <div class="w-full 1xl:w-265 m-auto">
 
             <x-section class="flex flex-col">
                 <x-header-index-subdomain/>
-
             </x-section>
 
 
@@ -38,7 +32,7 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
                         @for($i=1; $i<=12; $i++)
                             <div class="w-36 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
-                                <x-leaflet class="relative"/>
+                                <x-leaflet-slide class="relative"/>
                             </div>
                             @switch($i)
                                 @case(5)
@@ -60,7 +54,8 @@
                 <x-see-more class="pb-2" type="button">Zobacz wszystkie</x-see-more>
             </x-section>
 
-            <x-section>
+            <x-section class="mb-5">
+                <x-h2-title class="flex" :see-more-status="false">Sklepy w pobliżu Twojej lokalizacji</x-h2-title>
                 <x-shop-list/>
             </x-section>
 
@@ -69,9 +64,7 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex">Kupony rabatowe sklepu Dino</x-h2-title>
-                <x-swiper-vouchers swiper-class="vouchers-swiper-promo"/>
-
+                <x-swiper-vouchers swiper-class="vouchers-swiper-promo" title="Kupony rabatowe sieci Dino" :link="route('main.coupons')"/>
             </x-section>
 
             <x-section>
@@ -83,14 +76,9 @@
             <x-ad-1/>
 
         </div>
-        <div class="w-full m-4">
-            <div class="hidden 2xl:flex justify-start">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex 2xl:hidden justify-start">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+
+        {{-- Reklama pionowa po prawej stronie --}}
+        <x-ad-3-vertical site="justify-start"/>
 
     </div>
 

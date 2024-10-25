@@ -36,13 +36,12 @@
         {{ $slot }}
     </main>
 <x-footer/>
-</body>
 @vite([ 'resources/js/jquery-3.7.1.min.js',
         'resources/js/owl.carousel.min.js',
         'resources/js/custom-carousel.js',
         'resources/js/custom-swiper.js',
         'resources/js/leaflet-swiper.js',
         ])
-
-
+@stack('scripts')
+</body>
 </html>

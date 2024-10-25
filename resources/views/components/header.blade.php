@@ -1,31 +1,31 @@
 <header class="flex border-b border-gray-100 h-21 w-full">
-    <div class="w-full max-w-7xl m-auto">
-        <div class="py-4 px-4">
+    <div class="w-full max-w-7xl 1xl:max-w-8xl m-auto">
+        <div class="py-4 px-2">
             <div class="flex justify-between items-center w-full">
                 <div class="flex w-2/5">
-                    <a href="http://gazetkapromocyjna.local" class="lg:w-1/3">
+                    <a href="{{route('main.index')}}" class="lg:w-1/3">
                         <img src="https://hoian.pl/assets/image/Logo.png" alt="logo-image" class="w-28">
                     </a>
                     <div class="hidden lg:flex w-full">
                         <ul class="flex justify-around self-center w-full ">
                             <li class="flex border-b-2 border-white text-gray-500 transition duration-300 ease-in hover:border-blue-550 hover:text-gray-700">
-                                <a href="http://gazetkapromocyjna.local/gazetki-promocyjne-wszystkie,0">
-                                    <span>GAZETKI</span>
+                                <a href="{{route('main.leaflets')}}">
+                                    <p class="text-lg">Gazetki</p>
                                 </a>
                             </li>
                             <li class="flex border-b-2 border-white text-gray-500 transition duration-300 ease-in hover:border-blue-550 hover:text-gray-700">
-                                <a href="/sieci-handlowe-wszystkie,0">
-                                    <span>SKLEPY</span>
+                                <a href="{{route('main.retailers')}}">
+                                    <p class="text-lg">Sklepy</p>
                                 </a>
                             </li>
                             <li class="flex border-b-2 border-white text-gray-500 transition duration-300 ease-in hover:border-blue-550 hover:text-gray-700">
-                                <a href="http://gazetkapromocyjna.local/#">
-                                    <span>PRODUKTY</span>
+                                <a href="{{route('main.products')}}">
+                                    <p class="text-lg">Produkty</p>
                                 </a>
                             </li>
                             <li class="flex border-b-2 border-white text-gray-500 transition duration-300 ease-in hover:border-blue-550 hover:text-gray-700">
-                                <a href="/kupony-rabatowe-wszystkie,0">
-                                    <span>KUPONY</span>
+                                <a href="{{route('main.coupons')}}">
+                                    <p class="text-lg">Kupony</p>
                                 </a>
                             </li>
                         </ul>
@@ -42,7 +42,7 @@
                             <x-location-button class="" href="#"/>
                         </x-search>
                     </div>
-                    <ul class="hidden lg:flex justify-between w-4/12">
+                    <ul class="hidden lg:flex justify-between w-3/12">
                         <x-header.link href="#" svg='heart' />
                         <x-header.link href="#" svg='user' />
                         <x-header.link href="#" svg='brightness' />
@@ -70,7 +70,7 @@
                               class="fixed top-0 left-0 right-0 bottom-0 z-10 bg-white">
                             <div class="absolute top-0 left-0 right-0 bottom-0">
                                 <div class="flex justify-between items-center py-2 px-4">
-                                    <a href="/">
+                                    <a href="{{route('main.index')}}">
                                         <img src="https://hoian.pl/assets/image/Logo.png" alt="logo-image" class="w-28">
                                     </a>
                                     <x-header.link link="button" svg='close'/>
@@ -98,27 +98,27 @@
                                             </ul>
                                             <ul class="flex flex-col mt-8 mx-4">
                                                 <li class="px-4 py-2 border-b">
-                                                    <a href="/gazetki-promocyjne-wszystkie,0" class="link-title a_d99cny">
+                                                    <a href="{{route('main.leaflets')}}" class="link-title a_d99cny">
                                                         <span class="sp-link-title span_tr1l77">Gazetki</span>
                                                     </a>
                                                 </li>
                                                 <li class="px-4 py-2 border-b">
-                                                    <a href="/sieci-handlowe-wszystkie,0" class="link-title a_3cgpxm">
+                                                    <a href="{{route('main.retailers')}}" class="link-title a_3cgpxm">
                                                         <span class="sp-link-title span_c5t2wg">Sklepy</span>
                                                     </a>
                                                 </li>
                                                 <li class="px-4 py-2 border-b">
-                                                    <a href="#" class="link-title a_b70zm8">
+                                                    <a href="{{route('main.products')}}" class="link-title a_b70zm8">
                                                         <span class="sp-link-title span_zhao3d">Produkty</span>
                                                     </a>
                                                 </li>
                                                 <li class="px-4 py-2 border-b">
-                                                    <a href="/abc-zakupowicza/" class="link-title a_b70zm8">
+                                                    <a href="{{route('main.blogs')}}" class="link-title a_b70zm8">
                                                         <span class="sp-link-title span_zhao3d">Blog</span>
                                                     </a>
                                                 </li>
                                                 <li class="px-4 py-2 border-b">
-                                                    <a href="/kupony-rabatowe-wszystkie,0" class="link-title a_qpoaqp">
+                                                    <a href="{{route('main.coupons')}}" class="link-title a_qpoaqp">
                                                         <span class="sp-link-title span_376j45">Kupony</span>
                                                     </a>
                                                 </li>

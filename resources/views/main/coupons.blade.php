@@ -10,14 +10,10 @@
     <x-breadcrumbs>Kupony rabatowe</x-breadcrumbs>
     <x-ad-1/>
     <div class="flex">
-        <div class="hidden 1xl:flex w-full my-5">
-            <div class="hidden 2xl:flex w-full justify-end self-start">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex w-full 2xl:hidden justify-end self-start">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+
+        {{-- Reklama pionowa po lewej stronie --}}
+        <x-ad-3-vertical site="justify-end"/>
+
         <div class="w-full m-auto">
             <x-section class="flex flex-col 1xl:w-265">
 
@@ -34,7 +30,7 @@
 {{--                    <div class="flex flex-wrap gap-y-10 justify-between  h-full mb-16">--}}
                         @for($i=1; $i<=12; $i++)
                             <div class="w-full sm:w-72 md:w-80 lg:w-75 2lg:w-80 m-auto">
-                                <x-voucher class="mb-10"/>
+                                <x-voucher-slide class="mb-10"/>
                             </div>
                         @endfor
                     </div>
@@ -53,19 +49,14 @@
             <x-ad-1/>
 
         </div>
-        <div class="hidden 1xl:flex w-full my-5">
-            <div class="hidden 2xl:flex w-full justify-start self-start">
-                <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
-            </div>
-            <div class="hidden 1xl:flex w-full 2xl:hidden justify-start self-start">
-                <img src="https://placehold.co/160x600?text=Ads+160+x+600" alt="ad">
-            </div>
-        </div>
+        {{-- Reklama pionowa po prawej stronie --}}
+        <x-ad-3-vertical site="justify-start"/>
 
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-        <x-descripton/>
+
+        <x-descripton :items="$descriptions"/>
         <x-faq/>
     </div>
 

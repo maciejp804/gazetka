@@ -1,4 +1,4 @@
-@props(['swiperClass' => 'leafletPromo', 'isMobile', 'pages', 'inserts', 'ads', 'insertData', 'width', 'height'])
+@props(['swiperClass' => 'leafletPromo', 'isMobile', 'pages', 'inserts', 'ads', 'insertData'])
 @php
 
     if($isMobile)
@@ -35,23 +35,33 @@
                                 @endif
                                 @endif
                             </div>
-                            {{-- Inserty --}}
-                            @if(in_array($index + 1, $inserts))
-                                <div class="absolute top-0 left-0 w-full z-50 pointer-events-none">
-                                    <div class="sub-swiper w-full">
-                                        <div class="sub-swiper-wrapper swiper-wrapper flex">
-                                            <x-insert-slide-empty />
-                                            <x-insert-slide :index="$index + 1" :inserts="$inserts" :insertData="$insertData"/>
-                                            <x-insert-slide-empty />
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            {{-- Inserty End --}}
+{{--                            --}}{{-- Inserty --}}
+{{--                            @if(in_array($index + 1, $inserts))--}}
+{{--                                <div class="absolute top-0 left-0 w-full z-50 pointer-events-none">--}}
+{{--                                    <div class="sub-swiper w-full">--}}
+{{--                                        <div class="sub-swiper-wrapper swiper-wrapper flex">--}}
+{{--                                            <x-insert-slide-empty />--}}
+{{--                                            <x-insert-slide :index="$index + 1" :inserts="$inserts" :insertData="$insertData"/>--}}
+{{--                                            <x-insert-slide-empty />--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            @endif--}}
+{{--                            --}}{{-- Inserty End --}}
                         </div>
                     </div>
                     {{-- Inserty --}}
-
+                    @if(in_array($index + 1, $inserts))
+                        <div class="absolute top-0 left-0 w-full z-50 pointer-events-none">
+                            <div class="sub-swiper w-full">
+                                <div class="sub-swiper-wrapper swiper-wrapper flex">
+                                    <x-insert-slide-empty />
+                                    <x-insert-slide :index="$index + 1" :inserts="$inserts" :insertData="$insertData"/>
+                                    <x-insert-slide-empty />
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     {{-- Inserty End --}}
 
                 </div>
@@ -78,21 +88,35 @@
                         <div class="swiper-zoom-target">
 
                             <x-slide :index="$index" :is-mobile="$isMobile" :pages="$pages"/>
-                            {{-- Inserty --}}
-                            @if(in_array($index, $inserts))
-                                <div class="absolute top-0 left-0 w-full h-full z-50 pointer-events-none">
-                                    <div class="sub-swiper h-full w-full">
-                                        <div class="sub-swiper-wrapper swiper-wrapper">
+{{--                            --}}{{-- Inserty --}}
+{{--                            @if(in_array($index, $inserts))--}}
+{{--                                <div class="absolute top-0 left-0 w-full h-full z-50 pointer-events-none">--}}
+{{--                                    <div class="sub-swiper h-full w-full">--}}
+{{--                                        <div class="sub-swiper-wrapper swiper-wrapper">--}}
 
-                                            <x-insert-slide :index="$index" :inserts="$inserts" :insertData="$insertData" data="2"/>
-                                            <x-insert-slide-empty data="1"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                            {{-- Inserty End --}}
+{{--                                            <x-insert-slide :index="$index" :inserts="$inserts" :insertData="$insertData" data="2"/>--}}
+{{--                                            --}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            @endif--}}
+{{--                            --}}{{-- Inserty End --}}
                         </div>
                     </div>
+                    {{-- Inserty --}}
+                    @if(in_array($index, $inserts))
+                        <div class="absolute top-0 left-0 w-full h-full z-50 pointer-events-none">
+                            <div class="sub-swiper h-full w-full">
+                                <div class="sub-swiper-wrapper swiper-wrapper">
+                                    <x-insert-slide-empty />
+                                    <x-insert-slide :index="$index" :inserts="$inserts" :insertData="$insertData" data="2"/>
+                                    <x-insert-slide-empty />
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+                    {{-- Inserty End --}}
+
                 </div>
 
             @endfor

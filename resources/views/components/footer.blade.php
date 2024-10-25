@@ -126,11 +126,11 @@
             </ul>
             <ul class="my-5 mx-auto text-center gap-3 flex flex-col font-semibold border-b lg:flex-row lg:justify-center">
                 <x-footer.li>O GazetkaPromocyjna</x-footer.li>
-                <x-footer.li ref="/gazetki-promocyjne-wszystkie,0">Gazetki</x-footer.li>
-                <x-footer.li ref="/sieci-handlowe-wszystkie,0">Sklepy</x-footer.li>
-                <x-footer.li ref="/sieci-handlowe-wszystkie,0">Produkty</x-footer.li>
-                <x-footer.li >Blog</x-footer.li>
-                <x-footer.li ref="/kupony-rabatowe-wszystkie,0" >Kupony</x-footer.li>
+                <x-footer.li ref="{{route('main.leaflets')}}">Gazetki</x-footer.li>
+                <x-footer.li ref="{{route('main.retailers')}}">Sklepy</x-footer.li>
+                <x-footer.li ref="{{route('main.products')}}">Produkty</x-footer.li>
+                <x-footer.li ref="{{route('main.blogs')}}">Blog</x-footer.li>
+                <x-footer.li ref="{{route('main.coupons')}}" >Kupony</x-footer.li>
                 <x-footer.li >Kontakt</x-footer.li>
                 <x-footer.li >Pomoc</x-footer.li>
             </ul>

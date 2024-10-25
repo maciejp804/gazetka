@@ -1,5 +1,15 @@
 import Swiper from "swiper";
-import {Grid, HashNavigation, Keyboard, Navigation, Pagination, Scrollbar, Zoom, History} from "swiper/modules";
+import {
+    Grid,
+    HashNavigation,
+    Keyboard,
+    Navigation,
+    Pagination,
+    Scrollbar,
+    Zoom,
+    History,
+    FreeMode
+} from "swiper/modules";
 
 // init Swiper:
 const swiper = new Swiper('.mySwiper', {
@@ -639,3 +649,68 @@ const swiper8 = new Swiper('.vouchers-swiper-promo', {
         prevEl: '.swiper-button-prev',
     },
 });
+
+const swiper11 = new Swiper('.swiperCategory', {
+    // configure Swiper to use modules
+    modules: [Navigation, FreeMode],
+    slidesPerView: "auto",
+    spaceBetween: 5,
+    freeMode: true,
+    breakpoints: {
+        // when window width is >= 320px
+        320: {
+            spaceBetween: 5,
+        },
+        425: {
+            spaceBetween: 10,
+        },
+        475: {
+            spaceBetween: 10,
+        },
+        1440: {
+            spaceBetween: 15,
+        }
+    },
+    navigation: {
+        nextEl: ".button-next",
+        prevEl: ".button-prev",
+    },
+    on: {
+        init: function() {
+            // Hide previous button at the start
+            toggleNavButtons(this);
+        },
+        slideChange: function() {
+            // Toggle visibility of buttons after each slide change
+            toggleNavButtons(this);
+        },
+        reachBeginning: function() {
+            // Hide the previous button at the start
+            document.querySelector('.button-prev').style.display = 'none';
+        },
+        reachEnd: function() {
+            // Hide the next button at the end
+            document.querySelector('.button-next').style.display = 'none';
+        }
+    }
+});
+
+// Helper function to toggle navigation buttons
+function toggleNavButtons(swiper) {
+    const prevButton = document.querySelector('.button-prev');
+    const nextButton = document.querySelector('.button-next');
+
+    // Show both buttons by default
+    prevButton.style.display = 'flex';
+    nextButton.style.display = 'flex';
+
+    // Hide the previous button if at the beginning
+    if (swiper.isBeginning) {
+        prevButton.style.display = 'none';
+    }
+
+    // Hide the next button if at the end
+    if (swiper.isEnd) {
+        nextButton.style.display = 'none';
+    }
+}
