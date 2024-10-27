@@ -14,10 +14,6 @@ Alpine.plugin(collapse)
 
 Alpine.start();
 
-// core version + navigation, pagination modules:
-import Swiper from 'swiper';
-import { Navigation, Pagination, Grid} from 'swiper/modules';
-// import Swiper and modules styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
