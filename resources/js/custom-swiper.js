@@ -728,7 +728,7 @@ const swiperInfo = new Swiper('.swiper-info', {
 const swiperBlog = new Swiper('.swiper-blog', {
     // configure Swiper to use modules
     modules: [Navigation, Autoplay],
-    slidesPerView: 2,
+    slidesPerView: 1,
     spaceBetween: 5,
     loop: true,
     autoplay: true,

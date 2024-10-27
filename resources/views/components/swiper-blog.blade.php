@@ -1,6 +1,6 @@
 @props(['title' => 'Brak', 'link' => '#'])
 <x-h2-title class="flex" :link="$link">{!! $title !!}</x-h2-title>
-
+<div class="w-full">
 <div class="swiper swiper-blog">
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper h-full mb-10">
@@ -25,5 +25,5 @@
     @endfor
     </div>
 </div>
-
+</div>
 <x-see-more class="lg:hidden" :link="$link">Zobacz wszystkie</x-see-more>

@@ -8,10 +8,7 @@
 
     @vite([ 'resources/js/app.js',
             'resources/css/app.css',
-            'resources/css/owl.carousel.min.css',
-            'resources/css/owl.theme.default.min.css'
-
-            ])
+          ])
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
         window.googletag = window.googletag || {cmd: []};
@@ -36,10 +33,7 @@
         {{ $slot }}
     </main>
 <x-footer/>
-@vite([ 'resources/js/jquery-3.7.1.min.js',
-        'resources/js/owl.carousel.min.js',
-        'resources/js/custom-carousel.js',
-        'resources/js/custom-swiper.js',
+@vite([ 'resources/js/custom-swiper.js',
         'resources/js/leaflet-swiper.js',
         ])
 @stack('scripts')
