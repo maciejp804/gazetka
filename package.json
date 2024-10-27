@@ -24,6 +24,7 @@
         "@fortawesome/free-solid-svg-icons": "^6.6.0",
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "html2canvas": "^1.4.1",
+        "jquery": "^3.7.1",
         "swiper": "^11.1.12"
     }
 }
