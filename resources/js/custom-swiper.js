@@ -725,6 +725,44 @@ const swiperInfo = new Swiper('.swiper-info', {
     }
 });
 
+const swiperBlog = new Swiper('.swiper-blog', {
+    // configure Swiper to use modules
+    modules: [Navigation, Autoplay],
+    slidesPerView: 2,
+    spaceBetween: 5,
+    loop: true,
+    autoplay: true,
+    breakpoints: {
+        // when window width is >= 320px
+        320: {
+            slidesPerView: 2,
+            spaceBetween: 5,
+        },
+        425: {
+            spaceBetween: 10,
+        },
+        640: {
+            slidesPerView: 3,
+            spaceBetween: 10,
+        },
+        768: {
+            slidesPerView: 4,
+            spaceBetween: 10,
+        },
+        1024:{
+            spaceBetween: 15,
+        },
+        1060: {
+            slidesPerView: 5,
+
+        }
+    },
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    }
+});
+
 // Helper function to toggle navigation buttons
 function toggleNavButtons(swiper) {
     const prevButton = document.querySelector('.button-prev');

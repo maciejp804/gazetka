@@ -86,7 +86,7 @@
         <x-shop-descripton image="/build/assets/cheery-little-girl-sitting-shopping-cart 1-HAk2Ec6j.png"/>
 
         <section class="flex flex-col w-full 2lg:w-265 m-auto">
-            <x-blog title="Ostatnie wpisy blogowe"/>
+            <x-swiper-blog title="Ostatnie wpisy blogowe"/>
         </section>
 
         <x-faq/>

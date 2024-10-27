@@ -68,7 +68,7 @@
             </x-section>
 
             <x-section>
-                <x-blog title="Ostatnie wpisy blogowe" :link="route('main.blogs')"/>
+                <x-swiper-blog title="Ostatnie wpisy blogowe" :link="route('main.blogs')"/>
             </x-section>
 
             <x-ad-1/>

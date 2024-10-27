@@ -79,7 +79,7 @@
             </x-section>
 
             <x-section>
-                <x-blog title="Ostatnie wpisy blogowe"/>
+                <x-swiper-blog title="Ostatnie wpisy blogowe"/>
             </x-section>
 
             <x-ad-1/>
