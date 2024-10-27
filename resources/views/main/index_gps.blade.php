@@ -19,7 +19,7 @@
             </x-section>
 
             <x-section>
-                <x-carousel-info/>
+                <x-swiper-info/>
             </x-section>
 
             <x-section>
@@ -46,7 +46,7 @@
             </x-section>
 
             <x-section>
-                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"/
+                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"/>
             </x-section>
 
             <x-section>

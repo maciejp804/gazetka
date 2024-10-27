@@ -7,7 +7,7 @@ import {
     Pagination,
     Scrollbar,
     Zoom,
-    History,
+    Autoplay,
     FreeMode
 } from "swiper/modules";
 
@@ -692,6 +692,36 @@ const swiper11 = new Swiper('.swiperCategory', {
             // Hide the next button at the end
             document.querySelector('.button-next').style.display = 'none';
         }
+    }
+});
+
+const swiperInfo = new Swiper('.swiper-info', {
+    // configure Swiper to use modules
+    modules: [Navigation, Autoplay],
+    slidesPerView: 5,
+    spaceBetween: 5,
+    loop: true,
+    autoplay: true,
+    breakpoints: {
+        // when window width is >= 320px
+        320: {
+            slidesPerView: 2,
+            spaceBetween: 5,
+        },
+        425: {
+            spaceBetween: 10,
+        },
+        475: {
+            spaceBetween: 10,
+        },
+        1440: {
+            spaceBetween: 15,
+            loop: false ,
+        }
+    },
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
     }
 });
 

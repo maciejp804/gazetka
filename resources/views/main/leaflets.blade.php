@@ -25,9 +25,9 @@
                     </x-search>
                 </div>
                 <div class="w-full">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                         @for($i=1; $i<=12; $i++)
-                            <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
+                            <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
                                 <x-leaflet-slide class="relative"/>
                             </div>
                         @endfor

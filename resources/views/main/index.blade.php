@@ -19,7 +19,7 @@
             </x-section>
 
             <x-section>
-                <x-carousel-info/>
+                <x-swiper-info/>
             </x-section>
 
             <x-section>

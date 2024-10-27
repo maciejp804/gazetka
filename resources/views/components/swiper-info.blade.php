@@ -36,9 +36,11 @@ $count = count($info);
 
  @endphp
 <div class="w-full">
-    <div class="owl-carousel owl-theme info-carousel py-2">
+    <div class="swiper swiper-info">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper h-full mb-10">
         @for($i=1; $i<=$count; $i++)
-        <div class="items">
+        <div class="swiper-slide item">
                 <div class="w-full bg-gray-100 rounded">
                 <div class="flex flex-col gap-y-2 text-center aspect-square justify-center">
                     <div class="service-image">
@@ -59,5 +61,6 @@ $count = count($info);
             </div>
         </div>
         @endfor
+        </div>
     </div>
 </div>

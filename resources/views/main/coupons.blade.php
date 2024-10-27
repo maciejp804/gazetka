@@ -14,8 +14,8 @@
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
 
-        <div class="w-full m-auto">
-            <x-section class="flex flex-col 1xl:w-265">
+        <x-div-1060>
+            <x-section>
 
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
                     <x-select />
@@ -27,7 +27,6 @@
                 </div>
                 <div class="w-full mb-10">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-{{--                    <div class="flex flex-wrap gap-y-10 justify-between  h-full mb-16">--}}
                         @for($i=1; $i<=12; $i++)
                             <div class="w-full sm:w-72 md:w-80 lg:w-75 2lg:w-80 m-auto">
                                 <x-voucher-slide class="mb-10"/>
@@ -48,7 +47,7 @@
 
             <x-ad-1/>
 
-        </div>
+        </x-div-1060>
         {{-- Reklama pionowa po prawej stronie --}}
         <x-ad-3-vertical site="justify-start"/>
 
