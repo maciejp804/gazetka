@@ -5,6 +5,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
 
+
+$mainDomain = env('MAIN_DOMAIN', 'gazetkapromocyjna.local');
+
 $blogCategory = [
     ['name' => 'Porady', 'id' => '1', 'qty' => 10, 'slug' => 'porady'],
     ['name' => 'Recenzje', 'id' => '2', 'qty' => 22, 'slug' => 'recenzje'],
@@ -211,7 +214,7 @@ $insertData = [
 ];
 
 
-Route::domain('{subdomain}.gazetkapromocyjna.local')->group(function () use ($pages, $ads, $inserts, $insertData) {
+Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData) {
 
     Route::get('/godziny-otwarcia/wielen-os-przytorze-36' ,function ($subdomain){
 
@@ -287,9 +290,7 @@ Route::domain('{subdomain}.gazetkapromocyjna.local')->group(function () use ($pa
 
 
 
-Route::domain('gazetkapromocyjna.local')->group(function () use ($descriptions, $blogCategory) {
-
-
+Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory) {
 
     Route::get('/gazetki-promocyjne', function () use ($descriptions) {
 
