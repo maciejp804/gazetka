@@ -7,7 +7,7 @@
     @for($i=0; $i<10; $i++)
         <div class="swiper-slide">
             <div class="tr-pro-img member">
-                <a href="#">
+                <a href="/abc-zakupowicza/porady/chleb">
                     <img class="rounded-xl" src="http://165.232.144.14/media/blogs/5_ltC1WKM.png" alt="pro-img1">
                 </a>
             </div>
@@ -16,7 +16,7 @@
                     <span>Jan. 8, 2024</span>
                 </div>
                 <h3 class="text-black font-bold text-sm py-2">
-                    <a href="#">Lorem ipsum dolor sit amet consectetur</a></h3>
+                    <a href="/abc-zakupowicza/porady/chleb">Lorem ipsum dolor sit amet consectetur</a></h3>
                 <div class="text-xs text-gray-600">
                     <span class="old-price span_doglm7">Dolor sit amet, consectetur adipiscing elit. Ut posuere, urna nec vehicula.</span>
                 </div>

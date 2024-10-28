@@ -23,20 +23,24 @@
             </x-section>
 
             <x-section>
-                <x-swiper image="https://hoian.pl/assets/image/store/biedronka.png" name="Biedronka"
-                          offer="5 ofert" title="Sieci handlowe" :link="route('main.retailers')"/>
+                <x-swiper image="https://upload.wikimedia.org/wikipedia/en/5/5d/Biedronka_logo.svg" name="Biedronka"
+                          offer="5 ofert" title="Sieci handlowe" :link="route('main.retailers')"
+                          :uri="route('subdomain.index',['subdomain' => 'dino'])"
+                />
             </x-section>
 
             <x-section>
                 <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
                           offer="od 11.59 zł" title="Najczęściej szukane produkty" :link="route('main.products')"
-                          :uri="route('main.product',['name' => 'pomidory', 'id' => 1])"
+                          :uri="route('main.product',['name' => 'pomidory'])"
                 />
             </x-section>
 
             <x-section>
-                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png"
-                          name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"/>
+                <x-swiper image="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Zabka_logo_2020.svg/1920px-Zabka_logo_2020.svg.png"
+                          name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"
+                          :uri="route('subdomain.index',['subdomain' => 'dino'])"
+                />
             </x-section>
 
             <x-section>

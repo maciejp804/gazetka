@@ -38,7 +38,7 @@ $count = count($info);
 <div class="w-full">
     <div class="swiper swiper-info">
         <!-- Additional required wrapper -->
-        <div class="swiper-wrapper h-full mb-10">
+        <div class="swiper-wrapper h-full">
         @for($i=1; $i<=$count; $i++)
         <div class="swiper-slide item">
                 <div class="w-full bg-gray-100 rounded">

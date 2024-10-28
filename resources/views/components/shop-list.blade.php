@@ -2,7 +2,7 @@
     @for($i=1; $i<=9; $i++)
         <div class="grid grid-cols-3 px-5 odd:bg-gray-100 even:bg-white py-2 rounded">
             <div class="flex justify-start">
-                <a href="http://dino.gazetkapromocyjna.local/godziny-otwarcia/dino-os-przytorze-36,1">Dino, Poznań, ul. Towarowa</a>
+                <a href="http://dino.gazetkapromocyjna.local/godziny-otwarcia/wielen-os-przytorze-36">Dino, Wieleń, os. Przytorze 36</a>
             </div>
             <div class="flex justify-center gap-2">
                 <x-header.svg svg="clock" colour="fill-gray-300" />

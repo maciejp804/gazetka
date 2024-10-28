@@ -213,7 +213,7 @@ $insertData = [
 
 Route::domain('{subdomain}.gazetkapromocyjna.local')->group(function () use ($pages, $ads, $inserts, $insertData) {
 
-    Route::get('/godziny-otwarcia/dino-os-przytorze-36,1' ,function ($subdomain){
+    Route::get('/godziny-otwarcia/wielen-os-przytorze-36' ,function ($subdomain){
 
         return view('subdomain.shop', data:
             [
@@ -363,7 +363,7 @@ Route::domain('gazetkapromocyjna.local')->group(function () use ($descriptions, 
             ]);
     })->name('main.products');
 
-    Route::get('/produkty/{name},{id}', function ($name, $id) use ($descriptions) {
+    Route::get('/produkty/{name}', function ($name) use ($descriptions) {
 
         return view('main.product', data:
             [
@@ -371,7 +371,7 @@ Route::domain('gazetkapromocyjna.local')->group(function () use ($descriptions, 
                 'image' => '',
                 'slug' => 'Warszawa',
                 'h1Title'=> '<strong>Pomidory- promocje w gazetkach</strong>',
-                'id' => $id,
+                'id' => 1,
                 'name' => $name,
                 'descriptions' => $descriptions,
             ]);

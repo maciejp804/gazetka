@@ -34,7 +34,7 @@
 {{--                    <div class="flex flex-wrap gap-3">--}}
                         @for($i=1; $i<=12; $i++)
                             <div class="w-36 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
-                                <x-leaflet class="relative"/>
+                                <x-leaflet-slide class="relative"/>
                             </div>
                             @switch($i)
                                 @case(5)
@@ -57,8 +57,8 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex">Kupony rabatowe sklepu Dino</x-h2-title>
-                <x-swiper-vouchers swiper-class="vouchers-swiper-promo"/>
+
+                <x-swiper-vouchers swiper-class="vouchers-swiper-promo" title="Kupony rabatowe" :link="route('main.coupons')"/>
 
             </x-section>
 

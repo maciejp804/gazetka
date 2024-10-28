@@ -709,9 +709,14 @@ const swiperInfo = new Swiper('.swiper-info', {
             spaceBetween: 5,
         },
         425: {
+            slidesPerView: 2,
             spaceBetween: 10,
         },
         475: {
+            spaceBetween: 10,
+        },
+        640: {
+            slidesPerView: 4,
             spaceBetween: 10,
         },
         1440: {
@@ -728,17 +733,14 @@ const swiperInfo = new Swiper('.swiper-info', {
 const swiperBlog = new Swiper('.swiper-blog', {
     // configure Swiper to use modules
     modules: [Navigation, Autoplay],
-    slidesPerView: 1,
+    slidesPerView: 2,
     spaceBetween: 5,
     loop: true,
     autoplay: true,
     breakpoints: {
-        // when window width is >= 320px
-        320: {
-            slidesPerView: 2,
-            spaceBetween: 5,
-        },
+        // when window width is >= 425px
         425: {
+            slidesPerView: 2,
             spaceBetween: 10,
         },
         640: {
@@ -750,10 +752,13 @@ const swiperBlog = new Swiper('.swiper-blog', {
             spaceBetween: 10,
         },
         1024:{
+            slidesPerView: 4,
             spaceBetween: 15,
         },
         1060: {
             slidesPerView: 5,
+            spaceBetween: 15,
+            loop: false,
 
         }
     },
