@@ -218,6 +218,13 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
 
     Route::get('/godziny-otwarcia/wielen-os-przytorze-36' ,function ($subdomain){
 
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
+            ['label' => 'os. Przytorze 36', 'url' => ''],
+        ];
+
         return view('subdomain.shop', data:
             [
                 'data' => '',
@@ -225,10 +232,17 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
                 'slug' => 'Wieleń',
                 'h1Title'=> 'Dino Wieleń, os. Przytorze 36',
                 'subdomain' => $subdomain,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     })->name('subdomain.shop');
 
     Route::get('/w-gazetce/{product}' ,function ($subdomain, $product){
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
+            ['label' => 'os. Przytorze 36', 'url' => ''],
+        ];
 
         return view('subdomain.product', data:
             [
@@ -237,10 +251,18 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
                 'slug' => 'Wieleń',
                 'h1Title'=> $product.' w Dino',
                 'subdomain' => $subdomain,
+                "breadcrumbs" => $breadcrumbs,
             ]);
     })->name('subdomain.product');
 
     Route::get('/', function ($subdomain) {
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
+            ['label' => 'os. Przytorze 36', 'url' => ''],
+        ];
 
         return view('subdomain.index', data:
             [
@@ -249,10 +271,17 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
                 'slug' => 'Warszawa',
                 'h1Title'=> 'Dino gazetka • najnowsze ulotki i aktualne oferty promocyjne w Dino od 1.10',
                 'subdomain' => $subdomain,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     })->name('subdomain.index');
 
     Route::get('/poznan', function ($subdomain) {
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
+            ['label' => 'os. Przytorze 36', 'url' => ''],
+        ];
 
         return view('subdomain.index_gps', data:
             [
@@ -260,13 +289,22 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
                 'image' => '',
                 'slug' => 'Poznań',
                 'h1Title'=> 'Dino gazetka • najnowsze ulotki i aktualne oferty promocyjne w Dino od 1.10 - Poznań',
+                'subdomain' => $subdomain,
+                'breadcrumbs' => $breadcrumbs,
             ]);
-    });
+    })->name('subdomain.index_gps');
 
     Route::get('/gazetka-promocyjna-1', function ($subdomain) use ($pages, $inserts, $insertData, $ads) {
 
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
+            ['label' => 'os. Przytorze 36', 'url' => ''],
+        ];
 
         return view('subdomain.leaflet', data:
             [
@@ -280,6 +318,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
                 'insertData' => $insertData,
                 'ads' => $ads,
                 'subdomain' => $subdomain,
+                'breadcrumbs' => $breadcrumbs
 
 
             ]);
@@ -294,6 +333,11 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
 
     Route::get('/gazetki-promocyjne', function () use ($descriptions) {
 
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Gazetki promocyjne', 'url' => ''],
+        ];
+
         return view('main.leaflets', data:
             [
                 'data' => '',
@@ -301,10 +345,17 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Warszawa',
                 'h1Title'=> 'Gazetki <strong>promocyjne</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     })->name('main.leaflets');
 
     Route::get('/gazetki-promocyjne/poznan', function () use ($descriptions) {
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Gazetki Promocyjne', 'url' => route('main.leaflets')],
+            ['label' => 'Poznań', 'url' => ''],
+        ];
 
         return view('main.leaflets_gps', data:
             [
@@ -313,10 +364,16 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Poznań',
                 'h1Title'=> 'Gazetki <strong>promocyjne</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     });
 
     Route::get('/sieci-handlowe', function () use ($descriptions) {
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Sieci handlowe', 'url' => ''],
+        ];
 
         return view('main.retailers', data:
             [
@@ -325,10 +382,17 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Poznań',
                 'h1Title'=> 'Sieci <strong>handlowe</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     })->name('main.retailers');
 
     Route::get('/sieci-handlowe/poznan', function () use ($descriptions){
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Sieci handlowe', 'url' => route('main.retailers')],
+            ['label' => 'Poznań', 'url' => ''],
+        ];
 
         return view('main.retailers_gps', data:
             [
@@ -337,10 +401,16 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Poznań',
                 'h1Title'=> 'Sieci <strong>handlowe</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     });
 
     Route::get('/kupony-rabatowe', function () use ($descriptions) {
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Kupony rabatowe', 'url' => ''],
+        ];
 
         return view('main.coupons', data:
             [
@@ -349,10 +419,16 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Poznań',
                 'h1Title'=> '<strong>Kupony rabatowe</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     })->name('main.coupons');
 
     Route::get('/produkty', function () use ($descriptions) {
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Produkty', 'url' => ''],
+        ];
 
         return view('main.products', data:
             [
@@ -361,10 +437,17 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Warszawa',
                 'h1Title'=> '<strong>Produkty - promocje w gazetkach</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
             ]);
     })->name('main.products');
 
     Route::get('/produkty/{name}', function ($name) use ($descriptions) {
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Produkty', 'url' => route('main.products')],
+            ['label' => $name, 'url' => ''],
+        ];
 
         return view('main.product', data:
             [
@@ -375,6 +458,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'id' => 1,
                 'name' => $name,
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs
             ]);
     })->name('main.product');
 
@@ -383,6 +467,11 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
         foreach ($blogCategory as $item) {
             $sum += $item['qty'];
         }
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'ABC Zakupowicza', 'url' => ''],
+        ];
 
         return view('main.blogs', data:
             [
@@ -393,6 +482,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'descriptions' => $descriptions,
                 'blogCategory' => $blogCategory,
                 'sum' => $sum,
+                'breadcrumbs' => $breadcrumbs
             ]);
     })->name('main.blogs');
 
@@ -401,6 +491,12 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
         foreach ($blogCategory as $item) {
             $sum += $item['qty'];
         }
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'ABC Zakupowicza', 'url' => route('main.blogs')],
+            ['label' => 'Porady', 'url' => ''],
+        ];
 
         return view('main.blogs_category', data:
             [
@@ -411,10 +507,18 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'descriptions' => $descriptions,
                 'blogCategory' => $blogCategory,
                 'sum' => $sum,
+                'breadcrumbs' => $breadcrumbs
             ]);
     })->name('main.blogs_category');
 
     Route::get('/abc-zakupowicza/porady/{name}', function ($name) use ($descriptions, $blogCategory) {
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'ABC Zakupowicza', 'url' => route('main.blogs')],
+            ['label' => 'Porady', 'url' =>  route('main.blogs_category')],
+            ['label' => 'Artykuł', 'url' => ''],
+        ];
 
         return view('main.blog_article', data:
             [
@@ -424,14 +528,14 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'h1Title'=> "Jak wywołać zdjęcia w Rossmannie i zaoszczędzić pieniądze?",
                 'descriptions' => $descriptions,
                 'blogCategory' => $blogCategory,
-
-
+                'breadcrumbs' => $breadcrumbs
             ]);
     })->name('main.blog_article');
 
 
     Route::get('/', function () use ($descriptions) {
 
+        $breadcrumbs = [];
 
         return view('main.index', data:
             [
@@ -440,12 +544,16 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Warszawa',
                 'h1Title'=> 'Wszystkie gazetki promocyjne <strong>w jednym miejscu</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs
             ]);
     })->name('main.index');
 
     Route::get('/poznan', function () use ($descriptions) {
 
-
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Poznań', 'url' => ''],
+        ];
 
         return view('main.index_gps', data:
             [
@@ -454,6 +562,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Poznań',
                 'h1Title'=> 'Wszystkie gazetki promocyjne <strong>w jednym miejscu - Poznań</strong>',
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs
             ]);
     });
 
@@ -461,12 +570,19 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
 
     Route::get('/{slug}', function ($slug) use ($descriptions) {
 
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Dino Wieleń', 'url' => ''],
+            ['label' => 'os. Przytorze 36', 'url' => ''],
+        ];
+
         return view('main.index', data:
             [
                 'data' => '',
                 'image' => '',
                 'slug' => $slug,
                 'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs
             ]);
     });
 });

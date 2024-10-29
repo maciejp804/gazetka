@@ -13,7 +13,7 @@
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
 
-        <div class="w-full 1xl:w-265 m-auto">
+        <x-div-1060>
             <x-section>
                 <x-swiper-leaflets-promo title="Najnowsze gazetki promocyjne" :link="route('main.leaflets')"/>
             </x-section>
@@ -83,7 +83,7 @@
             </x-section>
 
             <x-ad-1/>
-        </div>
+        </x-div-1060>
 
         {{-- Reklama pionowa po prawej stronie --}}
         <x-ad-3-vertical site="justify-start"/>

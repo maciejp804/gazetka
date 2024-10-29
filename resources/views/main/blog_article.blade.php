@@ -12,7 +12,7 @@
 
         {{-- Reklama pionowa po lewej stronie --}}
 {{--        <x-ad-3-vertical site="justify-end"/>--}}
-        <x-breadcrumbs>ABC Zakupowicza</x-breadcrumbs>
+        <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
         <x-div-1060 class="2lg:flex-row">
             <div class="flex flex-col gap-y-4 w-full 2lg:w-4/5">
                 <x-header-blog>{{$h1Title}}</x-header-blog>

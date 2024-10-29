@@ -1,4 +1,4 @@
-<div {{ $attributes->merge(['class' => 'w-full my-2']) }}>
+<div {{ $attributes->merge(['class' => 'w-full my-5']) }}>
     <div class="flex justify-center 2xs:hidden">
         <img src="https://placehold.co/300x250?text=Ads+300+x+250">
     </div>

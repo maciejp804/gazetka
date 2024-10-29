@@ -7,7 +7,7 @@
         {!! $h1Title !!}
     </x-slot:h1Title>
     <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs :subdomain="$subdomain">Dino</x-breadcrumbs>
+    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
     <x-ad-1/>
     <div class="flex">
 

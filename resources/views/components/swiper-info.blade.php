@@ -41,11 +41,11 @@ $count = count($info);
         <div class="swiper-wrapper h-full">
         @for($i=1; $i<=$count; $i++)
         <div class="swiper-slide item">
-                <div class="w-full bg-gray-100 rounded">
+            <div class="w-full bg-gray-100 rounded relative">
                 <div class="flex flex-col gap-y-2 text-center aspect-square justify-center">
-                    <div class="service-image">
+                    <div>
                         <a href="#">
-                            <img src="{{ $info[$i]['url'] }}" class="flex !w-8 m-auto " alt="image">
+                            <img src="{{ $info[$i]['url'] }}" class="flex !w-14 m-auto " alt="image">
                         </a>
                     </div>
                     <div>

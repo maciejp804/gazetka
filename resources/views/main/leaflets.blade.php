@@ -7,14 +7,14 @@
         {!! $h1Title !!}
     </x-slot:h1Title>
     <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs>Gazetki promocyjne</x-breadcrumbs>
+    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
     <x-ad-1/>
     <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
 
-        <div class="flex flex-col w-full 1xl:w-265 m-auto">
+        <x-div-1060>
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
@@ -54,7 +54,7 @@
 
             <x-ad-1/>
 
-        </div>
+        </x-div-1060>
 
         {{-- Reklama pionowa po prawej stronie --}}
         <x-ad-3-vertical site="justify-start"/>

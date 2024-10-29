@@ -43,11 +43,14 @@ const swiper = new Swiper('.mySwiper', {
 
         },
         375: {
+            slidesPerView: 2,
+            spaceBetween: 5,
             grid: {
                 rows : 2,
             }
         },
         425: {
+            slidesPerView: 2,
             spaceBetween: 25,
             grid: {
                 rows : 2,
@@ -719,7 +722,7 @@ const swiperInfo = new Swiper('.swiper-info', {
             slidesPerView: 4,
             spaceBetween: 10,
         },
-        1440: {
+        1024: {
             spaceBetween: 15,
             loop: false ,
         }

@@ -24,7 +24,7 @@
 
     </style>
     <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs :subdomain="$subdomain">Gazetka promocyjna z Dino "Najbliżej Ciebie" (ważna od 10-10 do 16-10-2024)</x-breadcrumbs>
+    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
     <x-ad-1/>
     <div class="flex mb-2">
 

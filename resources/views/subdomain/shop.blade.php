@@ -8,18 +8,18 @@
     </x-slot:h1Title>
 
     <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs>Dino</x-breadcrumbs>
+    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
     <x-ad-1/>
     <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
 
-        <div class="w-full 1xl:w-265 mx-auto">
+        <x-div-1060>
 
-            <x-section>
+            <section class="mx-2 xs:mx-4">
                 <x-header-shop-subdomain/>
-            </x-section>
+            </section>
 
 
             <x-section>
@@ -31,7 +31,6 @@
                 </div>
                 <div class="w-full">
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
-{{--                    <div class="flex flex-wrap gap-3">--}}
                         @for($i=1; $i<=12; $i++)
                             <div class="w-36 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
                                 <x-leaflet-slide class="relative"/>
@@ -71,7 +70,7 @@
 
             <x-ad-1/>
 
-        </div>
+        </x-div-1060>
 
         {{-- Reklama pionowa po prawej stronie --}}
         <x-ad-3-vertical site="justify-start"/>
