@@ -53,11 +53,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funkcja do inicjalizacji nested slidera dla danego slajdu
     function initializeNestedSlider(slideIndex) {
-
+        console.log('Initializing nested slider for slide:', slideIndex); // Sprawdzenie inicjalizacji
         const slide = swiper9.slides[slideIndex];
         const nestedSwiperElement = slide.querySelector('.sub-swiper');
 
         if (nestedSwiperElement && !swiper10Instances[slideIndex]) {
+            console.log('Nested swiper element found for slide:', slideIndex);
             swiper10Instances[slideIndex] = new Swiper(nestedSwiperElement, {
                 loop: false,
                 followFinger: true,
@@ -75,8 +76,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     prevEl: slide.querySelector('.sub-swiper-prev'),
                 },
             });
+            console.log('Nested swiper initialized for slide:', slideIndex);
+        } else {
+            console.log('No nested swiper to initialize or already initialized for slide:', slideIndex);
         }
     }
+
 
 
     // Resetowanie zoomu i inicjalizacja/dezaktywacja nested slidera przy zmianie slajdów w swiper9
