@@ -47,14 +47,16 @@
             <x-section class="my-4">
                 <x-h2-title class="flex">Wybrane produkty z tej gazetki</x-h2-title>
                 <x-product-list/>
-                <x-see-more class="lg:hidden py-2" href="#">Zobacz wszystkie</x-see-more>
+                    <x-see-more class="lg:hidden py-2" href="#">Zobacz wszystkie</x-see-more>
             </x-section>
 
             <x-section class="my-4">
-               <x-swiper-leaflets-promo title="Inne gazetki danej sieci"/>
+                <x-h2-title class="flex">Inne gazetki danej sieci</x-h2-title>
+                <x-swiper-leaflets-promo title="Inne gazetki danej sieci"/>
             </x-section>
 
             <x-section>
+                <x-h2-title class="flex">Zobacz inne aktualne gazetki</x-h2-title>
                 <x-swiper-leaflets-promo title="Zobacz inne aktualne gazetki"/>
             </x-section>
 
