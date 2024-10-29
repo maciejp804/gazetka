@@ -299,8 +299,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
-            ['label' => 'os. Przytorze 36', 'url' => ''],
+            ['label' => 'Gazetka promocyjna z Dino', 'url' => '']
         ];
 
         return view('subdomain.leaflet', data:
