@@ -9,7 +9,7 @@
     <x-h1-title :h1Title="$h1Title"/>
     <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
     <x-ad-1/>
-    <x-div-1060 class="flex">
+    <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>

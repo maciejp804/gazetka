@@ -86,15 +86,15 @@ $descriptions = [
 $pages = [
     ['img' => 'https://lidl.gazetkapromocyjna.com.pl/1653/pages/large/1.jpg',
         'clicks' => [
-            ['url' => 'http://example1.com', 'x' => 2, 'y' => 38, 'width' => 46, 'height' => 19],
-            ['url' => 'http://example1.com', 'x' => 51, 'y' => 58, 'width' => 44, 'height' => 19]
+            ['url' => 'https://example1.com', 'x' => 2, 'y' => 38, 'width' => 46, 'height' => 19],
+            ['url' => 'https://example1.com', 'x' => 51, 'y' => 58, 'width' => 44, 'height' => 19]
 
         ]
     ],
     ['img' => 'https://lidl.gazetkapromocyjna.com.pl/1653/pages/large/2.jpg',
         'clicks' => [
-            ['url' => 'http://example1.com', 'x' => 2, 'y' => 38, 'width' => 46, 'height' => 19],
-            ['url' => 'http://example1.com', 'x' => 51, 'y' => 58, 'width' => 44, 'height' => 19]
+            ['url' => 'https://example1.com', 'x' => 2, 'y' => 38, 'width' => 46, 'height' => 19],
+            ['url' => 'https://example1.com', 'x' => 51, 'y' => 58, 'width' => 44, 'height' => 19]
 
         ]
     ],
@@ -240,8 +240,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
-            ['label' => 'os. Przytorze 36', 'url' => ''],
+            ['label' => $product, 'url' => ""]
         ];
 
         return view('subdomain.product', data:
@@ -260,8 +259,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
-            ['label' => 'os. Przytorze 36', 'url' => ''],
+            ['label' => 'Dino Poznań', 'url' => ""],
         ];
 
         return view('subdomain.index', data:
@@ -279,8 +277,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
-            ['label' => 'os. Przytorze 36', 'url' => ''],
+            ['label' => 'Dino Pozna', 'url' => ""]
         ];
 
         return view('subdomain.index_gps', data:
