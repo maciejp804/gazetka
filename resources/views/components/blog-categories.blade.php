@@ -1,5 +1,5 @@
 @props(['blogCategory', 'sum'])
-<div class="hidden swiper swiperCategory w-full pb-10 relative">
+<div class="hidden swiper swiperCategory w-full relative">
     <div class="swiper-wrapper">
 
             <div
