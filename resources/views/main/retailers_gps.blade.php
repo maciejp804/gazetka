@@ -24,10 +24,10 @@
                     </x-search>
                 </div>
 
-                <div class="w-full">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-4">
+                <div class="flex justify-center w-full">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                         @for($i=1; $i<=12; $i++)
-                            <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50 xl:w-48">
+                            <div class="w-34 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50 xl:w-48">
                                 <x-retailer-slide class="relative" image="https://hoian.pl/assets/image/store/biedronka.png" name="Biedronka" offer="5 ofert"/>
                             </div>
                         @endfor
@@ -45,7 +45,8 @@
             </x-section>
 
             <x-section>
-                <x-swiper-leaflets-promo title="Najnowsze gazetki promocyjne" :link="route('main.leaflets')"/>
+                <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>
+                <x-swiper-leaflets-promo />
             </x-section>
 
 

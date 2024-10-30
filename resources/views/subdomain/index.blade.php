@@ -14,7 +14,7 @@
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
 
-        <div class="w-full 1xl:w-265 mx-auto">
+        <x-div-1060>
 
             <x-section class="flex flex-col">
                 <x-header-index-subdomain/>
@@ -53,7 +53,7 @@
 
             <x-ad-1/>
 
-        </div>
+        </x-div-1060>
 
         {{-- Reklama pionowa po prawej stronie --}}
         <x-ad-3-vertical site="justify-start"/>

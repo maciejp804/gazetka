@@ -258,8 +258,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Dino Poznań', 'url' => ""],
+            ['label' => 'Dino', 'url' => '']
         ];
 
         return view('subdomain.index', data:
@@ -277,7 +276,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Dino Pozna', 'url' => ""]
+            ['label' => 'Dino Poznań', 'url' => ""]
         ];
 
         return view('subdomain.index_gps', data:
