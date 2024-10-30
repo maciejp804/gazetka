@@ -2,9 +2,15 @@
 <div class="hidden swiper swiperCategory w-full pb-10 relative">
     <div class="swiper-wrapper">
 
-            <div class="swiper-slide px-2 lg:px-4 py-2 border
-            @if(Request::is('abc-zakupowicza')) bg-white @else bg-gray-200 hover:bg-gray-100 @endif
-            rounded !w-auto">
+            <div
+                class="swiper-slide px-2 lg:px-4 py-2 border
+                @if(Request::is('abc-zakupowicza'))
+                bg-white
+                @else
+                bg-gray-200 hover:bg-gray-100
+               @endif
+                rounded !w-auto"
+            >
                 <a class="text-xs lg:text-sm" href="{{route('main.blogs')}}">Wszystkie ({{$sum}})</a>
             </div>
             @foreach($blogCategory as $category)
