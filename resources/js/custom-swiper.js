@@ -11,53 +11,72 @@ import {
     FreeMode
 } from "swiper/modules";
 
+    function initializeSwipers1() {
+        // Pobierz wszystkie elementy Swipera na stronie
+        const swipers = document.querySelectorAll('.mySwiper');
 
-function initializeSwipers1() {
-    // Pobierz wszystkie elementy Swipera na stronie
-    const swipers = document.querySelectorAll('.mySwiper');
+        swipers.forEach((swiperElement, index) => {
 
-    swipers.forEach((swiperElement, index) => {
-        // Unikalne identyfikatory nawigacji na podstawie indeksu lub atrybutu
-        const nextButton = document.querySelector(`.button-next-${index + 1}`);
-        const prevButton = document.querySelector(`.button-prev-${index + 1}`);
-        const pagination = swiperElement.querySelector('.swiper-pagination');
+            const nextClass = `.button-next-${index + 1}`;
+            const prevClass = `.button-prev-${index + 1}`;
+            // Unikalne identyfikatory nawigacji na podstawie indeksu lub atrybutu
+            const nextButton = document.querySelector(nextClass);
+            const prevButton = document.querySelector(prevClass);
+            const pagination = swiperElement.querySelector('.swiper-pagination');
 
-        // Inicjalizacja Swipera dla każdej instancji
-        new Swiper(swiperElement, {
-            modules: [Navigation, Pagination, Grid],
-            slidesPerView: 2,
-            spaceBetween: 5,
-            grid: {
-                rows: 2,
-                fill: 'row',
-            },
-            breakpoints: {
-                320: { slidesPerView: 2, spaceBetween: 5 },
-                375: { slidesPerView: 2, spaceBetween: 5 },
-                425: { slidesPerView: 2, spaceBetween: 25 },
-                475: { slidesPerView: 3, spaceBetween: 10 },
-                640: { slidesPerView: 3, spaceBetween: 5 },
-                768: { slidesPerView: 4, spaceBetween: 5, grid: { rows: 1 } },
-                1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 } },
-                1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 } }
-            },
-            pagination: {
-                el: pagination,
-                clickable: true,
-            },
-            navigation: {
-                nextEl: nextButton,
-                prevEl: prevButton,
-            }
-        });
-        console.log('wykonuje się');
-        console.log('Initializing swiper...');
-        console.log(swiperElement, nextButton, prevButton);
-    });
-}
+            // Inicjalizacja Swipera dla każdej instancji
+            new Swiper(swiperElement, {
+                modules: [Navigation, Pagination, Grid],
+                slidesPerView: 2,
+                spaceBetween: 5,
+                grid: {
+                    rows: 2,
+                    fill: 'row',
+                },
+                breakpoints: {
+                    320: { slidesPerView: 2, spaceBetween: 5 },
+                    375: { slidesPerView: 2, spaceBetween: 5 },
+                    425: { slidesPerView: 2, spaceBetween: 25 },
+                    475: { slidesPerView: 3, spaceBetween: 10 },
+                    640: { slidesPerView: 3, spaceBetween: 5 },
+                    768: { slidesPerView: 4, spaceBetween: 5, grid: { rows: 1 } },
+                    1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 } },
+                    1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 } }
+                },
+                pagination: {
+                    el: pagination,
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: nextButton,
+                    prevEl: prevButton,
+                },
+                on: {
+                    init: function() {
+                        // Hide previous button at the start
+                        toggleNavButtons(this, prevClass, nextClass);
+                    },
+                    slideChange: function() {
+                        // Toggle visibility of buttons after each slide change
+                        toggleNavButtons(this, prevClass, nextClass);
+                    },
+                    reachBeginning: function() {
+                        // Hide the previous button at the start
+                        document.querySelector(prevClass).style.display = 'none';
+                    },
+                    reachEnd: function() {
+                        // Hide the next button at the end
+                        document.querySelector(nextClass).style.display = 'none';
+                    }
+                }
 
-// Wywołaj funkcję, gdy strona się załaduje
-document.addEventListener('DOMContentLoaded', initializeSwipers1);
+            });
+
+        })
+    }
+
+    // Wywołaj funkcję, gdy strona się załaduje
+    document.addEventListener('DOMContentLoaded', initializeSwipers1);
 
 const swiper2 = new Swiper('.leafletPromo', {
     // configure Swiper to use modules
@@ -770,5 +789,97 @@ function toggleNavButtons(swiper, prevSelector, nextSelector) {
     }
 }
 
-
+//
+// import Swiper from "swiper";
+// import { Grid, HashNavigation, Keyboard, Navigation, Pagination, Scrollbar, Zoom, Autoplay, FreeMode } from "swiper/modules";
+//
+// // Helper function to toggle navigation buttons
+// function toggleNavButtons(swiper, prevSelector, nextSelector) {
+//     const prevButton = document.querySelector(prevSelector);
+//     const nextButton = document.querySelector(nextSelector);
+//
+//     if (!prevButton || !nextButton) {
+//         console.warn('One or both navigation buttons not found for', swiper);
+//         return;
+//     }
+//
+//     // Show both buttons by default
+//     prevButton.style.display = 'flex';
+//     nextButton.style.display = 'flex';
+//
+//     // Hide the previous button if at the beginning
+//     if (swiper.isBeginning) {
+//         prevButton.style.display = 'none';
+//     }
+//
+//     // Hide the next button if at the end
+//     if (swiper.isEnd) {
+//         nextButton.style.display = 'none';
+//     }
+// }
+//
+// // Universal function to initialize Swiper instances with showing slider after loading
+// function initSwiper(selector, options, prevSelector, nextSelector) {
+//     const swiperElement = document.querySelector(selector);
+//     if (!swiperElement) return;
+//
+//     const swiper = new Swiper(swiperElement, {
+//         ...options,
+//         navigation: {
+//             nextEl: nextSelector,
+//             prevEl: prevSelector,
+//         },
+//         on: {
+//             init: function () {
+//                 // Remove hidden class to show slider after initialization
+//                 swiperElement.classList.remove('hidden');
+//                 toggleNavButtons(this, prevSelector, nextSelector);
+//             },
+//             slideChange: function () {
+//                 toggleNavButtons(this, prevSelector, nextSelector);
+//             },
+//         }
+//     });
+//     return swiper;
+// }
+//
+// // Initialize multiple Swipers on DOMContentLoaded
+// document.addEventListener('DOMContentLoaded', function () {
+//     // Leaflet Promo Swiper
+//     initSwiper('.leafletPromo', {
+//         modules: [Navigation, Pagination, Grid, Zoom],
+//         slidesPerView: 2,
+//         spaceBetween: 5,
+//         grid: { rows: 2, fill: 'row' },
+//         breakpoints: {
+//             320: { slidesPerView: 2, spaceBetween: 25, grid: { rows: 2 } },
+//             425: { slidesPerView: 3, spaceBetween: 10, grid: { rows: 2 } },
+//             475: { slidesPerView: 3, spaceBetween: 5 },
+//             640: { slidesPerView: 3, spaceBetween: 5, grid: { rows: 2 } },
+//             768: { slidesPerView: 4, spaceBetween: 5, grid: { rows: 1 } },
+//             1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 } },
+//             1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 } }
+//         },
+//         pagination: { el: ".swiper-pagination", clickable: true }
+//     }, '.button-prev-swiper', '.button-next-swiper');
+//
+//     // Category Swiper
+//     initSwiper('.category-swiper', {
+//         modules: [Navigation, Pagination, Grid],
+//         slidesPerView: 2,
+//         spaceBetween: 5,
+//         grid: { rows: 2, fill: 'row' },
+//         breakpoints: {
+//             320: { slidesPerView: 2, spaceBetween: 5 },
+//             375: { slidesPerView: 3, spaceBetween: 5 },
+//             425: { slidesPerView: 3, spaceBetween: 10, grid: { rows: 1 } },
+//             475: { slidesPerView: 4, spaceBetween: 5 },
+//             640: { slidesPerView: 5, spaceBetween: 5 }
+//             // Add other breakpoints as needed
+//         },
+//         pagination: { el: ".swiper-pagination", clickable: true }
+//     }, '.swiper-button-prev', '.swiper-button-next');
+//
+//     // Add other Swipers as needed with initSwiper(...)
+// });
 
