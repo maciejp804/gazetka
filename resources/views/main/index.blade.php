@@ -102,7 +102,7 @@
             window.addEventListener('load', function() {
                 const swiperElement = document.querySelector('.mySwiper');
                 swiperElement.classList.remove('hidden');
-                swiperElement.classList.add('flex');
+
             });
         </script>
     @endpush
