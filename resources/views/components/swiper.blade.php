@@ -5,7 +5,7 @@
 <x-h2-title class="flex" :link="$link">{!! $title !!}</x-h2-title>
 
 <div class="w-full relative">
-    <div class="swiper {{$swiperClass}} hidden">
+    <div class="swiper {{$swiperClass}}">
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-10">
