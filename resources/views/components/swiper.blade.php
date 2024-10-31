@@ -19,20 +19,21 @@
         <!-- If we need pagination -->
         <div class="swiper-pagination"></div>
 
+        <!-- If we need navigation buttons -->
+        <x-button-next
+            class="button-next-{{$buttonClass}}"
+            size="4"
+            colour="gray-500"
+        />
+        <x-button-prev
+            class="button-prev-{{$buttonClass}}"
+            size="4"
+            colour="gray-500"
+        />
 
 
     </div>
-    <!-- If we need navigation buttons -->
-    <x-button-next
-        class="button-next-{{$buttonClass}}"
-        size="4"
-        colour="gray-500"
-    />
-    <x-button-prev
-        class="button-prev-{{$buttonClass}}"
-        size="4"
-        colour="gray-500"
-    />
+
 </div>
 
 <x-see-more class="lg:hidden" :link="$link">Zobacz wszystkie</x-see-more>
