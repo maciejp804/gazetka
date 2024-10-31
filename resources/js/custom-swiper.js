@@ -48,15 +48,6 @@ function initializeSwipers1() {
             navigation: {
                 nextEl: nextButton,
                 prevEl: prevButton,
-            },
-            on: {
-                init: function () {
-                    // Usuń klasę 'hidden' z każdego slajdu po załadowaniu Swipera
-                    this.slides.forEach(slide => {
-                        slide.classList.remove('hidden');  // Usuwa klasę ukrywającą
-                        slide.classList.add('flex');       // Dodaje klasę 'flex' z Tailwind
-                    });
-                }
             }
         });
         console.log('wykonuje się');
