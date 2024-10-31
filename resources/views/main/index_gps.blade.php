@@ -23,7 +23,9 @@
             </x-section>
 
             <x-section>
-                <x-swiper image="https://hoian.pl/assets/image/store/biedronka.png" name="Biedronka" offer="5 ofert" title="Sieci handlowe" :link="route('main.retailers')"/>
+                <x-swiper
+                    button-class="1"
+                    image="https://hoian.pl/assets/image/store/biedronka.png" name="Biedronka" offer="5 ofert" title="Sieci handlowe" :link="route('main.retailers')"/>
             </x-section>
 
             <x-section>
@@ -31,7 +33,9 @@
             </x-section>
 
             <x-section>
-                <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
+                <x-swiper
+                    button-class="2"
+                    image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
                           offer="od 11.59 zł" title="Najczęściej szukane produkty" :link="route('main.products')"
                           :uri="route('main.product',['name' => 'pomidory', 'id' => 1])"
                 />
@@ -46,7 +50,9 @@
             </x-section>
 
             <x-section>
-                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"/>
+                <x-swiper
+                    button-class="3"
+                    image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"/>
             </x-section>
 
             <x-section>

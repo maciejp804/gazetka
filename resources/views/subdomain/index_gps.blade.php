@@ -69,7 +69,9 @@
 
             <x-section>
                 <x-h2-title class="flex">Podobne sieci handlowe</x-h2-title>
-                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert"/>
+                <x-swiper
+                    button-class="1"
+                    image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert"/>
                 <x-see-more class="lg:hidden" href="#">Zobacz wszystkie</x-see-more>
             </x-section>
 

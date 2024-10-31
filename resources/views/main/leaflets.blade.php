@@ -39,7 +39,9 @@
 
             <x-section>
 
-                <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
+                <x-swiper
+                    button-class="1"
+                    image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
                           offer="od 11.59 zł" title="Najczęściej szukane produkty" :link="route('main.products')"
                           :uri="route('main.product',['name' => 'pomidory', 'id' => 1])"
                 />

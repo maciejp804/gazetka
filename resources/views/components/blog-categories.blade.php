@@ -22,15 +22,18 @@
             @endforeach
 
     </div>
-    <div class="button-next button-disabled absolute top-0 right-0 bg-gradient-to-r from-transparent to-white w-10 h-full z-10 flex justify-end">
-        <div class="flex self-center">
-            <x-header.svg svg="chevron-right"/>
+
+    <div class="button-next button-disabled absolute top-0 right-0 bg-gradient-to-r from-transparent to-white w-10 h-full z-10 justify-end">
+        <div class="flex self-center justify-center w-6 h-6 rounded-full">
+            <x-header.svg svg="chevron-right" size="5" colour="blue-550"/>
         </div>
     </div>
-    <div class="button-prev button-disabled absolute top-0 left-0 bg-gradient-to-l from-transparent to-white w-10 h-full z-10 flex justify-start ">
-        <div class="flex self-center">
-            <x-header.svg svg="chevron-left"/>
+
+    <div class="top-0 left-0 bg-gradient-to-l from-transparent to-white w-10 h-full z-10 button-prev button-disabled absolute flex justify-start">
+        <div class="flex">
+            <x-header.svg svg="chevron-left" size="5" colour="blue-550"/>
         </div>
     </div>
+
 </div>
 

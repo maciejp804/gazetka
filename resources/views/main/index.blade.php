@@ -24,21 +24,27 @@
             </x-section>
 
             <x-section>
-                <x-swiper image="https://upload.wikimedia.org/wikipedia/en/5/5d/Biedronka_logo.svg" name="Biedronka"
+                <x-swiper
+                    button-class="1"
+                    image="https://upload.wikimedia.org/wikipedia/en/5/5d/Biedronka_logo.svg" name="Biedronka"
                           offer="5 ofert" title="Sieci handlowe" :link="route('main.retailers')"
                           :uri="route('subdomain.index',['subdomain' => 'dino'])"
                 />
             </x-section>
 
             <x-section>
-                <x-swiper image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
+                <x-swiper
+                    button-class="2"
+                    image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
                           offer="od 11.59 zł" title="Najczęściej szukane produkty" :link="route('main.products')"
                           :uri="route('main.product',['name' => 'pomidory'])"
                 />
             </x-section>
 
             <x-section>
-                <x-swiper image="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Zabka_logo_2020.svg/1920px-Zabka_logo_2020.svg.png"
+                <x-swiper
+                    button-class="3"
+                    image="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Zabka_logo_2020.svg/1920px-Zabka_logo_2020.svg.png"
                           name="Żabka" offer="10 ofert" title="Sieci handlowe online" :link="route('main.retailers')"
                           :uri="route('subdomain.index',['subdomain' => 'dino'])"
                 />

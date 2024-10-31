@@ -39,9 +39,12 @@
             </x-section>
 
             <x-section>
-                <x-swiper image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png"
+                <x-swiper
+                    button-class="1"
+                    image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png"
                           name="Żabka" offer="10 ofert" title="Podobne sieci handlowe"
-                          :link="route('main.retailers')"/>
+                          :link="route('main.retailers')"
+                />
             </x-section>
 
             <x-section class="bg-gray-200 rounded">
