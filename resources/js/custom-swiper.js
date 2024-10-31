@@ -50,6 +50,7 @@ function initializeSwipers() {
                 prevEl: prevButton,
             }
         });
+        console.log('wykonuje sieś');
     });
 }
 
