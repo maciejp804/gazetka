@@ -97,5 +97,13 @@
         <x-descripton :items="$descriptions"/>
         <x-faq/>
     </div>
-
+    @push('scripts')
+        <script>
+            window.addEventListener('load', function() {
+                const swiperElement = document.querySelector('.mySwiper');
+                swiperElement.classList.remove('hidden');
+                swiperElement.classList.add('flex');
+            });
+        </script>
+    @endpush
 </x-layout>
