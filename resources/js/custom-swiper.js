@@ -12,7 +12,7 @@ import {
 } from "swiper/modules";
 
 
-function initializeSwipers() {
+function initializeSwipers1() {
     // Pobierz wszystkie elementy Swipera na stronie
     const swipers = document.querySelectorAll('.mySwiper');
 
@@ -50,12 +50,12 @@ function initializeSwipers() {
                 prevEl: prevButton,
             }
         });
-        console.log('wykonuje sieś');
+        console.log('wykonuje się');
     });
 }
 
 // Wywołaj funkcję, gdy strona się załaduje
-document.addEventListener('DOMContentLoaded', initializeSwipers);
+document.addEventListener('DOMContentLoaded', initializeSwipers1);
 
 const swiper2 = new Swiper('.leafletPromo', {
     // configure Swiper to use modules
