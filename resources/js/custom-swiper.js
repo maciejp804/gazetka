@@ -51,6 +51,8 @@ function initializeSwipers1() {
             }
         });
         console.log('wykonuje się');
+        console.log('Initializing swiper...');
+        console.log(swiperElement, nextButton, prevButton);
     });
 }
 
