@@ -16,7 +16,10 @@
         <x-div-1060>
 
             <x-section>
-                <x-swiper-leaflets-promo title="Najnowsze gazetki promocyjne" :link="route('main.leaflets')"/>
+                <x-swiper-leaflets-promo
+                    button-class="1"
+                    title="Najnowsze gazetki promocyjne"
+                    :link="route('main.leaflets')"/>
             </x-section>
 
             <x-section>

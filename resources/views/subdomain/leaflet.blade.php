@@ -52,12 +52,16 @@
 
             <x-section class="my-4">
                 <x-h2-title class="flex">Inne gazetki danej sieci</x-h2-title>
-                <x-swiper-leaflets-promo title="Inne gazetki danej sieci"/>
+                <x-swiper-leaflets-promo
+                    button-class="1"
+                    title="Inne gazetki danej sieci"/>
             </x-section>
 
             <x-section>
                 <x-h2-title class="flex">Zobacz inne aktualne gazetki</x-h2-title>
-                <x-swiper-leaflets-promo title="Zobacz inne aktualne gazetki"/>
+                <x-swiper-leaflets-promo
+                    button-class="2"
+                    title="Zobacz inne aktualne gazetki"/>
             </x-section>
 
             <x-section class="bg-gray-200 rounded">

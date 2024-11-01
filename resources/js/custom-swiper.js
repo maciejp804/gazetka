@@ -1,15 +1,96 @@
 import Swiper from "swiper";
-import {
-    Grid,
-    HashNavigation,
-    Keyboard,
-    Navigation,
-    Pagination,
-    Scrollbar,
-    Zoom,
-    Autoplay,
-    FreeMode
-} from "swiper/modules";
+import { Grid, Navigation, Pagination, Zoom, Autoplay, FreeMode} from "swiper/modules";
+
+// Universal function to initialize Swiper instances with showing slider after loading
+function initSwiper(selector, options, prevSelector, nextSelector) {
+    const swiperElements = document.querySelectorAll(selector);
+
+    swiperElements.forEach((swiperElement, index) => {
+        // Unikalne selektory nawigacyjne dla każdej instancji
+        const instancePrevSelector = `${prevSelector}-${index + 1}`;
+        const instanceNextSelector = `${nextSelector}-${index + 1}`;
+
+        const swiper = new Swiper(swiperElement, {
+            ...options,
+            navigation: {
+                nextEl: instanceNextSelector,
+                prevEl: instancePrevSelector,
+            },
+            on: {
+                init: function () {
+                    // Pobieranie przycisków nawigacyjnych
+                    const prevButton = document.querySelector(instancePrevSelector);
+                    const nextButton = document.querySelector(instanceNextSelector);
+
+                    // Sprawdzenie, czy ekran jest wystarczająco duży, aby pokazać przyciski
+                    if (window.innerWidth >= 768) {
+                        prevButton.classList.remove('hidden');
+                        nextButton.classList.remove('hidden');
+                    } else {
+                        prevButton.classList.add('hidden');
+                        nextButton.classList.add('hidden');
+                    }
+
+                    // Wywołanie toggleNavButtons dla przycisków nawigacyjnych
+                    toggleNavButtons(this, instancePrevSelector, instanceNextSelector);
+                },
+                slideChange: function () {
+                    toggleNavButtons(this, instancePrevSelector, instanceNextSelector);
+                },
+            }
+        });
+
+        // Funkcja do ponownej kontroli widoczności przycisków przy zmianie rozmiaru okna
+        window.addEventListener('resize', () => {
+            const prevButton = document.querySelector(instancePrevSelector);
+            const nextButton = document.querySelector(instanceNextSelector);
+
+            if (window.innerWidth < 768) {
+                prevButton.classList.add('hidden');
+                nextButton.classList.add('hidden');
+            } else {
+                prevButton.classList.remove('hidden');
+                nextButton.classList.remove('hidden');
+            }
+        });
+    });
+}
+
+// Helper function to toggle navigation buttons
+function toggleNavButtons(swiper, prevSelector, nextSelector) {
+    const prevButton = document.querySelector(prevSelector);
+    const nextButton = document.querySelector(nextSelector);
+
+    if (!prevButton || !nextButton) {
+        console.warn('One or both navigation buttons not found for', swiper);
+        return;
+    }
+
+    // Sprawdzenie szerokości ekranu
+    if (window.innerWidth <= 768) {
+        // Na mniejszych ekranach przyciski są ukryte
+        prevButton.style.display = 'none';
+        nextButton.style.display = 'none';
+        return; // Nie wykonuj dalszych działań
+    }
+
+
+    // Show both buttons by default
+    prevButton.style.display = 'flex';
+    nextButton.style.display = 'flex';
+
+    // Hide the previous button if at the beginning
+    if (swiper.isBeginning) {
+        prevButton.style.display = 'none';
+    }
+
+    // Hide the next button if at the end
+    if (swiper.isEnd) {
+        nextButton.style.display = 'none';
+    }
+}
+
+
 
     function initializeSwipers1() {
         // Pobierz wszystkie elementy Swipera na stronie
@@ -78,91 +159,25 @@ import {
     // Wywołaj funkcję, gdy strona się załaduje
     document.addEventListener('DOMContentLoaded', initializeSwipers1);
 
-const swiper2 = new Swiper('.leafletPromo', {
-    // configure Swiper to use modules
-    modules: [Navigation, Pagination, Grid, Zoom],
-    slidesPerView: 2,
-    spaceBetween: 5,
-    grid: {
-        rows : 2,
-        fill: 'row',
+document.addEventListener('DOMContentLoaded', function () {
+    // Leaflet Promo Swiper
+    initSwiper('.leafletPromo', {
+        modules: [Navigation, Pagination, Grid, Zoom],
+        slidesPerView: 2,
+        spaceBetween: 5,
+        grid: {rows: 2, fill: 'row'},
+        breakpoints: {
+            320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
+            425: {slidesPerView: 3, spaceBetween: 10, grid: {rows: 2}},
+            475: {slidesPerView: 3, spaceBetween: 5},
+            640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2}},
+            768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
+            1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
+            1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 1}}
+        },
+        pagination: {el: ".swiper-pagination", clickable: true}
+    }, '.button-prev-swiper', '.button-next-swiper');
 
-    },
-    breakpoints: {
-        // when window width is >= 320px
-        320: {
-            slidesPerView: 2,
-            spaceBetween: 25,
-            grid: {
-                rows : 2,
-                fill: 'row',
-
-            },
-
-        },
-        425: {
-            spaceBetween: 25,
-            },
-        475: {
-            slidesPerView: 3,
-            spaceBetween: 5,
-        },
-        640: {
-            slidesPerView: 3,
-            spaceBetween: 5,
-            grid: {
-                rows : 2,
-            }
-        },
-        768: {
-            slidesPerView: 4,
-            spaceBetween: 5,
-            grid: {
-                rows : 1,
-            }
-        },
-        1024: {
-            slidesPerView: 5,
-            spaceBetween: 5,
-            grid: {
-                rows : 1,
-            }
-        },
-        1440: {
-            slidesPerView: 5,
-            spaceBetween: 15,
-            grid: {
-                rows : 1,
-            }
-        },
-
-    },
-    pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-    },
-    navigation: {
-        nextEl: '.button-next-swiper',
-        prevEl: '.button-prev-swiper',
-    },
-    on: {
-        init: function() {
-            // Hide previous button at the start
-            toggleNavButtons(this, '.button-prev-swiper', '.button-next-swiper');
-        },
-        slideChange: function() {
-            // Toggle visibility of buttons after each slide change
-            toggleNavButtons(this, '.button-prev-swiper', '.button-next-swiper');
-        },
-        reachBeginning: function() {
-            // Hide the previous button at the start
-            document.querySelector('.button-prev-swiper').style.display = 'none';
-        },
-        reachEnd: function() {
-            // Hide the next button at the end
-            document.querySelector('.button-next-swiper').style.display = 'none';
-        }
-    }
 });
 
 const swiper3 = new Swiper('.category-swiper', {
@@ -764,30 +779,7 @@ const swiperBlog = new Swiper('.swiper-blog', {
     }
 });
 
-// Helper function to toggle navigation buttons
-function toggleNavButtons(swiper, prevSelector, nextSelector) {
-    const prevButton = document.querySelector(prevSelector);
-    const nextButton = document.querySelector(nextSelector);
 
-    if (!prevButton || !nextButton) {
-        console.warn('One or both navigation buttons not found for', swiper);
-        return;
-    }
-
-    // Show both buttons by default
-    prevButton.style.display = 'flex';
-    nextButton.style.display = 'flex';
-
-    // Hide the previous button if at the beginning
-    if (swiper.isBeginning) {
-        prevButton.style.display = 'none';
-    }
-
-    // Hide the next button if at the end
-    if (swiper.isEnd) {
-        nextButton.style.display = 'none';
-    }
-}
 
 //
 // import Swiper from "swiper";
@@ -818,30 +810,7 @@ function toggleNavButtons(swiper, prevSelector, nextSelector) {
 //     }
 // }
 //
-// // Universal function to initialize Swiper instances with showing slider after loading
-// function initSwiper(selector, options, prevSelector, nextSelector) {
-//     const swiperElement = document.querySelector(selector);
-//     if (!swiperElement) return;
-//
-//     const swiper = new Swiper(swiperElement, {
-//         ...options,
-//         navigation: {
-//             nextEl: nextSelector,
-//             prevEl: prevSelector,
-//         },
-//         on: {
-//             init: function () {
-//                 // Remove hidden class to show slider after initialization
-//                 swiperElement.classList.remove('hidden');
-//                 toggleNavButtons(this, prevSelector, nextSelector);
-//             },
-//             slideChange: function () {
-//                 toggleNavButtons(this, prevSelector, nextSelector);
-//             },
-//         }
-//     });
-//     return swiper;
-// }
+
 //
 // // Initialize multiple Swipers on DOMContentLoaded
 // document.addEventListener('DOMContentLoaded', function () {
