@@ -32,7 +32,7 @@
 
             <x-section class="my-4">
                 <x-h2-title class="flex" :link="route('main.leaflets')" :see-more-status="false">Nie znalazłeś czego szukasz? Sprawdź inne gazetki!</x-h2-title>
-                <x-swiper-leaflets-promo/>
+                <x-swiper-leaflets-promo button-class="1"/>
             </x-section>
 
 

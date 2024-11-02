@@ -56,7 +56,10 @@
             </x-section>
 
             <x-section>
-                <x-swiper-leaflets-promo title="Zobacz polecane gazetki" :link="route('main.leaflets')"/>
+                <x-swiper-leaflets-promo
+                    button-class="1"
+                    title="Zobacz polecane gazetki"
+                    :link="route('main.leaflets')"/>
             </x-section>
 
             <x-ad-1/>
