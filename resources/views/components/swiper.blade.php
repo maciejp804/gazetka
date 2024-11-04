@@ -33,7 +33,6 @@
 
 
     </div>
-
 </div>
 
 <x-see-more class="lg:hidden" :link="$link">Zobacz wszystkie</x-see-more>

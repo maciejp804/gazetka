@@ -4,7 +4,6 @@
         <div class="aspect-square rounded-full flex justify-center group-hover:bg-blue-550 group-hover:bg-opacity-50">
             <a class="self-center w-full" href="{{$uri}}">
                 <img class="w-3/4 rounded-full m-auto" src="{{ $image }}" alt="pro-img1">
-                <img class="absolute left-0 top-0 invisible opacity-0 aspect-square" src="https://hoian.pl/assets/image/pro/solid-color-image.png" alt="logo">
             </a>
         </div>
     </div>

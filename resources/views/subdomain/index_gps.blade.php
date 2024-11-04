@@ -60,7 +60,14 @@
             </x-section>
 
             <x-section>
-                <img src="{{asset('build/assets/map-BPSa5EXS.png')}}">
+                <x-map :map-id="'mapid'" :latitude="52.4057121" :longitude="16.9313448" :zoom="13" :markers="[
+                    ['lat' => 52.4057121, 'lng' => 16.9313448, 'name' => 'biedronka'],
+                    ['lat' => 52.4157121, 'lng' => 16.9213448, 'name' => 'lidl'],
+                    ['lat' => 52.4257121, 'lng' => 16.9413448, 'name' => 'tchibo'],
+                    ['lat' => 52.4257121, 'lng' => 16.9113448, 'name' => 'biedronka'],
+                    ['lat' => 52.4057121, 'lng' => 16.9213448, 'name' => 'lidl'],
+                ]" />
+
             </x-section>
 
             <x-section>

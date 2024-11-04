@@ -17,9 +17,9 @@
     <div class="flex flex-col gap-y-2 w-1/2 justify-between">
         <span class="text-right font-medium text-gray-700">Polub nas</span>
         <ul class="flex justify-end gap-x-2 border-b">
-            <x-header.link href="#" svg='facebook' sizeSvg="h-5 w-5" sizeLi="h-8 w-8" class="group"/>
-            <x-header.link href="#" svg='instagram' sizeSvg="h-5 w-5" sizeLi="h-8 w-8" class="group"/>
-            <x-header.link href="#" svg='pinterest' sizeSvg="h-5 w-5" sizeLi="h-8 w-8" class="group"/>
+            <x-header.link href="#" svg='facebook' sizeSvg="5" sizeLi="h-8 w-8" class="group"/>
+            <x-header.link href="#" svg='instagram' sizeSvg="5" sizeLi="h-8 w-8" class="group"/>
+            <x-header.link href="#" svg='pinterest' sizeSvg="5" sizeLi="h-8 w-8" class="group"/>
         </ul>
     </div>
 </div>

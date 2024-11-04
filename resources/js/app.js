@@ -8,6 +8,12 @@ import.meta.glob([
 import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse'
 
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+
 window.Alpine = Alpine;
 
 Alpine.plugin(collapse)

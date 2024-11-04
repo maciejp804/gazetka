@@ -25,6 +25,8 @@
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "html2canvas": "^1.4.1",
         "jquery": "^3.7.1",
+        "leaflet": "^1.9.4",
+        "leaflet.markercluster": "^1.5.3",
         "swiper": "^11.1.12"
     }
 }

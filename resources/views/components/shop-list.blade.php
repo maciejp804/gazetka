@@ -5,7 +5,7 @@
                 <a href="http://dino.gazetkapromocyjna.local/godziny-otwarcia/wielen-os-przytorze-36">Dino, Wieleń, os. Przytorze 36</a>
             </div>
             <div class="flex justify-center gap-2">
-                <x-header.svg svg="clock" colour="fill-gray-300" />
+                <x-header.svg svg="clock" colour="fill-gray-300"/>
                 <span>06:00-21:00</span>
             </div>
             <div class="flex justify-end gap-2">

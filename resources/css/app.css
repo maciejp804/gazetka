@@ -23,6 +23,28 @@
 
 [x-cloak] { display: none !important; }
 
+.custom-after-border::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 95%;
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #4285F4;
+}
+.center-marker {
+    background-color: orangered;
+    border: 1px solid orangered;
+    border-radius: 50%;
+    color: #FFFFFF;
+    font-size: 0px;
+
+    position: relative !important;
+    z-index: 1;
+}
 
 @tailwind base;
 @tailwind components;

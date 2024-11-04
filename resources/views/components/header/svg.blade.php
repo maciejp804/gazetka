@@ -1,4 +1,4 @@
-@props(['svg', 'colour' => 'blue-550', 'size' => '5'])
+@props(['svg', 'colour' => 'fill-blue-550', 'size' => '5'])
 
 @php
 
@@ -118,7 +118,7 @@
 
     }
 
-    $classes = 'flex self-center group-hover:fill-red-500 transition duration-300 ease-out fill-' . $colour .' h-'.$size.' w-'.$size ;
+    $classes = 'flex self-center group-hover:fill-red-500 transition duration-300 ease-out ' . $colour .' h-'.$size.' w-'.$size ;
 
 @endphp
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="{{$viewBox}}" {{$attributes->merge(['class' => $classes ])}}>
