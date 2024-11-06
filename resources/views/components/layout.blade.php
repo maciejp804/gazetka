@@ -7,8 +7,9 @@
     <meta name="robots" content="noindex">
     <title>Gazetka Promocyjna</title>
 
-    @vite([ 'resources/js/app.js',
+    @vite([
             'resources/css/app.css',
+
           ])
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
@@ -26,7 +27,9 @@
 
 <x-header :slug="$slug"/>
 <x-section class="lg:hidden">
-    <x-search :border="true" class="flex h-12">
+    <x-search :border="true" class="flex h-12" input-id="search-input-products-mobile"
+              result-id="results-box-products-mobile"
+              data-search-type="produkty-sklepy">
         <x-loupe-button href="#"/>
     </x-search>
 </x-section>
@@ -34,9 +37,12 @@
         {{ $slot }}
     </main>
 <x-footer/>
-@vite([ 'resources/js/custom-swiper.js',
-        'resources/js/leaflet-swiper.js',
-        ])
+@vite([
+    'resources/js/app.js',
+    'resources/js/filter.js',
+    'resources/js/custom-swiper.js',
+    'resources/js/leaflet-swiper.js'
+])
 @stack('scripts')
 </body>
 </html>

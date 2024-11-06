@@ -6,7 +6,7 @@ import.meta.glob([
 ]);
 
 import Alpine from 'alpinejs';
-import collapse from '@alpinejs/collapse'
+import collapse from '@alpinejs/collapse';
 
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -28,7 +28,3 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/zoom';
 import 'swiper/css/history';
 import 'swiper/css/free-mode';
-
-
-
-

@@ -33,12 +33,18 @@
                 </div>
                 <div class="flex self-center justify-end lg:w-3/5 h-12">
                     <div class="hidden lg:flex mr-2 w-5/12 ">
-                        <x-search :border="true" class="flex">
+                        <x-search :border="true" class="flex" input-id="search-input-products-desktop"
+                                  result-id="results-box-products-desktop"
+                                  da
+                                  data-search-type="produkty-sklepy">
                             <x-loupe-button href="#"/>
                         </x-search>
+
                     </div>
                     <div class="hidden lg:flex mr-2 w-3/12">
-                        <x-search class="flex" :placeholder="$slug">
+                        <x-search class="flex" :placeholder="$slug" input-id="search-input-location"
+                                  result-id="results-box-location"
+                                  data-search-type="miejscowosci">
                             <x-location-button class="" href="#"/>
                         </x-search>
                     </div>

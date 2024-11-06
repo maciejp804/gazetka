@@ -1,5 +1,6 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
+import scrollbar from 'tailwind-scrollbar';
 
 /** @type {import('tailwindcss').Config} */
 
@@ -12,6 +13,18 @@ export default {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
     ],
+    safelist: [
+        'rounded-t-3xl',
+        'rounded-b-lg',
+        'rounded-3xl',
+        'border-t',
+        'border-l',
+        'border-r',
+        'border-gray-200',
+        'hidden',
+        'flex',
+    ],
+
 
     theme: {
         extend: {
@@ -91,6 +104,8 @@ export default {
             }
         },
     },
-
-    plugins: [forms],
+    plugins: [
+        forms,
+        scrollbar, // Dodaj plugin scrollbar
+    ]
 };

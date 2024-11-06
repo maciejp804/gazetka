@@ -14,6 +14,7 @@ export default defineConfig({
                 'resources/js/custom-carousel.js',
                 'resources/js/custom-swiper.js',
                 'resources/js/leaflet-swiper.js',
+                'resources/js/filter.js',
             ],
             refresh: true,
         }),

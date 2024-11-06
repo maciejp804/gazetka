@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
 
@@ -318,6 +319,38 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
 
             ]);
     })->name('subdomain.leaflet');
+
+    Route::get('/search', function(Request $request) {
+        $query = $request->get('query');
+
+        // Tablice przykładowych danych
+        $produkty = [
+            ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+            ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+            ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+        ];
+
+        $sklepy = [
+            ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+            ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
+            ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+        ];
+
+        // Filtrowanie danych w obu tablicach
+        $filteredProdukty = array_filter($produkty, function ($item) use ($query) {
+            return stripos($item['name'], $query) !== false;
+        });
+
+        $filteredSklepy = array_filter($sklepy, function ($item) use ($query) {
+            return stripos($item['name'], $query) !== false;
+        });
+
+        // Zwrócenie wyników jako JSON z dwoma kategoriami
+        return response()->json([
+            'produkty' => array_values($filteredProdukty),
+            'sklepy' => array_values($filteredSklepy),
+        ]);
+    });
 });
 
 
@@ -561,6 +594,37 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
             ]);
     });
 
+    Route::get('/search', function(Request $request) {
+        $query = $request->get('query');
+
+        // Tablice przykładowych danych
+        $produkty = [
+            ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+            ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+            ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+        ];
+
+        $sklepy = [
+            ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+            ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
+            ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+        ];
+
+        // Filtrowanie danych w obu tablicach
+        $filteredProdukty = array_filter($produkty, function ($item) use ($query) {
+            return stripos($item['name'], $query) !== false;
+        });
+
+        $filteredSklepy = array_filter($sklepy, function ($item) use ($query) {
+            return stripos($item['name'], $query) !== false;
+        });
+
+        // Zwrócenie wyników jako JSON z dwoma kategoriami
+        return response()->json([
+            'produkty' => array_values($filteredProdukty),
+            'sklepy' => array_values($filteredSklepy),
+        ]);
+    });
 
 
     Route::get('/{slug}', function ($slug) use ($descriptions) {
@@ -600,6 +664,8 @@ Route::get('/api/inserts', function() {
 
     return response()->json($insertsData);
 });
+
+
 
 
 Route::get('/panel/', [Backcontroller::class, 'index']);
