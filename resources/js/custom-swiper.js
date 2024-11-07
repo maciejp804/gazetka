@@ -171,6 +171,29 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Swiper sieci handlowych na stronie sieci handlowych  */
 const swiper5 = new Swiper('.retailers-swiper', {
     // configure Swiper to use modules

@@ -321,36 +321,51 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
     })->name('subdomain.leaflet');
 
     Route::get('/search', function(Request $request) {
-        $query = $request->get('query');
+        $query = $request->input('query');
+        $searchType = $request->input('searchType');
 
-        // Tablice przykładowych danych
-        $produkty = [
-            ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
-            ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
-            ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
-        ];
+        $produkty = $sklepy = $miejscowosci = [];
 
-        $sklepy = [
-            ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-            ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
-            ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-        ];
 
-        // Filtrowanie danych w obu tablicach
-        $filteredProdukty = array_filter($produkty, function ($item) use ($query) {
-            return stripos($item['name'], $query) !== false;
-        });
 
-        $filteredSklepy = array_filter($sklepy, function ($item) use ($query) {
-            return stripos($item['name'], $query) !== false;
-        });
+        if ($searchType === 'produkty-sklepy') {
+            // Tablice przykładowych danych
+            $produkty = [
+                ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+                ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+                ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+            ];
+
+            $sklepy = [
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
+                ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+            ];
+            // Filtrowanie danych w obu tablicach
+            $produkty = array_filter($produkty, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+
+            $sklepy = array_filter($sklepy, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+        } elseif ($searchType === 'miejscowosci') {
+            $miejscowosci = [
+                ['name' => 'Poznań', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wieleń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+            ];
+            $miejscowosci = array_filter($miejscowosci, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+        }
+
 
         // Zwrócenie wyników jako JSON z dwoma kategoriami
         return response()->json([
-            'produkty' => array_values($filteredProdukty),
-            'sklepy' => array_values($filteredSklepy),
+            'html' => view('components.search-results', compact('produkty', 'sklepy', 'miejscowosci'))->render()
         ]);
     });
+
 });
 
 
@@ -560,6 +575,79 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
             ]);
     })->name('main.blog_article');
 
+    Route::get('/search', function(Request $request) {
+        $query = $request->input('query');
+        $searchType = $request->input('searchType');
+
+        $produkty = $sklepy = $miejscowosci = $gazetki = [];
+
+
+
+        if ($searchType === 'produkty-sklepy') {
+            // Tablice przykładowych danych
+            $produkty = [
+                ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+                ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+                ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
+            ];
+
+            $sklepy = [
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
+                ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+            ];
+            // Filtrowanie danych w obu tablicach
+            $produkty = array_filter($produkty, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+
+            $sklepy = array_filter($sklepy, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+        } elseif ($searchType === 'miejscowosci') {
+            $miejscowosci = [
+                ['name' => 'Poznań', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Piła', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wieleń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wisła', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wieluń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wieliczka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wiktoria', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Warszawa', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wrocław', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+            ];
+            $miejscowosci = array_filter($miejscowosci, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+        } elseif ($searchType === 'gazetki') {
+
+            $gazetki = [
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Aldi', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Aldi', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
+                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg']
+            ];
+
+            $gazetki = array_filter($gazetki, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+        }
+
+
+        // Zwrócenie wyników jako JSON z dwoma kategoriami
+        return response()->json([
+            'html' => view('components.search-results', compact('produkty', 'sklepy', 'miejscowosci', 'gazetki'))->render()
+        ]);
+    });
+
 
     Route::get('/', function () use ($descriptions) {
 
@@ -593,39 +681,6 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'breadcrumbs' => $breadcrumbs
             ]);
     });
-
-    Route::get('/search', function(Request $request) {
-        $query = $request->get('query');
-
-        // Tablice przykładowych danych
-        $produkty = [
-            ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
-            ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
-            ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
-        ];
-
-        $sklepy = [
-            ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-            ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
-            ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-        ];
-
-        // Filtrowanie danych w obu tablicach
-        $filteredProdukty = array_filter($produkty, function ($item) use ($query) {
-            return stripos($item['name'], $query) !== false;
-        });
-
-        $filteredSklepy = array_filter($sklepy, function ($item) use ($query) {
-            return stripos($item['name'], $query) !== false;
-        });
-
-        // Zwrócenie wyników jako JSON z dwoma kategoriami
-        return response()->json([
-            'produkty' => array_values($filteredProdukty),
-            'sklepy' => array_values($filteredSklepy),
-        ]);
-    });
-
 
     Route::get('/{slug}', function ($slug) use ($descriptions) {
 

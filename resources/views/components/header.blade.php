@@ -35,7 +35,6 @@
                     <div class="hidden lg:flex mr-2 w-5/12 ">
                         <x-search :border="true" class="flex" input-id="search-input-products-desktop"
                                   result-id="results-box-products-desktop"
-                                  da
                                   data-search-type="produkty-sklepy">
                             <x-loupe-button href="#"/>
                         </x-search>

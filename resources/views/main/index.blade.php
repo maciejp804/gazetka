@@ -73,11 +73,16 @@
                 <div class="flex flex-col gap-4 mb-4 lg:flex-row">
                     <x-select />
                     <x-select />
-                    <x-search placeholder="Wpisz nazwę sieci... " :border="true">
+                    <x-search placeholder="Wpisz nazwę sieci... " :border="true"
+                              input-id="search-input-leaflet"
+                              result-id="results-box-leaflet"
+                              data-search-type="gazetki"
+                              data-swiper-id="leaflet-swiper"
+                    >
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-swiper-leaflets swiper-class="leaflet"/>
+                <x-swiper-leaflets swiper-class="leaflet" data-swiper-id="leaflet-swiper"/>
                 <x-see-more class="lg:hidden pb-2" :link="route('main.leaflets')">Zobacz wszystkie</x-see-more>
             </x-section>
 

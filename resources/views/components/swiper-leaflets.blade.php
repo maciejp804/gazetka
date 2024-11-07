@@ -1,7 +1,7 @@
-@props(['swiperClass', 'buttonClass'=> 0])
+@props(['swiperClass', 'buttonClass'=> 0, 'dataSwiperId' => null])
 
 <div class="w-full">
-    <div class="swiper {{$swiperClass}}">
+    <div class="swiper {{$swiperClass}}" id="{{$dataSwiperId}}">
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-8">

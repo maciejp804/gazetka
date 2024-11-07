@@ -20,7 +20,12 @@
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
                     <x-select />
                     <x-select />
-                    <x-search placeholder="Wpisz nazwę sieci... " :border="true">
+                    <x-search placeholder="Wpisz nazwę sieci... " :border="true"
+                              input-id="search-input-leaflet"
+                              result-id="results-box-leaflet"
+                              data-search-type="gazetki"
+                              data-swiper-id="leaflet-swiper"
+                    >
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
