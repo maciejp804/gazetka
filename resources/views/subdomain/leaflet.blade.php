@@ -54,15 +54,11 @@
                 <x-h2-title class="flex">Inne gazetki danej sieci</x-h2-title>
                 <x-swiper-leaflets-promo
                     button-class="1"
-                    title="Inne gazetki danej sieci"/>
+                    title="Inne gazetki danej sieci"
+                    :leaflets="$leaflets"
+                    :link="route('main.leaflets')"/>
             </x-section>
 
-            <x-section>
-                <x-h2-title class="flex">Zobacz inne aktualne gazetki</x-h2-title>
-                <x-swiper-leaflets-promo
-                    button-class="2"
-                    title="Zobacz inne aktualne gazetki"/>
-            </x-section>
 
             <x-section class="bg-gray-200 rounded">
                 <x-h2-title see-more-status="fault" class="flex">Najbliższe miasta, w których znajdziesz sklepy Dino</x-h2-title>

@@ -1,20 +1,67 @@
-@props(['image', 'name', 'offer', 'hoverDesc'=> 'Pomidory', 'id'])
+@props(['item', 'id'])
+@php
+    $data1 = new DateTime('now'); // przykład bieżącej daty
+    $data2 = new DateTime($item['end']); // przykład końcowej daty
+    $diff = $data2->diff($data1);
+
+    // Sprawdź, czy data końcowa jest w przyszłości
+    if ($data2 > $data1) {
+        if ($diff->days > 30) {
+            $miesiace = $diff->y * 12 + $diff->m;
+            if ($miesiace > 4) {
+                $toEnd = "Ważne jeszcze $miesiace miesięcy";
+            } elseif ($miesiace > 1) {
+                $toEnd = "Ważne jeszcze $miesiace miesiące";
+            } else {
+                $toEnd = "Ważne jeszcze $miesiace miesiąc";
+            }
+        } elseif ($diff->days >= 1) { // Jeśli różnica wynosi co najmniej 1 dzień
+            $dni = $diff->days;
+
+            if ($dni > 4) {
+                $toEnd = "Ważne jeszcze $dni dni";
+            } elseif ($dni > 1) {
+                $toEnd = "Ważne jeszcze $dni dni";
+            } else {
+                $toEnd = "Ważne jeszcze $dni dzień";
+            }
+        } elseif ($diff->h > 0 || $diff->i > 0) { // Jeśli różnica wynosi mniej niż 1 dzień
+            $godziny = $diff->h;
+            $minuty = $diff->i;
+
+            if ($godziny > 1) {
+                $toEnd = "Ważne jeszcze $godziny godzin";
+            } elseif ($godziny === 1) {
+                $toEnd = "Ważne jeszcze $godziny godzina";
+            } else {
+                $toEnd = "Ważne jeszcze $minuty minut";
+            }
+        } else {
+            $toEnd = "Data już się kończy";
+        }
+    } else {
+        $toEnd = "Termin już upłynął";
+    }
+@endphp
+
+
+
 
 <div {{ $attributes }}>
-    <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded border border-gray-200 ">
-        <div class="aspect-square rounded flex justify-center">
+    <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded border border-gray-200 p-2">
+        <div class="rounded flex justify-center">
             <a class="self-center w-full" href="{{route('main.product', ['name'=>'pomidory','id'=>$id])}}">
-                <img class="w-9/12 m-auto" src="{{ $image }}" alt="pro-img1">
+                <img class="m-auto h-20 2xs:h-32 object-cover" src="{{ $item['logo'] }}" alt="pro-img1">
             </a>
-            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-blue-550 transition duration-300 ease-in"/>
+            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-orange-500 transition duration-300 ease-in"/>
         </div>
-        <div class="opacity-0 absolute w-full flex bg-blue-550 aspect-square rounded border border-blue-550 transition duration-500 hover:opacity-100">
-            <div class="flex flex-col justify-center gap-y-6 aspect-square">
+        <div class="opacity-0 absolute top-0 left-0 right-0 bottom-0 flex justify-center bg-blue-550 rounded border border-blue-550 transition duration-500 hover:opacity-100">
+            <div class="flex flex-col justify-center gap-y-6">
                 <a href="{{route('main.product', ['name'=>'pomidory','id'=>$id])}}" class="flex justify-center aspect-square self-center w-10 h-10 bg-blue-400 rounded-full text-white hover:text-blue-550 transition duration-500 ease-in">
                     <i class="fa fa-solid fa-search self-center"></i>
                 </a>
                 <a href="{{route('main.product', ['name'=>'pomidory','id'=>$id])}}" class="text-white text-sm">
-                    <span>{!! $hoverDesc !!}</span>
+                    <span>{{ $item['name'] }}</span>
                 </a>
             </div>
 
@@ -22,11 +69,20 @@
             <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>
 
         </div>
+        <div class="text-center min-h-12">
+            <h3 class="text-gray-800 text-base ">
+                <a href="{{route('main.product', ['name'=>'pomidory','id'=>$id])}}" class="font-semibold group-hover:font-bold">
+                    <span class="line-clamp-2">{{ $item['name'] }}</span></a>
+            </h3>
+        </div>
+
+        <div class="flex py-2 justify-between">
+            <div class="flex self-start text-blue-550 font-semibold text-base 2xs:text-xl"><span class="old-price">{{ $item['price'] }} zł</span></div>
+            <img class="flex self-end max-w-8 flex" src="https://img.blix.pl/image/brand/thumbnail_1.jpg" alt="pro-img1">
+        </div>
+        <div class="flex">
+            <span class="text-xs text-gray-600 min-h-8">{{ $toEnd }}</span>
+        </div>
     </div>
-    <div class="text-center">
-        <h3 class="text-gray-800 text-xs">
-            <a href="{{route('main.product', ['name'=>'pomidory','id'=>$id])}}" class="font-semibold group-hover:font-bold">{{ $name }}</a>
-        </h3>
-        <div class="text-gray-500 group-hover:font-semibold text-xs"><span class="old-price">{{ $offer }}</span></div>
-    </div>
+
 </div>

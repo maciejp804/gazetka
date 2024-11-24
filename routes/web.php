@@ -9,6 +9,60 @@ use Jenssegers\Agent\Agent;
 
 $mainDomain = env('MAIN_DOMAIN', 'gazetkapromocyjna.local');
 
+$leaflets = [
+    ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1907/1.jpg'],
+    ['name' => 'Delikatesy Centrum', 'category' => 'dom', 'create' => '2024-11-07', 'start' => '2024-11-15',  'end' => '2024-11-25', 'logo' => 'https://delikatesy-centrum.gazetkapromocyjna.com.pl/613/1.jpg'],
+    ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-11',  'end' => '2024-11-30', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1906/1.jpg'],
+    ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-06', 'start' => '2024-11-10',  'end' => '2024-11-25', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1905/1.jpg'],
+    ['name' => 'Delikatesy Centrum', 'category' => 'zbawki', 'create' => '2024-11-05', 'start' => '2024-11-28',  'end' => '2024-12-31', 'logo' => 'https://delikatesy-centrum.gazetkapromocyjna.com.pl/616/1.jpg'],
+    ['name' => 'Biedronka', 'category' => 'zabawki', 'create' => '2024-10-08', 'start' => '2024-10-15',  'end' => '2024-11-09', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1904/1.jpg'],
+    ['name' => 'Biedronka', 'category' => 'zabawki', 'create' => '2024-11-08', 'start' => '2024-11-15',  'end' => '2025-03-20', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1903/1.jpg'],
+    ['name' => 'Netto', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-11-15',  'end' => '2024-11-30', 'logo' => 'https://netto.gazetkapromocyjna.com.pl/1193/1.jpg'],
+    ['name' => 'Netto', 'category' => 'spozywcze', 'create' => '2024-10-31', 'start' => '2024-11-01',  'end' => '2024-11-29', 'logo' => 'https://netto.gazetkapromocyjna.com.pl/1192/1.jpg'],
+    ['name' => 'Aldi', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-12-15',  'end' => '2024-12-31', 'logo' => 'https://aldi.gazetkapromocyjna.com.pl/1222/1.jpg'],
+    ['name' => 'Aldi', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-11-29',  'end' => '2024-12-02', 'logo' => 'https://aldi.gazetkapromocyjna.com.pl/1221/1.jpg'],
+    ['name' => 'Biedronka', 'category' => 'spozywcze', 'create' => '2024-10-18', 'start' => '2024-10-25',  'end' => '2024-11-25', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1902/1.jpg'],
+    ['name' => 'Lidl', 'category' => 'dom', 'create' => '2024-11-07', 'start' => '2024-11-15',  'end' => '2024-11-25', 'logo' => 'https://lidl.gazetkapromocyjna.com.pl/1668/1.jpg'],
+    ['name' => 'Lidl', 'category' => 'spozywcze', 'create' => '2024-11-07', 'start' => '2024-11-15',  'end' => '2024-11-25', 'logo' => 'https://lidl.gazetkapromocyjna.com.pl/1667/1.jpg']
+];
+
+$retailers = [
+    ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-08', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg', 'offers' => 6],
+    ['name' => 'Lidl', 'category' => 'dom', 'create' => '2024-11-07', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg', 'offers' => 7],
+    ['name' => 'Netto', 'category' => 'dom', 'create' => '2024-11-08', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg', 'offers' => 5],
+    ['name' => 'Delikatesy Centrum', 'category' => 'zbawki', 'create' => '2024-11-05', 'logo' => 'https://img.blix.pl/image/brand/eb13a764611a871d9d004f2bb23aec85.jpeg', 'offers' => 3],
+    ['name' => 'Aldi', 'category' => 'spozywcze', 'create' => '2024-11-08', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_66.jpg', 'offers' => 8],
+    ['name' => 'Auchan', 'category' => 'spozywcze', 'create' => '2024-10-18', 'logo' => 'https://img.blix.pl/image/brand/f1497864fd7e717193074b0c710960f0.jpg', 'offers' => 4],
+    ['name' => 'Carrefour', 'category' => 'dom', 'create' => '2024-11-07', 'logo' => 'https://img.blix.pl/image/brand/dcbfe157c7908a3b4903e7610fb8a704.jpeg', 'offers' => 10],
+    ['name' => 'Dino', 'category' => 'spozywcze', 'create' => '2024-11-07', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_71.jpg', 'offers' => 3],
+];
+
+$products = [
+    ['name' => 'Pomidory malinowe', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-24 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/180x180/pomidory-malinowe-wazone-g99e8v.jpg', 'price' => '5,99', ],
+    ['name' => 'Chleb baltonowski krojony', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-19 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/350x350/chleb-tradycyjny-Cgx4Nf.jpg', 'price' => '7,99'],
+    ['name' => 'Mleko UHT 3,2%', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-17 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/350x350/laciate-mleko-swieze-32-1-l-7bflld.jpg', 'price' => '2,99'],
+    ['name' => 'Wiadro do mopa', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-12-01 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/350x350/vileda-zestaw-mop-ultramax-box-d0t54q.jpg','price' => '79,99'],
+    ['name' => 'Płyn do mycia naczyń', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2025-01-16 23:59:59','logo' => 'https://www.carrefour.pl/images/product/350x350/fairy-extra-lilac-washing-up-liquid-fairys-1-formula-for-fast-tough-grease-cleaning-650ml-llDYxQ.jpg', 'price' => '6,99'],
+    ['name' => 'Banany', 'category' => 'owoce', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2028-11-16 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/350x350/banany-bio-wazone-opakowanie-1f6fdi.jpg', 'price' => '7,49'],
+    ['name' => 'Marchew', 'category' => 'warzywa', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-30 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/350x350/marchew-wazona-46nnrg.jpg', 'price' => '1,99'],
+    ['name' => 'Kawa rozpuszczalna Tchibo', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-11-08', 'end' => '2024-11-16 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/350x350/jacobs-kronung-kawa-mielona-500-g-I0yNTr.jpg', 'price' => '15,99'],
+    ['name' => 'Sofa', 'category' => 'spozywcze', 'create' => '2024-11-08', 'start' => '2024-11-08', 'end' => '2024-11-18 23:59:59', 'logo' => 'https://www.carrefour.pl/images/product/350x350/jacobs-kronung-kawa-mielona-500-g-I0yNTr.jpg', 'price' => '1500,99'],
+];
+
+$vouchers = [
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Apart', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Lidl', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+    ['name' => 'Kruk', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/logo/20096_45x100.jpg', 'image' => 'https://gazetkapromocyjna.com.pl/static/images/vouchers/offers/offer-2023-11-21-9157.png', 'uri' => 'https://tc.tradetracker.net/?c=20096&amp;m=1183634&amp;a=222077&amp;r=&amp;u=https%3A%2F%2Fwkruk.pl%2F', 'description' => '15% zniżki na biżuterię ze srebra w sklepie W.KRUK!'],
+];
+
 $blogCategory = [
     ['name' => 'Porady', 'id' => '1', 'qty' => 10, 'slug' => 'porady'],
     ['name' => 'Recenzje', 'id' => '2', 'qty' => 22, 'slug' => 'recenzje'],
@@ -214,10 +268,25 @@ $insertData = [
     ]],
 ];
 
+$leaflets_category = $retailers_category = [
+    ['name' => 'Dom', 'value' => 'dom'],
+    ['name' => 'Moda', 'value' => 'moda'],
+    ['name' => 'Zabawki', 'value' => 'zabawki'],
+    ['name' => 'Art.Spożywcze', 'value' => 'spozywcze'],
+    ['name' => 'Ogród', 'value' => 'ogrod'],
+];
 
-Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData) {
+$leaflets_time = $retailers_time = [
+    ['name' => 'Ostatnio dodane', 'value' => 'last'],
+    ['name' => 'Kończą się', 'value' => 'ending'],
+    ['name' => 'Najnowsze', 'value' => 'newest'],
+];
 
-    Route::get('/godziny-otwarcia/wielen-os-przytorze-36' ,function ($subdomain){
+
+
+Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData, $leaflets_category, $leaflets_time, $leaflets, $vouchers, $retailers, $products) {
+
+    Route::get('/godziny-otwarcia/wielen-os-przytorze-36' ,function ($subdomain) use ($leaflets, $leaflets_time, $leaflets_category, $vouchers){
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -225,73 +294,106 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
             ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain])],
             ['label' => 'os. Przytorze 36', 'url' => ''],
         ];
+        $subdomain = 'lidl';
+
+        // Filtrowanie według nazwy
+        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
+            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
+        });
 
         return view('subdomain.shop', data:
             [
-                'data' => '',
-                'image' => '',
                 'slug' => 'Wieleń',
                 'h1Title'=> 'Dino Wieleń, os. Przytorze 36',
                 'subdomain' => $subdomain,
                 'breadcrumbs' => $breadcrumbs,
+                'leaflets_category' => $leaflets_category,
+                'leaflets_time' => $leaflets_time,
+                'leaflets' => $leaflets,
+                'vouchers' => $vouchers,
             ]);
     })->name('subdomain.shop');
 
-    Route::get('/w-gazetce/{product}' ,function ($subdomain, $product){
+    Route::get('/w-gazetce/{product}' ,function ($subdomain, $product) use ($leaflets){
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
             ['label' => $product, 'url' => ""]
         ];
+        $subdomain = 'lidl';
+
+        // Filtrowanie według nazwy
+        $leaflets_filtred = array_filter($leaflets, function ($item) use ($subdomain) {
+            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
+        });
 
         return view('subdomain.product', data:
             [
-                'data' => '',
-                'image' => '',
                 'slug' => 'Wieleń',
                 'h1Title'=> $product.' w Dino',
                 'subdomain' => $subdomain,
                 "breadcrumbs" => $breadcrumbs,
+                'leaflets' => $leaflets_filtred,
+                "leaflets_others" => $leaflets,
             ]);
     })->name('subdomain.product');
 
-    Route::get('/', function ($subdomain) {
+    Route::get('/', function ($subdomain) use ($leaflets_category, $leaflets_time, $leaflets, $vouchers) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => '']
         ];
 
+        $subdomain = 'lidl';
+
+        // Filtrowanie według nazwy
+        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
+            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
+        });
+
+
         return view('subdomain.index', data:
             [
-                'data' => '',
-                'image' => '',
                 'slug' => 'Warszawa',
                 'h1Title'=> 'Dino gazetka • najnowsze ulotki i aktualne oferty promocyjne w Dino od 1.10',
                 'subdomain' => $subdomain,
                 'breadcrumbs' => $breadcrumbs,
+                'leaflets_category' => $leaflets_category,
+                'leaflets_time' => $leaflets_time,
+                'leaflets' => $leaflets,
+                'vouchers' => $vouchers,
             ]);
     })->name('subdomain.index');
 
-    Route::get('/poznan', function ($subdomain) {
+    Route::get('/poznan', function ($subdomain) use ($leaflets_category, $leaflets_time, $leaflets, $vouchers) {
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
             ['label' => 'Dino Poznań', 'url' => ""]
         ];
 
+        $subdomain = 'lidl';
+
+        // Filtrowanie według nazwy
+        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
+            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
+        });
+
         return view('subdomain.index_gps', data:
             [
-                'data' => '',
-                'image' => '',
                 'slug' => 'Poznań',
                 'h1Title'=> 'Dino gazetka • najnowsze ulotki i aktualne oferty promocyjne w Dino od 1.10 - Poznań',
                 'subdomain' => $subdomain,
                 'breadcrumbs' => $breadcrumbs,
+                'leaflets_category' => $leaflets_category,
+                'leaflets_time' => $leaflets_time,
+                'leaflets' => $leaflets,
+                'vouchers' => $vouchers,
             ]);
     })->name('subdomain.index_gps');
 
-    Route::get('/gazetka-promocyjna-1', function ($subdomain) use ($pages, $inserts, $insertData, $ads) {
+    Route::get('/gazetka-promocyjna-1', function ($subdomain) use ($pages, $inserts, $insertData, $ads, $leaflets) {
 
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne
@@ -302,10 +404,15 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
             ['label' => 'Gazetka promocyjna z Dino', 'url' => '']
         ];
 
+        $subdomain = 'lidl';
+
+        // Filtrowanie według nazwy
+        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
+            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
+        });
+
         return view('subdomain.leaflet', data:
             [
-                'data' => '',
-                'image' => '',
                 'slug' => 'Poznań',
                 'h1Title'=> 'Gazetka promocyjna z Dino "Najbliżej Ciebie" (ważna od 10-10 do 16-10-2024)',
                 'isMobile' => $isMobile,
@@ -314,55 +421,296 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
                 'insertData' => $insertData,
                 'ads' => $ads,
                 'subdomain' => $subdomain,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets
 
 
             ]);
     })->name('subdomain.leaflet');
 
-    Route::get('/search', function(Request $request) {
+
+    Route::get('/search/single/dropdown', function(Request $request) {
+
         $query = $request->input('query');
         $searchType = $request->input('searchType');
 
-        $produkty = $sklepy = $miejscowosci = [];
+        $products = $retailers = $places = [];
 
+        if ($searchType === 'products-retailers') {
 
-
-        if ($searchType === 'produkty-sklepy') {
             // Tablice przykładowych danych
-            $produkty = [
+            $products = [
                 ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
                 ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
                 ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
             ];
 
-            $sklepy = [
+            $retailers = [
                 ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
                 ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
                 ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
             ];
+
             // Filtrowanie danych w obu tablicach
-            $produkty = array_filter($produkty, function ($item) use ($query) {
+            $products = array_filter($products, function ($item) use ($query) {
                 return stripos($item['name'], $query) !== false;
             });
 
-            $sklepy = array_filter($sklepy, function ($item) use ($query) {
+            $retailers = array_filter($retailers, function ($item) use ($query) {
                 return stripos($item['name'], $query) !== false;
             });
-        } elseif ($searchType === 'miejscowosci') {
-            $miejscowosci = [
+
+        } elseif ($searchType === 'places') {
+            $places = [
                 ['name' => 'Poznań', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Piła', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
                 ['name' => 'Wieleń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wisła', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wieluń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wieliczka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wiktoria', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Warszawa', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
+                ['name' => 'Wrocław', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
             ];
-            $miejscowosci = array_filter($miejscowosci, function ($item) use ($query) {
+            $places = array_filter($places, function ($item) use ($query) {
                 return stripos($item['name'], $query) !== false;
             });
         }
-
-
         // Zwrócenie wyników jako JSON z dwoma kategoriami
         return response()->json([
-            'html' => view('components.search-results', compact('produkty', 'sklepy', 'miejscowosci'))->render()
+            'html' => view('components.search-results-dropdown', compact('products', 'retailers', 'places'))->render()
+        ]);
+    });
+
+    Route::get('search/triple/swiper', function (Request $request) use ($leaflets) {
+        $query = $request->input('query');
+        if($query !== ''){
+            $query = strtolower($query);
+        }
+        $searchType = $request->input('searchType');
+        $category = $request->input('category');
+        $time = $request->input('time');
+
+
+        if ($searchType === 'leaflets') {
+            // Filtrowanie według nazwy
+            $leaflets = array_filter($leaflets, function ($item) use ($query) {
+                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $leaflets = array_filter($leaflets, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $leaflets = array_filter($leaflets, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+
+        }
+        // Zwrócenie wyników jako JSON z widokiem
+        return response()->json([
+            'html' => view('components.search-results-swiper', compact('leaflets'))->render()
+        ]);
+    });
+
+    Route::get('search/triple', function (Request $request) use ($leaflets, $retailers, $products, $vouchers) {
+        $query = $request->input('query');
+        if($query !== ''){
+            $query = strtolower($query);
+        }
+        $searchType = $request->input('searchType');
+        $category = $request->input('category');
+        $time = $request->input('time');
+
+        if ($searchType === 'leaflets') {
+
+            // Filtrowanie według nazwy
+            $leaflets = array_filter($leaflets, function ($item) use ($query) {
+                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $leaflets = array_filter($leaflets, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $leaflets = array_filter($leaflets, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+            $retailers = [];
+            $products = [];
+            $vouchers = [];
+        } elseif ($searchType === 'retailers') {
+            $retailers = array_filter($retailers, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $retailers = array_filter($retailers, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($retailers, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($retailers, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $retailers = array_filter($retailers, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+
+            $leaflets = [];
+            $products = [];
+            $vouchers = [];
+
+        } elseif ($searchType === 'products'){
+
+            $products = array_filter($products, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $products = array_filter($products, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($products, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($products, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $products = array_filter($products, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+
+
+            $retailers = [];
+            $leaflets = [];
+            $vouchers = [];
+        } elseif ($searchType === 'vouchers') {
+
+            // Filtrowanie według nazwy
+            $vouchers = array_filter($vouchers, function ($item) use ($query) {
+                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $vouchers = array_filter($vouchers, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($vouchers, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($vouchers, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $vouchers = array_filter($vouchers, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+            $retailers = [];
+            $leaflets = [];
+            $products = [];
+        }
+
+        // Zwrócenie wyników jako JSON z widokiem
+        return response()->json([
+            'html' => view('components.search-results-container', compact('leaflets', 'retailers', 'products', 'vouchers'))->render()
         ]);
     });
 
@@ -372,9 +720,9 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
 
 
 
-Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory) {
+Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,  $leaflets_category, $leaflets_time, $retailers_category, $retailers_time, $leaflets, $retailers, $products, $vouchers) {
 
-    Route::get('/gazetki-promocyjne', function () use ($descriptions) {
+    Route::get('/gazetki-promocyjne', function () use ($descriptions, $leaflets_category, $leaflets_time, $leaflets, $products) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -389,10 +737,14 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'h1Title'=> 'Gazetki <strong>promocyjne</strong>',
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'leaflets_category' => $leaflets_category,
+                'leaflets_time' => $leaflets_time,
+                'products' => $products,
             ]);
     })->name('main.leaflets');
 
-    Route::get('/gazetki-promocyjne/poznan', function () use ($descriptions) {
+    Route::get('/gazetki-promocyjne/poznan', function () use ($descriptions, $leaflets_category, $leaflets_time, $leaflets, $products) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -408,10 +760,14 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'h1Title'=> 'Gazetki <strong>promocyjne</strong>',
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'leaflets_category' => $leaflets_category,
+                'leaflets_time' => $leaflets_time,
+                'products' => $products,
             ]);
     });
 
-    Route::get('/sieci-handlowe', function () use ($descriptions) {
+    Route::get('/sieci-handlowe', function () use ($descriptions, $retailers, $retailers_category, $retailers_time, $leaflets, $products) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -426,10 +782,15 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'h1Title'=> 'Sieci <strong>handlowe</strong>',
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'retailers' => $retailers,
+                'retailers_category' => $retailers_category,
+                'retailers_time' => $retailers_time,
+                'products' => $products,
             ]);
     })->name('main.retailers');
 
-    Route::get('/sieci-handlowe/poznan', function () use ($descriptions){
+    Route::get('/sieci-handlowe/poznan', function () use ($descriptions, $retailers, $retailers_category, $retailers_time, $leaflets, $products){
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -445,10 +806,15 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'h1Title'=> 'Sieci <strong>handlowe</strong>',
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'retailers' => $retailers,
+                'retailers_category' => $retailers_category,
+                'retailers_time' => $retailers_time,
+                'products' => $products,
             ]);
     });
 
-    Route::get('/kupony-rabatowe', function () use ($descriptions) {
+    Route::get('/kupony-rabatowe', function () use ($descriptions, $retailers_category, $retailers_time, $products, $vouchers) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -463,10 +829,14 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'h1Title'=> '<strong>Kupony rabatowe</strong>',
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
+                'retailers_category' => $retailers_category,
+                'retailers_time' => $retailers_time,
+                'products' => $products,
+                'vouchers' => $vouchers,
             ]);
     })->name('main.coupons');
 
-    Route::get('/produkty', function () use ($descriptions) {
+    Route::get('/produkty', function () use ($descriptions, $retailers_category, $retailers_time, $products, $leaflets) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -481,10 +851,14 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'h1Title'=> '<strong>Produkty - promocje w gazetkach</strong>',
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
+                'retailers_category' => $retailers_category,
+                'retailers_time' => $retailers_time,
+                'products' => $products,
+                'leaflets' => $leaflets,
             ]);
     })->name('main.products');
 
-    Route::get('/produkty/{name}', function ($name) use ($descriptions) {
+    Route::get('/produkty/{name}', function ($name) use ($descriptions, $products, $vouchers) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -501,11 +875,13 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'id' => 1,
                 'name' => $name,
                 'descriptions' => $descriptions,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'products' => $products,
+                'vouchers' => $vouchers,
             ]);
     })->name('main.product');
 
-    Route::get('/abc-zakupowicza', function () use ($descriptions, $blogCategory) {
+    Route::get('/abc-zakupowicza', function () use ($descriptions, $blogCategory, $leaflets, $vouchers) {
         $sum = 0;
         foreach ($blogCategory as $item) {
             $sum += $item['qty'];
@@ -525,11 +901,13 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'descriptions' => $descriptions,
                 'blogCategory' => $blogCategory,
                 'sum' => $sum,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'vouchers' => $vouchers,
             ]);
     })->name('main.blogs');
 
-    Route::get('/abc-zakupowicza/porady', function () use ($descriptions, $blogCategory) {
+    Route::get('/abc-zakupowicza/porady', function () use ($descriptions, $blogCategory, $leaflets, $vouchers) {
         $sum = 0;
         foreach ($blogCategory as $item) {
             $sum += $item['qty'];
@@ -550,7 +928,9 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'descriptions' => $descriptions,
                 'blogCategory' => $blogCategory,
                 'sum' => $sum,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'vouchers' => $vouchers,
             ]);
     })->name('main.blogs_category');
 
@@ -575,37 +955,39 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
             ]);
     })->name('main.blog_article');
 
-    Route::get('/search', function(Request $request) {
+    Route::get('/search/single/dropdown', function(Request $request) {
+
         $query = $request->input('query');
         $searchType = $request->input('searchType');
 
-        $produkty = $sklepy = $miejscowosci = $gazetki = [];
+        $products = $retailers = $places = [];
 
+        if ($searchType === 'products-retailers') {
 
-
-        if ($searchType === 'produkty-sklepy') {
             // Tablice przykładowych danych
-            $produkty = [
+            $products = [
                 ['name' => 'bibuła', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
                 ['name' => 'biwak', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
                 ['name' => 'pączek', 'logo' => 'https://zakupy.biedronka.pl/dw/image/v2/BKFJ_PRD/on/demandware.static/-/Sites-PL_Master_Catalog/default/dw86fc0dc7/images/hi-res/359277.jpg'],
             ];
 
-            $sklepy = [
+            $retailers = [
                 ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
                 ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
                 ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
             ];
+
             // Filtrowanie danych w obu tablicach
-            $produkty = array_filter($produkty, function ($item) use ($query) {
+            $products = array_filter($products, function ($item) use ($query) {
                 return stripos($item['name'], $query) !== false;
             });
 
-            $sklepy = array_filter($sklepy, function ($item) use ($query) {
+            $retailers = array_filter($retailers, function ($item) use ($query) {
                 return stripos($item['name'], $query) !== false;
             });
-        } elseif ($searchType === 'miejscowosci') {
-            $miejscowosci = [
+
+        } elseif ($searchType === 'places') {
+            $places = [
                 ['name' => 'Poznań', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
                 ['name' => 'Piła', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
                 ['name' => 'Wieleń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
@@ -616,40 +998,251 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 ['name' => 'Warszawa', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
                 ['name' => 'Wrocław', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
             ];
-            $miejscowosci = array_filter($miejscowosci, function ($item) use ($query) {
-                return stripos($item['name'], $query) !== false;
-            });
-        } elseif ($searchType === 'gazetki') {
-
-            $gazetki = [
-                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_1.jpg'],
-                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Lidl', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Netto', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Aldi', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Aldi', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg'],
-                ['name' => 'Biedronka', 'logo' => 'https://img.blix.pl/image/brand/009a4e69e0832285e5f754b1c2890f1e.jpeg']
-            ];
-
-            $gazetki = array_filter($gazetki, function ($item) use ($query) {
+            $places = array_filter($places, function ($item) use ($query) {
                 return stripos($item['name'], $query) !== false;
             });
         }
-
-
         // Zwrócenie wyników jako JSON z dwoma kategoriami
         return response()->json([
-            'html' => view('components.search-results', compact('produkty', 'sklepy', 'miejscowosci', 'gazetki'))->render()
+            'html' => view('components.search-results-dropdown', compact('products', 'retailers', 'places'))->render()
+        ]);
+    });
+
+    Route::get('search/triple/swiper', function (Request $request) use ($leaflets) {
+        $query = $request->input('query');
+        if($query !== ''){
+            $query = strtolower($query);
+        }
+        $searchType = $request->input('searchType');
+        $category = $request->input('category');
+        $time = $request->input('time');
+
+
+        if ($searchType === 'leaflets') {
+            // Filtrowanie według nazwy
+            $leaflets = array_filter($leaflets, function ($item) use ($query) {
+                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $leaflets = array_filter($leaflets, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $leaflets = array_filter($leaflets, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+
+        }
+        // Zwrócenie wyników jako JSON z widokiem
+        return response()->json([
+            'html' => view('components.search-results-swiper', compact('leaflets'))->render()
+        ]);
+    });
+
+    Route::get('search/triple', function (Request $request) use ($leaflets, $retailers, $products, $vouchers) {
+        $query = $request->input('query');
+        if($query !== ''){
+            $query = strtolower($query);
+        }
+        $searchType = $request->input('searchType');
+        $category = $request->input('category');
+        $time = $request->input('time');
+
+        if ($searchType === 'leaflets') {
+
+            // Filtrowanie według nazwy
+            $leaflets = array_filter($leaflets, function ($item) use ($query) {
+                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $leaflets = array_filter($leaflets, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($leaflets, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $leaflets = array_filter($leaflets, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+            $retailers = [];
+            $products = [];
+            $vouchers = [];
+        } elseif ($searchType === 'retailers') {
+            $retailers = array_filter($retailers, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $retailers = array_filter($retailers, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($retailers, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($retailers, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $retailers = array_filter($retailers, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+
+            $leaflets = [];
+            $products = [];
+            $vouchers = [];
+
+        } elseif ($searchType === 'products'){
+
+            $products = array_filter($products, function ($item) use ($query) {
+                return stripos($item['name'], $query) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $products = array_filter($products, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($products, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($products, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $products = array_filter($products, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+
+
+            $retailers = [];
+            $leaflets = [];
+            $vouchers = [];
+        } elseif ($searchType === 'vouchers') {
+
+            // Filtrowanie według nazwy
+            $vouchers = array_filter($vouchers, function ($item) use ($query) {
+                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
+            });
+
+            // Filtrowanie według kategorii
+            if ($category != 'all') {
+                $vouchers = array_filter($vouchers, function ($item) use ($category) {
+                    return str_contains($item['category'], $category) !== false;
+                });
+            }
+
+            // Obsługa czasu (sortowanie i filtrowanie)
+            if ($time != 'all') {
+                switch ($time) {
+                    case 'ending': // Sortowanie po dacie zakończenia (end)
+                        usort($vouchers, function ($a, $b) {
+                            return $a['end'] <=> $b['end'];
+                        });
+                        break;
+
+                    case 'last': // Sortowanie po dacie utworzenia (create)
+                        usort($vouchers, function ($a, $b) {
+                            return $a['create'] <=> $b['create'];
+                        });
+                        break;
+
+                    case 'active': // Filtrowanie tylko aktywnych gazetek
+                        $vouchers = array_filter($vouchers, function ($item) {
+                            $today = date('Y-m-d');
+                            return $item['start'] <= $today && $item['end'] >= $today;
+                        });
+                        break;
+                }
+            }
+            $retailers = [];
+            $leaflets = [];
+            $products = [];
+        }
+
+        // Zwrócenie wyników jako JSON z widokiem
+        return response()->json([
+            'html' => view('components.search-results-container', compact('leaflets', 'retailers', 'products', 'vouchers'))->render()
         ]);
     });
 
 
-    Route::get('/', function () use ($descriptions) {
+
+    Route::get('/', function () use ($descriptions, $leaflets_category, $leaflets_time, $leaflets, $products, $vouchers) {
 
         $breadcrumbs = [];
 
@@ -660,11 +1253,16 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Warszawa',
                 'h1Title'=> 'Wszystkie gazetki promocyjne <strong>w jednym miejscu</strong>',
                 'descriptions' => $descriptions,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'leaflets_category' => $leaflets_category,
+                'leaflets_time' => $leaflets_time,
+                'products' => $products,
+                'vouchers' => $vouchers,
             ]);
     })->name('main.index');
 
-    Route::get('/poznan', function () use ($descriptions) {
+    Route::get('/poznan', function () use ($descriptions, $leaflets_category, $leaflets_time, $leaflets, $products, $vouchers) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -678,11 +1276,16 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'slug' => 'Poznań',
                 'h1Title'=> 'Wszystkie gazetki promocyjne <strong>w jednym miejscu - Poznań</strong>',
                 'descriptions' => $descriptions,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'leaflets' => $leaflets,
+                'leaflets_category' => $leaflets_category,
+                'leaflets_time' => $leaflets_time,
+                'products' => $products,
+                'vouchers' => $vouchers,
             ]);
     });
 
-    Route::get('/{slug}', function ($slug) use ($descriptions) {
+    Route::get('/{slug}', function ($slug) use ($descriptions, $products) {
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -696,7 +1299,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory)
                 'image' => '',
                 'slug' => $slug,
                 'descriptions' => $descriptions,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'products' => $products,
             ]);
     });
 });

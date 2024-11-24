@@ -24,18 +24,30 @@
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
-                    <x-select />
-                    <x-select />
+                    <x-select id="category-select" :items="$leaflets_category"/>
+                    <x-select id="time-select" :items="$leaflets_time"/>
+                    <x-search placeholder="Wpisz nazwę sieci... " :border="true" class="hidden"
+                              input-id="search-input-leaflet"
+                              result-id="results-box-leaflet"
+                              data-search-type="leaflets"
+                              data-container-id="leaflet-container"
+                              value="{{$subdomain}}"
+
+                    >
+                        <x-loupe-button href="#"/>
+                    </x-search>
 
                 </div>
-                <x-section-filtr-results>
-                    <x-leaflet-slide class="relative"/>
-                </x-section-filtr-results>
+                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflet"/>
                 <x-see-more class="pb-2" type="button">Zobacz wszystkie</x-see-more>
             </x-section>
 
             <x-section>
-                <x-swiper-vouchers swiper-class="vouchers-swiper-promo" title="Kupony rabatowe" :link="route('main.coupons')"/>
+                <x-swiper-vouchers
+                    swiper-class="vouchers-swiper-promo"
+                    title="Kupony rabatowe"
+                    :items="$vouchers"
+                    :link="route('main.coupons')"/>
             </x-section>
 
             <x-section>

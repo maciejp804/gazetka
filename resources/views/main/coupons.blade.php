@@ -18,22 +18,19 @@
 
             <x-section>
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
-                    <x-select />
-                    <x-select />
-                    <x-select />
-                    <x-search placeholder="Wpisz nazwę sieci... " :border="true">
+                    <x-select id="category-select" :items="$retailers_category"/>
+                    <x-select id="time-select" :items="$retailers_time"/>
+                    <x-search placeholder="Wpisz nazwę produktu... " :border="true"
+                              input-id="search-input-vouchers"
+                              result-id="results-box-vouchers"
+                              data-search-type="vouchers"
+                              data-container-id="vouchers-container"
+
+                    >
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <div class="w-full mb-10">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                        @for($i=1; $i<=12; $i++)
-                            <div class="w-full sm:w-72 md:w-80 lg:w-75 2lg:w-80 m-auto">
-                                <x-voucher-slide class="mb-10"/>
-                            </div>
-                        @endfor
-                    </div>
-                </div>
+                <x-section-filtr-results :ads-status="true" data-container-id="vouchers-container" :items="$vouchers" type="voucher"/>
                 <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
             </x-section>
 

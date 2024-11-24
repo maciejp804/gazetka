@@ -3,7 +3,7 @@
 <div {{ $attributes }}>
     <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded border border-gray-200 ">
         <div class="aspect-square rounded flex justify-center">
-            <a class="self-center w-full" href="{{route('subdomain.index', ['subdomain' => 'dino'])}}">
+            <a class="self-center w-2/3" href="{{route('subdomain.index', ['subdomain' => 'dino'])}}">
                 <img class="w-9/12 m-auto" src="{{ $image }}" alt="pro-img1">
             </a>
             <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-blue-550 transition duration-300 ease-in"/>

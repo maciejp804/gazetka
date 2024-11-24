@@ -1,8 +1,10 @@
-<div {{$attributes->merge(['class' => 'border border-gray-200 rounded p-2 mb-5'])}}>
+@props(['leaflet', 'ok' => false])
+
+<div {{$attributes->merge(['class' => 'w-full border border-gray-200 rounded p-2 mb-5'])}}>
     <div class="relative bg-white flex items-center justify-center group">
-        <div class="tr-pro-img">
+        <div class="w-full">
             <a href="{{route('subdomain.leaflet', ['subdomain' => 'dino'])}}">
-                <img class="rounded" src="https://hoian.pl/assets/media/promotions/zabka_UjzqnS0.png" alt="pro-img1">
+                <img class="rounded object-cover object-top w-full h-40 2xs:h-52 1xs:h-40 xs:h-44 sm:h-60 md:h-56 2lg:h-60 " src="{{$leaflet['logo']}}" alt="pro-img1">
             </a>
         </div>
         <div class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">
@@ -11,11 +13,13 @@
             </a>
         </div>
     </div>
-    <div class="pt-4 text-center hover:bg-white hover:opacity-20">
+    <div class="py-2 text-center hover:bg-white hover:opacity-20">
         <a href="{{route('subdomain.leaflet', ['subdomain' => 'dino'])}}">
             <img class="max-w-16 block m-auto" src="https://hoian.pl/assets/image/store/lidl-69.png" alt="pro-img1">
-            <h3 class="text-black text-xs font-bold">27 MAJ - 7 CZE 2024</h3>
-            <div class="font-light mb-1 text-xs"><span class="old-price">GAZETKA LIDL</span></div>
+            <h3 class="text-black text-xs font-bold">{{monthReplace($leaflet['start'],'d-m')}} - {{monthReplace($leaflet['end'])}}</h3>
+            <div class="font-light mb-1 text-xs">
+                <span class="overflow-hidden overflow-ellipsis whitespace-nowrap">GAZETKA {{strtoupper($leaflet['name'])}}</span>
+            </div>
         </a>
     </div>
     <div class="flex absolute justify-center w-full left-0 gap-3">

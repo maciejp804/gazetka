@@ -33,9 +33,11 @@
                 </div>
                 <div class="flex self-center justify-end lg:w-3/5 h-12">
                     <div class="hidden lg:flex mr-2 w-5/12 ">
-                        <x-search :border="true" class="flex" input-id="search-input-products-desktop"
+                        <x-search :border="true" class="flex"
+                                  input-id="search-input-products-desktop"
                                   result-id="results-box-products-desktop"
-                                  data-search-type="produkty-sklepy">
+                                  data-search-type="products-retailers"
+                                  >
                             <x-loupe-button href="#"/>
                         </x-search>
 
@@ -43,7 +45,8 @@
                     <div class="hidden lg:flex mr-2 w-3/12">
                         <x-search class="flex" :placeholder="$slug" input-id="search-input-location"
                                   result-id="results-box-location"
-                                  data-search-type="miejscowosci">
+                                  data-search-type="places"
+                                  >
                             <x-location-button class="" href="#"/>
                         </x-search>
                     </div>

@@ -37,13 +37,19 @@
             </x-section>
 
             <x-section>
-                <x-swiper-vouchers swiper-class="vouchers-swiper-promo" title="Polecane kupony rabatowe" :link="route('main.coupons')"/>
+                <x-swiper-vouchers
+                    swiper-class="vouchers-swiper-promo"
+                    title="Polecane kupony rabatowe"
+                    :items="$vouchers"
+                    :link="route('main.coupons')"/>
             </x-section>
 
             <x-section>
+                <x-h2-title class="flex" :link="route('main.leaflets')">Zobacz polecane gazetki</x-h2-title>
                 <x-swiper-leaflets-promo
                     button-class="1"
                     title="Zobacz polecane gazetki"
+                    :leaflets="$leaflets"
                     :link="route('main.leaflets')"/>
             </x-section>
 

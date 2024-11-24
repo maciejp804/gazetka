@@ -1,4 +1,4 @@
-@props(['swiperClass' => 'leafletPromo', 'link'=> '#', 'title' => 'Brak'])
+@props(['swiperClass' => 'leafletPromo', 'link'=> '#', 'title' => 'Brak', 'items'])
 
 <x-h2-title class="flex" :link="$link">{!! $title !!}</x-h2-title>
 
@@ -6,9 +6,9 @@
     <div class="swiper {{$swiperClass}}">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-16">
-            @for($i=1; $i<=126; $i++)
-                <x-voucher-slide class="swiper-slide"/>
-            @endfor
+            @foreach($items as $item)
+                <x-voucher-slide class="swiper-slide" :item="$item"/>
+            @endforeach
         </div>
         <!-- If we need pagination -->
         <div class="swiper-pagination"></div>

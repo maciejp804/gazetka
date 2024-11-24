@@ -29,7 +29,7 @@
 <x-section class="lg:hidden">
     <x-search :border="true" class="flex h-12" input-id="search-input-products-mobile"
               result-id="results-box-products-mobile"
-              data-search-type="produkty-sklepy">
+              data-search-type="products-retailers">
         <x-loupe-button href="#"/>
     </x-search>
 </x-section>

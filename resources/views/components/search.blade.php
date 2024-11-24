@@ -1,4 +1,5 @@
-@props(['placeholder' => 'Wyszukaj np. masło, Lidl' , 'border' => false, 'inputId' => 'empty', 'resultId' => 'empty', 'dataSearchType'=>'empty', 'dataSwiperId' => null])
+@props(['placeholder' => 'Wyszukaj np. masło, Lidl' , 'border' => false, 'inputId' => 'empty', 'resultId' => 'empty',
+'dataSearchType'=>'empty', 'dataContainerId' => null, 'value' => ''])
 
 @php
     $classes = 'search-input w-full bg-white-50 rounded-3xl text-sm placeholder-gray-400 focus:outline-none focus:ring-0';
@@ -18,12 +19,18 @@
                    id="{{$inputId}}"
                    data-results-box-id="{{$resultId}}"
                    data-search-type="{{$dataSearchType}}"
-                   data-swiper-id="{{$dataSwiperId}}"
+                   data-container-id="{{$dataContainerId}}"
+                   value="{{$value}}"
             >
             <button
                 type="button"
-                class="clear-button absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 w-5 hidden"
-            >
+                class="clear-button absolute top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 w-5 hidden
+                @if($dataSearchType === 'places')
+                    right-2
+                @else
+                    right-12
+                @endif
+                ">
                 <x-header.svg svg="close" size="4" class="fill-gray-400"/>
             </button>
             {{ $slot }}

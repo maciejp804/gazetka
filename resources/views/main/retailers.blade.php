@@ -17,21 +17,20 @@
         <x-div-1060>
             <x-section>
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row">
-                    <x-select />
-                    <x-select />
-                    <x-search class="h-12" placeholder="Wpisz nazwę sieci... " :border="true">
+                    <x-select id="category-select" :items="$retailers_category"/>
+                    <x-select id="time-select" :items="$retailers_time"/>
+                    <x-search placeholder="Wpisz nazwę sieci... " :border="true"
+                              input-id="search-input-retailers"
+                              result-id="results-box-retailers"
+                              data-search-type="retailers"
+                              data-container-id="retailers-container"
+
+                    >
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <div class="flex justify-center w-full">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-                        @for($i=1; $i<=12; $i++)
-                            <div class="w-34 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50 xl:w-48">
-                                <x-retailer-slide class="relative" image="https://hoian.pl/assets/image/store/biedronka.png" name="Biedronka" offer="5 ofert"/>
-                            </div>
-                        @endfor
-                    </div>
-                </div>
+                <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailer"/>
+
                 <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
             </x-section>
 
@@ -39,8 +38,11 @@
                 <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>
                 <x-swiper-leaflets-promo
                     button-class="1"
-                />
+                    title="Najnowsze gazetki promocyjne"
+                    :leaflets="$leaflets"
+                    :link="route('main.leaflets')"/>
             </x-section>
+
 
 
 

@@ -19,7 +19,7 @@ $week = [
                 <span>{{$day['day']}}</span>
             </div>
             <div class="flex justify-center gap-2">
-                <x-header.svg svg="clock" colour="gray-300" />
+                <x-header.svg svg="clock" colour="fill-gray-300" />
                 <span>{{$day['open']}}-{{$day['close']}}</span>
             </div>
         </div>

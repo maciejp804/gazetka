@@ -1,13 +1,13 @@
-@props(['swiperClass', 'buttonClass'=> 0, 'dataSwiperId' => null])
+@props(['swiperClass', 'buttonClass'=> 0, 'dataContainerId' => null, 'leaflets'])
 
 <div class="w-full">
-    <div class="swiper {{$swiperClass}}" id="{{$dataSwiperId}}">
+    <div class="swiper {{$swiperClass}}" id="{{$dataContainerId}}">
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-8">
-            @for($i=1; $i<=12; $i++)
-                <x-leaflet-slide class="swiper-slide"/>
-            @endfor
+           @foreach($leaflets as $leaflet)
+                <x-leaflet-slide class="swiper-slide" :leaflet="$leaflet"/>
+           @endforeach
         </div>
 
         <!-- If we need pagination -->

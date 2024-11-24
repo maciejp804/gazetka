@@ -19,6 +19,7 @@
                 <x-swiper-leaflets-promo
                     button-class="1"
                     title="Najnowsze gazetki promocyjne"
+                    :leaflets="$leaflets"
                     :link="route('main.leaflets')"/>
             </x-section>
 
@@ -37,10 +38,12 @@
 
             <x-section>
                 <x-swiper
+                    :items="$products"
+                    type="products"
                     button-class="2"
-                    image="https://hoian.pl/assets/media/products/1_dxXyvcN.png" name="pomidory"
-                          offer="od 11.59 zł" title="Najczęściej szukane produkty" :link="route('main.products')"
-                          :uri="route('main.product',['name' => 'pomidory'])"
+                    title="Najczęściej szukane produkty"
+                    :link="route('main.products')"
+                    :uri="route('main.product',['name' => 'pomidory', 'id' => 1])"
                 />
             </x-section>
 
@@ -63,7 +66,11 @@
             </x-section>
 
             <x-section>
-                <x-swiper-vouchers swiper-class="vouchers-swiper-promo" title="Kupony rabatowe" :link="route('main.coupons')"/>
+                <x-swiper-vouchers
+                    swiper-class="vouchers-swiper-promo"
+                    title="Kupony rabatowe"
+                    :items="$vouchers"
+                    :link="route('main.coupons')"/>
             </x-section>
 
             <x-ad-1/>
@@ -71,18 +78,18 @@
             <x-section>
                 <x-h2-title class="flex " :link="route('main.leaflets')">Przeglądaj gazetki i katalogi</x-h2-title>
                 <div class="flex flex-col gap-4 mb-4 lg:flex-row">
-                    <x-select />
-                    <x-select />
+                    <x-select id="category-select" :items="$leaflets_category"/>
+                    <x-select id="time-select" :items="$leaflets_time"/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true"
                               input-id="search-input-leaflet"
                               result-id="results-box-leaflet"
-                              data-search-type="gazetki"
-                              data-swiper-id="leaflet-swiper"
+                              data-search-type="leaflets"
+                              data-container-id="leaflet-swiper"
                     >
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-swiper-leaflets swiper-class="leaflet" data-swiper-id="leaflet-swiper"/>
+                <x-swiper-leaflets swiper-class="leaflet" data-container-id="leaflet-swiper" :leaflets="$leaflets" type="leaflet"/>
                 <x-see-more class="lg:hidden pb-2" :link="route('main.leaflets')">Zobacz wszystkie</x-see-more>
             </x-section>
 

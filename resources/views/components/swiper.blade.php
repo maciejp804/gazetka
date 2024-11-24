@@ -1,4 +1,4 @@
-@props(['image', 'name', 'offer', 'uri' => 'http://dino.gazetkapromocyjna.local',
+@props(['type' => 'base', 'items' => '' ,'image' => '', 'name' => '', 'offer' => '', 'uri' => 'http://dino.gazetkapromocyjna.local',
 'hoverDesc'=> 'Gazetka promocyjna <strong>Biedronka</strong>', 'swiperClass' => 'mySwiper',
 'link' => '#', 'title' => 'Missing title', 'buttonClass'])
 
@@ -9,10 +9,21 @@
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-10">
-            @for($i=0; $i<=10; $i++)
-                <!-- Slides -->
-                <x-base-slide :image="$image" :name="$name" :offer="$offer" :uri="$uri" :hover-desc="$hoverDesc"/>
-            @endfor
+            @if($type === 'base')
+                @for($i=0; $i<=10; $i++)
+                    <!-- Slides -->
+                    <x-base-slide :image="$image" :name="$name" :offer="$offer" :uri="$uri" :hover-desc="$hoverDesc"/>
+                @endfor
+            @elseif($type === 'products')
+                @foreach($items as $item)
+                    <!-- Slides -->
+                    <x-product class="relative swiper-slide"
+                               :item="$item"
+                               :id=1
+                    />
+                @endforeach
+             @endif
+
 
         </div>
 

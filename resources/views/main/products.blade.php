@@ -18,28 +18,19 @@
 
             <x-section>
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row">
-                    <x-select />
-                    <x-select />
-                    <x-search class="h-12" placeholder="Wpisz nazwę sieci... " :border="true">
+                    <x-select id="category-select" :items="$retailers_category"/>
+                    <x-select id="time-select" :items="$retailers_time"/>
+                    <x-search placeholder="Wpisz nazwę produktu... " :border="true"
+                              input-id="search-input-products"
+                              result-id="results-box-products"
+                              data-search-type="products"
+                              data-container-id="products-container"
+
+                    >
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <div class="flex justify-center w-full">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-                        @for($i=1; $i<=12; $i++)
-                            <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50 xl:w-48">
-                                <x-product class="relative"
-                                           image="https://hoian.pl/assets/media/products/1_dxXyvcN.png"
-                                           name="pomidory"
-                                           offer="od 11.59 zł"
-                                           hoverDesc="Pomidory"
-                                           :id=1
-
-                                />
-                            </div>
-                        @endfor
-                    </div>
-                </div>
+                <x-section-filtr-results :ads-status="true" data-container-id="products-container" :items="$products" type="product"/>
                 <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
             </x-section>
 
@@ -49,10 +40,14 @@
                 />
             </x-section>
 
+
             <x-section>
                 <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>
                 <x-swiper-leaflets-promo
-                    button-class="1"/>
+                    button-class="1"
+                    title="Najnowsze gazetki promocyjne"
+                    :leaflets="$leaflets"
+                    :link="route('main.leaflets')"/>
             </x-section>
 
 
