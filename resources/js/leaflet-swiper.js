@@ -2,6 +2,7 @@ import Swiper from "swiper";
 import {HashNavigation, Navigation, Pagination, Zoom} from "swiper/modules";
 
 document.addEventListener('DOMContentLoaded', function () {
+
     let isMobile = window.innerWidth <= 768;
     let redirectTimeout; // Zmienna do przechowywania identyfikatora timeout
     const countdownElement = createCountdownElement(); // Tworzymy element odliczania
@@ -11,11 +12,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Nasłuchujemy zmian hash
     window.addEventListener('hashchange', function () {
+        console.log('hashchange');
         correctHashIfNeeded();
     });
 
     // Inicjalizacja głównego slidera (swiper9)
     const swiper9 = new Swiper('.swiper-container', {
+        speed:300,
         modules: [Navigation, Pagination, Zoom, HashNavigation],
         loop: false,
         followFinger: true,
@@ -31,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         navigation: {
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
+
         },
         hashNavigation: {
             watchState: true, // Hash URL będzie aktualizowany w miarę zmiany slajdów
@@ -57,8 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const slide = swiper9.slides[slideIndex];
         const nestedSwiperElement = slide.querySelector('.sub-swiper');
 
-        if (nestedSwiperElement && !swiper10Instances[slideIndex]) {
-            console.log('Nested swiper element found for slide:', slideIndex);
+
             swiper10Instances[slideIndex] = new Swiper(nestedSwiperElement, {
                 loop: false,
                 followFinger: true,
@@ -76,16 +79,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     prevEl: slide.querySelector('.sub-swiper-prev'),
                 },
             });
-            console.log('Nested swiper initialized for slide:', slideIndex);
-        } else {
-            console.log('No nested swiper to initialize or already initialized for slide:', slideIndex);
-        }
+
     }
 
 
 
     // Resetowanie zoomu i inicjalizacja/dezaktywacja nested slidera przy zmianie slajdów w swiper9
     swiper9.on('slideChange', function () {
+        console.log('slideChange');
         swiper9.zoom.out();  // Resetowanie zoomu
 
         // Zatrzymaj obecne odliczanie, jeśli takie istnieje
@@ -116,12 +117,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Obsługa kliknięć na przyciskach nawigacji nested slidera
     document.querySelectorAll('.sub-swiper-next, .sub-swiper-prev').forEach(button => {
         button.addEventListener('click', function (evt) {
+            console.log('clicked');
             evt.stopPropagation();  // Zatrzymanie propagacji
+
         });
     });
 
     // Funkcja do korekty hash, jeśli jest liczbą parzystą
     function correctHashIfNeeded() {
+        console.log('correctHashIfNeeded');
         const hash = window.location.hash.replace('#', ''); // Pobieramy hash bez znaku #
         if (hash && !isNaN(hash)) {
             const pageIndex = parseInt(hash, 10); // Konwertujemy hash na liczbę całkowitą
@@ -152,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funkcja do ukrywania klikalnych obszarów podczas zoomu
     function toggleClickableAreas(scale) {
+        console.log('toggleClickableAreas');
         const clickableAreas = document.querySelectorAll('.clickable');
 
         if (scale > 1) {
@@ -167,11 +172,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     swiper9.on('reachEnd', function () {
+        console.log('Reach End');
         startRedirectCountdown();
     });
 
     // Funkcja do rozpoczęcia odliczania przekierowania
     function startRedirectCountdown() {
+        console.log('Redirect Countdown');
         let countdown = 5; // 5 sekund odliczania
         countdownElement.querySelector('span').textContent = `Przekierowanie za ${countdown} sekund...`;
         document.body.appendChild(countdownElement);
@@ -200,6 +207,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funkcja do zatrzymania odliczania przekierowania
     function stopRedirectCountdown() {
+        console.log('Redirect Countdown');
         if (redirectTimeout) {
             clearTimeout(redirectTimeout);
             redirectTimeout = null;
@@ -211,6 +219,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funkcja tworząca element odliczania
     function createCountdownElement() {
+        console.log('createCountdownElement');
         const element = document.createElement('div');
         element.style.position = 'fixed';
         element.style.bottom = '20px';

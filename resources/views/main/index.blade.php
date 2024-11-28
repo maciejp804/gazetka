@@ -57,7 +57,9 @@
             </x-section>
 
             <x-section>
-                <x-swiper-category title="Kategorie sieci handlowych" image="https://hoian.pl/assets/image/category/default.png" name="Ogród" offer="10 ofert"/>
+                <x-swiper-category
+                    title="Kategorie sieci handlowych"
+                    :items="$shop_categories"/>
             </x-section>
 
             <x-section class="bg-gray-200 rounded">

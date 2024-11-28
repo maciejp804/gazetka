@@ -69,7 +69,10 @@
             </x-section>
 
             <x-section>
-                <x-swiper-category title="Kategorie sieci handlowych" image="https://hoian.pl/assets/image/category/default.png" name="Ogród" offer="10 ofert"/>
+                <x-swiper-category
+                    :items="$shop_categories"
+                    title="Kategorie sieci handlowych"
+                />
             </x-section>
 
             <x-section class="bg-gray-200 rounded">
@@ -79,7 +82,11 @@
             </x-section>
 
             <x-section>
-                <x-swiper-vouchers swiper-class="vouchers-swiper-promo" title="Kupony rabatowe" :link="route('main.coupons')"/>
+                <x-swiper-vouchers
+                    swiper-class="vouchers-swiper-promo"
+                    title="Kupony rabatowe"
+                    :items="$vouchers"
+                    :link="route('main.coupons')"/>
             </x-section>
 
             <x-ad-1/>

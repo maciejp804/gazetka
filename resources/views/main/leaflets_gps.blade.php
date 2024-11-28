@@ -50,8 +50,9 @@
             </x-section>
 
             <x-section>
-                <x-swiper-category title="Kategorie produktów" image="{{asset('build/assets/nabial-B3NPvtdH.png')}}"
-                                  name="Nabiał" offer="10 produktów" :link="route('main.products')"
+                <x-swiper-category title="Kategorie produktów"
+                                   :items="$product_categories"
+                                   :link="route('main.products')"
                 />
             </x-section>
 

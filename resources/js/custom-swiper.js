@@ -638,8 +638,8 @@ const swiperBlog = new Swiper('.swiper-blog', {
 
         }
     },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    }
+    // navigation: {
+    //     nextEl: ".swiper-button-next", konflikt prycisków na stronie z gazetką promocyjną
+    //     prevEl: ".swiper-button-prev",
+    // }
 });

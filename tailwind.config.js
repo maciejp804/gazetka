@@ -23,6 +23,7 @@ export default {
         'border-gray-200',
         'hidden',
         'flex',
+        'text-amber-600'
     ],
 
 
@@ -59,6 +60,7 @@ export default {
             },
             width : {
                 '0.5' : '0.125rem',
+                '2.5' : '0.75rem',
                 '11.25' : '2.813rem',
                 '18' : '4.5rem',
                 '19' : '4.75rem',

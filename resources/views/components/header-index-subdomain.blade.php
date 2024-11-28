@@ -3,15 +3,15 @@
         <span class="text-left font-medium text-gray-700">Oceń nas</span>
         <div class="flex flex-col md:flex-row gap-x-3 md:items-center">
             <span class="2xs:whitespace-nowrap text-gray-600">2.5 / 10529 (głosów)</span>
-            <div class="flex flex-row-reverse w-full justify-end">
-                <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                <a href="#" class="text-amber-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                <a href="#" class="text-amber-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
+            <div class="flex flex-row w-full justify-start stars" id="star-rating">
+                <span data-rating="1" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
+                <span data-rating="2" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
+                <span data-rating="3" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
+                <span data-rating="4" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
+                <span data-rating="5" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
 
             </div>
-
+            <p id="rating-value">Ocena: 0</p>
         </div>
     </div>
     <div class="flex flex-col gap-y-2 w-1/2 justify-between">

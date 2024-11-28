@@ -1,4 +1,4 @@
-@props(['title' => 'Brak', 'image', 'name', 'offer', 'link' => '#', 'uri'])
+@props(['title' => 'Brak', 'image', 'name', 'offer', 'link' => '#', 'uri', 'items'])
 
 <x-h2-title :link="$link" class="flex">{!! $title !!}</x-h2-title>
 
@@ -7,11 +7,11 @@
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-10">
-            @for($i=1; $i<=10; $i++)
-
+            @foreach($items as $item)
                 <!-- Slides -->
-                <x-category-slide :image="$image" :name="$name" :offer="$offer" />
-            @endfor
+                <x-category-slide :item="$item" />
+            @endforeach
+
         </div>
 
         <!-- If we need pagination -->

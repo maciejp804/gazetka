@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Funkcja do wywołania wyszukiwania
         function performSearch() {
             const query = input.value.trim();
-            console.log(categorySelect);
+
             let selectCategory = '';
             if(categorySelect !== null)
             {

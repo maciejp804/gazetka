@@ -18,7 +18,8 @@
 
             <x-section>
                 <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row">
-                    <x-select id="category-select" :items="$retailers_category"/>
+                    <x-select-drpodown-url :items="$product_categories" />
+                    <x-select id="category-select" :items="$product_categories" class="hidden"/>
                     <x-select id="time-select" :items="$retailers_time"/>
                     <x-search placeholder="Wpisz nazwę produktu... " :border="true"
                               input-id="search-input-products"
@@ -35,8 +36,9 @@
             </x-section>
 
             <x-section>
-                <x-swiper-category title="Kategorie produktów" image="{{asset('build/assets/nabial-B3NPvtdH.png')}}"
-                                  name="Nabiał" offer="10 produktów" :link="route('main.products')"
+                <x-swiper-category title="Kategorie produktów"
+                                   :items="$product_categories"
+                                   :link="route('main.products')"
                 />
             </x-section>
 

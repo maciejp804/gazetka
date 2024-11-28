@@ -41,7 +41,8 @@
     'resources/js/app.js',
     'resources/js/custom-swiper.js',
     'resources/js/leaflet-swiper.js',
-    'resources/js/filter.js'
+    'resources/js/filter.js',
+    'resources/js/rating.js'
 
 ])
 @stack('scripts')

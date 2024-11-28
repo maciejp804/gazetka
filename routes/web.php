@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\BackController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Models\ProductCategory;
+use App\Models\ShopCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
@@ -728,6 +731,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Gazetki promocyjne', 'url' => ''],
         ];
+        $product_categories = ProductCategory::where('status', 1)->get();
+
 
         return view('main.leaflets', data:
             [
@@ -741,6 +746,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
                 'products' => $products,
+                'product_categories' => $product_categories,
             ]);
     })->name('main.leaflets');
 
@@ -751,6 +757,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
             ['label' => 'Gazetki Promocyjne', 'url' => route('main.leaflets')],
             ['label' => 'Poznań', 'url' => ''],
         ];
+
+        $product_categories = ProductCategory::where('status', 1)->get();
 
         return view('main.leaflets_gps', data:
             [
@@ -764,6 +772,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
                 'products' => $products,
+                'product_categories' => $product_categories,
             ]);
     });
 
@@ -836,27 +845,24 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
             ]);
     })->name('main.coupons');
 
+
+    //    Route::get('/produkty/{category}',[ProductController::class,'showCategory'])->name('main.products.category');
+
+    Route::get('/produkty/{category}', function ($category) use ( $descriptions, $retailers_time, $products, $leaflets) {
+        return app(ProductController::class)->showCategory($category, $descriptions, $retailers_time, $products, $leaflets);
+    })->name('main.products.category');
+
+
+//    Route::get('/produkty',[ProductController::class,'index'])->name('main.products');
+
     Route::get('/produkty', function () use ($descriptions, $retailers_category, $retailers_time, $products, $leaflets) {
-
-        $breadcrumbs = [
-            ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Produkty', 'url' => ''],
-        ];
-
-        return view('main.products', data:
-            [
-                'data' => '',
-                'image' => '',
-                'slug' => 'Warszawa',
-                'h1Title'=> '<strong>Produkty - promocje w gazetkach</strong>',
-                'descriptions' => $descriptions,
-                'breadcrumbs' => $breadcrumbs,
-                'retailers_category' => $retailers_category,
-                'retailers_time' => $retailers_time,
-                'products' => $products,
-                'leaflets' => $leaflets,
-            ]);
+        return app(ProductController::class)->index($descriptions, $retailers_category, $retailers_time, $products, $leaflets);
     })->name('main.products');
+
+
+
+
+
 
     Route::get('/produkty/{name}', function ($name) use ($descriptions, $products, $vouchers) {
 
@@ -1246,16 +1252,17 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
         $breadcrumbs = [];
 
+        $shop_categories = ShopCategory::where('status', 1)->get();
+
         return view('main.index', data:
             [
-                'data' => '',
-                'image' => '',
                 'slug' => 'Warszawa',
                 'h1Title'=> 'Wszystkie gazetki promocyjne <strong>w jednym miejscu</strong>',
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
+                'shop_categories' => $shop_categories,
                 'leaflets_time' => $leaflets_time,
                 'products' => $products,
                 'vouchers' => $vouchers,
@@ -1269,6 +1276,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
             ['label' => 'Poznań', 'url' => ''],
         ];
 
+        $shop_categories = ShopCategory::where('status', 1)->get();
+
         return view('main.index_gps', data:
             [
                 'data' => '',
@@ -1278,6 +1287,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
+                'shop_categories' => $shop_categories,
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
                 'products' => $products,

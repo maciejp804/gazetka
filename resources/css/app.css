@@ -23,6 +23,7 @@
 
 [x-cloak] { display: none !important; }
 
+
 .custom-after-border::after {
     content: "";
     position: absolute;
