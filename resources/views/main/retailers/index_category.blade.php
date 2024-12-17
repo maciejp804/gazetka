@@ -1,14 +1,17 @@
 <x-layout>
     <x-slot:slug>
-        {{$slug  }}
+        {{  $slug }}
     </x-slot:slug>
+    <x-slot:page_title>
+        {{  $page_title }}
+    </x-slot:page_title>
+    <x-slot:meta_description>
+        {{  $meta_description }}
+    </x-slot:meta_description>
 
-    <x-slot:h1Title>
-        {!! $h1Title !!}
-    </x-slot:h1Title>
-    <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
-    <x-ad-1/>
+    <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
+    <x-ad-1 class="my-5"/>
+
     <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
@@ -16,9 +19,10 @@
 
         <x-div-1060>
             <x-section>
-                <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row">
-                    <x-select id="category-select" :items="$retailers_category"/>
-                    <x-select id="time-select" :items="$retailers_time"/>
+                <x-h1-title :h1Title="$h1_title"/>
+                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row">
+                    <x-select-drpodown-url :items="$retailers_category" :category="$category" type="retailers"/>
+                    <x-select id="time-select" :items="$retailers_time" placeholder="Sortuj..."/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true"
                               input-id="search-input-retailers"
                               result-id="results-box-retailers"
@@ -29,7 +33,7 @@
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailer"/>
+                <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailers"/>
 
                 <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
             </x-section>
@@ -40,13 +44,13 @@
                     button-class="1"
                     title="Najnowsze gazetki promocyjne"
                     :leaflets="$leaflets"
-                    :link="route('main.leaflets')"/>
+                    main-route='main.leaflets'/>
             </x-section>
 
 
 
 
-            <x-ad-1/>
+            <x-ad-1 class="my-5"/>
 
         </x-div-1060>
 

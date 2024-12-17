@@ -1,6 +1,6 @@
-@props(['swiperClass' => 'leafletPromo', 'link'=> '#', 'title' => 'Brak', 'items'])
+@props(['swiperClass' => 'leafletPromo', 'mainRoute', 'title' => 'Brak', 'items'])
 
-<x-h2-title class="flex" :link="$link">{!! $title !!}</x-h2-title>
+<x-h2-title class="flex" :main-route="$mainRoute">{!! $title !!}</x-h2-title>
 
 <div class="w-full">
     <div class="swiper {{$swiperClass}}">
@@ -20,5 +20,5 @@
     </div>
 </div>
 
-<x-see-more class="lg:hidden pb-2" :link="$link">Zobacz wszystkie</x-see-more>
+<x-see-more class="lg:hidden pb-2" :main-route="$mainRoute">Zobacz wszystkie</x-see-more>
 

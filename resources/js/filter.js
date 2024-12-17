@@ -44,14 +44,14 @@ function handleSingleDropdownSearch(query, searchType, resultsBox, input) {
 }
 
 function handleTripleSwiperSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, swiperInstance) {
-    console.log(timeSelect);
+
     const searchUrl = `/search/triple/swiper?query=${encodeURIComponent(query)}&category=${encodeURIComponent(categorySelect)}&time=${encodeURIComponent(timeSelect)}&searchType=${searchType}`;
 
     fetch(searchUrl)
         .then(response => response.json())
         .then(data => {
             const cleanedHtml = data.html.replace(/\s/g, '');
-            console.log(cleanedHtml);
+
             if (cleanedHtml === '') {
                 data.html = '<p class="flex justify-center w-full p-4 text-gray-500 text-lg">Nie znaleziono gazetek.</p>';
             }
@@ -73,7 +73,37 @@ function handleTripleSearch(query, searchType, categorySelect, timeSelect, resul
         .then(response => response.json())
         .then(data => {
             const cleanedHtml = data.html.replace(/\s/g, '');
+            console.log(cleanedHtml);
+            if (cleanedHtml === '<div></div>' || cleanedHtml === '') {
 
+                data.html = '<p class="flex justify-center w-full p-4 text-gray-500 text-sm">' + answer + '</p>';
+
+                results.innerHTML = data.html;
+            } else {
+
+                results.innerHTML = data.html;
+
+            }
+
+            input.setAttribute('aria-expanded', 'true');
+            setupKeyboardNavigation(input, resultsBox);
+        })
+           .catch(error => console.error('Błąd:', error));
+
+}
+
+function handleQuadrupleSearch(query, searchType, categorySelect, typeSelect, timeSelect, resultsBox, input, containerId) {
+
+    const searchUrl = `/search/quadruple?query=${encodeURIComponent(query)}&category=${encodeURIComponent(categorySelect)}&type=${encodeURIComponent(typeSelect)}&time=${encodeURIComponent(timeSelect)}&searchType=${searchType}`;
+    const results = document.getElementById(containerId);
+    const answer = searchType === 'vouchers'  ? 'Brak ofert z danej kategorii, zmień parametry wyszukiwania.' : 'Zmień parametry wyszukiwania.';
+
+
+    fetch(searchUrl)
+        .then(response => response.json())
+        .then(data => {
+            const cleanedHtml = data.html.replace(/\s/g, '');
+            console.log(cleanedHtml);
             if (cleanedHtml === '<div></div>' || cleanedHtml === '') {
 
                 data.html = '<p class="flex justify-center w-full p-4 text-gray-500 text-sm">' + answer + '</p>';
@@ -89,6 +119,7 @@ function handleTripleSearch(query, searchType, categorySelect, timeSelect, resul
             setupKeyboardNavigation(input, resultsBox);
         })
         .catch(error => console.error('Błąd:', error));
+
 }
 
 function updateSwiperContent(swiperInstance, html) {
@@ -158,10 +189,14 @@ function restoreInputStyle(input, resultsBox, hideResultsBox = true, highlightCl
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    const searchInputs = document.querySelectorAll('.search-input');
 
-    searchInputs.forEach(input => {
+document.addEventListener('DOMContentLoaded', () => {
+    const filterBoxes = document.querySelectorAll('.filter-box');
+
+    filterBoxes.forEach(filterBox => {
+        const input = filterBox.querySelector('.search-input');
+        const dropdownUrl = filterBox.querySelector('.dropdown-url');
+        const dropdownValue = dropdownUrl ? dropdownUrl.getAttribute('data-dropdown') : null;
         const resultsBoxId = input.getAttribute('data-results-box-id');
         const resultsBox = document.getElementById(resultsBoxId);
         const searchType = input.getAttribute('data-search-type');
@@ -173,10 +208,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const clearButton = input.parentElement.querySelector('.clear-button');
 
-        const categorySelect = document.querySelector('#category-select');
-        const timeSelect = document.querySelector('#time-select');
+        const categorySelect = filterBox.querySelector('#category-select');
+        const timeSelect = filterBox.querySelector('#time-select');
+        const typeSelect = filterBox.querySelector('#type-select');
+
+        let type, time;
+        if (typeSelect){
+            type = typeSelect.value ? typeSelect.value : null;
+        } else {
+            type = null;
+        }
+
+        if (timeSelect){
+            time = timeSelect.value ? timeSelect.value : null;
+        } else {
+            time = null;
+        }
 
 
+
+        console.log(dropdownValue, type, time);
 
         // Funkcja do wywołania wyszukiwania
         function performSearch() {
@@ -186,11 +237,21 @@ document.addEventListener('DOMContentLoaded', function () {
             if(categorySelect !== null)
             {
                 selectCategory = categorySelect.value ? categorySelect.value : 'all';
+            } else if(dropdownValue !== null)
+            {
+                selectCategory = dropdownValue;
             }
+
             let timeCategory = '';
             if(timeSelect !== null)
             {
                 timeCategory = timeSelect.value ? timeSelect.value : 'all';
+            }
+
+            let typeCategory = '';
+            if(typeSelect !== null)
+            {
+                typeCategory = typeSelect.value ? typeSelect.value : 'all';
             }
 
 
@@ -215,10 +276,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     case 'retailers':
                     case 'products':
-                    case 'vouchers':
                             handleTripleSearch(query, searchType, selectCategory, timeCategory, resultsBox, input, containerId);
                         break;
 
+                    case 'vouchers':
+                        handleQuadrupleSearch(query, searchType, selectCategory, typeCategory, timeCategory, resultsBox, input, containerId);
+                        break;
                 }
 
             } else if (query.length === 0) {
@@ -240,8 +303,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     case 'retailers':
                     case 'products':
-                    case 'vouchers':
+
                         handleTripleSearch('', searchType, selectCategory, timeCategory, resultsBox, input, containerId);
+                        break;
+
+                    case 'vouchers':
+                        handleQuadrupleSearch(query, searchType, selectCategory, typeCategory, timeCategory, resultsBox, input, containerId);
                         break;
 
                 }
@@ -249,8 +316,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Nasłuchuj zmian w polach select i input
-        input.addEventListener('input', debounce(performSearch, 300));
+        // Nasłuchuj na input, kategoriach i czasie
+        if (input) {
+            input.addEventListener('input', debounce(performSearch, 300));
+        }
 
         if (categorySelect) {
             categorySelect.addEventListener('change', performSearch);
@@ -260,13 +329,19 @@ document.addEventListener('DOMContentLoaded', function () {
             timeSelect.addEventListener('change', performSearch);
         }
 
+        if (typeSelect) {
+            typeSelect.addEventListener('change', performSearch);
+        }
 
-        clearButton.addEventListener('click', function () {
-            input.value = '';
-            clearButton.classList.add('hidden');
-
-           performSearch();
-        });
+        if (clearButton) {
+            clearButton.addEventListener('click', function () {
+                if (input) {
+                    input.value = '';
+                }
+                clearButton.classList.add('hidden');
+                performSearch();
+            });
+        }
 
         document.addEventListener('mousedown', function (event) {
             if (!input.contains(event.target) && !resultsBox.contains(event.target)) {

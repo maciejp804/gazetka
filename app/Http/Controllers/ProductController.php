@@ -3,39 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Voucher;
+use App\Services\SortOptionsService;
+use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index($descriptions, $retailers_category, $retailers_time, $products, $leaflets)
+    public function index($descriptions, $retailers_category, $leaflets)
     {
+
+
+
+        $product_categories = ProductCategory::where('status', 1)->get();
+        $products = Product::all();
+        $product_sort = SortOptionsService::getSortOptions();
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Produkty', 'url' => ''],
         ];
 
-        $product_categories = ProductCategory::where('status', 1)->get();
         return view('main.products.index', data:
             [
-                'data' => '',
-                'image' => '',
                 'slug' => 'Warszawa',
-                'h1Title'=> '<strong>Produkty</strong> w gazetkach promocyjnych',
+                'h1_title'=> '<strong>Produkty</strong> w gazetkach promocyjnych',
+                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'retailers_category' => $retailers_category,
-                'retailers_time' => $retailers_time,
+                'product_sort' => $product_sort,
                 'products' => $products,
                 'leaflets' => $leaflets,
                 'product_categories' => $product_categories,
             ]);
     }
 
-    public function showCategory($category, $descriptions, $retailers_time, $products, $leaflets)
+    public function indexCategory($category, $descriptions, $leaflets)
     {
         $product_categories = ProductCategory::where('status', 1)->get();
         $category = $product_categories->where('slug', $category)->first();
+
+        if(!$category){
+            abort(404);
+        }
+
+
+        $products = Product::where('product_category_id', $category->id)->get();
 
 
         $breadcrumbs = [
@@ -44,18 +61,78 @@ class ProductController extends Controller
             ['label' => $category->name, 'url' => '']
         ];
 
-
+        $product_sort = SortOptionsService::getSortOptions();
+        $static_description = StaticDescriptions::getDescriptions();
         return view('main.products.index_category', data:
             [
                 'slug' => 'Warszawa',
-                'h1Title'=> 'Kategoria <strong>'.strtolower($category->name).'</strong> - produkty w gazetkach promocyjnych',
+                'h1_title'=> 'Produkty w gazetkach promocyjnych - kategoria <strong>'.strtolower($category->name).'</strong>',
+                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                'static_description' => $static_description,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
-                'retailers_time' => $retailers_time,
+                'product_sort' => $product_sort,
                 'products' => $products,
                 'leaflets' => $leaflets,
                 'product_categories' => $product_categories,
-                'category' => $category->name,
+                'category' => $category,
+            ]);
+    }
+
+    public function show($slug, $descriptions, $vouchers)
+    {
+        $products = Product::all();
+        $product = $products->where('slug', $slug)->first();
+        $products = $products->where('product_category_id', $product->product_category_id);
+        $vouchers = Voucher::with('voucherStore')->get();
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Produkty', 'url' => route('main.products')],
+            ['label' => $product->name, 'url' => ''],
+        ];
+
+
+        return view('main.products.show', data:
+            [
+                'slug' => 'Warszawa',
+                'h1_title'=> '<strong>'.$product->name.'</strong> - oferty w gazetkach promocyjnych',
+                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                'name' => $slug,
+                'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
+                'products' => $products,
+                'product' => $product,
+                'vouchers' => $vouchers,
+            ]);
+    }
+
+    public function showSubdomain($subdomain, $product, $leaflets)
+    {
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => $product, 'url' => ""]
+        ];
+        $subdomain = 'lidl';
+
+        // Filtrowanie według nazwy
+        $leaflets_filtred = array_filter($leaflets, function ($item) use ($subdomain) {
+            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
+        });
+
+        return view('subdomain.products.show', data:
+            [
+                'slug' => 'Wieleń',
+                'h1_title'=> $product.' w Dino',
+                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                'subdomain' => $subdomain,
+                "breadcrumbs" => $breadcrumbs,
+                'leaflets' => $leaflets_filtred,
+                "leaflets_others" => $leaflets,
             ]);
     }
 }

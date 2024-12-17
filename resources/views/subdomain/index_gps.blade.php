@@ -2,13 +2,18 @@
     <x-slot:slug>
         {{  $slug }}
     </x-slot:slug>
+    <x-slot:page_title>
+        {{  $page_title }}
+    </x-slot:page_title>
+    <x-slot:meta_description>
+        {{  $meta_description }}
+    </x-slot:meta_description>
 
-    <x-slot:h1Title>
-        {!! $h1Title !!}
-    </x-slot:h1Title>
-    <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
-    <x-ad-1/>
+
+    <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
+
+    <x-ad-1 class="my-5"/>
+
     <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
@@ -17,15 +22,16 @@
         <div class="w-full 1xl:w-265 m-auto">
 
             <x-section class="flex flex-col">
+                <x-h1-title :h1Title="$h1_title"/>
                 <x-header-index-subdomain/>
             </x-section>
 
 
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
-                <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
-                    <x-select id="category-select" :items="$leaflets_category"/>
-                    <x-select id="time-select" :items="$leaflets_time"/>
+                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
+                    <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
+                    <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true" class="hidden"
                               input-id="search-input-leaflet"
                               result-id="results-box-leaflet"
@@ -38,7 +44,7 @@
                     </x-search>
 
                 </div>
-                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflet"/>
+                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
                 <x-see-more class="pb-2" type="button">Zobacz wszystkie</x-see-more>
             </x-section>
 
@@ -63,18 +69,20 @@
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
-                    :link="route('main.coupons')"/>
+                    main-route="main.vouchers"/>
             </x-section>
 
             <x-section>
                 <x-swiper
+                    :items="$shops"
                     button-class="1"
-                    image="http://165.232.144.14/media/online_stores/zabka_Dzn0OKy.png" name="Żabka" offer="10 ofert"
-                    title="Podobne sieci handlowe"/>
-                <x-see-more class="lg:hidden" href="#">Zobacz wszystkie</x-see-more>
+                    type="retailers"
+                    title="Podobne sieci handlowe"
+                    main-route="main.retailers"
+                />
             </x-section>
 
-            <x-ad-1/>
+            <x-ad-1 class="my-5"/>
 
         </div>
 
@@ -87,7 +95,7 @@
 
         <x-shop-descripton image="/build/assets/cheery-little-girl-sitting-shopping-cart 1-HAk2Ec6j.png"/>
 
-        <section class="flex flex-col w-full 2lg:w-265 m-auto">
+        <section class="flex flex-col w-full 2lg:w-265 m-auto my-5">
             <x-swiper-blog title="Ostatnie wpisy blogowe"/>
         </section>
 

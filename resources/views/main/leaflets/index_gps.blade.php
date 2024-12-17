@@ -17,9 +17,9 @@
         <x-div-1060>
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
-                <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
-                    <x-select id="category-select" :items="$leaflets_category"/>
-                    <x-select id="time-select" :items="$leaflets_time"/>
+                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
+                    <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria"/>
+                    <x-select id="time-select" :items="$leaflet_sort" placeholder="Sortuj..."/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true"
                               input-id="search-input-leaflet"
                               result-id="results-box-leaflet"
@@ -63,7 +63,7 @@
                     button-class="1"
                     title="Najczęściej szukane produkty"
                     :link="route('main.products')"
-                    :uri="route('main.product',['name' => 'pomidory', 'id' => 1])"
+                    :uri="route('main.product',['slug' => 'pomidory', 'id' => 1])"
                 />
             </x-section>
 

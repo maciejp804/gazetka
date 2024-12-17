@@ -1,33 +1,38 @@
 @props(['item'])
-<div {{ $attributes->merge(['class' => 'border-1 border-dashed border-gray-200 rounded p-2 relative mb-3 sm:mb-0']) }}>
-    <div class="flex">
-        <div class="flex self-center w-1/3">
-            <div>
-                <a href="{{$item['uri']}}" rel="nofollow">
-                    <img src="{{$item['image']}}" alt="pro-img1">
-                </a>
+<div {{ $attributes->merge(['class' => 'border border-dashed border-gray-200 rounded p-2 relative mb-3 sm:mb-0']) }}>
+    <div class="flex h-36">
+        <a href="{{$item->offer_url}}" class="flex" rel="nofollow">
+        <div class="flex h-36 justify-center w-1/2">
+            <div class="flex w-full h-max-30">
+                <img class="object-cover rounded" src="{{$item->offer_image}}" alt="pro-img1">
             </div>
         </div>
-        <div class="flex flex-col w-2/3 px-2 gap-y-2">
-            <div class="w-11 flex">
-                <img src="{{$item['logo']}}" alt="pro-img1">
+        <div class="flex flex-col w-1/2 px-2 gap-y-2">
+            <div class="w-36 lg:w-30 flex self-center">
+                <img src="{{$item->voucherStore->logo_url}}" alt="pro-img2">
             </div>
 
-            <h3 class="font-semibold text-sm">
-                <a href="{{$item['uri']}}" rel="nofollow">
-                    {{$item['description']}}
-                </a>
+            <h3 class="font-semibold text-xs">
+                {{$item->title}}
             </h3>
-            <span class="text-xs text-gray-400">29 WRZ - 9 PAŹ 2917 </span>
+            <span class="text-xs text-gray-400">{{monthReplace($item->start_date,'d-m')}} - {{monthReplace($item->end_date)}}</span>
         </div>
+        </a>
     </div>
-    <div class="text-xs text-gray-400 my-2">
-        <span>Pobierz kod adidas i umieść go w koszyku zamówienia. Z kodem otrzymasz 30% rabatu na produkty nieprzecenione. </span>
+    <div class="text-xs text-gray-600 my-2">
+        <a rel="nofollow" href="{{$item->offer_image}}">
+            <span>{{$item->body}}</span>
+        </a>
     </div>
     <div class="flex justify-center text-white rounded-full bg-blue-550 m-5 p-2">
-        <a rel="nofollow" href="{{$item['uri']}}" class="btn-kuponi" id="voucherLink">
+        <a rel="nofollow" href="{{$item->offer_url}}">
             <span class="text-sm">
-                Nie potrzebujesz kodu
+                @if($item->code)
+                    Kod: {{$item->code}}
+                @else
+                    Nie potrzebujesz kodu
+                @endif
+
             </span>
         </a>
     </div>

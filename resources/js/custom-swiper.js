@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
         grid: { rows : 2, fill: 'row'},
         breakpoints: {
             320: { slidesPerView: 2, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
-            375: { slidesPerView: 3, spaceBetween: 5, grid: { rows : 2}},
+            375: { slidesPerView: 2, spaceBetween: 20, grid: { rows : 2}},
             425: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 1}},
             475: { slidesPerView: 4, spaceBetween: 5},
             640: { slidesPerView: 5, spaceBetween: 5},
@@ -168,28 +168,27 @@ document.addEventListener('DOMContentLoaded', function () {
         pagination: { el: ".swiper-pagination", clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
+    // Blog swiper
+    initSwiper('.swiper-blog', {
+        modules: [Navigation, Pagination, Autoplay, Grid],
+        slidesPerView: 1,
+        spaceBetween: 5,
+        loop: true,
+        autoplay: false,
+        grid: { rows : 2, fill: 'row'},
+        breakpoints: {
+            320: { slidesPerView: 1, spaceBetween: 5},
+            425:{ slidesPerView: 2, spaceBetween: 10},
+            475: { slidesPerView: 2, spaceBetween: 10},
+            640: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 1}},
+            768: { slidesPerView: 4, spaceBetween: 10, grid: { rows : 1}},
+            1024: { slidesPerView: 4, spaceBetween: 15, grid: { rows : 1}, navigation: { enabled: false}},
+            1060: { slidesPerView: 5, spaceBetween: 15, grid: { rows : 1}, navigation: { enabled: false}},
+        },
+        pagination: { el: ".swiper-pagination", clickable: true}
+    }, '.button-prev-swiper', '.button-next-swiper');
+
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -606,40 +605,4 @@ const swiperInfo = new Swiper('.swiper-info', {
     }
 });
 
-const swiperBlog = new Swiper('.swiper-blog', {
-    // configure Swiper to use modules
-    modules: [Navigation, Autoplay],
-    slidesPerView: 2,
-    spaceBetween: 5,
-    loop: true,
-    autoplay: true,
-    breakpoints: {
-        // when window width is >= 425px
-        425: {
-            slidesPerView: 2,
-            spaceBetween: 10,
-        },
-        640: {
-            slidesPerView: 3,
-            spaceBetween: 10,
-        },
-        768: {
-            slidesPerView: 4,
-            spaceBetween: 10,
-        },
-        1024:{
-            slidesPerView: 4,
-            spaceBetween: 15,
-        },
-        1060: {
-            slidesPerView: 5,
-            spaceBetween: 15,
-            loop: false,
 
-        }
-    },
-    // navigation: {
-    //     nextEl: ".swiper-button-next", konflikt prycisków na stronie z gazetką promocyjną
-    //     prevEl: ".swiper-button-prev",
-    // }
-});

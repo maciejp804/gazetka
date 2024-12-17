@@ -4,8 +4,8 @@
         <div class="mx-4 py-1 text-xs font-base text-gray-400">Produkty</div>
         @foreach($products as $product)
             <a href="#" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
-                <img src="{{ $product['logo'] }}" alt="{{ $product['name'] }} logo" class="inline-block w-6 h-6 mr-2">
-                {{ $product['name'] }}
+                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="inline-block w-6 h-6 mr-2">
+                {{ $product->name }}
             </a>
         @endforeach
     @endif

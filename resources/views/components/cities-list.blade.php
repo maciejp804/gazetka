@@ -1,5 +1,5 @@
-@props(['city' => true, 'href' => '#'])
-<div class="w-full px-4">
+@props(['city' => true, 'href' => '#', 'mainRoute' => 'main.index'])
+<div class="w-full px-4 ">
     <div class="w-full">
         <ul class="columns-2 text-sm md:columns-3 lg:columns-4">
             @if($city)
@@ -33,5 +33,6 @@
         </ul>
     </div>
 </div>
+<x-see-more class="lg:hidden" :main-route="$mainRoute">Zobacz wszystkie</x-see-more>
 
 

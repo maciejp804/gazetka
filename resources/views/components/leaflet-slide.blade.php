@@ -7,11 +7,11 @@
                 <img class="rounded object-cover object-top w-full h-40 2xs:h-52 1xs:h-40 xs:h-44 sm:h-60 md:h-56 2lg:h-60 " src="{{$leaflet['logo']}}" alt="pro-img1">
             </a>
         </div>
-        <div class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">
-            <a href="{{route('subdomain.leaflet', ['subdomain' => 'dino'])}}" class="hidden text-white group-hover:flex self-center justify-center font-bold text-xs w-24 h-8 bg-blue-550 rounded duration-300">
+        <a href="{{route('subdomain.leaflet', ['subdomain' => 'dino'])}}" class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">
+            <div  class="hidden text-white group-hover:flex self-center justify-center font-bold text-xs w-24 h-8 bg-blue-550 rounded duration-300">
                 <span class="flex self-center">Zobacz więcej</span>
-            </a>
-        </div>
+            </div>
+        </a>
     </div>
     <div class="py-2 text-center hover:bg-white hover:opacity-20">
         <a href="{{route('subdomain.leaflet', ['subdomain' => 'dino'])}}">

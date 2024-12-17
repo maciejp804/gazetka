@@ -31,7 +31,7 @@
                     right-12
                 @endif
                 ">
-                <x-header.svg svg="close" size="4" class="fill-gray-400"/>
+                <x-header.svg svg="close" size="h-4 w-4" class="fill-gray-400"/>
             </button>
             {{ $slot }}
 

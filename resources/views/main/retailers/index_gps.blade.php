@@ -16,7 +16,7 @@
 
         <x-div-1060>
             <x-section>
-                <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row">
+                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row">
                     <x-select id="category-select" :items="$retailers_category"/>
                     <x-select id="time-select" :items="$retailers_time"/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true"
@@ -29,7 +29,7 @@
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailer"/>
+                <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailers"/>
                 <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
             </x-section>
 

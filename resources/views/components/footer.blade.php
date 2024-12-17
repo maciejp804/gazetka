@@ -130,7 +130,7 @@
                 <x-footer.li ref="{{route('main.retailers')}}">Sklepy</x-footer.li>
                 <x-footer.li ref="{{route('main.products')}}">Produkty</x-footer.li>
                 <x-footer.li ref="{{route('main.blogs')}}">Blog</x-footer.li>
-                <x-footer.li ref="{{route('main.coupons')}}" >Kupony</x-footer.li>
+                <x-footer.li ref="{{route('main.vouchers')}}" >Kupony</x-footer.li>
                 <x-footer.li >Kontakt</x-footer.li>
                 <x-footer.li >Pomoc</x-footer.li>
             </ul>

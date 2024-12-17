@@ -17,7 +17,7 @@
                 <div class="swiper-slide px-2 lg:px-4 py-2 border
                 @if(Request::is('abc-zakupowicza/'.$category['slug'])) bg-white @else bg-gray-200 hover:bg-gray-100 @endif
                 rounded !w-auto">
-                    <a class="text-xs lg:text-sm" href="{{route('main.blogs_category')}}">{{$category['name']}} ({{$category['qty']}})</a>
+                    <a class="text-xs lg:text-sm" href="{{route('main.blogs_category', ['category' => $category['slug']])}}">{{$category['name']}} ({{$category['qty']}})</a>
                 </div>
             @endforeach
 

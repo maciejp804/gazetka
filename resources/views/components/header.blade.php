@@ -24,7 +24,7 @@
                                 </a>
                             </li>
                             <li class="flex border-b-2 border-white text-gray-500 transition duration-300 ease-in hover:border-blue-550 hover:text-gray-700">
-                                <a href="{{route('main.coupons')}}">
+                                <a href="{{route('main.vouchers')}}">
                                     <p class="text-lg">Kupony</p>
                                 </a>
                             </li>
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="flex self-center justify-end lg:w-3/5 h-12">
-                    <div class="hidden lg:flex mr-2 w-5/12 ">
+                    <div class="filter-box hidden lg:flex mr-2 w-5/12 ">
                         <x-search :border="true" class="flex"
                                   input-id="search-input-products-desktop"
                                   result-id="results-box-products-desktop"
@@ -42,7 +42,7 @@
                         </x-search>
 
                     </div>
-                    <div class="hidden lg:flex mr-2 w-3/12">
+                    <div class="filter-box hidden lg:flex mr-2 w-3/12">
                         <x-search class="flex" :placeholder="$slug" input-id="search-input-location"
                                   result-id="results-box-location"
                                   data-search-type="places"
@@ -126,7 +126,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="px-4 py-2 border-b">
-                                                    <a href="{{route('main.coupons')}}" class="link-title a_qpoaqp">
+                                                    <a href="{{route('main.vouchers')}}" class="link-title a_qpoaqp">
                                                         <span class="sp-link-title span_376j45">Kupony</span>
                                                     </a>
                                                 </li>

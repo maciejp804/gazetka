@@ -2,14 +2,17 @@
     <x-slot:slug>
         {{  $slug }}
     </x-slot:slug>
+    <x-slot:page_title>
+        {{  $page_title }}
+    </x-slot:page_title>
+    <x-slot:meta_description>
+        {{  $meta_description }}
+    </x-slot:meta_description>
 
-    <x-slot:h1Title>
-        {!! $h1Title !!}
-    </x-slot:h1Title>
 
-    <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
-    <x-ad-1/>
+    <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
+
+    <x-ad-1 class="my-5"/>
     <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
@@ -18,15 +21,16 @@
         <x-div-1060>
 
             <section class="mx-2 xs:mx-4">
+                <x-h1-title :h1Title="$h1_title"/>
                 <x-header-shop-subdomain/>
             </section>
 
 
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi Dino</x-h2-title>
-                <div class="flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
-                    <x-select id="category-select" :items="$leaflets_category"/>
-                    <x-select id="time-select" :items="$leaflets_time"/>
+                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
+                    <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
+                    <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true" class="hidden"
                               input-id="search-input-leaflet"
                               result-id="results-box-leaflet"
@@ -39,7 +43,7 @@
                     </x-search>
 
                 </div>
-                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflet"/>
+                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
                 <x-see-more class="pb-2" type="button">Zobacz wszystkie</x-see-more>
             </x-section>
 
@@ -48,7 +52,7 @@
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
-                    :link="route('main.coupons')"/>
+                    main-route="main.vouchers"/>
 
             </x-section>
 

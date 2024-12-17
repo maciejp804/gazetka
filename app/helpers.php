@@ -1,6 +1,5 @@
 <?php
 
-
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cookie;
@@ -39,6 +38,44 @@ if (! function_exists('monthReplace')) {
         }
     }
 }
+
+if (!function_exists('getUrlData')) {
+    function getUrlData($type): stdClass
+    {
+        $urlData = new stdClass();
+
+        switch ($type) {
+            case 'vouchers':
+                $urlData->urlType = 'kupony-rabatowe';
+                $urlData->routeName = 'main.vouchers.category';
+                break;
+
+            case 'products':
+                $urlData->urlType = 'produkty';
+                $urlData->routeName = 'main.products.category';
+                break;
+
+            case 'retailers':
+                $urlData->urlType = 'sieci-handlowe';
+                $urlData->routeName = 'main.retailers.category';
+                $urlData->routeNameSubdoamin = 'subdomain.index';
+                break;
+
+            case 'leaflets':
+                $urlData->urlType = 'gazetki-promocyjne';
+                $urlData->routeName = 'main.leaflets.category';
+                break;
+
+            default:
+                $urlData->urlType = 'default';
+                $urlData->routeName = 'main.default';
+                break;
+        }
+
+        return $urlData;
+    }
+}
+
 
 if (! function_exists('siteValidator'))
 {

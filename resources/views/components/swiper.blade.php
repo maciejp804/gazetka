@@ -1,8 +1,8 @@
 @props(['type' => 'base', 'items' => '' ,'image' => '', 'name' => '', 'offer' => '', 'uri' => 'http://dino.gazetkapromocyjna.local',
 'hoverDesc'=> 'Gazetka promocyjna <strong>Biedronka</strong>', 'swiperClass' => 'mySwiper',
-'link' => '#', 'title' => 'Missing title', 'buttonClass'])
+'link' => '#', 'title' => 'Missing title', 'buttonClass', 'mainRoute'])
 
-<x-h2-title class="flex" :link="$link">{!! $title !!}</x-h2-title>
+<x-h2-title class="flex" :main-route="$mainRoute">{!! $title !!}</x-h2-title>
 
 <div class="w-full relative">
     <div class="swiper {{$swiperClass}}">
@@ -12,14 +12,18 @@
             @if($type === 'base')
                 @for($i=0; $i<=10; $i++)
                     <!-- Slides -->
-                    <x-base-slide :image="$image" :name="$name" :offer="$offer" :uri="$uri" :hover-desc="$hoverDesc"/>
+                    <x-base-slide :item="$item" :type="$type" :image="$image" :name="$name" :offer="$offer" :hover-desc="$hoverDesc"/>
                 @endfor
+            @elseif($type === 'retailers')
+                @foreach($items as $item)
+                    <!-- Slides -->
+                    <x-base-slide :item="$item" :type="$type" :image="$item->logo" :name="$item->name" offer="1 oferta"  :hover-desc="$item->name"/>
+                @endforeach
             @elseif($type === 'products')
                 @foreach($items as $item)
                     <!-- Slides -->
                     <x-product class="relative swiper-slide"
                                :item="$item"
-                               :id=1
                     />
                 @endforeach
              @endif
@@ -33,12 +37,12 @@
         <!-- If we need navigation buttons -->
         <x-button-next
             class="button-next-{{$buttonClass}}"
-            size="4"
+            size="w-4 h-4"
             colour="gray-500"
         />
         <x-button-prev
             class="button-prev-{{$buttonClass}}"
-            size="4"
+            size="w-4 h-4"
             colour="gray-500"
         />
 
@@ -46,6 +50,6 @@
     </div>
 </div>
 
-<x-see-more class="lg:hidden" :link="$link">Zobacz wszystkie</x-see-more>
+<x-see-more class="lg:hidden" :main-route="$mainRoute">Zobacz wszystkie</x-see-more>
 
 

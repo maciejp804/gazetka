@@ -2,13 +2,16 @@
     <x-slot:slug>
         {{  $slug }}
     </x-slot:slug>
+    <x-slot:page_title>
+        {{  $page_title }}
+    </x-slot:page_title>
+    <x-slot:meta_description>
+        {{  $meta_description }}
+    </x-slot:meta_description>
 
-    <x-slot:h1Title>
-        {!! $h1Title !!}
-    </x-slot:h1Title>
-    <x-h1-title :h1Title="$h1Title"/>
-    <x-breadcrumbs :breadcrumbs="$breadcrumbs"/>
-    <x-ad-1/>
+
+    <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
+    <x-ad-1 class="my-5"/>
     <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
@@ -17,7 +20,8 @@
         <x-div-1060>
 
             <x-section>
-                <x-header-product-domain />
+                <x-h1-title :h1Title="$h1_title"/>
+                <x-header-product-domain :product="$product"/>
             </x-section>
 
             <x-section>
@@ -25,7 +29,7 @@
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
-                    :link="route('main.coupons')"/>
+                    main-route="main.vouchers"/>
             </x-section>
 
             <x-section>
@@ -36,7 +40,7 @@
                             <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50 xl:w-48">
                                 <x-product class="relative"
                                            :item="$item"
-                                           :id=1
+
                                 />
                             </div>
                         @endforeach

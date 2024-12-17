@@ -6,7 +6,7 @@
         $classes .= $loop->odd ? ' md:flex-row' : ' md:flex-row-reverse';
     @endphp
 
-        <div {{$attributes->merge(['class' => $classes])}}">
+        <div {{$attributes->merge(['class' => $classes])}}>
         <div class="flex w-full md:w-5/12">
             <img src="{{$item['img']}}" class="object-cover rounded" alt="picture">
         </div>

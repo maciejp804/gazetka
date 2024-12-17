@@ -1,6 +1,6 @@
-@props(['title' => 'Brak', 'image', 'name', 'offer', 'link' => '#', 'uri', 'items'])
+@props(['title' => 'Brak', 'items', 'categoryRoute', 'mainRoute'])
 
-<x-h2-title :link="$link" class="flex">{!! $title !!}</x-h2-title>
+<x-h2-title :main-route="$mainRoute" class="flex">{!! $title !!}</x-h2-title>
 
 <div class="w-full">
     <div class="swiper category-swiper">
@@ -9,7 +9,10 @@
         <div class="swiper-wrapper h-full mb-10">
             @foreach($items as $item)
                 <!-- Slides -->
-                <x-category-slide :item="$item" />
+                <x-category-slide
+                    :item="$item"
+                    :category-route="$categoryRoute"
+                />
             @endforeach
 
         </div>
@@ -23,5 +26,5 @@
 
     </div>
 </div>
-<x-see-more class="lg:hidden" :link="$link">Zobacz wszystkie</x-see-more>
+<x-see-more class="lg:hidden" :main-route="$mainRoute">Zobacz wszystkie</x-see-more>
 
