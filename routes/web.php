@@ -20,8 +20,8 @@ use Jenssegers\Agent\Agent;
 $mainDomain = env('MAIN_DOMAIN', 'gazetkapromocyjna.local');
 
 $leaflets = [
-    ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-08',  'end' => '2024-11-16', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1907/1.jpg'],
-    ['name' => 'Delikatesy Centrum', 'category' => 'dom', 'create' => '2024-11-07', 'start' => '2024-11-15',  'end' => '2024-11-25', 'logo' => 'https://delikatesy-centrum.gazetkapromocyjna.com.pl/613/1.jpg'],
+    ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-12-18 10:00:00', 'start' => '2024-12-24',  'end' => '2024-12-31', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1907/1.jpg'],
+    ['name' => 'Delikatesy Centrum', 'category' => 'dom', 'create' => '2024-11-07', 'start' => '2024-11-15',  'end' => '2024-12-18 15:00:00', 'logo' => 'https://delikatesy-centrum.gazetkapromocyjna.com.pl/613/1.jpg'],
     ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-08', 'start' => '2024-11-11',  'end' => '2024-11-30', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1906/1.jpg'],
     ['name' => 'Biedronka', 'category' => 'dom', 'create' => '2024-11-06', 'start' => '2024-11-10',  'end' => '2024-11-25', 'logo' => 'https://biedronka.gazetkapromocyjna.com.pl/1905/1.jpg'],
     ['name' => 'Delikatesy Centrum', 'category' => 'zbawki', 'create' => '2024-11-05', 'start' => '2024-11-28',  'end' => '2024-12-31', 'logo' => 'https://delikatesy-centrum.gazetkapromocyjna.com.pl/616/1.jpg'],

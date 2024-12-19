@@ -77,6 +77,77 @@ if (!function_exists('getUrlData')) {
 }
 
 
+if (!function_exists('validationDate'))
+{
+    function validationDate($endDate, $startDate = NULL, $createDate = NULL)
+    {
+        $dataNow = new DateTime('now'); // przykład bieżącej daty
+        $dataEnd = new DateTime($endDate); // przykład końcowej daty
+        $dataStart = new DateTime($startDate);
+        $dataCreate = new DateTime($createDate);
+        $diff = $dataEnd->diff($dataNow);
+
+        $new = false;
+        if ($createDate !== NULL) {
+            $diff2 = $dataCreate->diff($dataNow);
+            if($diff2->invert == 0 && $diff2->days < 1 )
+            {
+                $new = true;
+            }
+        }
+
+
+
+        if($dataStart > $dataNow){
+            return ['end'=>'Nadchodzaca oferta', 'classes' => 'bg-blue-500', 'new' => $new];
+        }
+            // Sprawdź, czy data końcowa jest w przyszłości
+            if ($dataEnd > $dataNow) {
+                $classes = 'bg-green-500';
+                if ($diff->days > 30) {
+                    $miesiace = $diff->y * 12 + $diff->m;
+                    if ($miesiace > 4) {
+                        $toEnd = "Aktualna $miesiace miesięcy";
+                    } elseif ($miesiace > 1) {
+                        $toEnd = "Ważne jeszcze $miesiace miesiące";
+                    } else {
+                        $toEnd = "Ważne jeszcze $miesiace miesiąc";
+                    }
+                } elseif ($diff->days >= 1) { // Jeśli różnica wynosi co najmniej 1 dzień
+                    $dni = $diff->days;
+
+                    if ($dni > 4) {
+                        $toEnd = "Ważne jeszcze $dni dni";
+                    } elseif ($dni > 1) {
+                        $toEnd = "Ważne jeszcze $dni dni";
+                    } else {
+                        $toEnd = "Ważne jeszcze $dni dzień";
+                        $classes = 'bg-yellow-600';
+                    }
+                } elseif ($diff->h > 0 || $diff->i > 0) { // Jeśli różnica wynosi mniej niż 1 dzień
+                    $godziny = $diff->h;
+                    $minuty = $diff->i;
+                    $classes = 'bg-yellow-600';
+                    if ($godziny > 1) {
+                        $toEnd = "Ważne jeszcze $godziny godzin";
+                    } elseif ($godziny === 1) {
+                        $toEnd = "Ważne jeszcze $godziny godzina";
+                    } else {
+                        $toEnd = "Ważne jeszcze $minuty minut";
+                    }
+                } else {
+                    $toEnd = "Oferta już się kończy";
+                    $classes = 'bg-red-500';
+                }
+            } else {
+                $toEnd = "Termin już upłynął";
+                $classes = 'bg-red-500';
+            }
+        return ['end'=> $toEnd, 'classes' => $classes, 'new' => $new];
+
+    }
+}
+
 if (! function_exists('siteValidator'))
 {
     function siteValidator ($site, $place = null)

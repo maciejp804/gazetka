@@ -361,7 +361,7 @@ class SearchController extends Controller
             if ($i > 0) {
 
                 //$url = 'https://pepco.pl/wp-content/uploads/2024/11/P10_'.$l.'_Leaflet_1.jpg';
-                $url = 'https://gazetki.aldi.pl/2024/kw51/24k51g03' . $combination . '//GetPDF.ashx';
+                $url = 'https://gazetki.aldi.pl/2024/kw52/24k52g02' . $combination . '//GetPDF.ashx';
                 //$url = 'https://gazetki.aldi.pl/2024/kw33/24k33g01cdga//GetPDF.ashx';
                 $ch = curl_init($url);
 

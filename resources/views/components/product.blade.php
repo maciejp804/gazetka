@@ -1,47 +1,6 @@
 @props(['item'])
 @php
-    $data1 = new DateTime('now'); // przykład bieżącej daty
-    $data2 = new DateTime($item['end']); // przykład końcowej daty
-    $diff = $data2->diff($data1);
-
-    // Sprawdź, czy data końcowa jest w przyszłości
-    if ($data2 > $data1) {
-        if ($diff->days > 30) {
-            $miesiace = $diff->y * 12 + $diff->m;
-            if ($miesiace > 4) {
-                $toEnd = "Ważne jeszcze $miesiace miesięcy";
-            } elseif ($miesiace > 1) {
-                $toEnd = "Ważne jeszcze $miesiace miesiące";
-            } else {
-                $toEnd = "Ważne jeszcze $miesiace miesiąc";
-            }
-        } elseif ($diff->days >= 1) { // Jeśli różnica wynosi co najmniej 1 dzień
-            $dni = $diff->days;
-
-            if ($dni > 4) {
-                $toEnd = "Ważne jeszcze $dni dni";
-            } elseif ($dni > 1) {
-                $toEnd = "Ważne jeszcze $dni dni";
-            } else {
-                $toEnd = "Ważne jeszcze $dni dzień";
-            }
-        } elseif ($diff->h > 0 || $diff->i > 0) { // Jeśli różnica wynosi mniej niż 1 dzień
-            $godziny = $diff->h;
-            $minuty = $diff->i;
-
-            if ($godziny > 1) {
-                $toEnd = "Ważne jeszcze $godziny godzin";
-            } elseif ($godziny === 1) {
-                $toEnd = "Ważne jeszcze $godziny godzina";
-            } else {
-                $toEnd = "Ważne jeszcze $minuty minut";
-            }
-        } else {
-            $toEnd = "Oferta już się kończy";
-        }
-    } else {
-        $toEnd = "Termin już upłynął";
-    }
+    $toEnd = validationDate($item['End'], $item['start']);
 @endphp
 
 
@@ -75,10 +34,10 @@
 
         <div class="flex py-2 justify-between">
             <div class="flex self-start text-blue-550 font-semibold text-base 2xs:text-xl"><span class="old-price">{{ $item['price'] }} zł</span></div>
-            <img class="flex self-end max-w-8 flex" src="https://img.blix.pl/image/brand/thumbnail_1.jpg" alt="pro-img1">
+            <img class="flex self-end max-w-8" src="https://img.blix.pl/image/brand/thumbnail_1.jpg" alt="pro-img1">
         </div>
         <div class="flex">
-            <span class="text-xs text-gray-600 min-h-8">{{ $toEnd }}</span>
+            <span class="flex justify-center text-white text-xs font-bold p-1 rounded w-full {{$toEnd['classes']}}">{{ $toEnd['end'] }}</span>
         </div>
     </div>
 

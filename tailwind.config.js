@@ -23,7 +23,11 @@ export default {
         'border-gray-200',
         'hidden',
         'flex',
-        'text-amber-600'
+        'text-amber-600',
+        'bg-yellow-600',
+        'bg-red-500',
+        'bg-green-500',
+        'bg-blue-500',
     ],
 
 
