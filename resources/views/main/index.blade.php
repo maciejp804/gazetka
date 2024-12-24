@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+    <x-slot:place>
+        {{ $place }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>
@@ -80,7 +80,8 @@
 
                 <x-cities-list
                     main-route="main.index"
-                    href="/poznan"/>
+                    :items="$places"
+                    />
             </x-section>
 
             <x-section>

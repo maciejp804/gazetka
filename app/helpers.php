@@ -5,28 +5,28 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\DomCrawler\Crawler;
 
-if (! function_exists('monthReplace')) {
-    function monthReplace ($date, $format = 'd-m-Y', $separator = ' '){
-
+if (!function_exists('monthReplace')) {
+    function monthReplace ($date, $type, $format = 'd-m-Y', $separator = ' ')
+    {
         $month_array = array(
-            1 => 'STY',
-            2 => 'LUT',
-            3 => 'MAR',
-            4 => 'KWI',
-            5 => 'MAJ',
-            6 => 'CZE',
-            7 => 'LIP',
-            8 => 'SIE',
-            9 => 'WRZ',
-            10 => 'PAŹ',
-            11 => 'LIS',
-            12 => 'GRU',
+            1 => ['excerpt' => 'sty', 'full' => 'styczeń'],
+            2 => ['excerpt' => 'lut', 'full' => 'luty'],
+            3 => ['excerpt' => 'mar', 'full' => 'marzec'],
+            4 => ['excerpt' => 'kwi', 'full' => 'kwiecień'],
+            5 => ['excerpt' => 'maj', 'full' => 'maj'],
+            6 => ['excerpt' => 'cze', 'full' => 'czerwiec'],
+            7 => ['excerpt' => 'lip', 'full' => 'lipiec'],
+            8 => ['excerpt' => 'sie', 'full' => 'sierpień'],
+            9 => ['excerpt' => 'wrz', 'full' => 'wrzesień'],
+            10 => ['excerpt' => 'paź', 'full' => 'październik'],
+            11 => ['excerpt' => 'lis', 'full' => 'listopad'],
+            12 => ['excerpt' => 'gru', 'full' => 'grudzień'],
 
         );
 
         // format daty jest YYYY-mm-dd
         $day = date('j', strtotime($date));
-        $month = $month_array[date('n', strtotime($date))];
+        $month = $month_array[date('n', strtotime($date))][$type];
         $year = date('Y', strtotime($date));
 
         // wyciągnąć miesiąc z daty i zamienić zgodnie z tablicą
@@ -35,6 +35,8 @@ if (! function_exists('monthReplace')) {
             return $day . $separator . $month . $separator . $year;
         } elseif ($format === 'd-m') {
             return $day . $separator . $month;
+        } elseif ($format=== 'm-Y') {
+            return $month . $separator . $year;
         }
     }
 }

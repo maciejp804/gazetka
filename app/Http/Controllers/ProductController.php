@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Voucher;
@@ -15,7 +16,9 @@ class ProductController extends Controller
     public function index($descriptions, $retailers_category, $leaflets)
     {
 
-
+        $places = Place::all();
+        $places = $places->sortByDesc('population')->take(40);
+        $place = $places->first();
 
         $product_categories = ProductCategory::where('status', 1)->get();
         $products = Product::all();
@@ -27,7 +30,9 @@ class ProductController extends Controller
 
         return view('main.products.index', data:
             [
-                'slug' => 'Warszawa',
+                'place' => $place->name,
+                'places' => $places,
+
                 'h1_title'=> '<strong>Produkty</strong> w gazetkach promocyjnych',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
@@ -51,6 +56,10 @@ class ProductController extends Controller
             abort(404);
         }
 
+        $places = Place::all();
+        $places = $places->sortByDesc('population')->take(40);
+        $place = $places->first();
+
 
         $products = Product::where('product_category_id', $category->id)->get();
 
@@ -65,7 +74,9 @@ class ProductController extends Controller
         $static_description = StaticDescriptions::getDescriptions();
         return view('main.products.index_category', data:
             [
-                'slug' => 'Warszawa',
+                'place' => $place->name,
+                'places' => $places,
+
                 'h1_title'=> 'Produkty w gazetkach promocyjnych - kategoria <strong>'.strtolower($category->name).'</strong>',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
@@ -84,6 +95,16 @@ class ProductController extends Controller
     {
         $products = Product::all();
         $product = $products->where('slug', $slug)->first();
+
+        if(!$product)
+        {
+            abort(404);
+        }
+
+        $places = Place::all();
+        $places = $places->sortByDesc('population')->take(40);
+        $place = $places->first();
+
         $products = $products->where('product_category_id', $product->product_category_id);
         $vouchers = Voucher::with('voucherStore')->get();
 
@@ -96,9 +117,11 @@ class ProductController extends Controller
 
         return view('main.products.show', data:
             [
-                'slug' => 'Warszawa',
-                'h1_title'=> '<strong>'.$product->name.'</strong> - oferty w gazetkach promocyjnych',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'place' => $place->name,
+                'places' => $places,
+
+                'h1_title'=> $product->name.' - promocje w sklepach',
+                'page_title'=> $product->name.' - promocje, aktualna cena w sklepach | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'name' => $slug,
                 'descriptions' => $descriptions,
@@ -111,10 +134,24 @@ class ProductController extends Controller
 
     public function showSubdomain($subdomain, $product, $leaflets)
     {
+
+        $products = Product::all();
+        $product = $products->where('slug', $product)->first();
+
+        if(!$product)
+        {
+            abort(404);
+        }
+
+
+        $places = Place::all();
+        $places = $places->sortByDesc('population')->take(40);
+        $place = $places->first();
+
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => $product, 'url' => ""]
+            ['label' => $product->name, 'url' => ""]
         ];
         $subdomain = 'lidl';
 
@@ -125,8 +162,10 @@ class ProductController extends Controller
 
         return view('subdomain.products.show', data:
             [
-                'slug' => 'Wieleń',
-                'h1_title'=> $product.' w Dino',
+                'place' => $place->name,
+                'places' => $places,
+
+                'h1_title'=> $product->name.' w Dino',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'subdomain' => $subdomain,

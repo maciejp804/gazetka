@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Services\SortOptionsService;
@@ -12,18 +13,25 @@ use Jenssegers\Agent\Agent;
 
 class LeafletController extends Controller
 {
-    public function index($descriptions, $leaflets_category, $leaflets)
+    public function index($descriptions, $leaflets)
     {
-        $breadcrumbs = [
-            ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Gazetki promocyjne', 'url' => ''],
-        ];
+        $places = Place::all();
+
+        $places = $places->sortByDesc('population')->take(40);
+
+        $place = $places->first();
+
         $product_categories = ProductCategory::where('status', 1)->get();
         $products = Product::all();
 
         $leaflet_sort = SortOptionsService::getSortOptions();
+
         $leaflets_category = SortOptionsService::getCategoryOptions();
 
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Gazetki promocyjne', 'url' => ''],
+        ];
 
         return view('main.leaflets.index', data:
             [
@@ -31,7 +39,8 @@ class LeafletController extends Controller
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
-                'slug' => 'Warszawa',
+                'place' => $place->name,
+                'places' => $places,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -42,9 +51,13 @@ class LeafletController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions, $leaflets_category, $leaflets)
+    public function indexCategory($category, $descriptions, $leaflets)
     {
+        $places = Place::all();
 
+        $places = $places->sortByDesc('population')->take(40);
+
+        $place = $places->first();
 
         $products = Product::all();
 
@@ -65,7 +78,8 @@ class LeafletController extends Controller
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
-                'slug' => 'Warszawa',
+                'place' => $place->name,
+                'places' => $places,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -109,6 +123,10 @@ class LeafletController extends Controller
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne
 
+        $places = Place::all();
+        $places = $places->sortByDesc('population')->take(40);
+        $place = $places->first();
+
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
@@ -124,10 +142,13 @@ class LeafletController extends Controller
 
         return view('subdomain.leaflet', data:
             [
+                'place' => $place->name,
+                'places' => $places,
+
                 'h1_title'=> 'Gazetka promocyjna z Dino "Najbliżej Ciebie" (ważna od 10-10 do 16-10-2024)',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'slug' => 'Warszawa',
+
                 'isMobile' => $isMobile,
                 'pages' => $pages,
                 'inserts' => $inserts,

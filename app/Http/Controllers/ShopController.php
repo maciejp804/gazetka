@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Place;
 use App\Models\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\ShopCategory;
@@ -17,6 +18,9 @@ class ShopController extends Controller
      */
     public function index($descriptions, $leaflets)
     {
+        $places = Place::all();
+        $places = $places->sortByDesc('population')->take(40);
+        $place = $places->first();
 
         $retailers_category = ShopCategory::where('status', 1)->get();
         $retailers = Shop::where('status', 1)->get();
@@ -32,6 +36,8 @@ class ShopController extends Controller
 
         return view('main.retailers.index', data:
             [
+                'places' => $places,
+                'place' => $place->name,
                 'h1_title'=> 'Sieci <strong>handlowe</strong>',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
@@ -47,8 +53,11 @@ class ShopController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions, $retailers, $leaflets)
+    public function indexCategory($category, $descriptions, $leaflets)
     {
+        $places = Place::all();
+        $places = $places->sortByDesc('population')->take(40);
+        $place = $places->first();
 
         $retailers_category = ShopCategory::where('status', 1)->get();
         $category = $retailers_category->where('slug', $category)->first();
@@ -71,6 +80,8 @@ class ShopController extends Controller
 
         return view('main.retailers.index_category', data:
             [
+                'places' => $places,
+                'place' => $place->name,
                 'h1_title'=> 'Sieci handlowe - markety i sklepy spożywcze',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',

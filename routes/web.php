@@ -347,14 +347,14 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     //    Route::get('/gazetki-promocyjne',[LeafletController::class,'index'])->name('main.leaflets');
 
-    Route::get('/gazetki-promocyjne', function () use ($descriptions, $leaflets_category, $leaflets) {
-        return app(LeafletController::class)->index($descriptions, $leaflets_category,  $leaflets);
+    Route::get('/gazetki-promocyjne', function () use ($descriptions, $leaflets) {
+        return app(LeafletController::class)->index($descriptions, $leaflets);
     })->name('main.leaflets');
 
     //    Route::get('/gazetki-promocyjne/{community}',[LeafletController::class,'indexGps'])->name('main.leaflets.gps');
 
-    Route::get('/gazetki-promocyjne/{category}', function ($category) use ($descriptions, $leaflets_category, $leaflets) {
-        return app(LeafletController::class)->indexCategory($category, $descriptions, $leaflets_category, $leaflets);
+    Route::get('/gazetki-promocyjne/{category}', function ($category) use ($descriptions, $leaflets) {
+        return app(LeafletController::class)->indexCategory($category, $descriptions, $leaflets);
     })->name('main.leaflets.category');
 
     //    Route::get('/sieci-handlowe',[ShopController::class,'index'])->name('main.retailers');
@@ -363,8 +363,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
         return app(ShopController::class)->index($descriptions, $leaflets);
     })->name('main.retailers');
 
-    Route::get('/sieci-handlowe/{category}', function ($category) use ($descriptions, $retailers,  $leaflets) {
-        return app(ShopController::class)->indexCategory($category, $descriptions, $retailers,  $leaflets);
+    Route::get('/sieci-handlowe/{category}', function ($category) use ($descriptions,  $leaflets) {
+        return app(ShopController::class)->indexCategory($category, $descriptions,  $leaflets);
     })->name('main.retailers.category');
 
     //    Route::get('/sieci-handlowe/{community}',[ShopController::class,'indexGps'])->name('main.retailers.gps');

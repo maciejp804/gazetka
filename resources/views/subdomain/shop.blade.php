@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+     <x-slot:place>
+        {{  $place }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>

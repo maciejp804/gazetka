@@ -54,7 +54,7 @@
 
                     @endphp
 
-                    <div class="w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50 xl:w-48">
+                    <div class="w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-46 2lg:w-50">
                         <x-base-slide :item="$item" :type="$type" :image="$item->logo" :name="$item->name" offer="1 oferta" :uri="$item->logo" :hover-desc="$item->name"/>
 
                     </div>
@@ -88,7 +88,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
             @foreach($items as $item)
-               <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50 xl:w-48">
+               <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-46 2lg:w-50">
                     <x-product class="relative"
                                :item="$item"
                                                    />

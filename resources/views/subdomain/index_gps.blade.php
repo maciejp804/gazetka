@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+     <x-slot:place>
+        {{  $place }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>
@@ -45,11 +45,11 @@
 
                 </div>
                 <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
-                <x-see-more class="pb-2" type="button">Zobacz wszystkie</x-see-more>
+
             </x-section>
 
             <x-section class="mb-5">
-                <x-h2-title class="flex" :see-more-status="false">Sklepy w pobliżu Twojej lokalizacji</x-h2-title>
+                <x-h2-title class="flex" :see-more-status="false">Sklepy {{$shop->name}} {{$place->name}} </x-h2-title>
                 <x-shop-list/>
             </x-section>
 

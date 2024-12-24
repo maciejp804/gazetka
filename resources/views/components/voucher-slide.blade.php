@@ -15,7 +15,7 @@
             <h3 class="font-semibold text-xs">
                 {{$item->title}}
             </h3>
-            <span class="text-xs text-gray-400">{{monthReplace($item->start_date,'d-m')}} - {{monthReplace($item->end_date)}}</span>
+            <span class="text-xs text-gray-400">{{mb_strtoupper(monthReplace($item->start_date,'excerpt','d-m',))}} - {{mb_strtoupper(monthReplace($item->end_date, 'excerpt'))}}</span>
         </div>
         </a>
     </div>

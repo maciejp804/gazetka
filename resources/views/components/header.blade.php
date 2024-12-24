@@ -43,7 +43,7 @@
 
                     </div>
                     <div class="filter-box hidden lg:flex mr-2 w-3/12">
-                        <x-search class="flex" :placeholder="$slug" input-id="search-input-location"
+                        <x-search class="flex" :placeholder="$place" input-id="search-input-location"
                                   result-id="results-box-location"
                                   data-search-type="places"
                                   >

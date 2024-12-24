@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+     <x-slot:place>
+        {{  $place }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>
@@ -45,7 +45,7 @@
 
                 </div>
                 <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
-                <x-see-more class="pb-2" type="button">Zobacz wszystkie</x-see-more>
+
             </x-section>
 
             <x-section>
@@ -67,8 +67,8 @@
             </x-section>
 
             <x-section class="bg-gray-200 rounded py-4">
-                <x-h2-title see-more-status="fault" class="flex">Największe miasta, w których znajdziesz sklepy Dino</x-h2-title>
-                <x-cities-list href="/poznan"/>
+                <x-h2-title see-more-status="fault" class="flex">Największe miasta, w których znajdziesz sklepy {{$shop->name}}</x-h2-title>
+                <x-cities-list :items="$places"/>
             </x-section>
 
 

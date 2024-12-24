@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Shop;
@@ -28,20 +29,9 @@ class SearchController extends Controller
             $retailers = Shop::where('name', 'like', $query . '%')->get();
 
         } elseif ($searchType === 'places') {
-            $places = [
-                ['name' => 'Poznań', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Piła', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Wieleń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Wisła', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Wieluń', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Wieliczka', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Wiktoria', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Warszawa', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-                ['name' => 'Wrocław', 'logo' => 'https://img.blix.pl/image/brand/thumbnail_23.jpg'],
-            ];
-            $places = array_filter($places, function ($item) use ($query) {
-                return stripos($item['name'], $query) !== false;
-            });
+
+            $places = Place::where('name', 'like', $query . '%')->get();
+
         }
         // Zwrócenie wyników jako JSON z dwoma kategoriami
         return response()->json([
@@ -361,7 +351,7 @@ class SearchController extends Controller
             if ($i > 0) {
 
                 //$url = 'https://pepco.pl/wp-content/uploads/2024/11/P10_'.$l.'_Leaflet_1.jpg';
-                $url = 'https://gazetki.aldi.pl/2024/kw52/24k52g02' . $combination . '//GetPDF.ashx';
+                $url = 'https://gazetki.aldi.pl/2025/kw01/25k01g01' . $combination . '//GetPDF.ashx';
                 //$url = 'https://gazetki.aldi.pl/2024/kw33/24k33g01cdga//GetPDF.ashx';
                 $ch = curl_init($url);
 

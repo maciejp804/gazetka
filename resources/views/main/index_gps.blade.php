@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+     <x-slot:place>
+        {{  $place->name }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>
@@ -22,7 +22,6 @@
                 <x-h1-title :h1Title="$h1_title"/>
                 <x-swiper-leaflets-promo
                     button-class="1"
-                    title="Najnowsze gazetki promocyjne"
                     :leaflets="$leaflets"
                     main-route="main.leaflets"/>
             </x-section>
@@ -36,7 +35,7 @@
                     :items="$shops"
                     button-class="1"
                     type="retailers"
-                    title="Sieci handlowe"
+                    title="Sieci handlowe w {{$place->name_locative}}"
                     main-route="main.retailers"
                 />
             </x-section>
@@ -50,7 +49,7 @@
                     :items="$products"
                     type="products"
                     button-class="2"
-                    title="Najlepsze promocje"
+                    title="Najlepsze promocje w {{$place->name_locative}}""
                     main-route="main.products"
                     :uri="route('main.product',['slug' => 'pomidory', 'id' => 1])"
                 />
@@ -82,7 +81,7 @@
                     :items="$shops"
                     button-class="3"
                     type="retailers"
-                    title="Sieci handlowe"
+                    title="Sieci handlowe w {{$place->name_locative}}"
                     main-route="main.retailers"
                 />
             </x-section>
@@ -106,7 +105,8 @@
 
                 <x-cities-list
                     main-route="main.index"
-                    href="/poznan"/>
+                    :items="$places"
+                    />
             </x-section>
 
             <x-section>

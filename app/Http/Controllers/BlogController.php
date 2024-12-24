@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Place;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 
@@ -10,6 +11,12 @@ class BlogController extends Controller
 {
     public function index($descriptions, $blogCategory, $leaflets)
     {
+        $places = Place::all();
+
+        $places = $places->sortByDesc('population')->take(40);
+
+        $place = $places->first();
+
         $sum = 0;
         foreach ($blogCategory as $item) {
             $sum += $item['qty'];
@@ -24,7 +31,9 @@ class BlogController extends Controller
 
         return view('main.blogs.index', data:
             [
-                'slug' => 'Warszawa',
+                'place' => $place->name,
+                'places' => $places,
+
                 'h1_title'=> 'ABC Zakupowicza',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
@@ -40,6 +49,12 @@ class BlogController extends Controller
 
     public function indexCategory($category, $descriptions, $blogCategory, $leaflets)
     {
+        $places = Place::all();
+
+        $places = $places->sortByDesc('population')->take(40);
+
+        $place = $places->first();
+
         $sum = 0;
         foreach ($blogCategory as $item) {
             $sum += $item['qty'];
@@ -55,7 +70,9 @@ class BlogController extends Controller
 
         return view('main.blogs.index_category', data:
             [
-                'slug' => 'Warszawa',
+                'place' => $place->name,
+                'places' => $places,
+
                 'h1_title'=> 'ABC Zakupowicza',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',

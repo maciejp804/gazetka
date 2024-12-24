@@ -29,7 +29,7 @@
     @if(isset($places) && count($places) > 0)
         <div class="mx-4 py-1 text-xs font-base text-gray-400 mt-2 border-t border-gray-200">Miejscowości</div>
         @foreach($places as $place)
-            <a href="#" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
+            <a href="{{route('main.index.gps', ['community' => $place->slug])}}" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
                 {{ $place['name'] }}
             </a>
         @endforeach

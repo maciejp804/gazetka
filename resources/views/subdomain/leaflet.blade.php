@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+     <x-slot:place>
+        {{  $place->name }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>
@@ -68,7 +68,7 @@
 
             <x-section class="bg-gray-200 rounded py-5">
                 <x-h2-title class="flex">Najbliższe miasta, w których znajdziesz sklepy Dino</x-h2-title>
-                <x-cities-list />
+                <x-cities-list :items="$places"/>
                 <x-see-more class="lg:hidden pb-2">Zobacz wszystkie</x-see-more>
             </x-section>
 

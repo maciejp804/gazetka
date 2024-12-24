@@ -6,12 +6,11 @@
     </div>
     <div class=" flex flex-col justify-center gap-y-2 p-2">
         <a href="abc-zakupowicza/porady/chleb" class="flex text-sm text-gray-700">Porady</a>
-        <span class="flex text-xs text-gray-500">10.05.2022</span>
         <a class="flex flex-col gap-y-2" href="#">
-            <h3 class="flex text-sm">Lorem ipsum dolor sit amet consectetur</h3>
+            <h3 class="flex text-base">Lorem ipsum dolor sit amet consectetur</h3>
         </a>
-
         <x-blog-author size="small"/>
+        <span class="flex text-xs text-gray-500">10.05.2022</span>
     </div>
 
 </div>

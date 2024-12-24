@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+     <x-slot:place>
+        {{  $place }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>
@@ -49,7 +49,7 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex" :link="route('main.leaflets')">Zobacz polecane gazetki</x-h2-title>
+                <x-h2-title class="flex" main-route="main.leaflets">Zobacz polecane gazetki</x-h2-title>
                 <x-swiper-leaflets-promo
                     button-class="1"
                     title="Zobacz polecane gazetki"
@@ -57,7 +57,7 @@
                     main-route="main.leaflets"/>
             </x-section>
 
-            <x-ad-1/>
+            <x-ad-1 class="my-5"/>
         </div>
 
         {{-- Reklama pionowa po prawej stronie --}}

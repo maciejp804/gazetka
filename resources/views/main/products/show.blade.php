@@ -1,7 +1,7 @@
 <x-layout>
-    <x-slot:slug>
-        {{  $slug }}
-    </x-slot:slug>
+     <x-slot:place>
+        {{  $place }}
+    </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
     </x-slot:page_title>
@@ -33,7 +33,7 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex" :link="route('main.products')">Podobne produkty w sklepach</x-h2-title>
+                <x-h2-title class="flex" main-route="main.products">Podobne produkty w sklepach</x-h2-title>
                 <div class="w-full">
                     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-4">
                         @foreach($products as $item)

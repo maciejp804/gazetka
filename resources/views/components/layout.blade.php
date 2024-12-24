@@ -26,7 +26,7 @@
 </head>
 <body class="font-ubuntu" id="app">
 
-<x-header :slug="$slug"/>
+<x-header :place="$place"/>
 <x-section class="filter-box lg:hidden">
     <x-search :border="true" class="flex h-12" input-id="search-input-products-mobile"
               result-id="results-box-products-mobile"
