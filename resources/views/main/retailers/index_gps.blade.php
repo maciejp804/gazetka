@@ -16,7 +16,7 @@
 
         <x-div-1060>
             <x-section>
-                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row">
+                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
                     <x-select id="category-select" :items="$retailers_category"/>
                     <x-select id="time-select" :items="$retailers_time"/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true"

@@ -20,7 +20,7 @@
         <x-div-1060>
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
-                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
+                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
                     <x-select-drpodown-url :items="$product_categories" :category="$category" type="leaflets"/>
                     <x-select id="time-select" :items="$leaflet_sort" placeholder="Sortuj..."/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true"

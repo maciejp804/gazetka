@@ -21,7 +21,7 @@
 
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
-                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
+                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
                     <x-select-drpodown-url :items="$voucher_categories" type="vouchers"/>
                     <x-select id="type-select" :items="$tags" placeholder="Typ Kuponu"/>
                     <x-select id="time-select" :items="$voucher_sort" placeholder="Sortuj..."/>
