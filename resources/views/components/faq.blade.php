@@ -10,7 +10,7 @@
           <div class="bg-gray-100 p-4 max-h-60 mx-7 mb-7">
               <div class="flex flex-col text-center gap-y-6">
                   <div class="flex justify-center">
-                      <img src="http://165.232.144.14/static/assets/image/pro/ask%201.png" class="img-fluid" alt="image">
+                      <img src="{{asset('assets/images/statics/ask.png')}}" class="img-fluid" alt="image">
                   </div>
                   <div class="flex flex-col gap-y-6">
                       <div>

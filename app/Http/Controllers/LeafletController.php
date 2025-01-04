@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Shop;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
@@ -120,6 +121,13 @@ class LeafletController extends Controller
 
     public function subdomainLeaflet($subdomain, $pages, $inserts, $insertData, $ads, $leaflets)
     {
+        $shops = Shop::all();
+        $shop = $shops->where('slug', $subdomain)->first();
+
+        if (!$shop) {
+            abort(404);
+        }
+
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne
 
@@ -127,13 +135,15 @@ class LeafletController extends Controller
         $places = $places->sortByDesc('population')->take(40);
         $place = $places->first();
 
+
+
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Gazetka promocyjna z Dino', 'url' => '']
+            ['label' => $shop->name, 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => 'Gazetka promocyjna '. $shop->name, 'url' => '']
         ];
 
-        $subdomain = 'lidl';
+
 
         // Filtrowanie według nazwy
         $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
@@ -142,11 +152,13 @@ class LeafletController extends Controller
 
         return view('subdomain.leaflet', data:
             [
-                'place' => $place->name,
+                'place' => $place,
                 'places' => $places,
 
-                'h1_title'=> 'Gazetka promocyjna z Dino "Najbliżej Ciebie" (ważna od 10-10 do 16-10-2024)',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'shop' => $shop,
+
+                'h1_title'=> 'Gazetka promocyjna '.$shop->name.' od 12.11 do 24.12',
+                'page_title'=> 'Gazetka promocyjna '.$shop->name.' od 12.11 do 24.12 | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'isMobile' => $isMobile,

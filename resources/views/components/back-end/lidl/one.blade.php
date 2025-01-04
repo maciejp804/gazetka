@@ -11,16 +11,16 @@
         <div class="flex-col flex h-full w-full">
             <div class="flex ml-4 h-12">
             <div class="flex flex-col bg-gradient-to-r from-blue-600 to-blue-800 w-4/12 leading-3 text-white text-center justify-center text-sm font-lidlSemibold">
-                <span>OD PONIEDZIAŁKU,</span>
-                <span>25.11</span>
+                <span>OD PIĄTKU,</span>
+                <span>27.12</span>
             </div>
-            <div class="flex flex-col bg-gradient-to-r from-black to-black leading-6 text-white text-center justify-center w-8/12 font-lidlSemibold">
-                <span>Sport</span>
+            <div class="flex flex-col bg-gradient-to-r from-blue-700 to-blue-400 leading-6 text-white text-center justify-center w-8/12 font-lidlSemibold">
+                <span>Moda</span>
             </div>
             </div>
             <div class="flex h-1/3 mt-3">
-                <div class="flex flex-wrap justify-start ml-4 w-4/12 h-full bg-black">
-                    <img class="flex flex-col z-50 h-fit" src="{{asset('images/templates/lidl-naglowek.png')}}">
+                <div class="flex flex-wrap justify-start ml-4 w-4/12 h-full bg-blue-550">
+                    <img class="flex flex-col z-50 h-fit" src="{{asset('images/templates/lidl-header1.png')}}">
 
                 </div>
                 <div class="flex flex-wrap relative justify-end w-8/12 h-fit">
@@ -34,18 +34,18 @@
                 <div class="flex flex-wrap relative justify-start h-fit">
                     <img class="flex align-bottom" src="@if($image !== ''){{asset($image)}}@endif">
                 </div>
-                <div class="flex flex-wrap justify-start w-4/12 bg-black bg-opacity-75 absolute">
+                <div class="flex flex-wrap justify-start w-4/12 bg-blue-550 bg-opacity-75 absolute">
                     <div class=" flex justify-center w-full">
                         <h2 class="text-white font-extrabold text-xl text-center pt-0 m-1 leading-none font-lidl" id="h2_title" > @if($data!== ''){{$data['h1Tag']}}@endif</h2>
                     </div>
-                    <div class="flex flex-col leading-none pt-1 text-white pl-1 pr-1 text-xs font-lidl fill-black">
+                    <div class="flex flex-col leading-none pt-1 text-white pl-1 pr-1 text-xs font-lidl fill-blue-550">
                         @if($data!== '')
                             {!! $data['attributes'] !!}
                         @endif
                     </div>
                 </div>
             </div>
-          <div class="absolute bottom-1/2 right-2 h-16 w-26 flex flex-wrap bg-black content-center p-2">
+          <div class="absolute bottom-1/2 right-2 h-16 w-26 flex flex-wrap bg-blue-550 content-center p-2">
                  <span class="text-white text-center text-4xl font-lidlSemibold">@if($data!== ''){{$data['priceWhole']}}.{{$data['priceRest']}}@endif zł</span>
                 <span class="text-xs price-rtveuroagd">@if($data!== '' and $data['promoCode'] !== null)Kod do oferty: {{$data['promoCode']}}@endif</span>
             </div>
@@ -68,8 +68,8 @@
                         <span class="text-xs"></span>
 
             </div>
-            <div class="absolute bottom-0 p-1 text-xs bg-black w-full text-white font-lidl">
-                <span>CZAS TRWANIA AKCJI: 25.11 - 02.12.2024 LUB DO WYCZERPANIA ZAPASÓW</span>
+            <div class="absolute bottom-0 p-1 text-xs bg-blue-550 w-full text-white font-lidl">
+                <span>CZAS TRWANIA AKCJI: 27.12 - 06.01.2025 LUB DO WYCZERPANIA ZAPASÓW</span>
             </div>
         </div>
     </div>

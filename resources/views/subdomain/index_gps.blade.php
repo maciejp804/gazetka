@@ -1,6 +1,6 @@
 <x-layout>
      <x-slot:place>
-        {{  $place }}
+        {{  $place->name }}
     </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
@@ -23,7 +23,8 @@
 
             <x-section class="flex flex-col">
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-index-subdomain/>
+                <x-header-index-subdomain
+                :shop="$shop"/>
             </x-section>
 
 

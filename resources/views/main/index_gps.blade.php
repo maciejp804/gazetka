@@ -49,7 +49,7 @@
                     :items="$products"
                     type="products"
                     button-class="2"
-                    title="Najlepsze promocje w {{$place->name_locative}}""
+                    title="Najlepsze promocje w {{$place->name_locative}}"
                     main-route="main.products"
                     :uri="route('main.product',['slug' => 'pomidory', 'id' => 1])"
                 />
@@ -99,7 +99,7 @@
             <x-section class="bg-gray-200 rounded py-4">
                 <x-h2-title
                     class="flex"
-                    main-route="main.index">
+                    main-route="main.maps">
                     Gazetki promocyjne w największych polskich miastach
                 </x-h2-title>
 

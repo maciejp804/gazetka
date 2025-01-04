@@ -133,7 +133,7 @@ class MainController extends Controller
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => $shop->name, 'url' => '']
+            ['label' => 'Gazetki '. $shop->name, 'url' => '']
         ];
 
         $vouchers = Voucher::with('voucherStore')->get();
@@ -156,8 +156,8 @@ class MainController extends Controller
             [
                 'place' => $place,
                 'places' => $places,
-                'h1_title'=> $shop->name. ' • gazetka promocyjna '.date('d.m', strtotime('now')).', aktualne promocje',
-                'page_title'=> $shop->name. ' gazetka aktualna - promocje, oferta '.date('d.m', strtotime('now')).' | GazetkaPromocyjna.com.pl',
+                'h1_title'=> $shop->name. ' • gazetka promocyjna '.date('d.m', strtotime('now')).' • aktualne promocje',
+                'page_title'=> $shop->name. ' gazetka aktualna • promocje, oferta '.date('d.m', strtotime('now')).' | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'subdomain' => $subdomain,
                 'breadcrumbs' => $breadcrumbs,
@@ -187,7 +187,7 @@ class MainController extends Controller
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => $shop->name, 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => 'Gazetki '. $shop->name, 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
             ['label' => $shop->name.' '.$place->name, 'url' => ""]
         ];
 

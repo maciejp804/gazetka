@@ -4,12 +4,12 @@ use App\Http\Controllers\BackController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\LeafletController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
-use App\Models\ProductCategory;
 use App\Models\ShopCategory;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -81,7 +81,7 @@ $blogCategory = [
 ];
 
 $descriptions = [
-    ['img' => 'http://165.232.144.14/static/assets/image/pro/Zrzut ekranu 2022-07-12 o 15.23 2.png',
+    ['img' => 'assets/images/statics/1.png',
         'h2Title' => 'Gazetki promocyjne - czy warto do nich<br> zaglądać?',
         'h3Title' => 'Gazetki promocyjne wydają wszystkie sieci handlowe. Znajdziesz je bezpośrednio
                     w sklepie, ale także w wygodniejszej formie w internecie.',
@@ -98,7 +98,7 @@ $descriptions = [
                     oraz sklepy odzieżowe.'],
     ],
 
-    ['img' => 'http://165.232.144.14/static/assets/image/pro/Zrzut ekranu 2022-07-12 o 15.23 1.png',
+    ['img' => 'assets/images/statics/2.png',
         'h2Title' => 'Gazetki promocyjne - czy warto do nich<br> zaglądać?',
         'h3Title' => 'Gazetki promocyjne wydają wszystkie sieci handlowe. Znajdziesz je bezpośrednio
                     w sklepie, ale także w wygodniejszej formie w internecie.',
@@ -114,7 +114,7 @@ $descriptions = [
                     warsztacie. Gazetki wydają bowiem nie tylko popularne dyskonty, ale również sklepy meblowe, drogerie
                     oraz sklepy odzieżowe.'],
     ],
-    ['img' => 'http://165.232.144.14/static/assets/image/pro/Zrzut ekranu 2022-07-12 o 15.26 1.png',
+    ['img' => 'assets/images/statics/3.png',
         'h2Title' => 'Gazetki promocyjne - czy warto do nich<br> zaglądać?',
         'h3Title' => 'Gazetki promocyjne wydają wszystkie sieci handlowe. Znajdziesz je bezpośrednio
                     w sklepie, ale także w wygodniejszej formie w internecie.',
@@ -130,7 +130,7 @@ $descriptions = [
                     warsztacie. Gazetki wydają bowiem nie tylko popularne dyskonty, ale również sklepy meblowe, drogerie
                     oraz sklepy odzieżowe.'],
     ],
-    ['img' => 'http://165.232.144.14/static/assets/image/pro/Zrzut%20ekranu%202022-07-12%20o%2015.27%201.png',
+    ['img' => 'assets/images/statics/4.png',
         'h2Title' => 'Gazetki promocyjne - czy warto do nich<br> zaglądać?',
         'h3Title' => 'Gazetki promocyjne wydają wszystkie sieci handlowe. Znajdziesz je bezpośrednio
                     w sklepie, ale także w wygodniejszej formie w internecie.',
@@ -343,7 +343,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
 
 
 
-Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,  $leaflets_category, $leaflets_time, $retailers_category, $retailers_time, $leaflets, $retailers, $products, $vouchers) {
+Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,  $leaflets_category, $leaflets_time, $retailers_category, $retailers_time, $leaflets, $retailers, $products, $vouchers, $mainDomain) {
 
     //    Route::get('/gazetki-promocyjne',[LeafletController::class,'index'])->name('main.leaflets');
 
@@ -422,6 +422,19 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
     Route::get('/abc-zakupowicza/{category}/{article}', function ($category, $article) use ($descriptions, $blogCategory) {
         return app(BlogController::class)->show($category, $article, $descriptions, $blogCategory);
     })->name('main.blogs_article');
+
+    // Route::get('/lokalizacje', [PlaceController::class, 'index'])->name('main.map');
+
+    Route::get('/lokalizacje/{category}', function ($category) use ($descriptions, $leaflets, $mainDomain){
+        return app(PlaceController::class)->indexVoivodeship($category, $descriptions, $leaflets, $mainDomain);
+    })->name('main.maps.voivodeship');
+
+
+//    Route::get('/lokalizacje', [PlaceController::class, 'index'])->name('main.map');
+
+    Route::get('/lokalizacje', function () use ($descriptions, $leaflets, $mainDomain) {
+        return app(PlaceController::class)->index($descriptions, $leaflets, $mainDomain);
+    })->name('main.maps');
 
 
     // Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');

@@ -10,10 +10,17 @@
                     <span class="flex self-center dropdown-url"
                         @if($category != 'Wszystkie')
                             data-dropdown="{{$category->id}}">
-                            Kategoria: {{$category->name}}
+                        @if($type != 'maps')
+                            Kategoria:
+                        @endif
+                        {{$category->name}}
                         @else
                             data-dropdown="all">
-                            Kategoria: Wszystkie
+                                @if($type != 'maps')
+                                    Kategoria: Wszystkie
+                                @else
+                                    Cała Polska
+                                @endif
                         @endif
                         </span>
                     <x-header.svg svg="chevron-down" size="h-2.5 w-2.5" colour="fill-black"/>

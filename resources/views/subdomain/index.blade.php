@@ -1,6 +1,6 @@
 <x-layout>
      <x-slot:place>
-        {{  $place }}
+        {{  $place->name }}
     </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
@@ -23,7 +23,7 @@
 
             <x-section class="flex flex-col">
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-index-subdomain/>
+                <x-header-index-subdomain :shop="$shop"/>
             </x-section>
 
 
@@ -68,7 +68,10 @@
 
             <x-section class="bg-gray-200 rounded py-4">
                 <x-h2-title see-more-status="fault" class="flex">Największe miasta, w których znajdziesz sklepy {{$shop->name}}</x-h2-title>
-                <x-cities-list :items="$places"/>
+                <x-cities-list
+                    main-route="subdomain.index_gps"
+                    :shop="$shop"
+                    :items="$places"/>
             </x-section>
 
 

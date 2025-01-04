@@ -1,3 +1,4 @@
+@props(['shop'])
 <div class="flex w-full justify-between bg-gray-200 p-4 rounded">
     <div class="flex flex-col gap-y-2 w-1/2">
         <span class="text-left font-medium text-gray-700">Oceń nas</span>
@@ -25,8 +26,8 @@
 </div>
 <div class="flex flex-col md:flex-row mt-4 gap-x-3">
     <div class="flex w-full md:w-50 justify-center">
-        <a href="{{route('subdomain.index', ['subdomain' => 'dino'])}}">
-            <img class="flex self-center" src="https://hoian.pl/assets/image/store/biedronka.png" alt="logo" />
+        <a href="{{route('subdomain.index', ['subdomain' => $shop->slug])}}">
+            <img class="flex self-center" src="{{$shop->logo}}" alt="logo" />
         </a>
     </div>
     <div class="flex w-full">

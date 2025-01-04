@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\Shop;
 use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
@@ -143,6 +144,8 @@ class ProductController extends Controller
             abort(404);
         }
 
+        $shops = Shop::all();
+        $shop = $shops->where('slug', $subdomain)->first();
 
         $places = Place::all();
         $places = $places->sortByDesc('population')->take(40);
@@ -153,7 +156,7 @@ class ProductController extends Controller
             ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
             ['label' => $product->name, 'url' => ""]
         ];
-        $subdomain = 'lidl';
+
 
         // Filtrowanie według nazwy
         $leaflets_filtred = array_filter($leaflets, function ($item) use ($subdomain) {
@@ -164,14 +167,14 @@ class ProductController extends Controller
             [
                 'place' => $place->name,
                 'places' => $places,
-
-                'h1_title'=> $product->name.' w Dino',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'h1_title'=> $product->name.' w '.$shop->name.' - aktualne promocje',
+                'page_title'=> $product->name.' '.$shop->name.' - '.monthReplace(date('Y-m-d',strtotime('now')), 'full', 'm-Y').' • GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'subdomain' => $subdomain,
                 "breadcrumbs" => $breadcrumbs,
                 'leaflets' => $leaflets_filtred,
                 "leaflets_others" => $leaflets,
+                'shop' => $shop,
             ]);
     }
 }

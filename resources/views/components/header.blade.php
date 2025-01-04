@@ -62,7 +62,7 @@
 
 
                 {{-- Mobile Menu--}}
-                <div class="lg:hidden">
+                <div class="lg:hidden z-30">
                     <ul x-data="{ mobileMenuIsOpen: false }" @click.away="mobileMenuIsOpen = false" class="flex gap-2">
                         <x-header.link href="#" svg='location' />
                         <x-header.link link="button" svg='bar'/>

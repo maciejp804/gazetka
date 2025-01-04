@@ -74,12 +74,11 @@
             <x-section class="bg-gray-200 rounded py-4">
                 <x-h2-title
                     class="flex"
-                    main-route="main.index">
+                    main-route="main.maps">
                     Gazetki promocyjne w największych polskich miastach
                 </x-h2-title>
 
                 <x-cities-list
-                    main-route="main.index"
                     :items="$places"
                     />
             </x-section>

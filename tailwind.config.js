@@ -14,6 +14,7 @@ export default {
         './resources/views/**/*.blade.php',
     ],
     safelist: [
+        'text-white',
         'rounded-t-3xl',
         'rounded-b-lg',
         'rounded-3xl',

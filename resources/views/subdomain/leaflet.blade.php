@@ -36,7 +36,8 @@
         <x-div-1060>
             <x-section class="flex flex-col">
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-index-subdomain/>
+                <x-header-index-subdomain
+                :shop="$shop"/>
             </x-section>
         </x-div-1060>
 
@@ -68,7 +69,10 @@
 
             <x-section class="bg-gray-200 rounded py-5">
                 <x-h2-title class="flex">Najbliższe miasta, w których znajdziesz sklepy Dino</x-h2-title>
-                <x-cities-list :items="$places"/>
+                <x-cities-list
+                    main-route="subdomain.index_gps"
+                    :shop="$shop"
+                    :items="$places"/>
                 <x-see-more class="lg:hidden pb-2">Zobacz wszystkie</x-see-more>
             </x-section>
 

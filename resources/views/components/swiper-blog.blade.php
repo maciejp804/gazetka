@@ -8,7 +8,7 @@
         <div class="swiper-slide">
             <a href="/abc-zakupowicza/porady/chleb">
                 <div class="flex w-full">
-                    <img class="w-full h-40 2xs:h-48 object-cover rounded" src="http://165.232.144.14/media/blogs/5_ltC1WKM.png" alt="pro-img1">
+                    <img class="w-full h-40 2xs:h-48 object-cover rounded" src="{{asset('assets/images/statics/blog.png')}}" alt="pro-img1">
                 </div>
                 <div class="text-xs text-gray-600 pt-2">
                     <span>Jan. 8, 2024</span>

@@ -68,6 +68,11 @@ if (!function_exists('getUrlData')) {
                 $urlData->routeName = 'main.leaflets.category';
                 break;
 
+            case 'maps':
+                $urlData->urlType = 'lokalizacje';
+                $urlData->routeName = 'main.maps.voivodeship';
+                break;
+
             default:
                 $urlData->urlType = 'default';
                 $urlData->routeName = 'main.default';
