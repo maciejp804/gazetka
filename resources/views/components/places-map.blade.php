@@ -34,7 +34,9 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Inicjalizacja mapy
-        const map = L.map('map').setView([{{$latitude}}, {{$longitude}}], {{$scale}});
+        const map = L.map('map',{
+            gestureHandling: true
+        }).setView([{{$latitude}}, {{$longitude}}], {{$scale}});
 
         // Dodanie warstwy TileLayer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

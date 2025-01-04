@@ -17,7 +17,10 @@ import Alpine from 'alpinejs';
 import collapse from '@alpinejs/collapse';
 
 import L from 'leaflet';
+import { GestureHandling } from "leaflet-gesture-handling";
+
 import 'leaflet/dist/leaflet.css';
+import "leaflet-gesture-handling/dist/leaflet-gesture-handling.css";
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
