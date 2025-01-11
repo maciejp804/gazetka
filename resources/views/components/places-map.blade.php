@@ -3,9 +3,9 @@
 <div class="flex relative h-full w-full z-10">
     <!-- Panel boczny -->
     <div id="sidebar" class="absolute top-3 left-12 grid grid-cols-2 gap-2 w-60 lg:w-1/2 z-20">
-        <x-select-drpodown-url type="maps" :items="$items" :category="$voivodeship" class="col-span-2"/>
+        <x-select-drpodown-url type="maps" :items="$items" :category="$voivodeship" class="col-span-2 lg:col-span-1"/>
 
-        <div class="relative col-span-2">
+        <div class="relative col-span-2 lg:col-span-1">
             <input
                 type="text"
                 id="search-input"

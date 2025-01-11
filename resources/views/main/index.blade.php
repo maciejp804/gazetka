@@ -9,6 +9,7 @@
         {{  $meta_description }}
     </x-slot:meta_description>
 
+
     <x-ad-1 class="my-5"/>
     <div class="flex">
 
@@ -81,6 +82,7 @@
                 <x-cities-list
                     :items="$places"
                     />
+                <x-see-more class="lg:hidden pb-2" main-route="main.maps">Zobacz wszystkie</x-see-more>
             </x-section>
 
             <x-section>

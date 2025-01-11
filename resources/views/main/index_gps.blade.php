@@ -1,6 +1,6 @@
 <x-layout>
-     <x-slot:place>
-        {{  $place->name }}
+    <x-slot:place>
+        {{ $place->name }}
     </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
@@ -8,7 +8,6 @@
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
-
 
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
     <x-ad-1 class="my-5"/>
@@ -104,7 +103,7 @@
                 </x-h2-title>
 
                 <x-cities-list
-                    main-route="main.index"
+                    main-route="main.index.gps"
                     :items="$places"
                     />
             </x-section>

@@ -12,17 +12,25 @@ use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class MainController extends Controller
 {
     public function index($descriptions, $leaflets)
     {
 
-        $places = Place::all();
+        $placesAll = Place::all();
 
-        $places = $places->sortByDesc('population')->take(40);
+        $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+
+        if (!$location) {
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+        }
 
         $shop_categories = ShopCategory::where('status', 1)->get();
 
@@ -42,8 +50,9 @@ class MainController extends Controller
 
         return view('main.index', data:
             [
+
                 'place' => $place->name,
-                'places' => $places,
+                'places' => $placesLimit40,
 
                 'h1_title'=> 'Najnowsze <strong>gazetki promocyjne</strong> - aktualne i nadchodzące promocje',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
@@ -64,15 +73,24 @@ class MainController extends Controller
 
     public function indexGps($community, $descriptions, $leaflets)
     {
-        $places = Place::all();
-        $place = $places->where('slug', $community)->first();
+        $placesAll = Place::all();
+
+        $place = $placesAll->where('slug', $community)->first();
 
         if(!$place)
         {
             abort(404);
         }
 
-        $places = $places->where('slug', '!=', $place->slug)->sortByDesc('population')->take(40);
+        // Zapisz lokalizację w ciasteczku
+        Cookie::queue('user_location', json_encode([
+            'id' => $place->id,
+            'name' => $place->name,
+            'latitude' => $place->lat,
+            'longitude' => $place->lng,
+        ],JSON_PRETTY_PRINT), 60 * 24 * 7, '/', '.'.config('app.main_domain'), false, false); // Zapis na 7 dni
+
+        $placesLimit40 = $placesAll->where('slug', '!=', $place->slug)->sortByDesc('population')->take(40);
 
         $shop_categories = ShopCategory::where('status', 1)->get();
 
@@ -95,8 +113,10 @@ class MainController extends Controller
 
         return view('main.index_gps', data:
             [
+
                 'place' => $place,
-                'places' => $places,
+                'places' => $placesLimit40,
+
                 'h1_title'=> 'Wszystkie <strong>gazetki promocyjne</strong> w jednym miejscu w '.$place->name_locative,
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
@@ -116,11 +136,18 @@ class MainController extends Controller
     public function subdomainIndex($subdomain, $leaflets)
     {
 
-        $places = Place::all();
+        $placesAll = Place::all();
 
-        $places = $places->sortByDesc('population')->take(40);
+        $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+
+        if (!$location) {
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+        }
 
         $shops = Shop::all();
         $shop = $shops->where('slug', $subdomain)->first();
@@ -148,32 +175,40 @@ class MainController extends Controller
             return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
         });
 
+        $products = Product::all();
 
+        return view('subdomain.index', [
+            //Zmienne globalne
+            'subdomain' => $subdomain,
 
+            // Lokalizacja
+            'place' => $place,
+            'places' => $placesLimit40,
 
+            // Opisy i dane globalne
+            'h1_title' => $shop->name . ' • gazetka promocyjna ' . date('d.m', strtotime('now')) . ' • aktualne promocje',
+            'page_title' => $shop->name . ' gazetka aktualna • promocje, oferta ' . date('d.m', strtotime('now')) . ' | GazetkaPromocyjna.com.pl',
+            'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
-        return view('subdomain.index', data:
-            [
-                'place' => $place,
-                'places' => $places,
-                'h1_title'=> $shop->name. ' • gazetka promocyjna '.date('d.m', strtotime('now')).' • aktualne promocje',
-                'page_title'=> $shop->name. ' gazetka aktualna • promocje, oferta '.date('d.m', strtotime('now')).' | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'subdomain' => $subdomain,
-                'breadcrumbs' => $breadcrumbs,
-                'leaflets_category' => $leaflets_category,
-                'leaflets_time' => $leaflets_time,
-                'leaflets' => $leaflets,
-                'vouchers' => $vouchers,
-                'shops' => $shops,
-                'shop' => $shop,
-            ]);
+            'breadcrumbs' => $breadcrumbs,
+
+            // Produkty
+
+            'products' => $products,
+            'leaflets_category' => $leaflets_category, // gazetki
+            'leaflets_time' => $leaflets_time,
+            'leaflets' => $leaflets,
+            'vouchers' => $vouchers, // kupony
+            'shops' => $shops, // sklepy
+            'shop' => $shop,
+        ]);
+
     }
 
     public function subdomainIndexGps($subdomain, $community, $leaflets)
     {
-        $places = Place::all();
-        $place = $places->where('slug', $community)->first();
+        $placesAll = Place::all();
+        $place = $placesAll->where('slug', $community)->first();
         $shops = Shop::all();
         $shop = $shops->where('slug', $subdomain)->first();
 
@@ -182,8 +217,17 @@ class MainController extends Controller
             abort(404);
         }
 
-        $shops->where('slug', '!=', $subdomain);
-        $places = $places->where('slug', '!=', $place->slug)->sortByDesc('population')->take(40);
+
+        // Zapisz lokalizację w ciasteczku
+        Cookie::queue('user_location', json_encode([
+            'id' => $place->id,
+            'name' => $place->name,
+            'latitude' => $place->lat,
+            'longitude' => $place->lng,
+        ],JSON_PRETTY_PRINT), 60 * 24 * 7, '/', '.'.config('app.main_domain'), false, false); // Zapis na 7 dni
+
+        $shopsOther = $shops->where('slug', '!=', $subdomain);
+
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -202,12 +246,11 @@ class MainController extends Controller
             return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
         });
 
-        $shops = Shop::all();
 
         return view('subdomain.index_gps', data:
             [
                 'place' => $place,
-                'places' => $places,
+
                 'h1_title'=> $shop->name. ' '. $place->name .' • gazetki promocyjne',
                 'page_title'=> $shop->name. ' '. $place->name .' • gazetka, godziny otwarcia | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
@@ -217,7 +260,7 @@ class MainController extends Controller
                 'leaflets_time' => $leaflets_time,
                 'leaflets' => $leaflets,
                 'vouchers' => $vouchers,
-                'shops' => $shops,
+                'shopsOther' => $shopsOther,
                 'shop' => $shop,
             ]);
     }

@@ -10,17 +10,22 @@ use App\Models\Shop;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Jenssegers\Agent\Agent;
+use function Webmozart\Assert\Tests\StaticAnalysis\object;
 
 class LeafletController extends Controller
 {
     public function index($descriptions, $leaflets)
     {
-        $places = Place::all();
-
-        $places = $places->sortByDesc('population')->take(40);
-
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
         $product_categories = ProductCategory::where('status', 1)->get();
         $products = Product::all();
@@ -41,7 +46,6 @@ class LeafletController extends Controller
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'place' => $place->name,
-                'places' => $places,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -54,11 +58,14 @@ class LeafletController extends Controller
 
     public function indexCategory($category, $descriptions, $leaflets)
     {
-        $places = Place::all();
-
-        $places = $places->sortByDesc('population')->take(40);
-
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
         $products = Product::all();
 
@@ -80,7 +87,7 @@ class LeafletController extends Controller
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'place' => $place->name,
-                'places' => $places,
+
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -127,13 +134,21 @@ class LeafletController extends Controller
         if (!$shop) {
             abort(404);
         }
+        $placesAll = Place::all();
+        $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
+
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne
 
-        $places = Place::all();
-        $places = $places->sortByDesc('population')->take(40);
-        $place = $places->first();
+
 
 
 
@@ -153,7 +168,7 @@ class LeafletController extends Controller
         return view('subdomain.leaflet', data:
             [
                 'place' => $place,
-                'places' => $places,
+                'places' => $placesLimit40,
 
                 'shop' => $shop,
 

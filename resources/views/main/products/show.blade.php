@@ -49,7 +49,7 @@
                 <x-see-more class="flex lg:hidden pb-2" type="button">Zobacz więcej</x-see-more>
             </x-section>
 
-            <x-ad-1/>
+            <x-ad-1 class="mb-5"/>
 
 
         </x-div-1060>

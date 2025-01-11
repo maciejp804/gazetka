@@ -10,11 +10,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
-use App\Models\ShopCategory;
 use Illuminate\Http\Request;
-use App\Models\Product;
 use Illuminate\Support\Facades\Route;
-use Jenssegers\Agent\Agent;
 
 
 $mainDomain = env('MAIN_DOMAIN', 'gazetkapromocyjna.local');
@@ -294,13 +291,11 @@ $leaflets_time = $retailers_time = [
 
 
 
-Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData, $leaflets_category, $leaflets_time, $leaflets, $vouchers, $retailers, $products) {
+Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData, $leaflets_category, $leaflets_time, $leaflets, $vouchers, $retailers, $products, $mainDomain) {
 
 
 
-    Route::get('/godziny-otwarcia/wielen-os-przytorze-36' ,function ($subdomain) use ($leaflets, $leaflets_time, $leaflets_category, $vouchers) {
-        return app(ShopController::class)->subdomainShowAddress($subdomain, $leaflets, $leaflets_time, $leaflets_category, $vouchers);
-    })->name('subdomain.shop_address');
+
 
     Route::get('/w-gazetce/{product}' ,function ($subdomain, $product) use ($leaflets) {
         return app(ProductController::class)->showSubdomain($subdomain, $product, $leaflets);
@@ -311,11 +306,15 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
        return app(LeafletController::class)->subdomainLeaflet($subdomain, $pages, $inserts, $insertData, $ads, $leaflets);
     })->name('subdomain.leaflet');
 
+    Route::get('/{community}/{address}' ,function ($subdomain, $community, $address) use ($leaflets) {
+        return app(ShopController::class)->subdomainShowAddress($subdomain, $community, $address, $leaflets);
+    })->name('subdomain.shop_address');
+
     Route::get('/{community}', function ($subdomain, $community) use ($leaflets) {
         return app(MainController::class)->subdomainIndexGps($subdomain, $community, $leaflets);
     })->name('subdomain.index_gps');
 
-    Route::get('/', function ($subdomain) use ( $leaflets) {
+    Route::get('/', function ($subdomain) use ($leaflets) {
         return app(MainController::class)->subdomainIndex($subdomain, $leaflets);
     })->name('subdomain.index');
 
@@ -460,36 +459,19 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     // Route::get('/',[MainController::class,'index'])->name('main.index');
 
-    Route::get('/', function () use ($descriptions, $leaflets_category, $leaflets) {
-        return app(MainController::class)->index($descriptions, $leaflets);
+    Route::get('/', function () use ($descriptions, $leaflets, $mainDomain) {
+        return app(MainController::class)->index($descriptions, $leaflets, $mainDomain);
     })->name('main.index');
 
     // Route::get('/{community}',[MainController::class,'indexGps'])->name('main.index.gps');
 
-    Route::get('/{community}', function ($community) use ($descriptions, $leaflets) {
-        return app(MainController::class)->indexGps($community, $descriptions, $leaflets);
+    Route::get('/{community}', function ($community) use ($descriptions, $leaflets, $mainDomain) {
+        return app(MainController::class)->indexGps($community, $descriptions, $leaflets, $mainDomain);
     })->name('main.index.gps');
 
 });
 
 
-
-Route::get('/api/inserts', function() {
-    $insertsData = [
-        [
-            'after' => 5,
-            'img' => 'http://gazetkapromocyjna.local/images/templates/home-you.png',
-            'clicks' => json_decode(file_get_contents(public_path('reklama/1.json'))),
-        ],
-        [
-            'after' => 9,
-            'img' => 'http://gazetkapromocyjna.local/images/templates/home-you.png',
-            'clicks' => json_decode(file_get_contents(public_path('reklama/2.json'))),
-        ]
-    ];
-
-    return response()->json($insertsData);
-});
 
 
 
@@ -524,3 +506,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+require __DIR__.'/api.php';

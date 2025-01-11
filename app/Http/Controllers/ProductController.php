@@ -11,15 +11,21 @@ use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class ProductController extends Controller
 {
     public function index($descriptions, $retailers_category, $leaflets)
     {
 
-        $places = Place::all();
-        $places = $places->sortByDesc('population')->take(40);
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
         $product_categories = ProductCategory::where('status', 1)->get();
         $products = Product::all();
@@ -32,7 +38,7 @@ class ProductController extends Controller
         return view('main.products.index', data:
             [
                 'place' => $place->name,
-                'places' => $places,
+
 
                 'h1_title'=> '<strong>Produkty</strong> w gazetkach promocyjnych',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
@@ -57,9 +63,14 @@ class ProductController extends Controller
             abort(404);
         }
 
-        $places = Place::all();
-        $places = $places->sortByDesc('population')->take(40);
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
 
         $products = Product::where('product_category_id', $category->id)->get();
@@ -76,7 +87,7 @@ class ProductController extends Controller
         return view('main.products.index_category', data:
             [
                 'place' => $place->name,
-                'places' => $places,
+
 
                 'h1_title'=> 'Produkty w gazetkach promocyjnych - kategoria <strong>'.strtolower($category->name).'</strong>',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
@@ -102,9 +113,14 @@ class ProductController extends Controller
             abort(404);
         }
 
-        $places = Place::all();
-        $places = $places->sortByDesc('population')->take(40);
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
         $products = $products->where('product_category_id', $product->product_category_id);
         $vouchers = Voucher::with('voucherStore')->get();
@@ -119,7 +135,7 @@ class ProductController extends Controller
         return view('main.products.show', data:
             [
                 'place' => $place->name,
-                'places' => $places,
+
 
                 'h1_title'=> $product->name.' - promocje w sklepach',
                 'page_title'=> $product->name.' - promocje, aktualna cena w sklepach | GazetkaPromocyjna.com.pl',
@@ -138,22 +154,26 @@ class ProductController extends Controller
 
         $products = Product::all();
         $product = $products->where('slug', $product)->first();
-
-        if(!$product)
+        $shops = Shop::all();
+        $shop = $shops->where('slug', $subdomain)->first();
+        if(!$product || !$shop)
         {
             abort(404);
         }
 
-        $shops = Shop::all();
-        $shop = $shops->where('slug', $subdomain)->first();
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
-        $places = Place::all();
-        $places = $places->sortByDesc('population')->take(40);
-        $place = $places->first();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => $shop->name, 'url' => route('subdomain.index', ['subdomain' => $shop->slug])],
             ['label' => $product->name, 'url' => ""]
         ];
 
@@ -165,12 +185,16 @@ class ProductController extends Controller
 
         return view('subdomain.products.show', data:
             [
-                'place' => $place->name,
-                'places' => $places,
+                //Zmienne globalne
+                'subdomain' => $subdomain,
+
+                //Lokalizacja
+                'place' => $place,
+
                 'h1_title'=> $product->name.' w '.$shop->name.' - aktualne promocje',
                 'page_title'=> $product->name.' '.$shop->name.' - '.monthReplace(date('Y-m-d',strtotime('now')), 'full', 'm-Y').' • GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'subdomain' => $subdomain,
+
                 "breadcrumbs" => $breadcrumbs,
                 'leaflets' => $leaflets_filtred,
                 "leaflets_others" => $leaflets,

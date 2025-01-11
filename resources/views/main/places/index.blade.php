@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :main_domain>
     <x-slot:place>
         {{ $place }}
     </x-slot:place>
@@ -8,6 +8,9 @@
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
+    <x-slot:main_domain>
+        {{  $mainDomain }}
+    </x-slot:main_domain>
 
     <x-ad-1 class="my-5"/>
     <div class="flex">
@@ -30,7 +33,7 @@
                 </x-h2-title>
 
                 <x-cities-list
-                    main-route="main.index"
+                    main-route="main.index.gps"
                     :items="$places"
                 />
             </x-section>

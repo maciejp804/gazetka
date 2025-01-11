@@ -1,6 +1,6 @@
 <x-layout>
      <x-slot:place>
-        {{  $place }}
+        {{  $place->name }}
     </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}

@@ -1,6 +1,6 @@
 <x-layout>
-     <x-slot:place>
-        {{  $place->name }}
+    <x-slot:place>
+        {{ $place->name }}
     </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
@@ -8,6 +8,7 @@
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
+
 
 
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
@@ -49,6 +50,16 @@
             </x-section>
 
             <x-section>
+                <x-swiper
+                    :items="$products"
+                    type="products"
+                    button-class="1"
+                    title="Promocje w {{$shop->name_locative}}"
+                    main-route="main.products"
+                />
+            </x-section>
+
+            <x-section>
                 <x-swiper-vouchers
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
@@ -59,7 +70,7 @@
             <x-section>
                 <x-swiper
                     :items="$shops"
-                    button-class="1"
+                    button-class="2"
                     type="retailers"
                     title="Podobne sieci handlowe"
                     main-route="main.retailers"

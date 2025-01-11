@@ -16,6 +16,7 @@ export default defineConfig({
                 'resources/js/leaflet-swiper.js',
                 'resources/js/filter.js',
                 'resources/js/rating.js',
+                'resources/js/geolocation.js',
             ],
             refresh: true,
         }),

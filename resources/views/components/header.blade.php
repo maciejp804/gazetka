@@ -126,6 +126,11 @@
                                                     </a>
                                                 </li>
                                                 <li class="px-4 py-2 border-b">
+                                                    <a href="{{route('main.maps')}}" class="link-title a_b70zm8">
+                                                        <span class="sp-link-title span_zhao3d">Lokalizacje</span>
+                                                    </a>
+                                                </li>
+                                                <li class="px-4 py-2 border-b">
                                                     <a href="{{route('main.vouchers')}}" class="link-title a_qpoaqp">
                                                         <span class="sp-link-title span_376j45">Kupony</span>
                                                     </a>

@@ -2,7 +2,7 @@
     @for($i=1; $i<=9; $i++)
         <div class="grid grid-cols-5 gap-2 p-2 odd:bg-gray-100 even:bg-white rounded">
             <div class="col-span-3 flex items-center justify-start">
-                <a href="http://dino.gazetkapromocyjna.local/godziny-otwarcia/wielen-os-przytorze-36" class="flex overflow-hidden">
+                <a href="http://dino.gazetkapromocyjna.local/wielen/os-przytorze-36" class="flex overflow-hidden">
                     <span class="truncate">Dino, Wieleń, os. Przytorze 36</span>
                 </a>
             </div>

@@ -75,7 +75,7 @@
 
             <x-section>
                 <x-swiper
-                    :items="$shops"
+                    :items="$shopsOther"
                     button-class="1"
                     type="retailers"
                     title="Podobne sieci handlowe"

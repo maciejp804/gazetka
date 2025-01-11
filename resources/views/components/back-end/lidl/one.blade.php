@@ -11,16 +11,16 @@
         <div class="flex-col flex h-full w-full">
             <div class="flex ml-4 h-12">
             <div class="flex flex-col bg-gradient-to-r from-blue-600 to-blue-800 w-4/12 leading-3 text-white text-center justify-center text-sm font-lidlSemibold">
-                <span>OD PIĄTKU,</span>
-                <span>27.12</span>
+                <span>OD WTORKU,</span>
+                <span>07.01</span>
             </div>
             <div class="flex flex-col bg-gradient-to-r from-blue-700 to-blue-400 leading-6 text-white text-center justify-center w-8/12 font-lidlSemibold">
-                <span>Moda</span>
+                <span>Dziecko</span>
             </div>
             </div>
             <div class="flex h-1/3 mt-3">
                 <div class="flex flex-wrap justify-start ml-4 w-4/12 h-full bg-blue-550">
-                    <img class="flex flex-col z-50 h-fit" src="{{asset('images/templates/lidl-header1.png')}}">
+                    <img class="flex flex-col z-50 h-fit" src="{{asset('images/templates/lidl-header.png')}}">
 
                 </div>
                 <div class="flex flex-wrap relative justify-end w-8/12 h-fit">
@@ -69,7 +69,7 @@
 
             </div>
             <div class="absolute bottom-0 p-1 text-xs bg-blue-550 w-full text-white font-lidl">
-                <span>CZAS TRWANIA AKCJI: 27.12 - 06.01.2025 LUB DO WYCZERPANIA ZAPASÓW</span>
+                <span>CZAS TRWANIA AKCJI: 07.01 - 31.01.2025 LUB DO WYCZERPANIA ZAPASÓW</span>
             </div>
         </div>
     </div>

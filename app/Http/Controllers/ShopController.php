@@ -10,6 +10,7 @@ use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class ShopController extends Controller
 {
@@ -18,9 +19,14 @@ class ShopController extends Controller
      */
     public function index($descriptions, $leaflets)
     {
-        $places = Place::all();
-        $places = $places->sortByDesc('population')->take(40);
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
 
         $retailers_category = ShopCategory::where('status', 1)->get();
         $retailers = Shop::where('status', 1)->get();
@@ -36,13 +42,13 @@ class ShopController extends Controller
 
         return view('main.retailers.index', data:
             [
-                'places' => $places,
+
                 'place' => $place->name,
                 'h1_title'=> 'Sieci <strong>handlowe</strong>',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'static_description' => $static_description,
-                'slug' => 'Poznań',
+
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -55,17 +61,24 @@ class ShopController extends Controller
 
     public function indexCategory($category, $descriptions, $leaflets)
     {
-        $places = Place::all();
-        $places = $places->sortByDesc('population')->take(40);
-        $place = $places->first();
-
         $retailers_category = ShopCategory::where('status', 1)->get();
         $category = $retailers_category->where('slug', $category)->first();
-        $static_description = StaticDescriptions::getDescriptions();
-        if ($category === null)
+        if (!$category)
         {
             abort(404);
         }
+
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
+
+        $static_description = StaticDescriptions::getDescriptions();
+
         $retailers_time = SortOptionsService::getSortOptions();
 
         $retailers = Shop::where('status', 1)->where('shop_category_id', $category->id)->get();
@@ -80,13 +93,13 @@ class ShopController extends Controller
 
         return view('main.retailers.index_category', data:
             [
-                'places' => $places,
-                'place' => $place->name,
+
+                'place' => $place,
                 'h1_title'=> 'Sieci handlowe - markety i sklepy spożywcze',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'static_description' => $static_description,
-                'slug' => 'Poznań',
+
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -119,13 +132,32 @@ class ShopController extends Controller
             ]);
     }
 
-    public function subdomainShowAddress($subdomain, $leaflets, $leaflets_time, $leaflets_category, $vouchers)
+    public function subdomainShowAddress($subdomain, $community, $address, $leaflets)
     {
+        $placesAll = Place::all();
+        $place = $placesAll->where('slug', '=', $community)->first();
+
+        $shops = Shop::all();
+        $shop = $shops->where('slug', $subdomain)->first();
+
+        if(!$place || !$shop)
+        {
+            abort(404);
+        }
+
+        // Zapisz lokalizację w ciasteczku
+        Cookie::queue('user_location', json_encode([
+            'id' => $place->id,
+            'name' => $place->name,
+            'latitude' => $place->lat,
+            'longitude' => $place->lng,
+        ],JSON_PRETTY_PRINT), 60 * 24 * 7, '/', '.'.config('app.main_domain'), false, false); // Zapis na 7 dni
+
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Dino', 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Dino Wieleń', 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain, 'community' => 'wielen'])],
+            ['label' => $shop->name, 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
+            ['label' => $shop->name.' '.$place->name, 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain, 'community' => $community])],
             ['label' => 'os. Przytorze 36', 'url' => ''],
         ];
 
@@ -137,13 +169,18 @@ class ShopController extends Controller
         $leaflets_time = SortOptionsService::getSortOptions();
         $leaflets_category = SortOptionsService::getCategoryOptions();
         $vouchers = Voucher::with('voucherStore')->get();
-        return view('subdomain.shop', data:
+
+        return view('subdomain.shop',
             [
-                'h1_title'=> 'Dino Wieleń, os. Przytorze 36',
+                'subdomain' => $subdomain,
+
+                'place' => $place,
+
+                'h1_title'=> $shop->name.' '.$place->name.', os. Przytorze 36',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'slug' => 'Wieleń',
-                'subdomain' => $subdomain,
+
+
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,

@@ -123,4 +123,6 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'main_domain' => env('MAIN_DOMAIN', 'gazetkapromocyjna.local'),
+
 ];

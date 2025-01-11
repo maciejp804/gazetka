@@ -13,18 +13,27 @@ use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class PlaceController extends Controller
 {
     public function index($descriptions, $leaflets, $mainDomain)
     {
+
         $voivodeships = Voivodeship::all();
+
         $voivodeship = $voivodeships->where('slug', '=','lodzkie')->first();
 
-        $places = Place::with('voivodeship')->orderBy('name')->get();
+        $placesAll = Place::with('voivodeship')->orderBy('name')->get();
 
+        $location = Cookie::get('user_location');
 
-        $place = $places->first();
+        if (!$location) {
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+        }
 
         $shop_categories = ShopCategory::where('status', 1)->get();
 
@@ -45,7 +54,7 @@ class PlaceController extends Controller
             [
                 'mainDomain' => $mainDomain,
                 'place' => $place->name,
-                'places' => $places,
+                'places' => $placesAll,
                 'voivodeships' => $voivodeships,
                 'latitude' => $voivodeship->lat,
                 'longitude' => $voivodeship->lng,
@@ -72,9 +81,18 @@ class PlaceController extends Controller
         $voivodeships = Voivodeship::all();
         $voivodeship = $voivodeships->where('slug', $slug)->first();
 
-        $places = Place::with('voivodeship')->where('voivodeship_id', $voivodeship->id) ->orderBy('name')->get();
+        $placesAll = Place::with('voivodeship')->orderBy('name')->get();
+        $placesVoivodeship = $placesAll->where('voivodeship_id', $voivodeship->id) ->sortBy('name');
 
-        $place = $places->first();
+        $location = Cookie::get('user_location');
+
+        if (!$location) {
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+        }
+
 
         $shop_categories = ShopCategory::where('status', 1)->get();
 
@@ -97,7 +115,7 @@ class PlaceController extends Controller
             [
                 'mainDomain' => $mainDomain,
                 'place' => $place->name,
-                'places' => $places,
+                'places' => $placesVoivodeship,
                 'voivodeships' => $voivodeships,
                 'voivodeship' => $voivodeship,
                 'latitude' => $voivodeship->lat,

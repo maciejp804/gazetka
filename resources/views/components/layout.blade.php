@@ -3,10 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="noindex">
     <title>@if($page_title) {{ $page_title }} @else Brak tytułu @endif </title>
     <meta name="Description" content="@if($meta_description) {{ $meta_description }} @else Brak tytułu @endif ">
+
+    <script>
+        const mainDomain = " {{ config('app.main_domain') }}";
+    </script>
+
     @vite([
             'resources/css/app.css',
             'resources/js/app.js',
@@ -16,10 +22,11 @@
     <script>
         window.googletag = window.googletag || {cmd: []};
         googletag.cmd.push(function() {
-            googletag.defineSlot('/7894359647/Mobile_300x600_1', [300, 600], 'div-gpt-ad-1728582925576-0').addService(googletag.pubads());
+            googletag.defineSlot('/7894359647/SI_ABF_970x250', [[300, 100], [336, 280], [300, 250], [970, 90], [970, 100], [970, 250]], 'div-gpt-ad-1736141195381-0').addService(googletag.pubads());
             googletag.pubads().enableSingleRequest();
             googletag.enableServices();
         });
+
     </script>
 
 
@@ -43,7 +50,8 @@
     'resources/js/custom-swiper.js',
     'resources/js/leaflet-swiper.js',
     'resources/js/filter.js',
-    'resources/js/rating.js'
+    'resources/js/rating.js',
+    'resources/js/geolocation.js'
 
 ])
 @stack('scripts')
