@@ -1,6 +1,6 @@
 <x-layout>
      <x-slot:place>
-        {{  $place }}
+        {{  $place->name }}
     </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
@@ -39,9 +39,12 @@
             </x-section>
 
             <x-section class="bg-gray-200 rounded py-4">
-                <x-h2-title main-route="main.leaflets" class="flex">Popularne sklepy</x-h2-title>
-                <x-cities-list :city="false"/>
-                <x-see-more class="lg:hidden pb-2" href="#">Zobacz wszystkie</x-see-more>
+                <x-h2-title main-route="main.retailers" class="flex">Popularne sklepy</x-h2-title>
+                <x-cities-list
+                    :items="$shops"
+                    main-route="subdomain.index"
+                    :city="false"/>
+                <x-see-more main-route="main.retailers" class="lg:hidden pb-2" href="#">Zobacz wszystkie</x-see-more>
             </x-section>
 
 
