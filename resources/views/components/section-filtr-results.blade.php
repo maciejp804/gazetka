@@ -88,11 +88,7 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
             @foreach($items as $item)
-               <div class="w-34 2xs:w-40 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-46 2lg:w-50">
-                    <x-product class="relative"
-                               :item="$item"
-                                                   />
-                </div>
+                    <x-product :item="$item"/>
                 @if($adsStatus === true)
                     @switch($loop->iteration)
                         @case(5)
