@@ -24,13 +24,17 @@
 
             <x-section class="flex flex-col">
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-index-subdomain :shop="$shop"/>
+                <x-header-index-subdomain
+                    :shop="$shop"
+                    :ratingCount="$ratingCount"
+                    :averageRating="$averageRating"
+                    :model="$model"/>
             </x-section>
 
 
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
-                <div class="filter-box flex flex-col gap-4 mb-4 h-full lg:flex-row lg:h-12">
+                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row lg:h-12">
                     <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
                     <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
                     <x-search placeholder="Wpisz nazwę sieci... " :border="true" class="hidden"

@@ -15,5 +15,20 @@ class Place extends Model
     {
         return $this->belongsTo(Voivodeship::class);
     }
+
+    public function ratings()
+    {
+        return $this->morphMany(Rating::class, 'rateable');
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating');
+    }
+
+    public function ratingCount()
+    {
+        return $this->ratings()->count();
+    }
 }
 

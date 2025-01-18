@@ -103,15 +103,19 @@ class ProductController extends Controller
             ]);
     }
 
-    public function show($slug, $descriptions, $vouchers)
+    public function show($slug, $descriptions)
     {
-        $products = Product::all();
+        $products = Product::with('ratings')->get();
         $product = $products->where('slug', $slug)->first();
+
 
         if(!$product)
         {
             abort(404);
         }
+
+        $averageRating = $product->averageRating();
+        $ratingCount = $product->ratingCount();
 
         $location = Cookie::get('user_location');
         if (!$location) {
@@ -134,6 +138,7 @@ class ProductController extends Controller
 
         return view('main.products.show', data:
             [
+                //Lokalizacja
                 'place' => $place->name,
 
 
@@ -145,6 +150,12 @@ class ProductController extends Controller
                 'breadcrumbs' => $breadcrumbs,
                 'products' => $products,
                 'product' => $product,
+
+                // Rating
+                'averageRating' => $averageRating,
+                'ratingCount' => $ratingCount,
+                'model' => "Product",
+
                 'vouchers' => $vouchers,
             ]);
     }
@@ -152,7 +163,7 @@ class ProductController extends Controller
     public function showSubdomain($subdomain, $product, $leaflets)
     {
 
-        $products = Product::all();
+        $products = Product::with('ratings');
         $product = $products->where('slug', $product)->first();
         $shops = Shop::all();
         $shop = $shops->where('slug', $subdomain)->first();

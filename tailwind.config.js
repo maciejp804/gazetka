@@ -29,6 +29,7 @@ export default {
         'bg-red-500',
         'bg-green-500',
         'bg-blue-500',
+        'duration-3000',
     ],
 
 
@@ -36,6 +37,10 @@ export default {
         extend: {
             animation: {
                 pulse: 'pulse 1.5s infinite ease-in-out',
+            },
+            transitionDuration: {
+                '2000': '2000ms',
+                '3000': '3000ms',
             },
             keyframes: {
                 pulse: {

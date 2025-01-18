@@ -21,7 +21,7 @@
 
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-product-domain :product="$product"/>
+                <x-header-product-domain :product="$product" :ratingCount="$ratingCount" :averageRating="$averageRating" :model="$model"/>
             </x-section>
 
             <x-section>

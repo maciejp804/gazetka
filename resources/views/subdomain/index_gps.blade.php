@@ -24,7 +24,12 @@
             <x-section class="flex flex-col">
                 <x-h1-title :h1Title="$h1_title"/>
                 <x-header-index-subdomain
-                :shop="$shop"/>
+                :shop="$shop"
+                :ratingCount="$ratingCount"
+                :averageRating="$averageRating"
+                :city="$place->slug"
+                :subdomain="$subdomain"
+                :model="$model"/>
             </x-section>
 
 

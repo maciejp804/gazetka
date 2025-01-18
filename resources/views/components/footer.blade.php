@@ -97,12 +97,12 @@
                     <span>Sklepy</span>
                 </a>
                 <ul  class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                    <x-footer.li >Biedronka</x-footer.li>
-                    <x-footer.li ref="http://lidl.gazetkapromocyjna.local" >Lidl</x-footer.li>
-                    <x-footer.li >Auchan</x-footer.li>
-                    <x-footer.li >Netto</x-footer.li>
-                    <x-footer.li >Empik</x-footer.li>
-                    <x-footer.li ref="http://dino.gazetkapromocyjna.local" >Dino</x-footer.li>
+                    <x-footer.li ref="https://biedronka.{{config('app.main_domain')}}">Biedronka</x-footer.li>
+                    <x-footer.li ref="https://lidl.{{config('app.main_domain')}}">Lidl</x-footer.li>
+                    <x-footer.li ref="https://auchan.{{config('app.main_domain')}}">Auchan</x-footer.li>
+                    <x-footer.li ref="https://netto.{{config('app.main_domain')}}">Netto</x-footer.li>
+                    <x-footer.li ref="https://empik.{{config('app.main_domain')}}">Empik</x-footer.li>
+                    <x-footer.li ref="https://dino.{{config('app.main_domain')}}">Dino</x-footer.li>
 
                 </ul>
             </div>

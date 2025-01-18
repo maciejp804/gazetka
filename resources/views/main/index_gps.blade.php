@@ -49,9 +49,7 @@
                     type="products"
                     button-class="2"
                     title="Najlepsze promocje w {{$place->name_locative}}"
-                    main-route="main.products"
-                    :uri="route('main.product',['slug' => 'pomidory', 'id' => 1])"
-                />
+                    main-route="main.products"/>
             </x-section>
 
             <x-section>
@@ -73,16 +71,6 @@
                     ['lat' => 52.4057121, 'lng' => 16.9213448, 'name' => 'lidl'],
                 ]" />
 
-            </x-section>
-
-            <x-section>
-                <x-swiper
-                    :items="$shops"
-                    button-class="3"
-                    type="retailers"
-                    title="Sieci handlowe w {{$place->name_locative}}"
-                    main-route="main.retailers"
-                />
             </x-section>
 
             <x-section>

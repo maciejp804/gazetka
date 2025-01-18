@@ -1,19 +1,20 @@
-@props(['shop'])
+@props(['shop', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
+
+
+<x-rating-form :rateableId="$shop->id"
+               :averageRating="$averageRating"
+               :city="$city"
+               :subdomain="$subdomain"
+               :id="$id"
+               :model="$model"/>
+
+
 <div class="flex w-full justify-between bg-gray-200 p-4 rounded">
     <div class="flex flex-col gap-y-2 w-1/2">
         <span class="text-left font-medium text-gray-700">Oceń nas</span>
-        <div class="flex flex-col md:flex-row gap-x-3 md:items-center">
-            <span class="2xs:whitespace-nowrap text-gray-600">2.5 / 10529 (głosów)</span>
-            <div class="flex flex-row w-full justify-start stars" id="star-rating">
-                <span data-rating="1" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
-                <span data-rating="2" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
-                <span data-rating="3" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
-                <span data-rating="4" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
-                <span data-rating="5" class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600 cursor-pointer">☆</span>
-
-            </div>
-            <p id="rating-value">Ocena: 0</p>
-        </div>
+        <x-rating-stars class="flex-col lg:flex-row lg:items-center justify-start"
+                        :average-rating="$averageRating"
+                        :rating-count="$ratingCount"/>
     </div>
     <div class="flex flex-col gap-y-2 w-1/2 justify-between">
         <span class="text-right font-medium text-gray-700">Polub nas</span>

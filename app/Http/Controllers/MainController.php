@@ -136,6 +136,15 @@ class MainController extends Controller
     public function subdomainIndex($subdomain, $leaflets)
     {
 
+        $shops = Shop::all();
+        $shop = $shops->where('slug', $subdomain)->first();
+        $shops->where('slug', '!=', $subdomain);
+
+        if(!$shop)
+        {
+            abort(404);
+        }
+
         $placesAll = Place::all();
 
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
@@ -149,14 +158,8 @@ class MainController extends Controller
             $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
-        $shops = Shop::all();
-        $shop = $shops->where('slug', $subdomain)->first();
-        $shops->where('slug', '!=', $subdomain);
-
-        if(!$shop)
-        {
-            abort(404);
-        }
+        $averageRating = $shop->averageRating();
+        $ratingCount = $shop->ratingCount();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -191,6 +194,12 @@ class MainController extends Controller
             'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
             'breadcrumbs' => $breadcrumbs,
+
+            // Rating
+            'averageRating' => $averageRating,
+            'ratingCount' => $ratingCount,
+            'model' => "Shop",
+
 
             // Produkty
 
@@ -228,6 +237,8 @@ class MainController extends Controller
 
         $shopsOther = $shops->where('slug', '!=', $subdomain);
 
+        $averageRating = $shop->averageRating();
+        $ratingCount = $shop->ratingCount();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -249,13 +260,24 @@ class MainController extends Controller
 
         return view('subdomain.index_gps', data:
             [
+                //Zmienne globalne
+                'subdomain' => $subdomain,
+
+                //Lokalizacja
                 'place' => $place,
 
                 'h1_title'=> $shop->name. ' '. $place->name .' • gazetki promocyjne',
                 'page_title'=> $shop->name. ' '. $place->name .' • gazetka, godziny otwarcia | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'subdomain' => $subdomain,
+
                 'breadcrumbs' => $breadcrumbs,
+
+
+                // Rating
+                'averageRating' => $averageRating,
+                'ratingCount' => $ratingCount,
+                'model' => "Shop",
+
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
                 'leaflets' => $leaflets,

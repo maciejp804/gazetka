@@ -126,7 +126,7 @@ class LeafletController extends Controller
             ]);
     }
 
-    public function subdomainLeaflet($subdomain, $pages, $inserts, $insertData, $ads, $leaflets)
+    public function subdomainLeaflet($subdomain, $id, $pages, $inserts, $insertData, $ads, $leaflets)
     {
         $shops = Shop::all();
         $shop = $shops->where('slug', $subdomain)->first();
@@ -134,6 +134,10 @@ class LeafletController extends Controller
         if (!$shop) {
             abort(404);
         }
+
+        $averageRating = $shop->averageRating();
+        $ratingCount = $shop->ratingCount();
+
         $placesAll = Place::all();
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
@@ -182,7 +186,14 @@ class LeafletController extends Controller
                 'insertData' => $insertData,
                 'ads' => $ads,
                 'subdomain' => $subdomain,
+                'id' => $id,
                 'breadcrumbs' => $breadcrumbs,
+
+                // Rating
+                'averageRating' => $averageRating,
+                'ratingCount' => $ratingCount,
+                'model' => "Shop",
+
                 'leaflets' => $leaflets
 
 

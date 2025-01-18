@@ -1,3 +1,12 @@
+@props(['rateableId', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
+
+<x-rating-form :rateableId="$rateableId"
+               :averageRating="$averageRating"
+               :city="$city"
+               :subdomain="$subdomain"
+               :id="$id"
+               :model="$model"/>
+
 <div class="flex flex-col w-full lg:flex-row gap-x-2">
 <div class="flex flex-col w-full lg:w-4/6">
     <div class="flex flex-col gap-x-2 sm:flex-row">
@@ -23,14 +32,11 @@
                         <x-header.svg svg="location"/>
                         <span class="text-center text-xs">Dino Wieleń</span>
                         <span class="text-center text-xs">os. Przytorze 36</span>
-                        <div class="flex flex-row-reverse w-full justify-center">
-                            <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-amber-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-amber-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                        </div>
-                        <span class="text-center text-gray-600 text-xs">2.5 / 10529 (głosów)</span>
+                        <x-rating-stars
+                            class="flex-col justify-center"
+                            :model="$model"
+                            :average-rating="$averageRating"
+                            :rating-count="$ratingCount"/>
                     </div>
                 </div>
             </div>

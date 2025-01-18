@@ -7,6 +7,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
@@ -302,8 +303,8 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
     })->name('subdomain.products.show');
 
 
-    Route::get('/gazetka-promocyjna-1', function ($subdomain) use ($pages, $inserts, $insertData, $ads, $leaflets) {
-       return app(LeafletController::class)->subdomainLeaflet($subdomain, $pages, $inserts, $insertData, $ads, $leaflets);
+    Route::get('/gazetka-promocyjna/{id}', function ($subdomain, $id) use ($pages, $inserts, $insertData, $ads, $leaflets) {
+       return app(LeafletController::class)->subdomainLeaflet($subdomain, $id, $pages, $inserts, $insertData, $ads, $leaflets);
     })->name('subdomain.leaflet');
 
     Route::get('/{community}/{address}' ,function ($subdomain, $community, $address) use ($leaflets) {
@@ -431,9 +432,13 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
 //    Route::get('/lokalizacje', [PlaceController::class, 'index'])->name('main.map');
 
-    Route::get('/lokalizacje', function () use ($descriptions, $leaflets, $mainDomain) {
+    Route::get('lokalizacje', function () use ($descriptions, $leaflets, $mainDomain) {
         return app(PlaceController::class)->index($descriptions, $leaflets, $mainDomain);
     })->name('main.maps');
+
+
+    Route::post('/ratings', [RatingController::class, 'store'])->middleware('auth')->name('ratings.store');
+
 
 
     // Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
@@ -457,17 +462,19 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     Route::get('/test-test', [SearchController::class, 'test']);
 
+    require __DIR__.'/auth.php';
+
+   // Route::get('/{community}',[MainController::class,'indexGps'])->name('main.index.gps');
+
+    Route::get('/{community}', function ($community) use ($descriptions, $leaflets, $mainDomain) {
+        return app(MainController::class)->indexGps($community, $descriptions, $leaflets, $mainDomain);
+    })->name('main.index.gps');
+
     // Route::get('/',[MainController::class,'index'])->name('main.index');
 
     Route::get('/', function () use ($descriptions, $leaflets, $mainDomain) {
         return app(MainController::class)->index($descriptions, $leaflets, $mainDomain);
     })->name('main.index');
-
-    // Route::get('/{community}',[MainController::class,'indexGps'])->name('main.index.gps');
-
-    Route::get('/{community}', function ($community) use ($descriptions, $leaflets, $mainDomain) {
-        return app(MainController::class)->indexGps($community, $descriptions, $leaflets, $mainDomain);
-    })->name('main.index.gps');
 
 });
 
@@ -505,6 +512,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+
 
 require __DIR__.'/api.php';

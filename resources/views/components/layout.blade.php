@@ -32,7 +32,7 @@
 
 </head>
 <body class="font-ubuntu" id="app">
-
+<x-flash-massage/>
 <x-header :place="$place"/>
 <x-section class="filter-box lg:hidden">
     <x-search :border="true" class="flex h-12" input-id="search-input-products-mobile"

@@ -47,19 +47,7 @@
                     type="products"
                     button-class="2"
                     title="Najlepsze promocje"
-                    main-route="main.products"
-                    :uri="route('main.product',['slug' => 'pomidory', 'id' => 1])"
-                />
-            </x-section>
-
-            <x-section>
-                <x-swiper
-                    :items="$shops"
-                    button-class="3"
-                    type="retailers"
-                    title="Sieci handlowe"
-                    main-route="main.retailers"
-                />
+                    main-route="main.products"/>
             </x-section>
 
             <x-section>

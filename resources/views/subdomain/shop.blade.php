@@ -22,7 +22,13 @@
 
             <section class="mx-2 xs:mx-4">
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-shop-subdomain/>
+                <x-header-shop-subdomain
+                    :rateableId="$place->id"
+                    :ratingCount="$ratingCount"
+                    :averageRating="$averageRating"
+                    :city="$place->slug"
+                    :subdomain="$subdomain"
+                    :model="$model"/>
             </section>
 
 

@@ -153,6 +153,8 @@ class ShopController extends Controller
             'longitude' => $place->lng,
         ],JSON_PRETTY_PRINT), 60 * 24 * 7, '/', '.'.config('app.main_domain'), false, false); // Zapis na 7 dni
 
+        $averageRating = $shop->averageRating();
+        $ratingCount = $shop->ratingCount();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -182,6 +184,12 @@ class ShopController extends Controller
 
 
                 'breadcrumbs' => $breadcrumbs,
+
+                // Rating
+                'averageRating' => $averageRating,
+                'ratingCount' => $ratingCount,
+                'model' => "Place",
+
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
                 'leaflets' => $leaflets,

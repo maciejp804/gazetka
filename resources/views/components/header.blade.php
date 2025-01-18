@@ -52,7 +52,11 @@
                     </div>
                     <ul class="hidden lg:flex justify-between w-3/12">
                         <x-header.link href="#" svg='heart' />
-                        <x-header.link href="#" svg='user' />
+                        @auth
+                            <x-header.link href="{{ route('dashboard') }}" svg='user' />
+                        @else
+                            <x-header.link href="{{ route('login') }}" svg='user' />
+                        @endauth
                         <x-header.link href="#" svg='brightness' />
                         <x-header.link href="#" class="items-center text-blue-550 font-bold"/>
                     </ul>

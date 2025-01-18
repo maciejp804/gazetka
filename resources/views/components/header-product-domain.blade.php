@@ -1,6 +1,15 @@
+@props(['product', 'averageRating', 'ratingCount', 'model', 'city' => '', 'subdomain' => '', 'id' => ''])
+
+<x-rating-form :rateableId="$product->id"
+               :averageRating="$averageRating"
+               :city="$city"
+               :subdomain="$subdomain"
+               :id="$id"
+               :model="$model"/>
+
 <div class="flex flex-col w-full lg:flex-row gap-x-2">
     <div class="flex flex-col w-full lg:w-1/6">
-        <div class="flex w-full mb-5 ">
+        <div class="flex w-full mb-5">
             <div class="w-full rounded lg:aspect-square ">
                 <div class="flex justify-center w-full h-full">
                     <img class="flex self-center w-4/5"
@@ -25,20 +34,17 @@
             </div>
         </div>
     </div>
+
     <div class="flex flex-col lg:w-2/6">
         <div class="flex w-full">
             <div class=" w-full rounded p-4 border bg-gray-100 ">
                 <div class="flex flex-col justify-center w-full h-full gap-4">
-                    <div class="flex flex-col gap-1">
-                        <div class="flex flex-row-reverse w-full justify-center">
-                            <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-gray-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-amber-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                            <a href="#" class="text-amber-400 peer peer-hover:text-amber-600 hover:text-amber-900 hover:text-transparent"><span class="text-2xl hover:before:absolute hover:before:text-2xl hover:before:content-['\2605'] hover:before:text-amber-600">☆</span></a>
-                        </div>
-                        <span class="text-center text-gray-600 text-xs">2.5 / 10529 (głosów)</span>
-                    </div>
+
+                    <x-rating-stars class="flex-col justify-center"
+                        :average-rating="$averageRating"
+                        :rating-count="$ratingCount"
+                        :model="$model"/>
+
                     <span class="text-center font-bold text-1xl">11.22 zł</span>
                     <button type="submit" class="flex self-center bg-orange-500 rounded-3xl px-4 py-2 text-white font-semibold text-sm">Przejdź do gazetki</button>
 
@@ -52,4 +58,3 @@
         </div>
     </div>
 </div>
-
