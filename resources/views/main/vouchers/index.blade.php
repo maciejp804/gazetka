@@ -21,7 +21,7 @@
 
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
-                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
+                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row" id="filtr">
                     <x-select-drpodown-url :items="$voucher_categories" type="vouchers"/>
                     <x-select id="type-select" :items="$tags" placeholder="Typ Kuponu"/>
                     <x-select id="time-select" :items="$voucher_sort" placeholder="Sortuj..."/>
@@ -36,7 +36,7 @@
                     </x-search>
                 </div>
                 <x-section-filtr-results :ads-status="true" data-container-id="vouchers-container" :items="$vouchers" type="vouchers"/>
-                <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
+                {{ $vouchers->links('custom-paginator') }}
             </x-section>
 
             <x-section class="bg-gray-200 rounded py-4">

@@ -23,7 +23,7 @@
 
                 <x-swiper-leaflets-promo
                     button-class="1"
-                    :leaflets="$leaflets"
+                    :leaflets="$leaflets_promo"
                     main-route="main.leaflets"/>
             </x-section>
 

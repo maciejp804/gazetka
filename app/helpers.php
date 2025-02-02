@@ -9,18 +9,18 @@ if (!function_exists('monthReplace')) {
     function monthReplace ($date, $type, $format = 'd-m-Y', $separator = ' ')
     {
         $month_array = array(
-            1 => ['excerpt' => 'sty', 'full' => 'styczeń'],
-            2 => ['excerpt' => 'lut', 'full' => 'luty'],
-            3 => ['excerpt' => 'mar', 'full' => 'marzec'],
-            4 => ['excerpt' => 'kwi', 'full' => 'kwiecień'],
-            5 => ['excerpt' => 'maj', 'full' => 'maj'],
-            6 => ['excerpt' => 'cze', 'full' => 'czerwiec'],
-            7 => ['excerpt' => 'lip', 'full' => 'lipiec'],
-            8 => ['excerpt' => 'sie', 'full' => 'sierpień'],
-            9 => ['excerpt' => 'wrz', 'full' => 'wrzesień'],
-            10 => ['excerpt' => 'paź', 'full' => 'październik'],
-            11 => ['excerpt' => 'lis', 'full' => 'listopad'],
-            12 => ['excerpt' => 'gru', 'full' => 'grudzień'],
+            1 => ['excerpt' => 'sty', 'full' => 'styczeń', 'full_gen' => 'stycznia'],
+            2 => ['excerpt' => 'lut', 'full' => 'luty', 'full_gen' => 'lutego'],
+            3 => ['excerpt' => 'mar', 'full' => 'marzec', 'full_gen' => 'marca'],
+            4 => ['excerpt' => 'kwi', 'full' => 'kwiecień', 'full_gen' => 'kwietnia'],
+            5 => ['excerpt' => 'maj', 'full' => 'maj', 'full_gen' => 'maja'],
+            6 => ['excerpt' => 'cze', 'full' => 'czerwiec', 'full_gen' => 'czerwca'],
+            7 => ['excerpt' => 'lip', 'full' => 'lipiec', 'full_gen' => 'lipca'],
+            8 => ['excerpt' => 'sie', 'full' => 'sierpień', 'full_gen' => 'sierpnia'],
+            9 => ['excerpt' => 'wrz', 'full' => 'wrzesień', 'full_gen' => 'września'],
+            10 => ['excerpt' => 'paź', 'full' => 'październik', 'full_gen' => 'października'],
+            11 => ['excerpt' => 'lis', 'full' => 'listopad', 'full_gen' => 'listopada'],
+            12 => ['excerpt' => 'gru', 'full' => 'grudzień', 'full_gen' => 'grudnia'],
 
         );
 
@@ -106,7 +106,7 @@ if (!function_exists('validationDate'))
 
 
         if($dataStart > $dataNow){
-            return ['end'=>'Nadchodzaca oferta', 'classes' => 'bg-blue-500', 'new' => $new];
+            return ['end'=>'Nadchodząca oferta', 'classes' => 'bg-blue-500', 'new' => $new];
         }
             // Sprawdź, czy data końcowa jest w przyszłości
             if ($dataEnd > $dataNow) {
@@ -116,19 +116,19 @@ if (!function_exists('validationDate'))
                     if ($miesiace > 4) {
                         $toEnd = "Aktualna $miesiace miesięcy";
                     } elseif ($miesiace > 1) {
-                        $toEnd = "Ważne jeszcze $miesiace miesiące";
+                        $toEnd = "Ważna jeszcze $miesiace miesiące";
                     } else {
-                        $toEnd = "Ważne jeszcze $miesiace miesiąc";
+                        $toEnd = "Ważna jeszcze $miesiace miesiąc";
                     }
                 } elseif ($diff->days >= 1) { // Jeśli różnica wynosi co najmniej 1 dzień
                     $dni = $diff->days;
 
                     if ($dni > 4) {
-                        $toEnd = "Ważne jeszcze $dni dni";
+                        $toEnd = "Ważna jeszcze $dni dni";
                     } elseif ($dni > 1) {
-                        $toEnd = "Ważne jeszcze $dni dni";
+                        $toEnd = "Ważna jeszcze $dni dni";
                     } else {
-                        $toEnd = "Ważne jeszcze $dni dzień";
+                        $toEnd = "Ważna jeszcze $dni dzień";
                         $classes = 'bg-yellow-600';
                     }
                 } elseif ($diff->h > 0 || $diff->i > 0) { // Jeśli różnica wynosi mniej niż 1 dzień
@@ -136,11 +136,11 @@ if (!function_exists('validationDate'))
                     $minuty = $diff->i;
                     $classes = 'bg-yellow-600';
                     if ($godziny > 1) {
-                        $toEnd = "Ważne jeszcze $godziny godzin";
+                        $toEnd = "Ważna jeszcze $godziny godzin";
                     } elseif ($godziny === 1) {
-                        $toEnd = "Ważne jeszcze $godziny godzina";
+                        $toEnd = "Ważna jeszcze $godziny godzina";
                     } else {
-                        $toEnd = "Ważne jeszcze $minuty minut";
+                        $toEnd = "Ważna jeszcze $minuty minut";
                     }
                 } else {
                     $toEnd = "Oferta już się kończy";
@@ -153,6 +153,57 @@ if (!function_exists('validationDate'))
         return ['end'=> $toEnd, 'classes' => $classes, 'new' => $new];
 
     }
+}
+
+if (! function_exists('chunkMyCollection'))
+{
+    function chunkMyCollection($collection)
+    {
+        $n = $collection->count();
+
+        // Jeżeli kolekcja pusta — zwracamy pustą tablicę
+        if ($n === 0) {
+            return [];
+        }
+
+        // 1) Pierwszy chunk (zawsze 1 element)
+        $firstChunk = $collection->slice(0, 1);
+
+        // Ustalamy, czy mamy "ostatni chunk" 1-elementowy (tylko gdy n jest parzyste)
+        if ($n % 2 === 0) {
+            // parzysta liczba elementów => ostatni chunk będzie jednoelementowy
+            // zatem "środek" to elementy pomiędzy 1 a (n-1) czyli slice(1, n-2)
+            $pairsPart = $collection->slice(1, $n - 2);
+            $lastChunk = $collection->slice($n - 1, 1); // ostatni element
+        } else {
+            // nieparzysta liczba elementów => ostatni chunku jednoelementowego nie ma
+            // całe "środek" to elementy pomiędzy 1 a końcem
+            $pairsPart = $collection->slice(1, $n - 1);
+            $lastChunk = null;
+        }
+
+        // 2) Dzielimy "środek" na pary
+        $chunks = [];
+        $pairsCount = $pairsPart->count();
+
+        for ($i = 0; $i < $pairsCount; $i += 2) {
+            // Bierzemy "po 2" na raz
+            $chunks[] = $pairsPart->slice($i, 2);
+        }
+
+        // 3) Łączymy wszystko w jedną tablicę chunków
+        //    Na początku pierwszy chunk, potem pary, na końcu (opcjonalnie) ostatni chunk
+        $result = array_merge(
+            [$firstChunk],  // pierwszy kawałek
+            $chunks         // pary
+        );
+        if ($lastChunk) {
+            $result[] = $lastChunk;  // jeśli parzyste, dokładamy ostatni 1-elementowy
+        }
+
+        return $result;
+    }
+
 }
 
 if (! function_exists('siteValidator'))

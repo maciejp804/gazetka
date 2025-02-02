@@ -18,6 +18,18 @@ class SortOptionsService
         });
     }
 
+    public static function getSortPopularity(): Collection
+    {
+        return collect([
+            //['id' => 1, 'name' => 'Ulubione'],
+            ['id' => 2, 'name' => 'Najwyżej oceniane'],
+            ['id' => 3, 'name' => 'Alfabetycznie'],
+
+        ])->map(function ($item) {
+            return (object) $item; // Konwertuje każdy element na obiekt
+        });
+    }
+
     public static function getCategoryOptions(): Collection
     {
         return collect([

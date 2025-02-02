@@ -30,15 +30,21 @@
             <x-section>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki z tym produktem w Dino</x-h2-title>
 
-                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
+                <x-leaflet-product-results
+                    :ads-status="true"
+                    :products-in-leaflets="$productsInShopLeaflets"
+                    :subdomain="$subdomain"
+                    :shop="$shop"
+                    type="products-leaflet"/>
             </x-section>
 
             <x-section class="my-4">
                 <x-h2-title class="flex" main-route="main.leaflets" :see-more-status="false">Nie znalazłeś czego szukasz? Sprawdź inne gazetki!</x-h2-title>
                 <x-swiper-leaflets-promo
+                    class="leafletSingle"
                     button-class="1"
                     title="Nie znalazłeś czego szukasz? Sprawdź inne gazetki!"
-                    :leaflets="$leaflets_others"
+                    :leaflets="$productsInNoShopLeaflets"
                     main-route="main.leaflets"/>
             </x-section>
 

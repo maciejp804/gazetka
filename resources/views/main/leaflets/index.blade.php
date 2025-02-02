@@ -37,7 +37,7 @@
 
                 <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
 
-                <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
+                {{ $leaflets->links('custom-paginator') }}
             </x-section>
 
             <x-section>

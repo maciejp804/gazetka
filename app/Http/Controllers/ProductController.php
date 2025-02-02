@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Leaflet;
+use App\Models\Page;
+use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -15,7 +18,7 @@ use Illuminate\Support\Facades\Cookie;
 
 class ProductController extends Controller
 {
-    public function index($descriptions, $retailers_category, $leaflets)
+    public function index($descriptions)
     {
 
         $location = Cookie::get('user_location');
@@ -28,8 +31,43 @@ class ProductController extends Controller
         }
 
         $product_categories = ProductCategory::where('status', 1)->get();
-        $products = Product::all();
+
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->paginate(10);
+
+        $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
+            return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                return [
+                    'click_id'      => $click->id,
+                    'valid_from'    => $click->valid_from,
+                    'valid_to'      => $click->valid_to,
+                    'page_id'       => $click->page->id,
+                    'leaflet_id'    => $leaflet->id,
+                    'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                ];
+            });
+        });
+
+        // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
+        $products->setCollection($flattenedCollection);
+
+
         $product_sort = SortOptionsService::getSortOptions();
+
+
+        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
+        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Produkty', 'url' => ''],
@@ -46,7 +84,7 @@ class ProductController extends Controller
 
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
-                'retailers_category' => $retailers_category,
+
                 'product_sort' => $product_sort,
                 'products' => $products,
                 'leaflets' => $leaflets,
@@ -54,7 +92,7 @@ class ProductController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions, $leaflets)
+    public function indexCategory($category, $descriptions)
     {
         $product_categories = ProductCategory::where('status', 1)->get();
         $category = $product_categories->where('slug', $category)->first();
@@ -73,8 +111,40 @@ class ProductController extends Controller
         }
 
 
-        $products = Product::where('product_category_id', $category->id)->get();
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->whereHas('leafletProduct.product', function ($query) use ($category) {
+                $query->where('product_category_id', $category->id);
+            })
+            ->paginate(10);
 
+        $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
+            return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                return [
+                    'click_id'      => $click->id,
+                    'valid_from'    => $click->valid_from,
+                    'valid_to'      => $click->valid_to,
+                    'page_id'       => $click->page->id,
+                    'leaflet_id'    => $leaflet->id,
+                    'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                ];
+            });
+        });
+
+        // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
+        $products->setCollection($flattenedCollection);
+
+        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
+        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -105,7 +175,7 @@ class ProductController extends Controller
 
     public function show($slug, $descriptions)
     {
-        $products = Product::with('ratings')->get();
+        $products = Product::with('ratings', 'leaflets')->get();
         $product = $products->where('slug', $slug)->first();
 
 
@@ -126,7 +196,33 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $products = $products->where('product_category_id', $product->product_category_id);
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->whereHas('leafletProduct', function($query) use ($product) {
+                $query->where('product_id', '!=', $product->id);
+            })
+            ->get()
+            ->flatMap(function ($click) {
+                return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                    return [
+                        'click_id'      => $click->id,
+                        'valid_from'    => $click->valid_from,
+                        'valid_to'      => $click->valid_to,
+                        'page_id'       => $click->page->id,
+                        'leaflet_id'    => $leaflet->id,
+                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                    ];
+                });
+            });
         $vouchers = Voucher::with('voucherStore')->get();
 
         $breadcrumbs = [
@@ -160,17 +256,111 @@ class ProductController extends Controller
             ]);
     }
 
-    public function showSubdomain($subdomain, $product, $leaflets)
+    public function showSubdomain($subdomain, $slug, $leaflets)
     {
 
         $products = Product::with('ratings');
-        $product = $products->where('slug', $product)->first();
+        $product = $products->where('slug', $slug)->first();
         $shops = Shop::all();
         $shop = $shops->where('slug', $subdomain)->first();
+
         if(!$product || !$shop)
         {
             abort(404);
         }
+
+        $productsInShopLeaflets = Leaflet::with('shop')
+            ->where('shop_id', $shop->id)
+            ->where('valid_to', '>=', now()->toDateString()) // Gazetka musi być nadal ważna
+            ->whereHas('pages.clicks.leafletProduct', function ($query) use ($product) {
+                $query->where('product_id', $product->id)
+                    ->where('valid_from', '<=', now()->toDateString()) // Oferta już aktywna
+                    ->where('valid_to', '>=', now()->toDateString()); // Oferta nadal ważna
+            })->with([
+                'pages' => function ($query) use ($product) {
+                    $query->whereHas('clicks.leafletProduct', function ($q) use ($product) {
+                        $q->where('product_id', $product->id)
+                            ->where('valid_from', '<=', now()->toDateString())
+                            ->where('valid_to', '>=', now()->toDateString());
+                    });
+                },
+                'pages.clicks' => function ($query) use ($product) {
+                    $query->whereHas('leafletProduct', function ($q) use ($product) {
+                        $q->where('product_id', $product->id)
+                            ->where('valid_from', '<=', now()->toDateString())
+                            ->where('valid_to', '>=', now()->toDateString());
+                    });
+                },
+                'pages.clicks.leafletProduct.product'
+            ])
+            ->get()
+            ->map(function ($leaflet) {
+                return [
+                    'leaflet_id' => $leaflet->id,
+                    'name' => $leaflet->shop->name ?? 'Brak sklepu',
+                    'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
+                    'logo'=> $leaflet->shop->logo_xs,
+                    'pages' => $leaflet->pages->map(function ($page) {
+                        return [
+                            'page_number' => $page->page_number,
+                            'page_image' => $page->image_path,
+                            'clicks' => $page->clicks->map(function ($click) {
+                                return [
+                                    'valid_from' => $click->valid_from,
+                                    'valid_to' => $click->valid_to,
+                                ];
+                            }),
+                        ];
+                    }),
+                ];
+            });
+
+
+        $productsInNoShopLeaflets = Leaflet::with('shop')
+            ->where('shop_id','!=', $shop->id)
+            ->where('valid_to', '>=', now()->toDateString()) // Gazetka musi być nadal ważna
+            ->whereHas('pages.clicks.leafletProduct', function ($query) use ($product) {
+                $query->where('product_id', $product->id)
+                    ->where('valid_from', '<=', now()->toDateString()) // Oferta już aktywna
+                    ->where('valid_to', '>=', now()->toDateString()); // Oferta nadal ważna
+            })->with([
+                'pages' => function ($query) use ($product) {
+                    $query->whereHas('clicks.leafletProduct', function ($q) use ($product) {
+                        $q->where('product_id', $product->id)
+                            ->where('valid_from', '<=', now()->toDateString())
+                            ->where('valid_to', '>=', now()->toDateString());
+                    });
+                },
+                'pages.clicks' => function ($query) use ($product) {
+                    $query->whereHas('leafletProduct', function ($q) use ($product) {
+                        $q->where('product_id', $product->id)
+                            ->where('valid_from', '<=', now()->toDateString())
+                            ->where('valid_to', '>=', now()->toDateString());
+                    });
+                },
+                'pages.clicks.leafletProduct.product'
+            ])
+            ->get()
+            ->map(function ($leaflet) {
+                return [
+                    'leaflet_id' => $leaflet->id,
+                    'name' => $leaflet->shop->name ?? 'Brak sklepu',
+                    'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
+                    'logo'=> $leaflet->shop->logo_xs,
+                    'pages' => $leaflet->pages->map(function ($page) {
+                        return [
+                            'page_number' => $page->page_number,
+                            'page_image' => $page->image_path,
+                            'clicks' => $page->clicks->map(function ($click) {
+                                return [
+                                    'valid_from' => $click->valid_from,
+                                    'valid_to' => $click->valid_to,
+                                ];
+                            }),
+                        ];
+                    }),
+                ];
+            });
 
         $location = Cookie::get('user_location');
         if (!$location) {
@@ -189,15 +379,12 @@ class ProductController extends Controller
         ];
 
 
-        // Filtrowanie według nazwy
-        $leaflets_filtred = array_filter($leaflets, function ($item) use ($subdomain) {
-            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
-        });
-
         return view('subdomain.products.show', data:
             [
-                //Zmienne globalne
+                //Zmienne globalne strony
                 'subdomain' => $subdomain,
+                'product' => $product,
+                'shop' => $shop,
 
                 //Lokalizacja
                 'place' => $place,
@@ -207,9 +394,11 @@ class ProductController extends Controller
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 "breadcrumbs" => $breadcrumbs,
-                'leaflets' => $leaflets_filtred,
+                'leaflets' => $leaflets,
                 "leaflets_others" => $leaflets,
-                'shop' => $shop,
+
+                'productsInShopLeaflets' => $productsInShopLeaflets,
+                'productsInNoShopLeaflets' => $productsInNoShopLeaflets,
             ]);
     }
 }

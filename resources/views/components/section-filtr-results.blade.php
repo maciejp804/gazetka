@@ -1,13 +1,22 @@
 @props(['adsStatus' => false, 'items', 'dataContainerId', 'type'])
 
-
 @if($type == 'leaflets')
     <div {{$attributes->merge(['class' => 'w-full'])}} id="{{$dataContainerId}}">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
                 @foreach($items as $item)
                     <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
-                        <x-leaflet-slide class="relative" :leaflet="$item"/>
+                        <x-leaflet-slide
+                            class="relative"
+                            :valid_from="$item->valid_from"
+                            :valid_to="$item->valid_to"
+                            :logo="$item->shop->logo_xs"
+                            :name="$item->shop->name"
+                            :slug="$item->shop->slug"
+                            :id="$item->id"
+                            :page="1"
+                            :image="$item->image_cover"
+                        />
                     </div>
                     @if($adsStatus === true)
                         @switch($loop->iteration)
@@ -29,13 +38,12 @@
             @else
                 <p class="flex justify-center w-full p-4 text-gray-500 text-sm">Brak aktualnych ofert</p>
             @endif
-
         </div>
     </div>
 @endif
 
 @if($type == 'retailers')
-    <div class="flex justify-center w-full" id="{{$dataContainerId}}">
+    <div {{$attributes->merge(['class' => 'w-full'])}} id="{{$dataContainerId}}">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
                 @foreach($items as $item)
@@ -84,11 +92,20 @@
 
 
 @if($type == 'products')
-    <div class="flex justify-center w-full" id="{{$dataContainerId}}">
+    <div class="w-full" id="{{$dataContainerId}}">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
             @foreach($items as $item)
-                    <x-product :item="$item"/>
+{{--                @dd($item['valid_from'])--}}
+                    <x-product
+                        :valid_from="$item['valid_from']"
+                        :valid_to="$item['valid_to']"
+                        :product_image="$item['product_image']"
+                        :product_name="$item['product_name']"
+                        :product_slug="$item['product_slug']"
+                        :promo_price="$item['promo_price']"
+                        :logo_xs="$item['logo_xs']"
+                    />
                 @if($adsStatus === true)
                     @switch($loop->iteration)
                         @case(5)
@@ -114,7 +131,7 @@
 @endif
 
 @if($type == 'vouchers')
-    <div class="flex justify-center w-full" id="{{$dataContainerId}}">
+    <div class="w-full" id="{{$dataContainerId}}">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-5">
 
             @foreach($items as $item)

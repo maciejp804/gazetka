@@ -112,6 +112,23 @@ document.addEventListener('DOMContentLoaded', function () {
         pagination: {el: ".swiper-pagination", clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
+    initSwiper('.leafletSingle', {
+        modules: [Navigation, Pagination, Grid, Zoom],
+        slidesPerView: 2,
+        spaceBetween: 5,
+        grid: {rows: 1, fill: 'row'},
+        breakpoints: {
+            320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 1}},
+            425: {slidesPerView: 3, spaceBetween: 10, grid: {rows: 1}},
+            475: {slidesPerView: 3, spaceBetween: 5},
+            640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 1}},
+            768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
+            1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
+            1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 1}}
+        },
+        pagination: {el: ".swiper-pagination", clickable: true}
+    }, '.button-prev-swiper', '.button-next-swiper');
+
     // Category swiper
     initSwiper('.category-swiper', {
         modules: [Navigation, Pagination, Grid],
@@ -147,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
             1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 }},
             1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 }}
         },
-        pagination: {el: ".swiper-pagination", clickable: true}
+        pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
     }, '.button-prev', '.button-next');
 
     // Universal swiper

@@ -35,7 +35,7 @@
                 </div>
                 <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailers"/>
 
-                <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
+                {{ $retailers->links('custom-paginator') }}
             </x-section>
 
             <x-section>

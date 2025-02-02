@@ -33,8 +33,10 @@
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflet"/>
-                <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
+
+                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
+
+                {{ $leaflets->links('custom-paginator') }}
             </x-section>
 
             <x-section>

@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leaflets', function (Blueprint $table) {
+        Schema::create('pages', function (Blueprint $table) {
             $table->id();
+            $table->string('page_number');
+            $table->string('image_path')->nullable();
             $table->timestamps();
         });
     }
@@ -22,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('leaflets');
+        Schema::dropIfExists('pages');
     }
 };

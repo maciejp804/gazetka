@@ -1,16 +1,16 @@
 {{-- Wyniki dla gazetek --}}
-@if(!empty($leaflets) && count($leaflets) > 0)
-    <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
+@if($searchType == 'leaflets')
+    <x-section-filtr-results :ads-status="true" data-container-id="leaflet-filter" :items="$results" :type="$searchType"/>
 @endif
 
-@if(!empty($retailers) && count($retailers) > 0)
-    <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailers"/>
+@if($searchType == 'retailers')
+    <x-section-filtr-results :ads-status="true" data-container-id="retailers-filter" :items="$results" :type="$searchType"/>
 @endif
 
-@if(!empty($products) && count($products) > 0)
-    <x-section-filtr-results :ads-status="true" data-container-id="products-container" :items="$products" type="products"/>
+@if($searchType == 'products')
+    <x-section-filtr-results :ads-status="true" data-container-id="products-filter" :items="$results" :type="$searchType"/>
 @endif
 
-@if(!empty($vouchers) && count($vouchers) > 0)
-    <x-section-filtr-results :ads-status="true" data-container-id="vouchers-container" :items="$vouchers" type="vouchers"/>
+@if($searchType == 'vouchers')
+    <x-section-filtr-results :ads-status="true" data-container-id="vouchers-filter" :items="$results" :type="$searchType"/>
 @endif

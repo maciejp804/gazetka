@@ -53,21 +53,43 @@
         <x-ad-2 justify="justify-end mt-10"/>
         <x-div-1060-leaftet>
             <x-section>
-                <x-leaflet-subdomain swiperClass="swiper-container" :is-mobile="$isMobile" :pages="$pages" :inserts="$inserts" :ads="$ads" :insert-data="$insertData"/>
+                <x-leaflet-subdomain swiperClass="swiper-container" :is-mobile="$isMobile" :leaflet="$leaflet" :pages="$pages" :inserts="$inserts" :ads="$ads" :insert-data="$insertData"/>
             </x-section>
+
+            @if(!empty($leaflets))
+                <x-section class="my-4">
+                    <x-h2-title
+                        class="flex"
+                        main-route="main.leaflets">
+                        Inne gazetki danej sieci
+                    </x-h2-title>
+
+                    <x-swiper-leaflets-promo
+                        swiper-class="leafletSingle"
+                        button-class="1"
+                        :leaflets="$leaflets"
+                        main-route="main.leaflets"/>
+                </x-section>
+            @endif
+
 
             <x-section class="my-4">
                 <x-h2-title class="flex">Wybrane produkty z tej gazetki</x-h2-title>
-                <x-product-list/>
+                <x-product-list :products="$products" :subdomain="$subdomain"/>
                     <x-see-more class="lg:hidden py-2" >Zobacz wszystkie</x-see-more>
             </x-section>
 
             <x-section class="my-4">
-                <x-h2-title class="flex">Inne gazetki danej sieci</x-h2-title>
+                <x-h2-title
+                    class="flex"
+                    main-route="main.leaflets">
+                    Podobne gazetki innych sieci
+                </x-h2-title>
+
                 <x-swiper-leaflets-promo
-                    button-class="1"
-                    title="Inne gazetki danej sieci"
-                    :leaflets="$leaflets"
+                    swiper-class="leafletSingle"
+                    button-class="2"
+                    :leaflets="$similarLeaflets"
                     main-route="main.leaflets"/>
             </x-section>
 

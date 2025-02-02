@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Leaflet;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -39,7 +40,7 @@ class SearchController extends Controller
         ]);
     }
 
-    public function tripleSwiper(Request $request, $leaflets)
+    public function tripleSwiper(Request $request)
     {
         $query = $request->input('query');
         if ($query !== '') {
@@ -52,40 +53,42 @@ class SearchController extends Controller
 
         if ($searchType === 'leaflets') {
             // Filtrowanie według nazwy
-            $leaflets = array_filter($leaflets, function ($item) use ($query) {
-                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
-            });
+            $leaflets = Leaflet::with('shop')
+                ->where('valid_to', '>=',now())
+                ->whereHas('shop', function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('name', 'like', $query . '%');
+                });
 
             // Filtrowanie według kategorii
-            if ($category != 'all') {
-                $leaflets = array_filter($leaflets, function ($item) use ($category) {
-                    return str_contains($item['category'], $category) !== false;
-                });
-            }
+
 
             // Obsługa czasu (sortowanie i filtrowanie)
             if ($time != 'all') {
                 switch ($time) {
-                    case 'ending': // Sortowanie po dacie zakończenia (end)
-                        usort($leaflets, function ($a, $b) {
-                            return $a['end'] <=> $b['end'];
-                        });
+                    case '1': // Sortowanie po dacie zakończenia (end)
+                        $leaflets = $leaflets->orderBy('updated_at', 'desc');
                         break;
 
-                    case 'last': // Sortowanie po dacie utworzenia (create)
-                        usort($leaflets, function ($a, $b) {
-                            return $a['create'] <=> $b['create'];
-                        });
+                    case '2': // Sortowanie po dacie zakończenia (end)
+                        $leaflets = $leaflets
+                            ->where('valid_from', '<=',now())
+                            ->orderBy('valid_to', 'asc');
                         break;
 
-                    case 'active': // Filtrowanie tylko aktywnych gazetek
-                        $leaflets = array_filter($leaflets, function ($item) {
-                            $today = date('Y-m-d');
-                            return $item['start'] <= $today && $item['end'] >= $today;
-                        });
+                    case '3': // Sortowanie po dacie utworzenia (create)
+                        $leaflets = $leaflets
+                            ->where('valid_from', '>',now())
+                            ->orderBy('valid_from', 'desc');
+                        break;
+
+                    case '4': // Filtrowanie tylko aktywnych gazetek
+                        $leaflets = $leaflets
+                            ->where('valid_from', '<=', now())
+                            ->orderBy('valid_from', 'desc');
                         break;
                 }
             }
+            $leaflets = $leaflets->get();
 
         }
         // Zwrócenie wyników jako JSON z widokiem
@@ -95,7 +98,7 @@ class SearchController extends Controller
 
     }
 
-    public function triple($request, $leaflets, $retailers, $products, $vouchers)
+    public function triple($request)
     {
         $query = $request->input('query');
         if ($query !== '') {
@@ -105,178 +108,118 @@ class SearchController extends Controller
         $category = $request->input('category');
         $time = $request->input('time');
 
+        // Parametry paginacji (domyślnie page=1, limit=10)
+        $page  = $request->input('page', 1);
+        $limit = $request->input('limit', 10);
+
         if ($searchType === 'leaflets') {
 
             // Filtrowanie według nazwy
-            $leaflets = array_filter($leaflets, function ($item) use ($query) {
-                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
-            });
+            $leaflets = Leaflet::with('shop')
+                ->where('valid_to', '>=',now())
+                ->whereHas('shop', function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('name', 'like', $query . '%');
+                });
 
             // Filtrowanie według kategorii
-            if ($category != 'all') {
-                $leaflets = array_filter($leaflets, function ($item) use ($category) {
-                    return str_contains($item['category'], $category) !== false;
-                });
-            }
+
 
             // Obsługa czasu (sortowanie i filtrowanie)
             if ($time != 'all') {
                 switch ($time) {
-                    case 'ending': // Sortowanie po dacie zakończenia (end)
-                        usort($leaflets, function ($a, $b) {
-                            return $a['end'] <=> $b['end'];
-                        });
+                    case '1': // Sortowanie po dacie zakończenia (end)
+                        $leaflets = $leaflets->orderBy('updated_at', 'desc');
                         break;
 
-                    case 'last': // Sortowanie po dacie utworzenia (create)
-                        usort($leaflets, function ($a, $b) {
-                            return $a['create'] <=> $b['create'];
-                        });
+                    case '2': // Sortowanie po dacie zakończenia (end)
+                        $leaflets = $leaflets
+                            ->where('valid_from', '<=',now())
+                            ->orderBy('valid_to', 'asc');
                         break;
 
-                    case 'active': // Filtrowanie tylko aktywnych gazetek
-                        $leaflets = array_filter($leaflets, function ($item) {
-                            $today = date('Y-m-d');
-                            return $item['start'] <= $today && $item['end'] >= $today;
-                        });
+                    case '3': // Sortowanie po dacie utworzenia (create)
+                        $leaflets = $leaflets
+                            ->where('valid_from', '>',now())
+                            ->orderBy('valid_from', 'desc');
+                        break;
+
+                    case '4': // Filtrowanie tylko aktywnych gazetek
+                        $leaflets = $leaflets
+                            ->where('valid_from', '<=', now())
+                            ->orderBy('valid_from', 'desc');
                         break;
                 }
             }
-            $retailers = [];
-            $products = [];
-            $vouchers = [];
+
+            $results = $leaflets->paginate($limit, ['*'], 'page', $page);
+
         } elseif ($searchType === 'retailers') {
 
-            $retailers_category =ShopCategory::all();
-            $retailers = Shop::where('name', 'like', '%' . $query . '%')->get();
-
+            $retailers = Shop::where('name', 'like', $query . '%');
 
             // Filtrowanie według kategorii
-            if ($category != 'all') {
-
-                $category_id = $retailers_category->where('id', $category)->first()->id;
-                $retailers = $retailers->where('shop_category_id', $category_id);
+            if($category != 'all')
+            {
+                $retailers = $retailers
+                    ->where('shop_category_id', $category);
             }
 
             // Obsługa czasu (sortowanie i filtrowanie)
             if ($time != 'all') {
                 switch ($time) {
-                    case 'ending': // Sortowanie po dacie zakończenia (end)
-                        usort($retailers, function ($a, $b) {
-                            return $a['end'] <=> $b['end'];
-                        });
+                    case '1': // Sortowanie po ulubionych
+
                         break;
 
-                    case 'last': // Sortowanie po dacie utworzenia (create)
-                        usort($retailers, function ($a, $b) {
-                            return $a['create'] <=> $b['create'];
-                        });
+                    case '2': // Sortowanie po najwyżej oceniane
+                        $retailers = $retailers
+                            ->orderBy('ranking', 'desc');
                         break;
 
-                    case 'active': // Filtrowanie tylko aktywnych gazetek
-                        $retailers = array_filter($retailers, function ($item) {
-                            $today = date('Y-m-d');
-                            return $item['start'] <= $today && $item['end'] >= $today;
-                        });
+                    case '3': // Sortowanie po nazwie Alfabetycznie
+                        $retailers = $retailers
+                            ->orderBy('name', 'asc');
+                        break;
+
+                    case '4': //
+
                         break;
                 }
             }
-
-            $leaflets = [];
-            $products = [];
-            $vouchers = [];
+            $results = $retailers->paginate($limit, ['*'], 'page', $page);
 
         } elseif ($searchType === 'products') {
 
-
-            $product_categories = ProductCategory::all();
-
-            $products = Product::where('name', 'like', $query . '%')->get();
+            $products = Product::where('name', 'like', $query . '%');
 
 
             // Filtrowanie według kategorii
             if ($category != 'all') {
-                $category_id = $product_categories->where('id', $category)->first()->id;
-                $products = $products->where('product_category_id', $category_id);
+
+                $products = $products->where('product_category_id', $category);
             }
 
-//            // Obsługa czasu (sortowanie i filtrowanie)
-//            if ($time != 'all') {
-//                switch ($time) {
-//                    case 'ending': // Sortowanie po dacie zakończenia (end)
-//                        usort($products, function ($a, $b) {
-//                            return $a['end'] <=> $b['end'];
-//                        });
-//                        break;
-//
-//                    case 'last': // Sortowanie po dacie utworzenia (create)
-//                        usort($products, function ($a, $b) {
-//                            return $a['create'] <=> $b['create'];
-//                        });
-//                        break;
-//
-//                    case 'active': // Filtrowanie tylko aktywnych gazetek
-//                        $products = array_filter($products, function ($item) {
-//                            $today = date('Y-m-d');
-//                            return $item['start'] <= $today && $item['end'] >= $today;
-//                        });
-//                        break;
-//                }
-//            }
+           // Obsługa czasu (sortowanie i filtrowanie)
 
 
-            $retailers = [];
-            $leaflets = [];
-            $vouchers = [];
-        } elseif ($searchType === 'vouchers') {
+            $results = $products->paginate($limit, ['*'], 'page', $page);
 
-            // Filtrowanie według nazwy
-            $vouchers = array_filter($vouchers, function ($item) use ($query) {
-                return str_starts_with(strtolower($item['name']), strtolower($query)) !== false;
-            });
-
-            // Filtrowanie według kategorii
-            if ($category != 'all') {
-                $vouchers = array_filter($vouchers, function ($item) use ($category) {
-                    return str_contains($item['category'], $category) !== false;
-                });
-            }
-
-            // Obsługa czasu (sortowanie i filtrowanie)
-            if ($time != 'all') {
-                switch ($time) {
-                    case 'ending': // Sortowanie po dacie zakończenia (end)
-                        usort($vouchers, function ($a, $b) {
-                            return $a['end'] <=> $b['end'];
-                        });
-                        break;
-
-                    case 'last': // Sortowanie po dacie utworzenia (create)
-                        usort($vouchers, function ($a, $b) {
-                            return $a['create'] <=> $b['create'];
-                        });
-                        break;
-
-                    case 'active': // Filtrowanie tylko aktywnych gazetek
-                        $vouchers = array_filter($vouchers, function ($item) {
-                            $today = date('Y-m-d');
-                            return $item['start'] <= $today && $item['end'] >= $today;
-                        });
-                        break;
-                }
-            }
-            $retailers = [];
-            $leaflets = [];
-            $products = [];
         }
+
+        $html = view('components.search-results-container', compact('results', 'searchType'))->render();
 
         // Zwrócenie wyników jako JSON z widokiem
         return response()->json([
-            'html' => view('components.search-results-container', compact('leaflets', 'retailers', 'products', 'vouchers'))->render()
+            'html' => $html,
+            'pagination' => [
+                'currentPage' => $results->currentPage(),
+                'totalPages'  => $results->lastPage(),
+                // ewentualnie total() też się przydaje
+            ],
         ]);
     }
 
-   public function quadruple($request, $leaflets, $retailers, $products)
+   public function quadruple($request)
     {
         $query = $request->input('query');
         if ($query !== '') {
@@ -287,10 +230,18 @@ class SearchController extends Controller
         $time = $request->input('time');
         $type = $request->input('type');
 
-        if ($searchType === 'vouchers') {
-            $voucher_store_ids = VoucherStore::where('name', 'like', $query . '%')->pluck('id');
+        // Parametry paginacji (domyślnie page=1, limit=10)
+        $page  = $request->input('page', 1);
+        $limit = $request->input('limit', 10);
 
-            $vouchers = Voucher::with('voucherStore')->whereIn('voucher_store_id', $voucher_store_ids);
+        if ($searchType === 'vouchers') {
+
+            // Filtrowanie według nazwy
+            $vouchers = Voucher::with('voucherStore')
+                ->where('end_date', '>=',now())
+                ->whereHas('voucherStore', function ($queryBuilder) use ($query) {
+                    $queryBuilder->where('name', 'like', $query . '%');
+                });
 
             // Filtrowanie według kategorii
             if ($category != 'all') {
@@ -326,32 +277,36 @@ class SearchController extends Controller
                 }
             }
 
-            $vouchers = $vouchers->get();
+            $results = $vouchers->paginate($limit, ['*'], 'page', $page);
 
-            // Puste wyniki dla innych typów
-            $retailers = [];
-            $leaflets = [];
-            $products = [];
         }
 
 
         // Zwrócenie wyników jako JSON z widokiem
+        $html = view('components.search-results-container', compact('results', 'searchType'))->render();
+
+        // Zwrócenie wyników jako JSON z widokiem
         return response()->json([
-            'html' => view('components.search-results-container', compact('leaflets', 'retailers', 'products', 'vouchers'))->render()
+            'html' => $html,
+            'pagination' => [
+                'currentPage' => $results->currentPage(),
+                'totalPages'  => $results->lastPage(),
+                // ewentualnie total() też się przydaje
+            ],
         ]);
     }
 
-    public function test()
+    public function test($week, $number, $start)
     {
         set_time_limit(3200);
-        $data = json_decode(file_get_contents(storage_path('app\public\json\combinations_sorted_with_o_t_at_end.json')), true);
+        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations.json')), true);
         $i = 1;
         $l = 356406;
         foreach ($data['combinations'] as $combination) {
-            if ($i > 0) {
+            if ($i >= $start) {
 
                 //$url = 'https://pepco.pl/wp-content/uploads/2024/11/P10_'.$l.'_Leaflet_1.jpg';
-                $url = 'https://gazetki.aldi.pl/2025/kw04/25k04g03' . $combination . '//GetPDF.ashx';
+                $url = 'https://gazetki.aldi.pl/2025/kw'.$week.'/25k'.$week.'g'.$number . $combination . '//GetPDF.ashx';
                 //$url = 'https://gazetki.aldi.pl/2024/kw33/24k33g01cdga//GetPDF.ashx';
                 $ch = curl_init($url);
 

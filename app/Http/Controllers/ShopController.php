@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Leaflet;
 use App\Models\Place;
 use App\Models\Shop;
 use App\Http\Controllers\Controller;
@@ -17,7 +18,7 @@ class ShopController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($descriptions, $leaflets)
+    public function index($descriptions)
     {
         $location = Cookie::get('user_location');
         if (!$location) {
@@ -29,9 +30,15 @@ class ShopController extends Controller
         }
 
         $retailers_category = ShopCategory::where('status', 1)->get();
-        $retailers = Shop::where('status', 1)->get();
-        $retailers_time = SortOptionsService::getSortOptions();
+        $retailers = Shop::where('status', 1)->paginate(10);
+        $retailers_time = SortOptionsService::getSortPopularity();
         $static_description = StaticDescriptions::getDescriptions();
+
+        $leaflets = Leaflet::with('shop')
+            ->where('valid_to','>=', now())
+            ->orderBy('created_at', 'desc')
+            ->limit(40)
+            ->get();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -59,10 +66,11 @@ class ShopController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions, $leaflets)
+    public function indexCategory($category, $descriptions)
     {
         $retailers_category = ShopCategory::where('status', 1)->get();
         $category = $retailers_category->where('slug', $category)->first();
+
         if (!$category)
         {
             abort(404);
@@ -79,9 +87,15 @@ class ShopController extends Controller
 
         $static_description = StaticDescriptions::getDescriptions();
 
-        $retailers_time = SortOptionsService::getSortOptions();
+        $retailers_time = SortOptionsService::getSortPopularity();
 
-        $retailers = Shop::where('status', 1)->where('shop_category_id', $category->id)->get();
+        $retailers = Shop::where('status', 1)->where('shop_category_id', $category->id)->paginate(10);
+
+        $leaflets = Leaflet::with('shop')
+            ->where('valid_to','>=', now())
+            ->orderBy('created_at', 'desc')
+            ->limit(40)
+            ->get();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -156,6 +170,13 @@ class ShopController extends Controller
         $averageRating = $shop->averageRating();
         $ratingCount = $shop->ratingCount();
 
+        $leaflets = Leaflet::with('shop')
+            ->where('shop_id', $shop->id)
+            ->where('valid_to','>=', now())
+            ->orderBy('created_at', 'desc')
+            ->limit(40)
+            ->get();
+
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => $shop->name, 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
@@ -163,10 +184,6 @@ class ShopController extends Controller
             ['label' => 'os. Przytorze 36', 'url' => ''],
         ];
 
-        // Filtrowanie według nazwy
-        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
-            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
-        });
 
         $leaflets_time = SortOptionsService::getSortOptions();
         $leaflets_category = SortOptionsService::getCategoryOptions();

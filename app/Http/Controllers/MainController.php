@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Leaflet;
+use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\Cookie;
 
 class MainController extends Controller
 {
-    public function index($descriptions, $leaflets)
+    public function index($descriptions)
     {
 
         $placesAll = Place::all();
@@ -32,9 +34,43 @@ class MainController extends Controller
             $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
+        $leaflets = Leaflet::with('shop')
+            ->where('valid_to', '>=', now()->toDateString())
+        ->get(); // Gazetka musi być nadal ważna
+
+        $leaflets_promo = $leaflets->sortByDesc('valid_to')->take(20);
+
+        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+
+
         $shop_categories = ShopCategory::where('status', 1)->get();
 
-        $products = Product::all();
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->get()
+            ->flatMap(function ($click) {
+            return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                return [
+                    'click_id'      => $click->id,
+                    'valid_from'    => $click->valid_from,
+                    'valid_to'      => $click->valid_to,
+                    'page_id'       => $click->page->id,
+                    'leaflet_id'    => $leaflet->id,
+                    'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                ];
+            });
+        });
+
+
 
         $vouchers = Voucher::with('voucherStore')->get();
 
@@ -48,18 +84,22 @@ class MainController extends Controller
 
         $breadcrumbs = [];
 
-        return view('main.index', data:
-            [
+        return view('main.index', [
 
+                //Lokalizacja
                 'place' => $place->name,
                 'places' => $placesLimit40,
 
+                // Opisy i dane globalne
                 'h1_title'=> 'Najnowsze <strong>gazetki promocyjne</strong> - aktualne i nadchodzące promocje',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'static_description' => $static_description,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
+
+                //Gazetki
+                'leaflets_promo' => $leaflets_promo,
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
                 'shop_categories' => $shop_categories,
@@ -71,7 +111,7 @@ class MainController extends Controller
             ]);
     }
 
-    public function indexGps($community, $descriptions, $leaflets)
+    public function indexGps($community, $descriptions)
     {
         $placesAll = Place::all();
 
@@ -92,9 +132,40 @@ class MainController extends Controller
 
         $placesLimit40 = $placesAll->where('slug', '!=', $place->slug)->sortByDesc('population')->take(40);
 
+        $leaflets = Leaflet::with('shop')
+            ->where('valid_to', '>=', now()->toDateString())
+            ->get(); // Gazetka musi być nadal ważna
+
+        $leaflets_promo = $leaflets->sortByDesc('valid_to')->take(20);
+        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+
+
         $shop_categories = ShopCategory::where('status', 1)->get();
 
-        $products = Product::all();
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->get()
+            ->flatMap(function ($click) {
+                return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                    return [
+                        'click_id'      => $click->id,
+                        'valid_from'    => $click->valid_from,
+                        'valid_to'      => $click->valid_to,
+                        'page_id'       => $click->page->id,
+                        'leaflet_id'    => $leaflet->id,
+                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                    ];
+                });
+            });
 
         $vouchers = Voucher::with('voucherStore')->get();
 
@@ -123,8 +194,12 @@ class MainController extends Controller
                 'static_description' => $static_description,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
-                'leaflets' => $leaflets,
+
                 'shop_categories' => $shop_categories,
+
+                //Gazetki
+                'leaflets_promo' => $leaflets_promo,
+                'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
                 'products' => $products,
@@ -133,7 +208,7 @@ class MainController extends Controller
             ]);
     }
 
-    public function subdomainIndex($subdomain, $leaflets)
+    public function subdomainIndex($subdomain)
     {
 
         $shops = Shop::all();
@@ -144,6 +219,13 @@ class MainController extends Controller
         {
             abort(404);
         }
+        $leaflets = Leaflet::with('shop')
+            ->where('valid_to', '>=', now()->toDateString())
+            ->where('shop_id',$shop->id)->get(); // Gazetka musi być nadal ważna
+
+
+
+        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
 
         $placesAll = Place::all();
 
@@ -173,12 +255,30 @@ class MainController extends Controller
         $leaflets_category = ProductCategory::where('status', 1)->get();
 
 
-        // Filtrowanie według nazwy
-        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
-            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
-        });
-
-        $products = Product::all();
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->get()
+            ->flatMap(function ($click) {
+                return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                    return [
+                        'click_id'      => $click->id,
+                        'valid_from'    => $click->valid_from,
+                        'valid_to'      => $click->valid_to,
+                        'page_id'       => $click->page->id,
+                        'leaflet_id'    => $leaflet->id,
+                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                    ];
+                });
+            });
 
         return view('subdomain.index', [
             //Zmienne globalne
@@ -214,7 +314,7 @@ class MainController extends Controller
 
     }
 
-    public function subdomainIndexGps($subdomain, $community, $leaflets)
+    public function subdomainIndexGps($subdomain, $community)
     {
         $placesAll = Place::all();
         $place = $placesAll->where('slug', $community)->first();
@@ -226,6 +326,9 @@ class MainController extends Controller
             abort(404);
         }
 
+        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->where('shop_id',$shop->id)->get();
+
+        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
 
         // Zapisz lokalizację w ciasteczku
         Cookie::queue('user_location', json_encode([
@@ -252,14 +355,7 @@ class MainController extends Controller
 
         $leaflets_category = ProductCategory::where('status', 1)->get();
 
-        // Filtrowanie według nazwy
-        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
-            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
-        });
-
-
-        return view('subdomain.index_gps', data:
-            [
+         return view('subdomain.index_gps', [
                 //Zmienne globalne
                 'subdomain' => $subdomain,
 
@@ -278,6 +374,7 @@ class MainController extends Controller
                 'ratingCount' => $ratingCount,
                 'model' => "Shop",
 
+                //Gazetki
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
                 'leaflets' => $leaflets,

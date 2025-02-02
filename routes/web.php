@@ -261,7 +261,7 @@ $pages = [
     // Dodaj więcej stron
 ];
 
-$ads = [15];
+$ads = [13];
 $inserts = [5,9];
 $insertData = [
     ['after' => 5,'img' => 'https://placehold.co/449x750/gray/white?text=AD1+449+x+750', 'clicks' => [
@@ -269,7 +269,7 @@ $insertData = [
         ['url' => 'http://example1.com', 'x' => 200, 'y' => 400, 'width' => 50, 'height' => 50]
 
     ]],
-    ['after' => 9,'img' => 'https://placehold.co/718x1200/gray/white?text=AD1+488+x+800', 'clicks' => [
+    ['after' => 9,'img' => 'https://placehold.co/300x600/gray/white?text=AD1+300+x+600', 'clicks' => [
         ['url' => 'http://example1.com', 'x' => 100, 'y' => 200, 'width' => 50, 'height' => 50],
         ['url' => 'http://example1.com', 'x' => 200, 'y' => 400, 'width' => 50, 'height' => 50]
 
@@ -298,13 +298,13 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
 
 
 
-    Route::get('/w-gazetce/{product}' ,function ($subdomain, $product) use ($leaflets) {
-        return app(ProductController::class)->showSubdomain($subdomain, $product, $leaflets);
+    Route::get('/w-gazetce/{slug}' ,function ($subdomain, $slug) use ($leaflets) {
+        return app(ProductController::class)->showSubdomain($subdomain, $slug, $leaflets);
     })->name('subdomain.products.show');
 
 
     Route::get('/gazetka-promocyjna/{id}', function ($subdomain, $id) use ($pages, $inserts, $insertData, $ads, $leaflets) {
-       return app(LeafletController::class)->subdomainLeaflet($subdomain, $id, $pages, $inserts, $insertData, $ads, $leaflets);
+       return app(LeafletController::class)->subdomainLeaflet($subdomain, $id,  $insertData);
     })->name('subdomain.leaflet');
 
     Route::get('/{community}/{address}' ,function ($subdomain, $community, $address) use ($leaflets) {
@@ -353,8 +353,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     //    Route::get('/gazetki-promocyjne/{community}',[LeafletController::class,'indexGps'])->name('main.leaflets.gps');
 
-    Route::get('/gazetki-promocyjne/{category}', function ($category) use ($descriptions, $leaflets) {
-        return app(LeafletController::class)->indexCategory($category, $descriptions, $leaflets);
+    Route::get('/gazetki-promocyjne/{category}', function ($category) use ($descriptions) {
+        return app(LeafletController::class)->indexCategory($category, $descriptions);
     })->name('main.leaflets.category');
 
     //    Route::get('/sieci-handlowe',[ShopController::class,'index'])->name('main.retailers');
@@ -460,20 +460,20 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
     });
 
 
-    Route::get('/test-test', [SearchController::class, 'test']);
+    Route::get('/test-test/{week}/{number}/{start}', [SearchController::class, 'test']);
 
     require __DIR__.'/auth.php';
 
    // Route::get('/{community}',[MainController::class,'indexGps'])->name('main.index.gps');
 
-    Route::get('/{community}', function ($community) use ($descriptions, $leaflets, $mainDomain) {
-        return app(MainController::class)->indexGps($community, $descriptions, $leaflets, $mainDomain);
+    Route::get('/{community}', function ($community) use ($descriptions) {
+        return app(MainController::class)->indexGps($community, $descriptions);
     })->name('main.index.gps');
 
     // Route::get('/',[MainController::class,'index'])->name('main.index');
 
-    Route::get('/', function () use ($descriptions, $leaflets, $mainDomain) {
-        return app(MainController::class)->index($descriptions, $leaflets, $mainDomain);
+    Route::get('/', function () use ($descriptions) {
+        return app(MainController::class)->index($descriptions);
     })->name('main.index');
 
 });

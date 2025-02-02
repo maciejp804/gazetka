@@ -33,9 +33,14 @@
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-section-filtr-results :ads-status="true" data-container-id="retailers-container" :items="$retailers" type="retailers"/>
+                <x-section-filtr-results
+                    class="mb-2"
+                    :ads-status="true"
+                    data-container-id="retailers-container"
+                    :items="$retailers"
+                    type="retailers"/>
 
-                <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
+                {{ $retailers->links('custom-paginator') }}
             </x-section>
 
             <x-section>

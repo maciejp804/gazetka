@@ -22,8 +22,15 @@
             @elseif($type === 'products')
                 @foreach($items as $item)
                     <!-- Slides -->
-                    <x-product class="relative swiper-slide"
-                               :item="$item"
+                    <x-product
+                        class="relative swiper-slide"
+                        :valid_from="$item['valid_from']"
+                        :valid_to="$item['valid_to']"
+                        :product_image="$item['product_image']"
+                        :product_name="$item['product_name']"
+                        :product_slug="$item['product_slug']"
+                        :promo_price="$item['promo_price']"
+                        :logo_xs="$item['logo_xs']"
                     />
                 @endforeach
              @endif

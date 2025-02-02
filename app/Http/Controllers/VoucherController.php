@@ -29,13 +29,12 @@ class VoucherController extends Controller
             $place = (object)$locationData;
         }
 
-        $shops = Shop::all();
+        $shops = Shop::with('ratings')->get();
 
         $voucher_categories = VoucherCategory::where('status',1)->get();
         $model = new Voucher(); // Przykład: szukamy tagów dla kuponów
         $tags = Tag::whereJsonContains('applies_to', class_basename($model))->where('start_date', '<', now())->where('end_date', '>', now())->get();
-        $vouchers = Voucher::with('voucherStore')->get();
-
+        $vouchers = Voucher::with('voucherStore')->paginate(9);
         $voucher_sort = SortOptionsService::getSortOptions();
 
         $breadcrumbs = [
@@ -94,7 +93,7 @@ class VoucherController extends Controller
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Kupony rabatowe', 'url' => ''],
+            ['label' => 'Kupony rabatowe', 'url' => route('main.vouchers')],
             ['label' => $category->name, 'url' => ''],
         ];
 

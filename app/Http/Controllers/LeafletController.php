@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Leaflet;
+use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -16,8 +18,10 @@ use function Webmozart\Assert\Tests\StaticAnalysis\object;
 
 class LeafletController extends Controller
 {
-    public function index($descriptions, $leaflets)
+    public function index($descriptions)
     {
+        $leaflets = $this->getLeafletsSimplePaginate(10);
+
         $location = Cookie::get('user_location');
         if (!$location) {
             $placesAll = Place::all();
@@ -28,7 +32,31 @@ class LeafletController extends Controller
         }
 
         $product_categories = ProductCategory::where('status', 1)->get();
-        $products = Product::all();
+
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->get()
+            ->flatMap(function ($click) {
+                return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                    return [
+                        'click_id'      => $click->id,
+                        'valid_from'    => $click->valid_from,
+                        'valid_to'      => $click->valid_to,
+                        'page_id'       => $click->page->id,
+                        'leaflet_id'    => $leaflet->id,
+                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                    ];
+                });
+            });
 
         $leaflet_sort = SortOptionsService::getSortOptions();
 
@@ -56,8 +84,48 @@ class LeafletController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions, $leaflets)
+    public function indexCategory($category, $descriptions)
     {
+
+        $product_categories = ProductCategory::where('status', 1)->get();
+        $category = $product_categories->where('slug', $category)->first();
+
+        if (!$category) {
+            abort(404);
+        }
+
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+//            ->whereHas('leafletProduct.product', function ($query) use ($category) {
+//                $query->where('product_category_id', $category->id);
+//            })
+            ->get()
+            ->flatMap(function ($click) {
+                return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                    return [
+                        'click_id'      => $click->id,
+                        'valid_from'    => $click->valid_from,
+                        'valid_to'      => $click->valid_to,
+                        'page_id'       => $click->page->id,
+                        'leaflet_id'    => $leaflet->id,
+                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                    ];
+                });
+            });
+
+//        dd($products);
+
+        $leaflets = $this->getLeafletsSimplePaginate(10);
+
         $location = Cookie::get('user_location');
         if (!$location) {
             $placesAll = Place::all();
@@ -67,10 +135,7 @@ class LeafletController extends Controller
             $place = (object)$locationData;
         }
 
-        $products = Product::all();
 
-        $product_categories = ProductCategory::where('status', 1)->get();
-        $category = $product_categories->where('slug', $category)->first();
         $leaflet_sort = SortOptionsService::getSortOptions();
         $leaflets_category = SortOptionsService::getCategoryOptions();
 
@@ -126,14 +191,40 @@ class LeafletController extends Controller
             ]);
     }
 
-    public function subdomainLeaflet($subdomain, $id, $pages, $inserts, $insertData, $ads, $leaflets)
+    public function subdomainLeaflet($subdomain, $id, $insertData)
     {
-        $shops = Shop::all();
-        $shop = $shops->where('slug', $subdomain)->first();
+        $shop = Shop::where('slug', $subdomain)->first();
 
-        if (!$shop) {
+        $leaflet = Leaflet::with('shop', 'pages.clicks.leafletProduct.product', 'inserts.clicks', 'leafletAds','products')->find($id);
+
+        //dd($leaflet);
+        if (!$shop || !$leaflet) {
             abort(404);
         }
+        $pages = $leaflet->pages->sortByDesc('sort_order');
+        $pages = $pages->chunk(1);
+        $inserts = $leaflet->inserts;
+        $ads = $leaflet->leafletAds;
+        $products = $leaflet->products->unique('id');
+
+        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->where('shop_id',$shop->id)->get();
+
+        // Paginacja gazetek dla danego sklepu
+        $shopLeaflets = Leaflet::with('shop')
+            ->where('shop_id', $shop->id)
+            ->where('valid_to', '>=', now())
+            ->get();
+
+        // Pobranie identyfikatorów podobnych sklepów
+        $similarShopIds = Shop::where('shop_category_id', $shop->shop_category_id)
+            ->where('id', '!=', $shop->id)
+            ->pluck('id');
+
+        // Paginacja gazetek dla sieci podobnych sklepów
+        $similarLeaflets = Leaflet::with('shop')
+            ->whereIn('shop_id', $similarShopIds)
+            ->where('valid_to', '>=', now())
+            ->get();
 
         $averageRating = $shop->averageRating();
         $ratingCount = $shop->ratingCount();
@@ -162,13 +253,6 @@ class LeafletController extends Controller
             ['label' => 'Gazetka promocyjna '. $shop->name, 'url' => '']
         ];
 
-
-
-        // Filtrowanie według nazwy
-        $leaflets = array_filter($leaflets, function ($item) use ($subdomain) {
-            return str_starts_with(strtolower($item['name']), strtolower($subdomain)) !== false;
-        });
-
         return view('subdomain.leaflet', data:
             [
                 'place' => $place,
@@ -176,7 +260,7 @@ class LeafletController extends Controller
 
                 'shop' => $shop,
 
-                'h1_title'=> 'Gazetka promocyjna '.$shop->name.' od 12.11 do 24.12',
+                'h1_title'=> 'Gazetka promocyjna '.$shop->name.' od '.monthReplace($leaflet->valid_from, 'full_gen', 'd-m').' do '.monthReplace($leaflet->valid_to,'full_gen'),
                 'page_title'=> 'Gazetka promocyjna '.$shop->name.' od 12.11 do 24.12 | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
@@ -194,9 +278,19 @@ class LeafletController extends Controller
                 'ratingCount' => $ratingCount,
                 'model' => "Shop",
 
-                'leaflets' => $leaflets
+                //Gazetki
+                'leaflet' => $leaflet,
+                'leaflets' => $leaflets,
+                'similarLeaflets' => $similarLeaflets,
 
-
+                //Produkty
+                'products' => $products,
             ]);
     }
+
+    protected function getLeafletsSimplePaginate($pages)
+    {
+        return Leaflet::with('shop')->where('valid_to','>=',now())->paginate($pages, ['*'], 'page');
+    }
+
 }

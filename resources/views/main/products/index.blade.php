@@ -36,7 +36,7 @@
                     </x-search>
                 </div>
                 <x-section-filtr-results :ads-status="true" data-container-id="products-container" :items="$products" type="products"/>
-                <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
+                {{ $products->links('custom-paginator') }}
             </x-section>
 
             <x-section>
@@ -48,14 +48,14 @@
             </x-section>
 
 
-            <x-section>
-                <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>
-                <x-swiper-leaflets-promo
-                    button-class="1"
-                    title="Najnowsze gazetki promocyjne"
-                    :leaflets="$leaflets"
-                    main-route="main.leaflets"/>
-            </x-section>
+{{--            <x-section>--}}
+{{--                <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>--}}
+{{--                <x-swiper-leaflets-promo--}}
+{{--                    button-class="1"--}}
+{{--                    title="Najnowsze gazetki promocyjne"--}}
+{{--                    :leaflets="$leaflets"--}}
+{{--                    main-route="main.leaflets"/>--}}
+{{--            </x-section>--}}
 
 
 

@@ -6,7 +6,34 @@
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-8">
            @foreach($leaflets as $leaflet)
-                <x-leaflet-slide class="swiper-slide" :leaflet="$leaflet"/>
+
+                @if(!is_array($leaflet))
+                    <x-leaflet-slide
+                        class="swiper-slide"
+                        :valid_from="$leaflet->valid_from"
+                        :valid_to="$leaflet->valid_to"
+                        :logo="$leaflet->shop->logo_xs"
+                        :name="$leaflet->shop->name"
+                        :slug="$leaflet->shop->slug"
+                        :id="$leaflet->id"
+                        :page="1"
+                        :image="$leaflet->image_cover"
+                    />
+                @else
+                    @foreach($leaflet['pages'] as $item)
+                        <x-leaflet-slide
+                            class="swiper-slide"
+                            :valid_from="$item['clicks'][0]['valid_from']"
+                            :valid_to="$item['clicks'][0]['valid_to']"
+                            :logo="$leaflet['logo']"
+                            :name="$leaflet['name']"
+                            :slug="$leaflet['slug']"
+                            :id="$leaflet['leaflet_id']"
+                            :page="$item['page_number']"
+                            :image="$item['page_image']"
+                        />
+                    @endforeach
+                @endif
            @endforeach
         </div>
 
