@@ -12,6 +12,7 @@ use App\Models\ShopCategory;
 use App\Models\Tag;
 use App\Models\Voucher;
 use App\Models\VoucherStore;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -53,47 +54,36 @@ class SearchController extends Controller
 
         if ($searchType === 'leaflets') {
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop')
-                ->where('valid_to', '>=',now())
+            $leaflets = Leaflet::with('shop', 'products')
+                ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
+                ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+                ->where('leaflets.status', '=', 'published')
                 ->whereHas('shop', function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', $query . '%');
                 });
 
             // Filtrowanie według kategorii
+                if ($category != 'all')
+                {
+                    $leaflets->whereHas('products', function ($queryProduct) use ($category) {
+                        $queryProduct->where('product_category_id', $category);
+                    });
+                }
+
 
 
             // Obsługa czasu (sortowanie i filtrowanie)
-            if ($time != 'all') {
-                switch ($time) {
-                    case '1': // Sortowanie po dacie zakończenia (end)
-                        $leaflets = $leaflets->orderBy('updated_at', 'desc');
-                        break;
 
-                    case '2': // Sortowanie po dacie zakończenia (end)
-                        $leaflets = $leaflets
-                            ->where('valid_from', '<=',now())
-                            ->orderBy('valid_to', 'asc');
-                        break;
+            $leaflets = $this->getOrderBy($time, $leaflets);
 
-                    case '3': // Sortowanie po dacie utworzenia (create)
-                        $leaflets = $leaflets
-                            ->where('valid_from', '>',now())
-                            ->orderBy('valid_from', 'desc');
-                        break;
-
-                    case '4': // Filtrowanie tylko aktywnych gazetek
-                        $leaflets = $leaflets
-                            ->where('valid_from', '<=', now())
-                            ->orderBy('valid_from', 'desc');
-                        break;
-                }
-            }
-            $leaflets = $leaflets->get();
+            $results = $leaflets->get();
 
         }
+
+
         // Zwrócenie wyników jako JSON z widokiem
         return response()->json([
-            'html' => view('components.search-results-swiper', compact('leaflets'))->render()
+            'html' => view('components.search-results-swiper', compact('results', 'searchType'))->render()
         ]);
 
     }
@@ -115,43 +105,28 @@ class SearchController extends Controller
         if ($searchType === 'leaflets') {
 
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop')
-                ->where('valid_to', '>=',now())
+            $leaflets = Leaflet::with('shop', 'products')
+                ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
+                ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+                ->where('leaflets.status', '=', 'published')
                 ->whereHas('shop', function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', $query . '%');
                 });
 
             // Filtrowanie według kategorii
+            if ($category != 'all')
+            {
+                $leaflets->whereHas('products', function ($queryProduct) use ($category) {
+                    $queryProduct->where('product_category_id', $category);
+                });
+            }
 
 
             // Obsługa czasu (sortowanie i filtrowanie)
-            if ($time != 'all') {
-                switch ($time) {
-                    case '1': // Sortowanie po dacie zakończenia (end)
-                        $leaflets = $leaflets->orderBy('updated_at', 'desc');
-                        break;
 
-                    case '2': // Sortowanie po dacie zakończenia (end)
-                        $leaflets = $leaflets
-                            ->where('valid_from', '<=',now())
-                            ->orderBy('valid_to', 'asc');
-                        break;
+           $leaflets = $this->getOrderBy($time, $leaflets);
 
-                    case '3': // Sortowanie po dacie utworzenia (create)
-                        $leaflets = $leaflets
-                            ->where('valid_from', '>',now())
-                            ->orderBy('valid_from', 'desc');
-                        break;
-
-                    case '4': // Filtrowanie tylko aktywnych gazetek
-                        $leaflets = $leaflets
-                            ->where('valid_from', '<=', now())
-                            ->orderBy('valid_from', 'desc');
-                        break;
-                }
-            }
-
-            $results = $leaflets->paginate($limit, ['*'], 'page', $page);
+           $results = $leaflets->paginate($limit, ['*'], 'page', $page);
 
         } elseif ($searchType === 'retailers') {
 
@@ -299,8 +274,8 @@ class SearchController extends Controller
     public function test($week, $number, $start)
     {
         set_time_limit(3200);
-        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations.json')), true);
-        $i = 1;
+        $data = json_decode(file_get_contents(storage_path('app\public\json\kombinacje.json')), true);
+        $i = 0;
         $l = 356406;
         foreach ($data['combinations'] as $combination) {
             if ($i >= $start) {
@@ -346,5 +321,71 @@ class SearchController extends Controller
             $l++;
             // break;
         }
+    }
+
+    public function combination()
+    {
+
+
+        $letters = ["a", "b", "c", "d", "e", "f", "g", "h", "j", "o", "t", "k"];
+        $combinations = [];
+
+// Cztery zagnieżdżone pętle generują wszystkie 4-literowe ciągi
+        foreach ($letters as $l1) {
+            foreach ($letters as $l2) {
+                foreach ($letters as $l3) {
+                    foreach ($letters as $l4) {
+                        $combinations[] = $l1 . $l2 . $l3 . $l4;
+                    }
+                }
+            }
+        }
+
+// Zamiana tablicy na format JSON z ładnym formatowaniem
+        $json = json_encode($combinations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+// Zapis do pliku kombinacje.json w bieżącym katalogu
+        file_put_contents("kombinacje.json", $json);
+
+        echo "Wygenerowano " . count($combinations) . " kombinacji. Plik 'kombinacje.json' został zapisany.\n";
+
+    }
+
+    /**
+     * @param mixed $time
+     * @param Builder $leaflets
+     * @return Builder
+     */
+    public function getOrderBy(mixed $time, Builder $leaflets): Builder
+    {
+        switch ($time) {
+            case 'all': // Sortowanie po updated_at (ostatnio dodane)
+                $leaflets = $leaflets->orderBy('leaflets.updated_at', 'desc');
+                break;
+
+            case '1': // Sortowanie po updated_at (ostatnio dodane)
+                $leaflets = $leaflets->orderBy('shops.ranking', 'desc');
+
+                break;
+
+            case '2': // Sortowanie po dacie zakończenia (end)
+                $leaflets = $leaflets
+                    ->where('valid_from', '<=', now('Europe/Warsaw')->toDateTime())
+                    ->orderBy('valid_to', 'asc');
+                break;
+
+            case '3': // Sortowanie po dacie startu gdzie jest ona w przyszłości
+                $leaflets = $leaflets
+                    ->where('valid_from', '>', now())
+                    ->orderBy('valid_from', 'desc');
+                break;
+
+            case '4': // Filtrowanie tylko aktywnych gazetek
+                $leaflets = $leaflets
+                    ->where('valid_from', '<=', now())
+                    ->orderBy('valid_from', 'desc');
+                break;
+        }
+        return $leaflets;
     }
 }

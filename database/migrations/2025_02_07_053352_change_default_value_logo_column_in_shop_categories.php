@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pages', function (Blueprint $table) {
-            $table->id();
-            $table->string('page_number');
-            $table->string('image_path')->nullable();
-            $table->integer('width')->nullable();
-            $table->integer('height')->nullable();
-            $table->timestamps();
+        Schema::table('shop_categories', function (Blueprint $table) {
+            $table->string('logo')->default('assets/images/categories/default.webp')->change();
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::table('shop_categories', function (Blueprint $table) {
+            $table->string('logo')->default('assets/images/categories/default.png')->change();
+        });
     }
 };

@@ -22,6 +22,7 @@
                         <div class="swiper-zoom-target">
                             <div class="{{ $class }} w-full">
                                 @if ($index == 0) <!-- Pierwszy slajd -->
+
                                 <x-slide-empty />
                                 <x-slide :index="$index" :is-mobile="$isMobile" :pages="$pages[$index]"/>
                                 @else <!-- Środkowe slajdy -->

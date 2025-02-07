@@ -35,12 +35,19 @@ class MainController extends Controller
         }
 
         $leaflets = Leaflet::with('shop')
-            ->where('valid_to', '>=', now()->toDateString())
-        ->get(); // Gazetka musi być nadal ważna
+            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'published')
+            ->get(); // Gazetka musi być nadal ważna
 
-        $leaflets_promo = $leaflets->sortByDesc('valid_to')->take(20);
 
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+        $leaflets_promo = $leaflets
+            ->where('pinned', '=', 1)
+            ->sortByDesc('priority')
+            ->sortByDesc('updated_at')->take(20);
+
+
+
+        $leaflets = $leaflets->sortByDesc('updated_at')->take(40);
 
 
         $shop_categories = ShopCategory::where('status', 1)->get();
@@ -48,6 +55,10 @@ class MainController extends Controller
         $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
             ->where('valid_from', '<=', now())
             ->where('valid_to', '>=', now())
+            ->whereHas('leafletProduct', function ($query) {
+                $query->where('status', '=','promo');
+            })
+            ->limit(40)
             ->get()
             ->flatMap(function ($click) {
             return $click->page->leaflets->map(function ($leaflet) use ($click) {
@@ -80,7 +91,7 @@ class MainController extends Controller
 
         $static_description = StaticDescriptions::getDescriptions();
 
-        $shops = Shop::all();
+        $shops = Shop::orderBy('ranking', 'desc')->get();
 
         $breadcrumbs = [];
 
@@ -142,9 +153,13 @@ class MainController extends Controller
 
         $shop_categories = ShopCategory::where('status', 1)->get();
 
-        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product.ratings')
             ->where('valid_from', '<=', now())
             ->where('valid_to', '>=', now())
+            ->whereHas('leafletProduct', function ($query) {
+                $query->where('status', 'promo');
+            })
+            ->limit(40)
             ->get()
             ->flatMap(function ($click) {
                 return $click->page->leaflets->map(function ($leaflet) use ($click) {

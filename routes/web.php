@@ -462,6 +462,12 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     Route::get('/test-test/{week}/{number}/{start}', [SearchController::class, 'test']);
 
+    Route::get('/combination', [SearchController::class, 'combination'])
+        ->middleware('auth')
+        ->name('combination');
+
+
+
     require __DIR__.'/auth.php';
 
    // Route::get('/{community}',[MainController::class,'indexGps'])->name('main.index.gps');

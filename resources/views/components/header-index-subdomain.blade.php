@@ -1,10 +1,11 @@
 @props(['shop', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
 
 
+
 <x-rating-form :rateableId="$shop->id"
                :averageRating="$averageRating"
                :city="$city"
-               :subdomain="$subdomain"
+               :subdomain="$shop->slug"
                :id="$id"
                :model="$model"/>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rating;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 
 class RatingController extends Controller
@@ -11,7 +12,7 @@ class RatingController extends Controller
     public function store(Request $request)
     {
         $city = $request->get('city');
-        $subdomain = $request->get('subdomain');
+        $subdomain = $request->post('subdomain');
         $id = $request->get('id');
 
         $validated = $request->validate([
@@ -20,16 +21,28 @@ class RatingController extends Controller
             'rating' => 'required|integer|min:1|max:5',
         ]);
 
+
+
         $exists = Rating::where('rateable_id', $validated['rateable_id'])
             ->where('rateable_type', $validated['rateable_type'])
             ->where('user_id', auth()->id())
             ->exists();
 
         if ($exists) {
+            $shop = Shop::where('slug', $subdomain)->first();
 
             Rating::where('rateable_id', $validated['rateable_id'])
                 ->where('rateable_type', $validated['rateable_type'])
                 ->where('user_id', auth()->id())->update(['rating' => $validated['rating']]);
+
+
+            if ($shop) {
+                $average = $shop->ratings()
+                    ->where('rateable_type', $validated['rateable_type'])
+                    ->avg('rating');
+
+                $shop->update(['ranking' => $average]);
+            }
 
             if(!$city){
                 if(!$id){
@@ -53,6 +66,8 @@ class RatingController extends Controller
             'user_id' => auth()->id(), // Pobiera ID zalogowanego użytkownika
             'rating' => $validated['rating'],
         ]);
+
+        Shop::where('slug', $subdomain)->first()->update(['ranking' => $validated['rating']]);
 
         return redirect()->back()->with('success', 'Dziękujemy za ocenę!');
     }

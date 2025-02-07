@@ -24,7 +24,7 @@ return new class extends Migration
             $table->timestamp('display_from')->nullable();
             $table->timestamp('display_to')->nullable();
             $table->boolean('require_age_verification')->default(false);
-            $table->boolean('pinned')->default(false);
+            $table->boolean('pinned')->default(false); // Przypięta do slidera promo
             $table->integer('priority')->default(0);
             // $table->integer('pages'); // Rozważ usunięcie, jeśli używasz tabeli łącznikowej
             $table->enum('status', ['draft', 'published', 'archive'])->default('published');

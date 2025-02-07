@@ -4,12 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Shop extends Model
 {
     use HasFactory;
 
-    public function ratings()
+    protected $fillable = [
+        'ranking'
+    ];
+
+    public function ratings(): MorphMany
     {
         return $this->morphMany(Rating::class, 'rateable');
     }

@@ -124,7 +124,7 @@ class LeafletController extends Controller
 
 //        dd($products);
 
-        $leaflets = $this->getLeafletsSimplePaginate(10);
+        $leaflets = $this->getLeafletsSimplePaginate(10, $category->id);
 
         $location = Cookie::get('user_location');
         if (!$location) {
@@ -195,9 +195,10 @@ class LeafletController extends Controller
     {
         $shop = Shop::where('slug', $subdomain)->first();
 
-        $leaflet = Leaflet::with('shop', 'pages.clicks.leafletProduct.product', 'inserts.clicks', 'leafletAds','products')->find($id);
+        $leaflet = Leaflet::with('shop', 'pages.clicks.leafletProduct.product', 'inserts.clicks', 'leafletAds','products')
+            ->find($id);
 
-        //dd($leaflet);
+//        dd($leaflet);
         if (!$shop || !$leaflet) {
             abort(404);
         }
@@ -288,9 +289,21 @@ class LeafletController extends Controller
             ]);
     }
 
-    protected function getLeafletsSimplePaginate($pages)
+    protected function getLeafletsSimplePaginate($pages, $category = 'all')
     {
-        return Leaflet::with('shop')->where('valid_to','>=',now())->paginate($pages, ['*'], 'page');
+
+        $leaflets = Leaflet::with('shop', 'products')
+            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('leaflets.status', '=', 'published');
+
+        if ($category != 'all')
+        {
+            $leaflets->whereHas('products', function ($queryProduct) use ($category) {
+                $queryProduct->where('product_category_id', $category);
+            });
+        }
+
+        return $leaflets->paginate($pages, ['*'], 'page');
     }
 
 }

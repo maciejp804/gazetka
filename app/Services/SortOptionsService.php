@@ -9,7 +9,7 @@ class SortOptionsService
     public static function getSortOptions(): Collection
     {
         return collect([
-            ['id' => 1, 'name' => 'Najnowsze'],
+            ['id' => 1, 'name' => 'Popularne sklepy'],
             ['id' => 2, 'name' => 'Kończą się'],
             ['id' => 3, 'name' => 'Nadchodzące'],
             ['id' => 4, 'name' => 'Aktualne'],
