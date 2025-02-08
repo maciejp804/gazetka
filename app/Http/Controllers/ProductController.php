@@ -31,7 +31,7 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $product_categories = ProductCategory::where('status', 1)->get();
+        $product_categories = ProductCategory::where('status', 1)->where('parent_id', null)->get();
 
         $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
             ->where('valid_from', '<=', now())

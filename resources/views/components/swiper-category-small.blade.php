@@ -5,6 +5,31 @@
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-10">
+            <div class="swiper-slide group ">
+                <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded-full border border-gray-200
+                    @if(request()->is('produkty/'.$category->slug))
+                        bg-blue-550
+                    @endif
+                    ">
+                    <div class="aspect-square rounded-full flex justify-center group-hover:bg-blue-550 group-hover:bg-opacity-50">
+                        @if(request()->is('produkty/'.$category->slug))
+                            <span class="self-center w-full">
+                    <img class="w-3/4 rounded-full m-auto" src="{{ asset('assets/images/categories/default.webp') }}" alt="pro-img1">
+                </span>
+                        @else
+                            <a class="self-center w-full" href="{{route('main.products.category', ['category' => $category->slug])}}">
+                                <img class="w-3/4 rounded-full m-auto" src="{{ asset('assets/images/categories/default.webp')}}" alt="pro-img1">
+                            </a>
+                        @endif
+
+                    </div>
+                </div>
+                <div class="text-center">
+                    <h3 class="text-gray-800 text-xs">
+                        <a href="{{route('main.products.category', ['category' => $category->slug])}}" class="font-semibold group-hover:font-bold">Wszystkie</a>
+                    </h3>
+                </div>
+            </div>
             @foreach($items as $item)
                 <!-- Slides -->
                 <x-category-slide-small
