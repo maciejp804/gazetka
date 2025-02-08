@@ -148,6 +148,24 @@ document.addEventListener('DOMContentLoaded', function () {
         pagination: {el: ".swiper-pagination", clickable: true}
     }, '.swiper-button-prev', '.swiper-button-next');
 
+    // Category swiper
+    initSwiper('.category-swiper-small', {
+        modules: [Navigation, Grid],
+        slidesPerView: 2,
+        spaceBetween: 5,
+        grid: { rows : 1, fill: 'row'},
+        breakpoints: {
+            320: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
+            375: { slidesPerView: 5, spaceBetween: 10, grid: { rows : 1}},
+            425: { slidesPerView: 5, spaceBetween: 10, grid: { rows : 1}},
+            475: { slidesPerView: 5, spaceBetween: 10, grid: { rows: 1}},
+            640: { slidesPerView: 10, spaceBetween: 10, grid: { rows: 1}},
+            768: { slidesPerView: 10, spaceBetween: 10},
+            1024: { slidesPerView: 10, spaceBetween: 18, grid: { rows : 1}},
+            1440: { slidesPerView: 10, spaceBetween: 25, grid: { rows : 1}}
+        }
+    }, '.prev-swiper', '.next-swiper');
+
     // Universal swiper
     initSwiper('.mySwiper', {
         modules: [Navigation, Pagination, Grid],

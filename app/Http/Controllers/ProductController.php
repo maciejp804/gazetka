@@ -15,6 +15,7 @@ use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use function Webmozart\Assert\Tests\StaticAnalysis\null;
 
 class ProductController extends Controller
 {
@@ -94,12 +95,19 @@ class ProductController extends Controller
 
     public function indexCategory($category, $descriptions)
     {
-        $product_categories = ProductCategory::where('status', 1)->get();
+        $product_categories = ProductCategory::with('children')
+            ->where('status', 1)
+            ->where('parent_id', null)
+            ->get();
+
+
         $category = $product_categories->where('slug', $category)->first();
 
         if(!$category){
             abort(404);
         }
+
+        $subcategories = $category->children;
 
         $location = Cookie::get('user_location');
         if (!$location) {
@@ -111,13 +119,15 @@ class ProductController extends Controller
         }
 
 
-        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product.category')
             ->where('valid_from', '<=', now())
             ->where('valid_to', '>=', now())
-            ->whereHas('leafletProduct.product', function ($query) use ($category) {
-                $query->where('product_category_id', $category->id);
+            ->whereHas('leafletProduct.product.category', function ($query) use ($category) {
+                $query->where('id', $category->id)
+                    ->orWhere('parent_id', $category->id);
             })
             ->paginate(10);
+
 
         $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
             return $click->page->leaflets->map(function ($leaflet) use ($click) {
@@ -170,6 +180,98 @@ class ProductController extends Controller
                 'leaflets' => $leaflets,
                 'product_categories' => $product_categories,
                 'category' => $category,
+                'subcategories' => $subcategories,
+            ]);
+    }
+
+    public function indexSubCategory($category, $subcategory, $descriptions)
+    {
+        $product_categories = ProductCategory::with('children')
+            ->where('status', 1)
+            ->where('parent_id', null)
+            ->get();
+
+
+        $category = $product_categories->where('slug', $category)->first();
+
+        $subcategory = $category->children->where('slug', $subcategory)->first();
+
+        if(!$subcategory || !$category) {
+            abort(404);
+        }
+        $sucategories = $category->children;
+
+        $location = Cookie::get('user_location');
+        if (!$location) {
+            $placesAll = Place::all();
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = (object)$locationData;
+        }
+
+
+        $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product.category')
+            ->where('valid_from', '<=', now())
+            ->where('valid_to', '>=', now())
+            ->whereHas('leafletProduct.product.category', function ($query) use ($subcategory) {
+                $query->where('product_category_id', $subcategory->id);
+            })
+            ->paginate(10);
+
+        $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
+            return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                return [
+                    'click_id'      => $click->id,
+                    'valid_from'    => $click->valid_from,
+                    'valid_to'      => $click->valid_to,
+                    'page_id'       => $click->page->id,
+                    'leaflet_id'    => $leaflet->id,
+                    'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                ];
+            });
+        });
+
+        // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
+        $products->setCollection($flattenedCollection);
+
+        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
+        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'Produkty', 'url' => route('main.products')],
+            ['label' => $category->name, 'url' => route('main.products.category', $category->id)],
+            ['label' => $subcategory->name, 'url' => '']
+        ];
+
+        $product_sort = SortOptionsService::getSortOptions();
+        $static_description = StaticDescriptions::getDescriptions();
+        return view('main.products.index_category', data:
+            [
+                'place' => $place->name,
+
+
+                'h1_title'=> 'Produkty w gazetkach promocyjnych - kategoria <strong>'.strtolower($category->name).'</strong>',
+                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                'static_description' => $static_description,
+                'descriptions' => $descriptions,
+                'breadcrumbs' => $breadcrumbs,
+                'product_sort' => $product_sort,
+                'products' => $products,
+                'leaflets' => $leaflets,
+                'product_categories' => $product_categories,
+                'category' => $category,
+                'subcategories' => $sucategories,
             ]);
     }
 

@@ -347,8 +347,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     //    Route::get('/gazetki-promocyjne',[LeafletController::class,'index'])->name('main.leaflets');
 
-    Route::get('/gazetki-promocyjne', function () use ($descriptions, $leaflets) {
-        return app(LeafletController::class)->index($descriptions, $leaflets);
+    Route::get('/gazetki-promocyjne', function () use ($descriptions) {
+        return app(LeafletController::class)->index($descriptions);
     })->name('main.leaflets');
 
     //    Route::get('/gazetki-promocyjne/{community}',[LeafletController::class,'indexGps'])->name('main.leaflets.gps');
@@ -359,12 +359,12 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     //    Route::get('/sieci-handlowe',[ShopController::class,'index'])->name('main.retailers');
 
-    Route::get('/sieci-handlowe', function () use ($descriptions, $leaflets) {
-        return app(ShopController::class)->index($descriptions, $leaflets);
+    Route::get('/sieci-handlowe', function () use ($descriptions) {
+        return app(ShopController::class)->index($descriptions);
     })->name('main.retailers');
 
-    Route::get('/sieci-handlowe/{category}', function ($category) use ($descriptions,  $leaflets) {
-        return app(ShopController::class)->indexCategory($category, $descriptions,  $leaflets);
+    Route::get('/sieci-handlowe/{category}', function ($category) use ($descriptions) {
+        return app(ShopController::class)->indexCategory($category, $descriptions);
     })->name('main.retailers.category');
 
     //    Route::get('/sieci-handlowe/{community}',[ShopController::class,'indexGps'])->name('main.retailers.gps');
@@ -384,24 +384,30 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
         return app(VoucherController::class)->indexCategory($category, $descriptions, $retailers_category, $retailers_time, $products);
     })->name('main.vouchers.category');
 
-
     //    Route::get('/produkty/{category}',[ProductController::class,'indexCategory'])->name('main.products.category');
 
-    Route::get('/produkty/{category}', function ($category) use ( $descriptions, $leaflets) {
-        return app(ProductController::class)->indexCategory($category, $descriptions, $leaflets);
+    Route::get('/produkty/{category}', function ($category) use ( $descriptions) {
+        return app(ProductController::class)->indexCategory($category, $descriptions);
     })->name('main.products.category');
+
+
+    //    Route::get('/produkty/{category}/{subcategory}',[ProductController::class,'indexCategory'])->name('main.products.category');
+
+    Route::get('/produkty/{category}/{subcategory}', function ($category, $subcategory) use ( $descriptions) {
+        return app(ProductController::class)->indexSubCategory($category, $subcategory, $descriptions);
+    })->name('main.products.subcategory');
 
 
 //    Route::get('/produkty',[ProductController::class,'index'])->name('main.products');
 
-    Route::get('/produkty', function () use ($descriptions, $retailers_category, $leaflets) {
-        return app(ProductController::class)->index($descriptions, $retailers_category, $leaflets);
+    Route::get('/produkty', function () use ($descriptions) {
+        return app(ProductController::class)->index($descriptions);
     })->name('main.products');
 
     //    Route::get('/produkt/{slug}',[ProductController::class,'show'])->name('main.product');
 
     Route::get('/produkt/{slug}', function ($slug) use  ($descriptions, $vouchers) {
-        return app(ProductController::class)->show($slug, $descriptions, $vouchers);
+        return app(ProductController::class)->show($slug, $descriptions);
     })->name('main.product');
 
 

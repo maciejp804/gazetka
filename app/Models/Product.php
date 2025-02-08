@@ -16,10 +16,14 @@ class Product extends Model
             ->withPivot('price', 'promo_price');
     }
 
-
     public function product_category(): BelongsTo
     {
         return $this->belongsTo(ProductCategory::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'product_category_id');
     }
 
     public function ratings()

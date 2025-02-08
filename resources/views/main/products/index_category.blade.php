@@ -36,18 +36,19 @@
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
+                @if($subcategories->count() > 0)
+                    <x-swiper-category-small
+                        button-class="1"
+                        :items="$subcategories"
+                        :category="$category"
+                        category-route="main.products.subcategory"
+                        main-route="main.products"
+                    />
+                @endif
+
                 <x-section-filtr-results :ads-status="true" data-container-id="products-container" :items="$products" type="products"/>
                 {{ $products->links('custom-paginator') }}
             </x-section>
-
-            <x-section>
-                <x-swiper-category title="Kategorie produktów"
-                                   :items="$product_categories"
-                                   category-route="main.products.category"
-                                   main-route="main.products"
-                />
-            </x-section>
-
 
             <x-section>
                 <x-h2-title class="flex"  main-route="main.leaflets">Najnowsze gazetki promocyjne</x-h2-title>
