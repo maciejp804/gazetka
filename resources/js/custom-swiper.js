@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
             1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
             1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 1}}
         },
-        pagination: {el: ".swiper-pagination", clickable: true}
+        pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
     initSwiper('.leafletSingle', {
@@ -126,26 +126,26 @@ document.addEventListener('DOMContentLoaded', function () {
             1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
             1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 1}}
         },
-        pagination: {el: ".swiper-pagination", clickable: true}
+        pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
     // Category swiper
     initSwiper('.category-swiper', {
         modules: [Navigation, Pagination, Grid],
-        slidesPerView: 2,
+        slidesPerView: 3,
         spaceBetween: 5,
         grid: { rows : 2, fill: 'row'},
         breakpoints: {
-            320: { slidesPerView: 2, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
-            375: { slidesPerView: 2, spaceBetween: 20, grid: { rows : 2}},
-            425: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 1}},
-            475: { slidesPerView: 4, spaceBetween: 5},
-            640: { slidesPerView: 5, spaceBetween: 5},
-            768: { slidesPerView: 5, spaceBetween: 5},
-            1024: { slidesPerView: 7, spaceBetween: 18, grid: { rows : 1}},
-            1440: { slidesPerView: 7, spaceBetween: 25, grid: { rows : 1}}
+            320: { slidesPerView: 3, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
+            375: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 2, fill: 'row'}},
+            425: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 2, fill: 'row'}},
+            475: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
+            640: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
+            768: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
+            1024: { slidesPerView: 7, spaceBetween: 18, grid: { rows : 1, fill: 'row'}},
+            1440: { slidesPerView: 7, spaceBetween: 25, grid: { rows : 1, fill: 'row'}}
         },
-        pagination: {el: ".swiper-pagination", clickable: true}
+        pagination: {el: ".swiper-pagination", dynamicBullets: true,clickable: true}
     }, '.swiper-button-prev', '.swiper-button-next');
 
     // Category swiper
@@ -193,14 +193,14 @@ document.addEventListener('DOMContentLoaded', function () {
         grid: { rows : 2, fill: 'row'},
         breakpoints: {
             320: { slidesPerView: 2, spaceBetween: 25, grid: { rows : 2, fill: 'row'}},
-            425: { spaceBetween: 25},
-            475: { slidesPerView: 3, spaceBetween: 5},
-            640: { slidesPerView: 3, spaceBetween: 5, grid: { rows : 2}},
-            768: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 1}},
-            1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 3}, navigation: { enabled: false}},
-            1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows : 3}, navigation: { enabled: false}},
+            425: { slidesPerView: 2, spaceBetween: 25, grid: { rows : 2, fill: 'row'}},
+            475: { slidesPerView: 3, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
+            640: { slidesPerView: 3, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
+            768: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
+            1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 3, fill: 'row'}, navigation: { enabled: false}},
+            1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows : 3, fill: 'row'}, navigation: { enabled: false}},
         },
-        pagination: { el: ".swiper-pagination", clickable: true}
+        pagination: { el: ".swiper-pagination", dynamicBullets: true, clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
     // Blog swiper
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
             1024: { slidesPerView: 4, spaceBetween: 15, grid: { rows : 1}, navigation: { enabled: false}},
             1060: { slidesPerView: 5, spaceBetween: 15, grid: { rows : 1}, navigation: { enabled: false}},
         },
-        pagination: { el: ".swiper-pagination", clickable: true}
+        pagination: { el: ".swiper-pagination", dynamicBullets: true, clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
 });

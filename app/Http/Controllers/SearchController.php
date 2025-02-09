@@ -75,7 +75,7 @@ class SearchController extends Controller
 
             // Obsługa czasu (sortowanie i filtrowanie)
 
-            $leaflets = $this->getOrderBy($time, $leaflets);
+            $leaflets = $this->leafletsGetOrderBy($time, $leaflets);
 
             $results = $leaflets->get();
 

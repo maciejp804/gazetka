@@ -24,7 +24,7 @@
     <div class="py-2 text-center hover:bg-white hover:opacity-20">
         <a href="{{route('subdomain.leaflet', ['subdomain' => $slug, 'id' =>$id])}}#{{$page}}">
             <img class="max-w-8 block m-auto" src="{{$logo}}" alt="pro-img1">
-            <h3 class="text-white text-xs font-bold p-1 rounded my-1 {{$toEnd['classes']}}">{{$toEnd['end']}}</h3>
+            <h3 class="text-white text-xs font-bold p-1 rounded my-1 truncate {{$toEnd['classes']}}">{{$toEnd['end']}}</h3>
             <div class="flex justify-center font-light mb-1 text-xs">
                 <span class="truncate">GAZETKA {{strtoupper($name)}}</span>
             </div>
