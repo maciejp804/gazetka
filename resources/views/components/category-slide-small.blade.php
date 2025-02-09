@@ -22,7 +22,11 @@
     </div>
     <div class="text-center">
         <h3 class="text-gray-800 text-xs">
-            <a href="{{route($categoryRoute, ['category' => $category->slug, 'subcategory' => $item->slug])}}" class="font-semibold group-hover:font-bold">{{ $item->name }}</a>
+            <a href="{{route($categoryRoute, ['category' => $category->slug, 'subcategory' => $item->slug])}}" class="font-semibold
+             @if(!request()->is('produkty/'.$category->slug.'/'.$item->slug))
+                        group-hover:font-bold
+                        @endif
+            ">{{ $item->name }}</a>
         </h3>
     </div>
 </div>

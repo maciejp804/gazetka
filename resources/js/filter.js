@@ -62,7 +62,7 @@ function handleTripleSwiperSearch(query, searchType, categorySelect, timeSelect,
         .catch(error => console.error('Błąd:', error));
 }
 
-function handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId,currentPage = 1) {
+function handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId, subcategory, currentPage = 1 ) {
 
     const searchUrl = `/search/triple?` +
         `query=${encodeURIComponent(query)}` +
@@ -70,6 +70,7 @@ function handleTripleSearch(query, searchType, categorySelect, timeSelect, resul
         `&time=${encodeURIComponent(timeSelect)}` +
         `&searchType=${searchType}` +
         `&page=${currentPage}` +
+        `&subcategory=${subcategory}` +
         `&limit=10`;
 
     const results = document.getElementById(containerId);
@@ -321,11 +322,13 @@ function renderPagination(containerId, pagination, query, searchType, categorySe
         paginationDiv.appendChild(pageInfo);
         paginationDiv.appendChild(nextButton);
     } else {
-        paginationDiv.classList.add('justify-center');
-        const infoSpan = document.createElement('span');
-        infoSpan.textContent = `Koniec`;
-        infoSpan.classList.add('text-sm', 'text-gray-700');
-        paginationDiv.appendChild(infoSpan);
+        if (pagination.total > 0){
+            paginationDiv.classList.add('justify-center');
+            const infoSpan = document.createElement('span');
+            infoSpan.textContent = `Koniec`;
+            infoSpan.classList.add('text-sm', 'text-gray-700');
+            paginationDiv.appendChild(infoSpan);
+        }
     }
 
     resultsContainer.appendChild(paginationDiv);
@@ -341,6 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dropdownValue = dropdownUrl ? dropdownUrl.getAttribute('data-dropdown') : null;
         const resultsBoxId = input.getAttribute('data-results-box-id');
         const resultsBox = document.getElementById(resultsBoxId);
+        const swiperSmall = filterBox.querySelector('.swiper-category-small');
 
         const searchType = input.getAttribute('data-search-type');
         const containerId = input.getAttribute('data-container-id');
@@ -354,6 +358,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const categorySelect = filterBox.querySelector('#category-select');
         const timeSelect = filterBox.querySelector('#time-select');
         const typeSelect = filterBox.querySelector('#type-select');
+        const subcategorySelect = swiperSmall ? swiperSmall.getAttribute('data-subcategory') : null;
+
 
         let type, time;
         if (typeSelect){
@@ -370,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-        console.log(dropdownValue, type, time);
+        console.log(dropdownValue,subcategorySelect, type, time);
 
         // Funkcja do wywołania wyszukiwania
         function performSearch() {
@@ -397,6 +403,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 typeCategory = typeSelect.value ? typeSelect.value : 'all';
             }
 
+            let typeSubCategory = '';
+            if(subcategorySelect !== null)
+            {
+                typeSubCategory = subcategorySelect ? subcategorySelect : 'all';
+            }
+
 
             clearButton.classList.toggle('hidden', query.length === 0);
 
@@ -413,13 +425,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         if(swiperInstance){
                             handleTripleSwiperSearch(query, searchType, selectCategory, timeCategory, resultsBox, input, swiperInstance);
                         } else {
-                            handleTripleSearch(query, searchType, selectCategory, timeCategory, resultsBox, input, containerId);
+                            handleTripleSearch(query, searchType, selectCategory, timeCategory, resultsBox, input, containerId, typeSubCategory);
                         }
                         break;
 
                     case 'retailers':
                     case 'products':
-                            handleTripleSearch(query, searchType, selectCategory, timeCategory, resultsBox, input, containerId);
+                            handleTripleSearch(query, searchType, selectCategory, timeCategory, resultsBox, input, containerId, typeSubCategory);
                         break;
 
                     case 'vouchers':
@@ -440,14 +452,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         if(swiperInstance){
                             handleTripleSwiperSearch('', searchType, selectCategory, timeCategory, resultsBox, input, swiperInstance);
                         } else {
-                            handleTripleSearch('', searchType, selectCategory, timeCategory, resultsBox, input, containerId);
+                            handleTripleSearch('', searchType, selectCategory, timeCategory, resultsBox, input, containerId, typeSubCategory);
                         }
                         break;
 
                     case 'retailers':
                     case 'products':
 
-                        handleTripleSearch('', searchType, selectCategory, timeCategory, resultsBox, input, containerId);
+                        handleTripleSearch(query, searchType, selectCategory, timeCategory, resultsBox, input, containerId, typeSubCategory);
                         break;
 
                     case 'vouchers':

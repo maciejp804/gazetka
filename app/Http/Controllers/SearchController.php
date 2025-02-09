@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Leaflet;
+use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -101,11 +102,12 @@ class SearchController extends Controller
         // Parametry paginacji (domyślnie page=1, limit=10)
         $page  = $request->input('page', 1);
         $limit = $request->input('limit', 10);
+        $subcategory = $request->input('subcategory');
 
         if ($searchType === 'leaflets') {
 
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop', 'products')
+            $leaflets = Leaflet::with('shop', 'products.product_category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
                 ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
@@ -116,15 +118,16 @@ class SearchController extends Controller
             // Filtrowanie według kategorii
             if ($category != 'all')
             {
-                $leaflets->whereHas('products', function ($queryProduct) use ($category) {
-                    $queryProduct->where('product_category_id', $category);
+                $leaflets->whereHas('products.product_category', function ($queryProduct) use ($category) {
+                    $queryProduct->where('id', $category)
+                    ->orWhere('parent_id', $category);
                 });
             }
 
 
             // Obsługa czasu (sortowanie i filtrowanie)
 
-           $leaflets = $this->getOrderBy($time, $leaflets);
+           $leaflets = $this->leafletsGetOrderBy($time, $leaflets);
 
            $results = $leaflets->paginate($limit, ['*'], 'page', $page);
 
@@ -165,19 +168,64 @@ class SearchController extends Controller
 
         } elseif ($searchType === 'products') {
 
-            $products = Product::where('name', 'like', $query . '%');
-
+            $products = PageClick::select('page_clicks.*')
+                ->join('leaflet_products', 'page_clicks.leaflet_product_id', '=', 'leaflet_products.id')
+                ->where('valid_from', '<=', now())
+                ->where('valid_to', '>=', now())
+                ->whereHas('leafletProduct.product', function ($queryName) use ($query) {
+                    $queryName->where('name', 'like', $query . '%');
+                });
 
             // Filtrowanie według kategorii
             if ($category != 'all') {
-
-                $products = $products->where('product_category_id', $category);
+                if ($subcategory != 'all') {
+                    // Filtrowanie po konkretnej subkategorii – produkt musi mieć product_category_id równy $subcategory.
+                    $products = $products->whereHas('leafletProduct.product.category', function ($queryCategory) use ($subcategory) {
+                        $queryCategory->where('id', $subcategory);
+                    });
+                } else {
+                    // Filtrowanie po głównej kategorii – produkt może być przypisany do głównej kategorii
+                    // lub do którejś z jej subkategorii (czyli tam, gdzie parent_id = $category).
+                    $products = $products->whereHas('leafletProduct.product.category', function ($queryCategory) use ($category) {
+                        $queryCategory->where('id', $category)
+                            ->orWhere('parent_id', $category);
+                    });
+                }
             }
 
-           // Obsługa czasu (sortowanie i filtrowanie)
+            // Obsługa czasu (sortowanie i filtrowanie)
 
+            $products = $this->productsGetOrderBy($time, $products);
 
             $results = $products->paginate($limit, ['*'], 'page', $page);
+
+
+
+            $flattenedCollection = $results->getCollection()->flatMap(function ($click) {
+                return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                    return [
+                        'click_id'      => $click->id,
+                        'valid_from'    => $click->valid_from,
+                        'valid_to'      => $click->valid_to,
+                        'page_id'       => $click->page->id,
+                        'leaflet_id'    => $leaflet->id,
+                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                    ];
+                });
+            });
+
+            // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
+            $results->setCollection($flattenedCollection);
+
+
 
         }
 
@@ -189,6 +237,7 @@ class SearchController extends Controller
             'pagination' => [
                 'currentPage' => $results->currentPage(),
                 'totalPages'  => $results->lastPage(),
+                'total'        => $results->total(),
                 // ewentualnie total() też się przydaje
             ],
         ]);
@@ -356,7 +405,7 @@ class SearchController extends Controller
      * @param Builder $leaflets
      * @return Builder
      */
-    public function getOrderBy(mixed $time, Builder $leaflets): Builder
+    public function leafletsGetOrderBy(mixed $time, Builder $leaflets): Builder
     {
         switch ($time) {
             case 'all': // Sortowanie po updated_at (ostatnio dodane)
@@ -387,5 +436,48 @@ class SearchController extends Controller
                 break;
         }
         return $leaflets;
+    }
+
+    /**
+     * @param mixed $time
+     * @param Builder $leaflets
+     * @return Builder
+     */
+    public function productsGetOrderBy(mixed $time, Builder $products): Builder
+    {
+        switch ($time) {
+            case 'all': // Sortowanie po updated_at (ostatnio dodane)
+                $products = $products->orderBy('updated_at', 'desc');
+                break;
+
+            case '1': // Sortowanie po updated_at (ostatnio dodane)
+
+                $products = $products->orderBy('promo_price', 'asc');
+                break;
+
+            case '2': // Sortowanie po updated_at (ostatnio dodane)
+
+                $products = $products->orderBy('promo_price', 'desc');
+                break;
+
+            case '3': // Sortowanie po dacie zakończenia (end)
+                $products = $products
+                    ->where('valid_from', '<=', now('Europe/Warsaw')->toDateTime())
+                    ->orderBy('valid_to', 'asc');
+                break;
+
+            case '4': // Sortowanie po dacie startu gdzie jest ona w przyszłości
+                $products = $products
+                    ->where('valid_from', '>',  now('Europe/Warsaw')->toDateTime())
+                    ->orderBy('valid_from', 'desc');
+                break;
+
+            case '5': // Filtrowanie tylko aktywnych gazetek
+                $products = $products
+                    ->where('valid_from', '<=',  now('Europe/Warsaw')->toDateTime())
+                    ->orderBy('valid_from', 'desc');
+                break;
+        }
+        return $products;
     }
 }

@@ -36,7 +36,7 @@
                     @endif
                 @endforeach
             @else
-                <p class="flex justify-center w-full p-4 text-gray-500 text-sm">Brak aktualnych ofert</p>
+                <p class="col-span-2 sm:col-span-3 lg:col-span-5 flex justify-center w-full p-4 text-gray-500 text-sm">Brak aktualnych ofert</p>
             @endif
         </div>
     </div>
@@ -95,8 +95,8 @@
     <div class="w-full" id="{{$dataContainerId}}">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
-            @foreach($items as $item)
-{{--                @dd($item['valid_from'])--}}
+                @foreach($items as $item)
+                    {{--                    @dd($item->product_slug)--}}
                     <x-product
                         :valid_from="$item['valid_from']"
                         :valid_to="$item['valid_to']"

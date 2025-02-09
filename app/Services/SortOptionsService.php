@@ -43,12 +43,15 @@ class SortOptionsService
         });
     }
 
-    public static function getCategoryRetailers(): Collection
+    public static function getSortOptionsProducts(): Collection
     {
         return collect([
-            ['id' => 1, 'name' => 'Dom', 'value' => 'dom'],
-            ['id' => 2, 'name' => 'Moda', 'value' => 'moda'],
-            ['id' => 3, 'name' => 'Zabawki', 'value' => 'zabawki'],
+            ['id' => 1, 'name' => 'Najniższa cena'],
+            ['id' => 2, 'name' => 'Najwyższa cena'],
+            ['id' => 3, 'name' => 'Kończą się'],
+            ['id' => 4, 'name' => 'Nadchodzace'],
+            ['id' => 5, 'name' => 'Aktualne'],
+
 
         ])->map(function ($item) {
             return (object) $item;

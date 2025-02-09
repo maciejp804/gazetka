@@ -31,7 +31,10 @@ class LeafletController extends Controller
             $place = (object)$locationData;
         }
 
-        $product_categories = ProductCategory::where('status', 1)->get();
+        $product_categories = ProductCategory::where('status', 1)
+            ->where('parent_id', '=', null)
+            ->orderBy('name', 'asc')
+            ->get();
 
         $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
             ->where('valid_from', '<=', now())
@@ -87,7 +90,11 @@ class LeafletController extends Controller
     public function indexCategory($category, $descriptions)
     {
 
-        $product_categories = ProductCategory::where('status', 1)->get();
+        $product_categories = ProductCategory::where('status', 1)
+            ->where('parent_id', '=', null)
+            ->orderBy('name', 'asc')
+            ->get();
+
         $category = $product_categories->where('slug', $category)->first();
 
         if (!$category) {
@@ -292,14 +299,15 @@ class LeafletController extends Controller
     protected function getLeafletsSimplePaginate($pages, $category = 'all')
     {
 
-        $leaflets = Leaflet::with('shop', 'products')
+        $leaflets = Leaflet::with('shop', 'products.product_category')
             ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('leaflets.status', '=', 'published');
 
         if ($category != 'all')
         {
-            $leaflets->whereHas('products', function ($queryProduct) use ($category) {
-                $queryProduct->where('product_category_id', $category);
+            $leaflets->whereHas('products.product_category', function ($queryProduct) use ($category) {
+                $queryProduct->where('id', $category)
+                ->orWhere('parent_id', $category);
             });
         }
 

@@ -23,28 +23,34 @@
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
 
-                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
-                    <x-select-drpodown-url :items="$product_categories" :category="$category" type="products"/>
-                    <x-select id="time-select" :items="$product_sort" placeholder="Sortuj..."/>
-                    <x-search placeholder="Wpisz nazwę produktu... " :border="true"
-                              input-id="search-input-products"
-                              result-id="results-box-products"
-                              data-search-type="products"
-                              data-container-id="products-container"
+                <div class="filter-box flex flex-col mb-4">
+                    <div class="flex flex-col gap-4 mb-4 lg:flex-row">
+                        <x-select-drpodown-url :items="$product_categories" :category="$category" type="products"/>
+                        <x-select id="time-select" :items="$product_sort" placeholder="Sortuj..."/>
+                        <x-search placeholder="Wpisz nazwę produktu... " :border="true"
+                                  input-id="search-input-products"
+                                  result-id="results-box-products"
+                                  data-search-type="products"
+                                  data-container-id="products-container"
 
-                    >
-                        <x-loupe-button href="#"/>
-                    </x-search>
+                        >
+                            <x-loupe-button href="#"/>
+                        </x-search>
+                    </div>
+
+                    @if($subcategories->count() > 0)
+                        <x-swiper-category-small
+                            class="swiper-category-small"
+                            data-subcategory="{{$subcategory}}"
+                            button-class="1"
+                            :items="$subcategories"
+                            :category="$category"
+                            category-route="main.products.subcategory"
+                            main-route="main.products"
+                        />
+                    @endif
                 </div>
-                @if($subcategories->count() > 0)
-                    <x-swiper-category-small
-                        button-class="1"
-                        :items="$subcategories"
-                        :category="$category"
-                        category-route="main.products.subcategory"
-                        main-route="main.products"
-                    />
-                @endif
+
 
                 <x-section-filtr-results :ads-status="true" data-container-id="products-container" :items="$products" type="products"/>
                 {{ $products->links('custom-paginator') }}

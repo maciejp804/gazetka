@@ -63,7 +63,7 @@ class ProductController extends Controller
         $products->setCollection($flattenedCollection);
 
 
-        $product_sort = SortOptionsService::getSortOptions();
+        $product_sort = SortOptionsService::getSortOptionsProducts();
 
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
@@ -162,7 +162,7 @@ class ProductController extends Controller
             ['label' => $category->name, 'url' => '']
         ];
 
-        $product_sort = SortOptionsService::getSortOptions();
+        $product_sort = SortOptionsService::getSortOptionsProducts();
         $static_description = StaticDescriptions::getDescriptions();
         return view('main.products.index_category', data:
             [
@@ -181,6 +181,7 @@ class ProductController extends Controller
                 'product_categories' => $product_categories,
                 'category' => $category,
                 'subcategories' => $subcategories,
+                'subcategory' => 'all',
             ]);
     }
 
@@ -243,6 +244,7 @@ class ProductController extends Controller
         // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
         $products->setCollection($flattenedCollection);
 
+
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
         $leaflets = $leaflets->sortByDesc('created_at')->take(40);
 
@@ -253,7 +255,7 @@ class ProductController extends Controller
             ['label' => $subcategory->name, 'url' => '']
         ];
 
-        $product_sort = SortOptionsService::getSortOptions();
+        $product_sort = SortOptionsService::getSortOptionsProducts();
         $static_description = StaticDescriptions::getDescriptions();
         return view('main.products.index_category', data:
             [
@@ -272,6 +274,7 @@ class ProductController extends Controller
                 'product_categories' => $product_categories,
                 'category' => $category,
                 'subcategories' => $sucategories,
+                'subcategory' => $subcategory->id,
             ]);
     }
 

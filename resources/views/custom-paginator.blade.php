@@ -29,7 +29,7 @@
         @endif
 
     </div>
-@else
+@elseif($paginator->total() > 0)
     <div class="custom-pagination flex items-center justify-center p-4">
         <span class="text-sm text-gray-700">Koniec</span>
     </div>

@@ -1,10 +1,10 @@
 @props(['title' => 'Brak', 'items', 'category', 'categoryRoute', 'mainRoute'])
 
-<div class="w-full">
+<div {{$attributes->merge(['class'=> "w-full"])}}>
     <div class="swiper category-swiper-small">
 
         <!-- Additional required wrapper -->
-        <div class="swiper-wrapper h-full mb-10">
+        <div class="swiper-wrapper h-full">
             <div class="swiper-slide group ">
                 <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded-full border border-gray-200
                     @if(request()->is('produkty/'.$category->slug))
@@ -26,7 +26,11 @@
                 </div>
                 <div class="text-center">
                     <h3 class="text-gray-800 text-xs">
-                        <a href="{{route('main.products.category', ['category' => $category->slug])}}" class="font-semibold group-hover:font-bold">Wszystkie</a>
+                        <a href="{{route('main.products.category', ['category' => $category->slug])}}" class="font-semibold
+                        @if(!request()->is('produkty/'.$category->slug))
+                        group-hover:font-bold
+                        @endif
+                        ">Wszystkie</a>
                     </h3>
                 </div>
             </div>
