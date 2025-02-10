@@ -55,7 +55,7 @@ class SearchController extends Controller
 
         if ($searchType === 'leaflets') {
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop', 'products')
+            $leaflets = Leaflet::with('shop', 'products.category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
                 ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
@@ -66,8 +66,9 @@ class SearchController extends Controller
             // Filtrowanie według kategorii
                 if ($category != 'all')
                 {
-                    $leaflets->whereHas('products', function ($queryProduct) use ($category) {
-                        $queryProduct->where('product_category_id', $category);
+                    $leaflets->whereHas('products.category', function ($queryProduct) use ($category) {
+                        $queryProduct->where('id', $category)
+                            ->orWhere('parent_id', $category);
                     });
                 }
 

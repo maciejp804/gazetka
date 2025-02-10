@@ -16,7 +16,7 @@
             <a class="self-center w-full" href="{{$route}}">
                 <img class="w-8/12 m-auto" src="{{ $image }}" alt="pro-img1">
             </a>
-            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-blue-550 transition duration-300 ease-in"/>
+{{--            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-blue-550 transition duration-300 ease-in"/>--}}
         </div>
         <a href="{{$route}}" class="opacity-0 absolute w-full flex bg-blue-550 aspect-square rounded border border-blue-550 transition duration-500 hover:opacity-100">
             <div class="flex flex-col justify-center gap-y-6 aspect-square">
@@ -26,7 +26,7 @@
                 <span class="text-white text-sm">{!! $hoverDesc !!}</span>
             </div>
             <!--{% check_like item request as liked %}-->
-            <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>
+{{--            <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}
         </a>
     </div>
     <div class="text-center">

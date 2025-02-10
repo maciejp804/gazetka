@@ -31,8 +31,8 @@
                         </ul>
                     </div>
                 </div>
-                <div class="flex self-center justify-end lg:w-3/5 h-12">
-                    <div class="filter-box hidden lg:flex mr-2 w-5/12 ">
+                <div class="hidden lg:flex self-center justify-end lg:w-3/5 h-12">
+                    <div class="filter-box flex mr-2 w-5/12 ">
                         <x-search :border="true" class="flex"
                                   input-id="search-input-products-desktop"
                                   result-id="results-box-products-desktop"
@@ -50,15 +50,15 @@
                             <x-location-button class="" href="#"/>
                         </x-search>
                     </div>
-                    <ul class="hidden lg:flex justify-between w-3/12">
-                        <x-header.link href="#" svg='heart' />
+                    <ul class="hidden lg:flex justify-end w-3/12">
+{{--                        <x-header.link href="#" svg='heart' />--}}
+{{--                        <x-header.link href="#" svg='brightness' />--}}
+{{--                        <x-header.link href="#" class="items-center text-blue-550 font-bold"/>--}}
                         @auth
                             <x-header.link href="{{ route('dashboard') }}" svg='user' />
                         @else
                             <x-header.link href="{{ route('login') }}" svg='user' />
                         @endauth
-                        <x-header.link href="#" svg='brightness' />
-                        <x-header.link href="#" class="items-center text-blue-550 font-bold"/>
                     </ul>
                 </div>
 
@@ -66,9 +66,16 @@
 
 
                 {{-- Mobile Menu--}}
-                <div class="lg:hidden z-30">
+                <div class="flex w-3/5 justify-end lg:hidden z-30">
                     <ul x-data="{ mobileMenuIsOpen: false }" @click.away="mobileMenuIsOpen = false" class="flex gap-2">
-                        <x-header.link href="#" svg='location' />
+                        <div class="filter-box flex lg:hidden w-4/5">
+                            <x-search class="flex" :placeholder="$place" input-id="search-input-location-2"
+                                      result-id="results-box-location-2"
+                                      data-search-type="places"
+                            >
+                                <x-location-button/>
+                            </x-search>
+                        </div>
                         <x-header.link link="button" svg='bar'/>
 
                         <!-- Mobile Menu Modal Window -->
@@ -91,22 +98,27 @@
                                 <div class="navbar-collapse" id="navbarContent01">
                                     <div class="megamenu-content div_q9whqo">
                                         <div class="mainwrap">
-                                            <ul class="flex w-80 m-auto gap-2">
+                                            <ul class="flex w-80 m-auto gap-2 justify-center">
+{{--                                                <li>--}}
+{{--                                                    <x-header.link href="#" svg='location' />--}}
+{{--                                                </li>--}}
+{{--                                                <li>--}}
+{{--                                                    <x-header.link href="#" svg='heart' />--}}
+{{--                                                </li>--}}
+{{--                                                <li>--}}
+{{--                                                    <x-header.link href="#" svg='brightness' />--}}
+{{--                                                </li>--}}
+{{--                                                <li>--}}
+{{--                                                    <x-header.link href="#" class="items-center text-blue-550 font-bold"/>--}}
+{{--                                                </li>--}}
                                                 <li>
-                                                    <x-header.link href="#" svg='location' />
+                                                    @auth
+                                                        <x-header.link href="{{ route('dashboard') }}" svg='user' />
+                                                    @else
+                                                        <x-header.link href="{{ route('login') }}" svg='user' />
+                                                    @endauth
                                                 </li>
-                                                <li>
-                                                    <x-header.link href="#" svg='heart' />
-                                                </li>
-                                                <li>
-                                                    <x-header.link href="#" svg='user' />
-                                                </li>
-                                                <li>
-                                                    <x-header.link href="#" svg='brightness' />
-                                                </li>
-                                                <li>
-                                                    <x-header.link href="#" class="items-center text-blue-550 font-bold"/>
-                                                </li>
+
                                             </ul>
                                             <ul class="flex flex-col mt-8 mx-4">
                                                 <li class="px-4 py-2 border-b">
@@ -141,13 +153,13 @@
                                                 </li>
                                             </ul>
                                             <div class="absolute bottom-0 w-full">
-                                                <ul class="flex justify-center gap-x-4 my-5 w-80 m-auto">
-                                                    <li class="flex w-20"><a href="#"><img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 7.png" alt="Google Play"></a></li>
-                                                    <li class="flex w-20"><a href="#"><img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 8.png" alt="App Gallery"></a></li>
-                                                    <li class="flex w-20"><a href="#"><img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 9.png" alt="App Store"></a></li>
-                                                </ul>
+{{--                                                <ul class="flex justify-center gap-x-4 my-5 w-80 m-auto">--}}
+{{--                                                    <li class="flex w-20"><a href="#"><img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 7.png" alt="Google Play"></a></li>--}}
+{{--                                                    <li class="flex w-20"><a href="#"><img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 8.png" alt="App Gallery"></a></li>--}}
+{{--                                                    <li class="flex w-20"><a href="#"><img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 9.png" alt="App Store"></a></li>--}}
+{{--                                                </ul>--}}
                                                 <p class="text-1xs text-gray-500 text-center pb-5">
-                                                    2024 © Gazetkapromocyjna.com.pl. Wszelkie prawa
+                                                    @php echo date('Y'); @endphp © Gazetkapromocyjna.com.pl. Wszelkie prawa
                                                     zastrzeżone
                                                 </p>
                                             </div>

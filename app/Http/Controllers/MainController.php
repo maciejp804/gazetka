@@ -87,7 +87,10 @@ class MainController extends Controller
 
         $leaflets_time = SortOptionsService::getSortOptions();
 
-        $leaflets_category = ProductCategory::where('status', 1)->get();
+        $leaflets_category = ProductCategory::where('status', 1)
+            ->where('parent_id', null)
+            ->orderBy('name', 'asc')
+            ->get();
 
         $static_description = StaticDescriptions::getDescriptions();
 

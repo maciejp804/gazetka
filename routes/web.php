@@ -4,6 +4,7 @@ use App\Http\Controllers\BackController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\LeafletController;
 use App\Http\Controllers\MainController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -445,7 +446,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     Route::post('/ratings', [RatingController::class, 'store'])->middleware('auth')->name('ratings.store');
 
-
+    Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
     // Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
 

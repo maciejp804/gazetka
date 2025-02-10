@@ -9,7 +9,7 @@
             <div class="self-center w-full">
                 <img class="m-auto h-20 2xs:h-32 object-cover" src="{{ $product_image }}" alt="pro-img1">
             </div>
-            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-orange-500 transition duration-300 ease-in"/>
+{{--            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}
         </div>
         <a href="{{route('main.product', ['slug' => $product_slug])}}" class="opacity-0 absolute top-0 left-0 right-0 bottom-0 flex justify-center bg-blue-550 rounded border border-blue-550 transition duration-500 hover:opacity-100">
             <div class="flex flex-col justify-center gap-y-6">
@@ -20,7 +20,7 @@
             </div>
 
             <!--{% check_like item request as liked %}-->
-            <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>
+{{--            <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}
         </a>
         <div class="text-center min-h-12">
             <h3 class="text-gray-800 text-base ">

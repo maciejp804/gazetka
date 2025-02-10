@@ -108,17 +108,17 @@
             </div>
         </div>
         <div class="pb-5 mt-5 mx-5">
-            <ul class="flex justify-center gap-x-4 my-5">
-                <x-footer.li-image >
-                    <img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 7.png" alt="Google Play">
-                </x-footer.li-image>
-                <x-footer.li-image >
-                    <img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 8.png" alt="App Gallery">
-                </x-footer.li-image>
-                <x-footer.li-image >
-                    <img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 9.png" alt="App Store">
-                </x-footer.li-image>
-            </ul>
+{{--            <ul class="flex justify-center gap-x-4 my-5">--}}
+{{--                <x-footer.li-image >--}}
+{{--                    <img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 7.png" alt="Google Play">--}}
+{{--                </x-footer.li-image>--}}
+{{--                <x-footer.li-image >--}}
+{{--                    <img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 8.png" alt="App Gallery">--}}
+{{--                </x-footer.li-image>--}}
+{{--                <x-footer.li-image >--}}
+{{--                    <img class="flex w-20" src="https://hoian.pl/assets/image/pro/image 9.png" alt="App Store">--}}
+{{--                </x-footer.li-image>--}}
+{{--            </ul>--}}
             <ul class="flex justify-center gap-x-6 border-b">
                 <x-header.link href="#" svg='facebook' />
                 <x-header.link href="#" svg='instagram' />
@@ -126,13 +126,19 @@
             </ul>
             <ul class="my-5 mx-auto text-center gap-3 flex flex-col font-semibold border-b lg:flex-row lg:justify-center">
                 <x-footer.li>O GazetkaPromocyjna</x-footer.li>
-                <x-footer.li ref="{{route('main.leaflets')}}">Gazetki</x-footer.li>
-                <x-footer.li ref="{{route('main.retailers')}}">Sklepy</x-footer.li>
-                <x-footer.li ref="{{route('main.products')}}">Produkty</x-footer.li>
-                <x-footer.li ref="{{route('main.blogs')}}">Blog</x-footer.li>
-                <x-footer.li ref="{{route('main.vouchers')}}" >Kupony</x-footer.li>
+                <x-footer.li>Regulamin</x-footer.li>
+                <x-footer.li>Polityka prywatności</x-footer.li>
+                <x-footer.li>Polityka cookies</x-footer.li>
+                <x-footer.li>Pomoc</x-footer.li>
                 <x-footer.li >Kontakt</x-footer.li>
-                <x-footer.li >Pomoc</x-footer.li>
+
+{{--                <x-footer.li ref="{{route('main.leaflets')}}">Gazetki</x-footer.li>--}}
+{{--                <x-footer.li ref="{{route('main.retailers')}}">Sklepy</x-footer.li>--}}
+{{--                <x-footer.li ref="{{route('main.products')}}">Produkty</x-footer.li>--}}
+{{--                <x-footer.li ref="{{route('main.blogs')}}">Blog</x-footer.li>--}}
+{{--                <x-footer.li ref="{{route('main.vouchers')}}" >Kupony</x-footer.li>--}}
+{{--                <x-footer.li >Kontakt</x-footer.li>--}}
+{{--                <x-footer.li >Pomoc</x-footer.li>--}}
             </ul>
             <ul class="my-5 mx-auto text-center">
                 <p class="text-1xs text-gray-500">
