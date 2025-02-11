@@ -14,12 +14,12 @@
                         </template >
                     </a>
                     <ul x-show="expanded == 0" x-collapse.duration.500ms class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                        <x-footer.li>Gazetka Biedronka</x-footer.li>
-                        <x-footer.li>Gazetka Lidl</x-footer.li>
-                        <x-footer.li>Gazetka Pepco</x-footer.li>
-                        <x-footer.li>Gazetka Kaufland</x-footer.li>
-                        <x-footer.li>Gazetka Auchan</x-footer.li>
-                        <x-footer.li>Gazetka Netto</x-footer.li>
+                        <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'biedronka'])">Gazetka Biedronka</x-footer.li>
+                        <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'lidl'])">Gazetka Lidl</x-footer.li>
+                        <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'pepco'])">Gazetka Pepco</x-footer.li>
+                        <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'kaufland'])">Gazetka Kaufland</x-footer.li>
+                        <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'dino'])">Gazetka Dino</x-footer.li>
+                        <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'netto'])">Gazetka Netto</x-footer.li>
 
                     </ul>
                 </div>
@@ -36,16 +36,16 @@
 
                     </a>
                     <ul x-show="expanded == 1" x-collapse.duration.500ms class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                        <x-footer.li >McDonald's kupony</x-footer.li>
-                        <x-footer.li >Max Burgers kupony</x-footer.li>
-                        <x-footer.li >Kebab King kupony</x-footer.li>
-                        <x-footer.li >Salad story kupony</x-footer.li>
-                        <x-footer.li >Starbucks kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom'])">Dom -  kupony</x-footer.li>
+                        {{--                    <x-footer.li >Kebab King kupony</x-footer.li>--}}
+                        {{--                    <x-footer.li >Salad story kupony</x-footer.li>--}}
+                        {{--                    <x-footer.li >Starbucks kupony</x-footer.li>--}}
                     </ul>
                 </div>
                 <div>
                     <a @click="expanded =  expanded == 2 ? null : 2" class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">
-                        <span>Sklepy</span>
+                        <span>GazetkaPromocyjna.com.pl</span>
                         <template x-if="expanded != 2">
                             <i class="fa fa-angle-down self-center"></i>
                         </template >
@@ -54,55 +54,55 @@
                         </template >
                     </a>
                     <ul x-show="expanded == 2" x-collapse.duration.500ms class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                        <x-footer.li >Biedronka</x-footer.li>
-                        <x-footer.li >Lidl</x-footer.li>
-                        <x-footer.li >Auchan</x-footer.li>
-                        <x-footer.li >Netto</x-footer.li>
-                        <x-footer.li >Empik</x-footer.li>
-                        <x-footer.li >Pepco</x-footer.li>
+                        <x-footer.li :ref="route('main.leaflets')">Gazetki</x-footer.li>
+                        <x-footer.li :ref="route('main.retailers')">Sklepy</x-footer.li>
+                        <x-footer.li :ref="route('main.products')">Produkty</x-footer.li>
+                        <x-footer.li :ref="route('main.vouchers')">Kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.blogs')">Blog</x-footer.li>
+                        <x-footer.li :ref="route('main.maps')">Lokalizacje</x-footer.li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="hidden lg:flex 2lg:w-265 justify-around m-auto">
             <div class="flex flex-col">
-                <a class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">
-                    <span>Gazetki promocyjne</span>
-                </a>
+                <span class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">
+                    Gazetki promocyjne
+                </span>
                 <ul  class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                    <x-footer.li>Gazetka Biedronka</x-footer.li>
-                    <x-footer.li>Gazetka Lidl</x-footer.li>
-                    <x-footer.li>Gazetka Pepco</x-footer.li>
-                    <x-footer.li>Gazetka Kaufland</x-footer.li>
-                    <x-footer.li>Gazetka Auchan</x-footer.li>
-                    <x-footer.li>Gazetka Netto</x-footer.li>
+                    <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'biedronka'])">Gazetka Biedronka</x-footer.li>
+                    <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'lidl'])">Gazetka Lidl</x-footer.li>
+                    <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'pepco'])">Gazetka Pepco</x-footer.li>
+                    <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'kaufland'])">Gazetka Kaufland</x-footer.li>
+                    <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'dino'])">Gazetka Dino</x-footer.li>
+                    <x-footer.li :ref="route('subdomain.index', ['subdomain' => 'netto'])">Gazetka Netto</x-footer.li>
 
                 </ul>
             </div>
             <div class="hidden lg:flex flex-col">
-                <a class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">
-                    <span>Kupony rabatowe</span>
-                </a>
+                <span class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">
+                    Kupony rabatowe
+                </span>
                 <ul  class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                    <x-footer.li >McDonald's kupony</x-footer.li>
-                    <x-footer.li >Max Burgers kupony</x-footer.li>
-                    <x-footer.li >Kebab King kupony</x-footer.li>
-                    <x-footer.li >Salad story kupony</x-footer.li>
-                    <x-footer.li >Starbucks kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom'])">Dom -  kupony</x-footer.li>
+{{--                    <x-footer.li >Kebab King kupony</x-footer.li>--}}
+{{--                    <x-footer.li >Salad story kupony</x-footer.li>--}}
+{{--                    <x-footer.li >Starbucks kupony</x-footer.li>--}}
 
                 </ul>
             </div>
             <div class="hidden lg:flex flex-col">
-                <a class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">
-                    <span>Sklepy</span>
-                </a>
+                <span class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">
+                    GazetkaPromocyjna.com.pl
+                </span>
                 <ul  class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                    <x-footer.li ref="https://biedronka.{{config('app.main_domain')}}">Biedronka</x-footer.li>
-                    <x-footer.li ref="https://lidl.{{config('app.main_domain')}}">Lidl</x-footer.li>
-                    <x-footer.li ref="https://auchan.{{config('app.main_domain')}}">Auchan</x-footer.li>
-                    <x-footer.li ref="https://netto.{{config('app.main_domain')}}">Netto</x-footer.li>
-                    <x-footer.li ref="https://empik.{{config('app.main_domain')}}">Empik</x-footer.li>
-                    <x-footer.li ref="https://dino.{{config('app.main_domain')}}">Dino</x-footer.li>
+                    <x-footer.li :ref="route('main.leaflets')">Gazetki</x-footer.li>
+                    <x-footer.li :ref="route('main.retailers')">Sklepy</x-footer.li>
+                    <x-footer.li :ref="route('main.products')">Produkty</x-footer.li>
+                    <x-footer.li :ref="route('main.vouchers')">Kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.blogs')">Blog</x-footer.li>
+                    <x-footer.li :ref="route('main.maps')">Lokalizacje</x-footer.li>
 
                 </ul>
             </div>

@@ -62,18 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
-
-        const flashMessage = document.getElementById('flash-message');
-        if (flashMessage) {
-            flashMessage.classList.add('transition', 'duration-3000', 'ease-out', 'opacity-0');
-        // Ukryj komunikat po 5 sekundach:
-        setTimeout(() => {
-        flashMessage.remove(); // Usuwa <div> z DOM
-    }, 2500);
-    }
-
-
 });
 
 //     document.addEventListener('DOMContentLoaded', () => {

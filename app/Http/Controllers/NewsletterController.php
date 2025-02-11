@@ -12,9 +12,11 @@ class NewsletterController extends Controller
         // Walidacja adresu e-mail
         $request->validate([
             'email' => 'required|email',
+            'terms' => 'accepted'
         ]);
 
         $email  = $request->input('email');
+        $terms  = $request->input('terms');
         $apiKey = env('MAILER_API_KEY');
         $groupId = env('MAILER_GROUP_ID');
 
@@ -35,11 +37,16 @@ class NewsletterController extends Controller
                     'email' => $email,
                 ]
             ]);
-            dd($response);
-            // Sprawdzenie statusu odpowiedzi (Mailerlite zwraca 200 lub 201 przy powodzeniu)
-            if (in_array($response->getStatusCode(), [200, 201])) {
-                return redirect()->back()->with('success', 'Dziękujemy za subskrypcję newslettera!');
+
+            switch ($response->getStatusCode()){
+                case 200:
+                    return redirect()->back()->with('update', 'Adres e-mail znajduje się w naszej bazie!');
+
+                case 201:
+                    return redirect()->back()->with('success', 'Dziękujemy za subskrypcję newslettera!');
+
             }
+
         } catch (\Exception $e) {
             \Log::error("MailerLite subscribe error: " . $e->getMessage());
             return redirect()->back()->with('error', 'Wystąpił problem przy zapisie, spróbuj ponownie.');
