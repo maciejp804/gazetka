@@ -1,18 +1,31 @@
-@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image', 'valid_to', 'valid_from', 'name', 'slug'])
+@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image_path','webp_path', 'avif_path', 'valid_to', 'valid_from', 'name', 'slug'])
 @php
 
     $toEnd = validationDate($valid_to, $valid_from, $valid_to);
 
 @endphp
+
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
 {{--@dd($item)--}}
-<div {{$attributes->merge(['class' => 'w-full border border-gray-200 rounded p-2 mb-5'])}}>
+<div {{$attributes->merge(['class' => 'border border-gray-200 rounded p-2 mb-5'])}}>
     <div class="relative bg-white flex items-center justify-center group overflow-hidden">
         @if($toEnd['new'] === true)
             <span class="absolute top-[6%] -right-14 w-40 rotate-45 flex justify-center items-center h-6 bg-green-600 text-sm text-white text-center z-20">Nowość</span>
         @endif
         <div class="w-full">
             <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,'id' =>$id])}}#{{$page}}">
-                <img class="rounded object-cover object-top w-full h-40 2xs:h-52 1xs:h-40 xs:h-44 sm:h-60 md:h-56 2lg:h-60 " src="{{$image}}" alt="pro-img1">
+{{--                <img class="rounded object-cover object-top h-40 2xs:h-52 1xs:h-40 xs:h-44 sm:h-60 md:h-56 2lg:h-60 w-full" src="{{$image}}" alt="pro-img1">--}}
+                <picture>
+                    <source srcset="{{ Storage::url($avif_path) }}" type="image/avif">
+                    <source srcset="{{ Storage::url($webp_path) }}" type="image/webp">
+                    <img class="rounded object-cover object-top w-full h-40 2xs:h-52 1xs:h-40 xs:h-44 sm:h-60 md:h-56 2lg:h-60"
+                         src="{{ Storage::url($image_path) }}"
+                         width="1920" height="1080"
+                         alt="pro-img5">
+                </picture>
+
             </a>
         </div>
         <a href="{{route('subdomain.leaflet', ['subdomain' => $slug, 'id' =>$id])}}#{{$page}}" class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">

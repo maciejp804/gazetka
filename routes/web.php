@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LeafletController;
+use App\Http\Controllers\LeafletCoverController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PlaceController;
@@ -291,6 +293,13 @@ $leaflets_time = $retailers_time = [
     ['name' => 'Najnowsze', 'value' => 'newest'],
 ];
 
+Route::get('new', function ()
+{
+    \Illuminate\Support\Facades\Mail::to('biuro@hoian.pl')->send(
+        new \App\Mail\ContactMail()
+    );
+    return 'Done';;
+});
 
 
 Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData, $leaflets_category, $leaflets_time, $leaflets, $vouchers, $retailers, $products, $mainDomain) {
@@ -443,10 +452,18 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
         return app(PlaceController::class)->index($descriptions, $leaflets, $mainDomain);
     })->name('main.maps');
 
+    Route::get('/onas', [MainController::class, 'about'])->name('main.about');
+
+    Route::get('/kontakt',[ContactController::class,'index'])->name('main.contact');
+
+    Route::post('/send-contact',[ContactController::class,'send'])->name('main.contact.send');
+
 
     Route::post('/ratings', [RatingController::class, 'store'])->middleware('auth')->name('ratings.store');
 
     Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+
+    Route::get('/convert', [LeafletCoverController::class, 'storeCoverFromUrl']);
 
     // Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
 
@@ -469,7 +486,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     Route::get('/test-test/{week}/{number}/{start}', [SearchController::class, 'test']);
 
-    Route::get('/combination', [SearchController::class, 'combination'])
+    Route::get('combination', [SearchController::class, 'combination'])
         ->middleware('auth')
         ->name('combination');
 
@@ -484,6 +501,8 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
     })->name('main.index.gps');
 
     // Route::get('/',[MainController::class,'index'])->name('main.index');
+
+
 
     Route::get('/', function () use ($descriptions) {
         return app(MainController::class)->index($descriptions);

@@ -4,14 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Leaflet extends Model
 {
     use HasFactory;
 
-    public function shop()
+    public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
+    }
+
+    public function cover()
+    {
+        return $this->hasOne(LeafletCover::class);
     }
 
     public function pages()

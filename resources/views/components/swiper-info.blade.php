@@ -1,7 +1,7 @@
 @props(['items'])
 
 <div class="w-full">
-    <div class="swiper swiper-info">
+        <div class="swiper swiper-info">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full">
         @foreach($items as $item)

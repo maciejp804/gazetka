@@ -22,7 +22,7 @@
                           <span>Napisz lub zadzwoń do nas</span>
                       </div>
                       <div class="m-auto">
-                          <a href="/contact/" class="flex self-center bg-orange-500 rounded-3xl px-4 py-2 text-white font-semibold text-sm text-center" >Napisz do nas</a>
+                          <a href="{{route('main.contact')}}" class="flex self-center bg-orange-500 rounded-3xl px-4 py-2 text-white font-semibold text-sm text-center" >Napisz do nas</a>
                       </div>
                   </div>
               </div>

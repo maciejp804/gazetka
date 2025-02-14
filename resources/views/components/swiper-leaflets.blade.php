@@ -1,6 +1,6 @@
 @props(['swiperClass', 'buttonClass'=> 0, 'dataContainerId' => null, 'leaflets'])
 
-<div class="w-full">
+{{--<div class="w-full">--}}
     <div class="swiper {{$swiperClass}}" id="{{$dataContainerId}}">
 
         <!-- Additional required wrapper -->
@@ -8,8 +8,10 @@
            @foreach($leaflets as $leaflet)
 
                 @if(!is_array($leaflet))
+
                     <x-leaflet-slide
-                        class="swiper-slide"
+                        class="swiper-slide flex w-50 flex-row"
+                        style="width: 200px;"
                         :valid_from="$leaflet->valid_from"
                         :valid_to="$leaflet->valid_to"
                         :logo="$leaflet->shop->logo_xs"
@@ -17,7 +19,10 @@
                         :slug="$leaflet->shop->slug"
                         :id="$leaflet->id"
                         :page="1"
-                        :image="$leaflet->image_cover"
+                        :image_path="$leaflet->cover->path"
+                        :webp_path="$leaflet->cover->webp_path"
+                        :avif_path="$leaflet->cover->avif_path"
+
                     />
                 @else
                     @foreach($leaflet['pages'] as $item)
@@ -54,4 +59,4 @@
             </div>
         @endif
     </div>
-</div>
+{{--</div>--}}

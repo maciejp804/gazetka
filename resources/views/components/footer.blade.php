@@ -84,8 +84,8 @@
                     Kupony rabatowe
                 </span>
                 <ul  class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
-                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom'])">Dom -  kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'dom'])">Dom -  kupony</x-footer.li>
 {{--                    <x-footer.li >Kebab King kupony</x-footer.li>--}}
 {{--                    <x-footer.li >Salad story kupony</x-footer.li>--}}
 {{--                    <x-footer.li >Starbucks kupony</x-footer.li>--}}
@@ -125,12 +125,12 @@
                 <x-header.link href="#" svg='pinterest' />
             </ul>
             <ul class="my-5 mx-auto text-center gap-3 flex flex-col font-semibold border-b lg:flex-row lg:justify-center">
-                <x-footer.li>O GazetkaPromocyjna</x-footer.li>
+                <x-footer.li :ref="route('main.about')">O GazetkaPromocyjna</x-footer.li>
                 <x-footer.li>Regulamin</x-footer.li>
                 <x-footer.li>Polityka prywatności</x-footer.li>
                 <x-footer.li>Polityka cookies</x-footer.li>
-                <x-footer.li>Pomoc</x-footer.li>
-                <x-footer.li >Kontakt</x-footer.li>
+{{--                <x-footer.li>Pomoc</x-footer.li>--}}
+                <x-footer.li :ref="route('main.contact')">Kontakt</x-footer.li>
 
 {{--                <x-footer.li ref="{{route('main.leaflets')}}">Gazetki</x-footer.li>--}}
 {{--                <x-footer.li ref="{{route('main.retailers')}}">Sklepy</x-footer.li>--}}

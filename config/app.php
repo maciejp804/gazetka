@@ -125,4 +125,9 @@ return [
 
     'main_domain' => env('MAIN_DOMAIN', 'gazetkapromocyjna.local'),
 
+    'aliases' => [
+        'Image_1' => Intervention\Image\Image::class,
+    ]
+
+
 ];

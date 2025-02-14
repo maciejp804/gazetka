@@ -92,11 +92,13 @@ function initSwiper(selector, options, prevSelector, nextSelector) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('load', function () {
 
     // Leaflet Promo Swiper
     initSwiper('.leafletPromo', {
         modules: [Navigation, Pagination, Grid, Zoom],
+        observer: true,
+        observeParents: true,
         slidesPerView: 2,
         spaceBetween: 5,
         grid: {rows: 2, fill: 'row'},
@@ -107,9 +109,9 @@ document.addEventListener('DOMContentLoaded', function () {
             640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2}},
             768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
             1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
-            1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 1}}
+            1440: {slidesPerView: 5, spaceBetween: 7, grid: {rows: 1}}
         },
-        pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
+        pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true},
     }, '.button-prev-swiper', '.button-next-swiper');
 
     initSwiper('.leafletSingle', {
@@ -204,6 +206,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }, '.button-prev-swiper', '.button-next-swiper');
 
     // Blog swiper
+    initSwiper('.swiper-info', {
+        modules: [Navigation, Autoplay],
+        slidesPerView: 5,
+        spaceBetween: 5,
+        loop: true,
+        autoplay: true,
+        breakpoints: {
+            320: { slidesPerView: 2, spaceBetween: 5},
+            425:{ slidesPerView: 2, spaceBetween: 10},
+            475: { slidesPerView: 2, spaceBetween: 10},
+            640: { slidesPerView: 4, spaceBetween: 10},
+            1024: { slidesPerView: 5, spaceBetween: 15, loop:false},
+        },
+        pagination: { el: ".swiper-pagination", dynamicBullets: true, clickable: true}
+    }, '.swiper-button-prev', '.swiper-button-next');
+
     initSwiper('.swiper-blog', {
         modules: [Navigation, Pagination, Autoplay, Grid],
         slidesPerView: 1,
@@ -604,40 +622,6 @@ const swiper11 = new Swiper('.swiperCategory', {
     }
 });
 
-const swiperInfo = new Swiper('.swiper-info', {
-    // configure Swiper to use modules
-    modules: [Navigation, Autoplay],
-    slidesPerView: 5,
-    spaceBetween: 5,
-    loop: true,
-    autoplay: true,
-    breakpoints: {
-        // when window width is >= 320px
-        320: {
-            slidesPerView: 2,
-            spaceBetween: 5,
-        },
-        425: {
-            slidesPerView: 2,
-            spaceBetween: 10,
-        },
-        475: {
-            spaceBetween: 10,
-        },
-        640: {
-            slidesPerView: 4,
-            spaceBetween: 10,
-        },
-        1024: {
-            spaceBetween: 15,
-            slidesPerView: 5,
-            loop: false ,
-        }
-    },
-    navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-    }
-});
+
 
 

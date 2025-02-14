@@ -1,4 +1,4 @@
-<header class="flex border-b border-gray-100 h-21 w-full">
+<header class="flex border-b border-gray-100 h-21 w-full mb-2">
     <div class="w-full max-w-7xl 1xl:max-w-8xl m-auto">
         <div class="py-4 px-2">
             <div class="flex justify-between items-center w-full">
@@ -68,14 +68,13 @@
                 {{-- Mobile Menu--}}
                 <div class="flex w-3/5 justify-end lg:hidden z-30">
                     <ul x-data="{ mobileMenuIsOpen: false }" @click.away="mobileMenuIsOpen = false" class="flex gap-2">
-                        <div class="filter-box flex lg:hidden w-4/5">
-                            <x-search class="flex" :placeholder="$place" input-id="search-input-location-2"
-                                      result-id="results-box-location-2"
-                                      data-search-type="places"
-                            >
-                                <x-location-button/>
-                            </x-search>
-                        </div>
+
+                            @auth
+                                <x-header.link href="{{ route('dashboard') }}" svg='user' />
+                            @else
+                                <x-header.link href="{{ route('login') }}" svg='user' />
+                            @endauth
+
                         <x-header.link link="button" svg='bar'/>
 
                         <!-- Mobile Menu Modal Window -->
@@ -112,11 +111,12 @@
 {{--                                                    <x-header.link href="#" class="items-center text-blue-550 font-bold"/>--}}
 {{--                                                </li>--}}
                                                 <li>
-                                                    @auth
-                                                        <x-header.link href="{{ route('dashboard') }}" svg='user' />
-                                                    @else
-                                                        <x-header.link href="{{ route('login') }}" svg='user' />
-                                                    @endauth
+                                                    <x-search class="flex" :placeholder="$place" input-id="search-input-location-2"
+                                                              result-id="results-box-location-2"
+                                                              data-search-type="places"
+                                                    >
+                                                        <x-location-button/>
+                                                    </x-search>
                                                 </li>
 
                                             </ul>

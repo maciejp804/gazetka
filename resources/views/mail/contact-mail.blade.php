@@ -1,0 +1,3 @@
+<div>
+    {{$request['message']}}
+</div>

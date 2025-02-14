@@ -34,7 +34,7 @@ class MainController extends Controller
             $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
-        $leaflets = Leaflet::with('shop')
+        $leaflets = Leaflet::with('shop', 'cover')
             ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('status', '=', 'published')
             ->get(); // Gazetka musi być nadal ważna
@@ -97,7 +97,7 @@ class MainController extends Controller
         $shops = Shop::orderBy('ranking', 'desc')->get();
 
         $breadcrumbs = [];
-
+//        dd($leaflets_promo);
         return view('main.index', [
 
                 //Lokalizacja
@@ -400,5 +400,49 @@ class MainController extends Controller
                 'shopsOther' => $shopsOther,
                 'shop' => $shop,
             ]);
+    }
+
+    public function about()
+    {
+
+        $location = Cookie::get('user_location');
+
+        if (!$location) {
+            $place = Place::where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = Place::where('id', '=', $locationData['id'])->first();
+        }
+
+        $breadcrumbs = [
+            ['label' => 'Strona główna', 'url' => route('main.index')],
+            ['label' => 'O GazetkaPromocyjna', 'url' => ''],
+        ];
+
+        $descriptions = [
+            ['img' => 'assets/images/statics/1.png',
+                'h2Title' => 'Historia',
+                'h3Title' => '',
+                'p' => ['Strona gazetkapromocyjna.com.pl powstała w 2012 roku i jest własnością firmy Gazetka Promocyjna, która swoją siedzibę ma w Poznaniu.',
+                        'Głównym celem serwisu jest gromadzenie i prezentowanie aktualnej oferty najpopularniejszych sieci handlowych w postaci - gazetek. W swojej bazie posiadamy promocje z różnych gałęzi handlu takich jak: artykuły spożywcze, artykuły gospodarstwa domowego, artykuły rtv i agd oraz wiele innych. Zasięgiem obejmujemy całą Polskę. Użytkownicy serwisu mogą przeglądać oferty wielu sieci i sklepów bez wychodzenia z domu. Sieci handlowe mają możliwość promowania swojej oferty na stronach naszego serwisu co pozwala trafić do domów przyszłych Klientów. Oferujemy możliwość wyświetlania reklamy na stronach oraz aktywne promowanie gazetki promocyjnej poprzez umieszczanie i eksponowanie jej w popularnych i często odwiedzanych miejscach naszej strony.',
+                        'Sieci handlowe mają możliwość promowania swojej oferty na stronach naszego serwisu co pozwala trafić do domów przyszłych Klientów. Oferujemy możliwość wyświetlania reklamy na stronach oraz aktywne promowanie gazetki promocyjnej poprzez umieszczanie i eksponowanie jej w popularnych i często odwiedzanych miejscach naszej strony.',
+                        'Strona gazetkapromocyjna.com.pl skierowana jest również do innych portali internetowych, które chcą aktywnie się promować w Internecie za pomocą naszego serwisu.',
+                        'GazetkaPromocyjna.com.pl'
+                    ],
+            ]
+        ];
+
+        return view('main.about',[
+                'place' => $place,
+
+                // Opisy i dane globalne
+                'h1_title'=> 'Najnowsze <strong>gazetki promocyjne</strong> - aktualne i nadchodzące promocje',
+                'page_title'=> 'Masz pytanie? Wypróbuj kontakt do nas | GazetkaPromocyjna.com.pl',
+                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+
+                'breadcrumbs' => $breadcrumbs,
+                'descriptions' => $descriptions,
+            ]
+        );
     }
 }
