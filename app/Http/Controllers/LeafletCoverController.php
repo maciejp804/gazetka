@@ -67,7 +67,7 @@ class LeafletCoverController extends Controller
             }
 
             // Zapisz plik tymczasowo
-            $filename = time() . '.jpg';
+            $filename = uniqid() . '.jpg';
             $path = 'leaflets/covers/' . $filename;
             Storage::disk('public')->put($path, $response->body());
 
@@ -75,12 +75,12 @@ class LeafletCoverController extends Controller
             $image = Image::read(storage_path('app/public/' . $path));
 
             // Konwersja do WebP
-            $webpPath = 'leaflets/covers/' . time() . '.webp';
+            $webpPath = 'leaflets/covers/' . uniqid() . '.webp';
             $webpImage = $image->encode(new WebpEncoder(quality: 80));
             Storage::disk('public')->put($webpPath, (string)$webpImage);
 
             // Konwersja do AVIF
-            $avifPath = 'leaflets/covers/' . time() . '.avif';
+            $avifPath = 'leaflets/covers/' . uniqid() . '.avif';
             $avifImage = $image->encode(new AvifEncoder(quality: 80));
             Storage::disk('public')->put($avifPath, (string)$avifImage);
 
