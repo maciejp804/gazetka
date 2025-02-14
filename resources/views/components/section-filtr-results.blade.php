@@ -5,9 +5,10 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
                 @foreach($items as $item)
-                    <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
+                    <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-50">
                         <x-leaflet-slide
-                            class="relative"
+                            class="relative w-full"
+
                             :valid_from="$item->valid_from"
                             :valid_to="$item->valid_to"
                             :logo="$item->shop->logo_xs"
@@ -15,7 +16,9 @@
                             :slug="$item->shop->slug"
                             :id="$item->id"
                             :page="1"
-                            :image="$item->image_cover"
+                            :image_path="$item->cover->path"
+                            :webp_path="$item->cover->webp_path"
+                            :avif_path="$item->cover->avif_path"
                         />
                     </div>
                     @if($adsStatus === true)

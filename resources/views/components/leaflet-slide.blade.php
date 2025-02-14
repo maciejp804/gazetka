@@ -16,7 +16,6 @@
         @endif
         <div class="w-full">
             <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,'id' =>$id])}}#{{$page}}">
-{{--                <img class="rounded object-cover object-top h-40 2xs:h-52 1xs:h-40 xs:h-44 sm:h-60 md:h-56 2lg:h-60 w-full" src="{{$image}}" alt="pro-img1">--}}
                 <picture>
                     <source srcset="{{ Storage::url($avif_path) }}" type="image/avif">
                     <source srcset="{{ Storage::url($webp_path) }}" type="image/webp">

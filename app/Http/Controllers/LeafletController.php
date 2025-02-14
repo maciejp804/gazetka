@@ -299,7 +299,7 @@ class LeafletController extends Controller
     protected function getLeafletsSimplePaginate($pages, $category = 'all')
     {
 
-        $leaflets = Leaflet::with('shop', 'products.product_category')
+        $leaflets = Leaflet::with('shop', 'cover', 'products.product_category')
             ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('leaflets.status', '=', 'published');
 

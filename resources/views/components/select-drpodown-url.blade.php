@@ -29,11 +29,11 @@
 
                 <div x-show="show" class="absolute top-12 left-0 border border-gray-200 text-gray-400 bg-white rounded-md w-full" style="display: none; z-index: 1000">
                     <a class="flex px-3 pb-0.5 text-gray-400 hover:bg-[#1967d2] hover:text-white rounded-t-md
-                    {{ Request::is($urlData->urlType) ? 'bg-blue-400 text-white' : 'bg-white' }}
+                    {{ request()->is($urlData->urlType) ? 'bg-blue-400 text-white' : 'bg-white' }}
                     " href="/{{$urlData->urlType}}">Wszystkie</a>
                     @foreach($items as $item)
                         <a class="flex px-3 pb-0.5 text-gray-400 hover:bg-[#1967d2] hover:text-white
-                                           {{ Request::is($urlData->urlType.'/'.$item->slug) ? 'bg-blue-400 text-white' : 'bg-white' }}
+                                           {{ request()->is($urlData->urlType.'/'.$item->slug) ? 'bg-blue-400 text-white' : 'bg-white' }}
 
                                           @if($loop->last == true)
                                             rounded-b-md
