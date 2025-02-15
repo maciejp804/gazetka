@@ -19,7 +19,7 @@
                 <picture>
                     <source srcset="{{ Storage::url($avif_path) }}" type="image/avif">
                     <source srcset="{{ Storage::url($webp_path) }}" type="image/webp">
-                    <img class="rounded object-cover object-top w-full h-40 2xs:h-52 1xs:h-40 xs:h-44 sm:h-60 md:h-56 2lg:h-60"
+                    <img class="rounded object-cover object-top w-full h-40 2xs:h-52 xs:h-52 sm:h-60 md:h-56 2lg:h-60"
                          src="{{ Storage::url($image_path) }}"
                          width="1920" height="1080"
                          alt="pro-img5">

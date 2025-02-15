@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="flex flex-col w-1/2 px-2 gap-y-2">
-            <div class="w-36 lg:w-30 flex self-center">
+            <div class="flex self-center">
                 <img src="{{$item->voucherStore->logo_url}}" alt="pro-img2">
             </div>
 

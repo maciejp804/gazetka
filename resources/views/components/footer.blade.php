@@ -126,9 +126,9 @@
             </ul>
             <ul class="my-5 mx-auto text-center gap-3 flex flex-col font-semibold border-b lg:flex-row lg:justify-center">
                 <x-footer.li :ref="route('main.about')">O GazetkaPromocyjna</x-footer.li>
-                <x-footer.li>Regulamin</x-footer.li>
-                <x-footer.li>Polityka prywatności</x-footer.li>
-                <x-footer.li>Polityka cookies</x-footer.li>
+                <x-footer.li :ref="route('main.statute')">Regulamin</x-footer.li>
+                <x-footer.li :ref="route('main.privacy')">Polityka prywatności</x-footer.li>
+                <x-footer.li :ref="route('main.cookies')">Polityka cookies</x-footer.li>
 {{--                <x-footer.li>Pomoc</x-footer.li>--}}
                 <x-footer.li :ref="route('main.contact')">Kontakt</x-footer.li>
 

@@ -104,8 +104,8 @@ window.addEventListener('load', function () {
         grid: {rows: 2, fill: 'row'},
         breakpoints: {
             320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
-            425: {slidesPerView: 3, spaceBetween: 10, grid: {rows: 2}},
-            475: {slidesPerView: 3, spaceBetween: 5},
+            425: {slidesPerView: 2, spaceBetween: 15, grid: {rows: 2}},
+            475: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
             640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2}},
             768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
             1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},

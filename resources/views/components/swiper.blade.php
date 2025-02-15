@@ -16,8 +16,22 @@
                 @endfor
             @elseif($type === 'retailers')
                 @foreach($items as $item)
+                    @php
+                        if ($item->leaflets_count == 0)
+                        {
+                            $offer = 'Brak ofert';
+                        } elseif ($item->leaflets_count == 1){
+                            $offer = $item->leaflets_count. ' oferta';
+                        } elseif ($item->leaflets_count > 1 && $item->leaflets_count< 5)
+                        {
+                            $offer = $item->leaflets_count. ' oferty';
+                        } else {
+                             $offer = $item->leaflets_count. ' ofert';
+                        }
+
+                    @endphp
                     <!-- Slides -->
-                    <x-base-slide :item="$item" :type="$type" :image="$item->logo" :name="$item->name" offer="1 oferta"  :hover-desc="$item->name"/>
+                    <x-base-slide :item="$item" :type="$type" :image="$item->logo" :name="$item->name" :offer="$offer"  :hover-desc="$item->name"/>
                 @endforeach
             @elseif($type === 'products')
                 @foreach($items as $item)

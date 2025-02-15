@@ -454,6 +454,12 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     Route::get('/onas', [MainController::class, 'about'])->name('main.about');
 
+    Route::get('/polityka-prywatnosci', [MainController::class, 'privacy'])->name('main.privacy');
+
+    Route::get('/polityka-cookies', [MainController::class, 'cookies'])->name('main.cookies');
+
+    Route::get('/regulamin', [MainController::class, 'statute'])->name('main.statute');
+
     Route::get('/kontakt',[ContactController::class,'index'])->name('main.contact');
 
     Route::post('/send-contact',[ContactController::class,'send'])->name('main.contact.send');

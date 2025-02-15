@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="flex pl-2 items-center">
                                     <input type="checkbox" name="terms" value="1" class="mr-2" required>
-                                    <span class="text-sm text-gray-700">Akceptuję <a href="{{route('main.index')}}" target="_blank" class="text-blue-500 underline"> regulamin</a></span>
+                                    <span class="text-sm text-gray-700">Akceptuję <a href="{{route('main.statute')}}" target="_blank" class="text-blue-500 underline"> regulamin</a></span>
                                 </div>
 
                             </form>

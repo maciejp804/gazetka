@@ -14,6 +14,11 @@ class Shop extends Model
         'ranking'
     ];
 
+    public function leaflets()
+    {
+        return $this->hasMany(Leaflet::class);
+    }
+
     public function ratings(): MorphMany
     {
         return $this->morphMany(Rating::class, 'rateable');

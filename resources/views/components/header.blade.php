@@ -95,7 +95,6 @@
                                 </div>
 
                                 <div class="navbar-collapse" id="navbarContent01">
-                                    <div class="megamenu-content div_q9whqo">
                                         <div class="mainwrap">
                                             <ul class="flex w-80 m-auto gap-2 justify-center">
 {{--                                                <li>--}}
@@ -110,7 +109,7 @@
 {{--                                                <li>--}}
 {{--                                                    <x-header.link href="#" class="items-center text-blue-550 font-bold"/>--}}
 {{--                                                </li>--}}
-                                                <li>
+                                                <li class="filter-box">
                                                     <x-search class="flex" :placeholder="$place" input-id="search-input-location-2"
                                                               result-id="results-box-location-2"
                                                               data-search-type="places"
@@ -165,7 +164,6 @@
                                             </div>
 
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
