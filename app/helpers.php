@@ -73,6 +73,11 @@ if (!function_exists('getUrlData')) {
                 $urlData->routeName = 'main.maps.voivodeship';
                 break;
 
+            case 'blogs':
+                $urlData->urlType = 'abc-zakupowicza';
+                $urlData->routeName = 'main.blogs.category';
+                break;
+
             default:
                 $urlData->urlType = 'default';
                 $urlData->routeName = 'main.default';

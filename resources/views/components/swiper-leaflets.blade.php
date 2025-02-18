@@ -4,13 +4,13 @@
     <div class="swiper {{$swiperClass}}" id="{{$dataContainerId}}">
 
         <!-- Additional required wrapper -->
-        <div class="swiper-wrapper h-full mb-8">
+        <div class="swiper-wrapper h-full mb-8 flex relative">
            @foreach($leaflets as $leaflet)
 
                 @if(!is_array($leaflet))
 
                     <x-leaflet-slide
-                        class="swiper-slide flex w-50 flex-row"
+                        class="swiper-slide flex w-50 flex-col"
                         style="width: 200px;"
                         :valid_from="$leaflet->valid_from"
                         :valid_to="$leaflet->valid_to"

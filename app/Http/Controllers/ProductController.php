@@ -251,7 +251,7 @@ class ProductController extends Controller
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Produkty', 'url' => route('main.products')],
-            ['label' => $category->name, 'url' => route('main.products.category', $category->id)],
+            ['label' => $category->name, 'url' => route('main.products.category', $category->slug)],
             ['label' => $subcategory->name, 'url' => '']
         ];
 

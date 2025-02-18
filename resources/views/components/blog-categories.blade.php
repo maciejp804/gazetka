@@ -1,10 +1,10 @@
 @props(['blogCategory', 'sum'])
-<div class="hidden swiper swiperCategory w-full relative">
+<div class="hidden swiper swiperCategory w-full relative mb-4">
     <div class="swiper-wrapper">
 
             <div
                 class="swiper-slide px-2 lg:px-4 py-2 border
-                @if(Request::is('abc-zakupowicza'))
+                @if(request()->is('abc-zakupowicza'))
                 bg-white
                 @else
                 bg-gray-200 hover:bg-gray-100
@@ -13,11 +13,17 @@
             >
                 <a class="text-xs lg:text-sm" href="{{route('main.blogs')}}">Wszystkie ({{$sum}})</a>
             </div>
+
             @foreach($blogCategory as $category)
+
                 <div class="swiper-slide px-2 lg:px-4 py-2 border
-                @if(Request::is('abc-zakupowicza/'.$category['slug'])) bg-white @else bg-gray-200 hover:bg-gray-100 @endif
+                @if(request()->is('abc-zakupowicza/'.$category->slug)) bg-white @else bg-gray-200 hover:bg-gray-100 @endif
                 rounded !w-auto">
-                    <a class="text-xs lg:text-sm" href="{{route('main.blogs_category', ['category' => $category['slug']])}}">{{$category['name']}} ({{$category['qty']}})</a>
+                    <a class="text-xs lg:text-sm" href="{{route('main.blogs.category', ['category' => $category->slug])}}">
+                        {{$category->name}} ({{$category->blogs_count}})
+
+
+                    </a>
                 </div>
             @endforeach
 

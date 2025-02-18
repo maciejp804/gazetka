@@ -1,4 +1,4 @@
-@props(['size' => 'big'])
+@props(['size' => 'big', 'author' => ''])
 
 @php
 
@@ -13,6 +13,6 @@ if($size == 'small'){
 @endphp
 
 <div {{$attributes->merge(['class' => 'flex gap-x-2'])}}>
-    <img class="rounded-full {{$imgClass}}" src="http://165.232.144.14/static/assets/image/pro/dave.png">
-    <span class="flex items-center {{$spanClass}}">Jan Kowalski</span>
+    <img class="rounded-full {{$imgClass}}" src="{{ Storage::url($author->profile->image) }}">
+    <span class="flex items-center {{$spanClass}}">{{$author->name}}</span>
 </div>

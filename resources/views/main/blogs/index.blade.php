@@ -19,42 +19,29 @@
         <x-ad-3-vertical site="justify-end"/>
 
         <div class="w-full 1xl:min-w-265 1xl:w-265 m-auto flex flex-col">
-            <x-section class="flex flex-col gap-y-4 mb-10">
+            <x-section class="flex flex-col">
 
                 <x-blog-categories :blogCategory="$blogCategory" :sum="$sum"/>
 
+                @foreach($blogs as $blog)
 
-                <x-h2-title class="flex" link="{{route('main.blogs_category', ['category' => 'porownania'])}}">Porównania</x-h2-title>
-                <div class="grid grid-cols-6 gap-x-3 gap-y-6 p-2 rounded">
-                    @for($i=0; $i<4; $i++)
-                        @switch($i)
-                            @case(0)
-                                <x-blogs-item-big />
-                                @break
-                            @default
-                                <x-blogs-item-small />
-                                @break
-                        @endswitch
-                    @endfor
-                </div>
+                    @if($blog->blogs->count() > 0)
+                    <x-h2-title class="flex"  main-route="main.blogs.category" :category="$blog->slug">{{$blog->name}}</x-h2-title>
+                    <div class="grid grid-cols-6 gap-x-3 gap-y-6 p-2 rounded">
+                       @foreach($blog->blogs as $item)
+                            @if($loop->first)
+                                <x-blogs-item-big :item="$item" :blog="$blog"/>
+                            @else
+                                <x-blogs-item-small :item="$item" :blog="$blog"/>
+                            @endif
 
-                <x-ad-4-horizontal/>
-
-                <x-h2-title class="flex" link="{{route('main.blogs_category', ['category' => 'porownania'])}}">Aktualności</x-h2-title>
-                <div class="grid grid-cols-6 gap-x-3 gap-y-6">
-                    @for($i=0; $i<4; $i++)
-                        @switch($i)
-                            @case(0)
-                                <x-blogs-item-big/>
-                                @break
-                            @default
-                                <x-blogs-item-small/>
-                                @break
-                        @endswitch
-                    @endfor
-                </div>
+                        @endforeach
+                    </div>
+                    <x-ad-4-horizontal/>
+                    @endif
+                @endforeach
             </x-section>
-            <x-ad-4-horizontal/>
+
 
             <x-section>
                 <x-swiper-vouchers

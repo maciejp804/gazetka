@@ -5,9 +5,7 @@
 
 @endphp
 
-@php
-    use Illuminate\Support\Facades\Storage;
-@endphp
+
 {{--@dd($item)--}}
 <div {{$attributes->merge(['class' => 'border border-gray-200 rounded p-2 mb-5'])}}>
     <div class="relative bg-white flex items-center justify-center group overflow-hidden">
