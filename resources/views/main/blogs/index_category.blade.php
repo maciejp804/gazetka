@@ -21,25 +21,25 @@
         <div class="w-full 1xl:min-w-265 1xl:w-265 m-auto flex flex-col">
             <x-section class="flex flex-col gap-y-4 mb-10">
 
-                <x-blog-categories :blogCategory="$blogCategory" :sum="$sum"/>
-
-                <x-h2-title class="flex" see-more-status="false">Porady</x-h2-title>
+                <x-blog-categories
+                    button-class="1"
+                    :blogCategory="$blogCategories"
+                    :sum="$sum"
+                />
+                <x-h2-title class="flex"  main-route="main.blogs.category" :category="$blogCategory->slug">{{$blogCategory->name}}</x-h2-title>
                 <div class="grid grid-cols-6 gap-x-3 gap-y-6 p-2 rounded">
-                    @for($i=0; $i<8; $i++)
-                        @switch($i)
-                            @case(0)
-                                <x-blogs-item-big />
-                                @break
-                            @default
-                                <x-blogs-item-small />
-                                @break
-                        @endswitch
-                    @endfor
+                @foreach($blogs as $blog)
+{{--                    @dd()--}}
+                                @if($loop->first)
+                                    <x-blogs-item-big :item="$blog" :blog="$blogCategory"/>
+                                @else
+                                    <x-blogs-item-small :item="$blog" :blog="$blog"/>
+                                @endif
+                @endforeach
                 </div>
-
-                <x-ad-4-horizontal/>
+                {{ $blogs->links('custom-paginator') }}
             </x-section>
-
+            <x-ad-4-horizontal/>
             <x-section>
                 <x-swiper-vouchers
                     swiper-class="vouchers-swiper-promo"
@@ -65,17 +65,13 @@
 
     </div>
 
-    <div class="flex-col mx-4 xl:m-auto">
-        <x-descripton :items="$descriptions"/>
-        <x-faq/>
-    </div>
-    @push('scripts')
-        <script>
-            window.addEventListener('load', function() {
-                const swiperElement = document.querySelector('.swiperCategory');
-                swiperElement.classList.remove('hidden');
-                swiperElement.classList.add('flex');
-            });
-        </script>
-    @endpush
+{{--    @push('scripts')--}}
+{{--        <script>--}}
+{{--            window.addEventListener('load', function() {--}}
+{{--                const swiperElement = document.querySelector('.swiper-load');--}}
+{{--                console.log(swiperElement);--}}
+{{--                swiperElement.classList.remove('hidden');--}}
+{{--            });--}}
+{{--        </script>--}}
+{{--    @endpush--}}
 </x-layout>

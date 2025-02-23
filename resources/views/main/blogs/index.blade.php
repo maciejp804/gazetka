@@ -34,7 +34,6 @@
                             @else
                                 <x-blogs-item-small :item="$item" :blog="$blog"/>
                             @endif
-
                         @endforeach
                     </div>
                     <x-ad-4-horizontal/>

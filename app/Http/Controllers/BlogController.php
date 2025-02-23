@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cookie;
 
 class BlogController extends Controller
 {
-    public function index($descriptions, $blogCategory)
+    public function index($descriptions)
     {
         $placesAll = Place::all();
 
@@ -34,10 +34,6 @@ class BlogController extends Controller
             ->where('status', '=', 'published')
             ->get(); // Gazetka musi być nadal ważna
 
-        $sum = 0;
-        foreach ($blogCategory as $item) {
-            $sum += $item['qty'];
-        }
 
         $vouchers = Voucher::with('voucherStore')->get();
 
@@ -80,25 +76,45 @@ class BlogController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions, $blogCategory, $leaflets)
+    public function indexCategory($category, $descriptions)
     {
+        $blogCategories = BlogCategory::withCount(['blogs' => function ($query) {
+            $query->where('status', '=', 'published');
+        }])->get();
+
+        $blogCategory = $blogCategories->where('slug', '=', $category)->first();
+
+        if(!$blogCategory)
+        {
+            abort(404);
+        }
+
         $places = Place::all();
 
         $places = $places->sortByDesc('population')->take(40);
 
         $place = $places->first();
 
+        $leaflets = Leaflet::with('shop', 'cover')
+            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'published')
+            ->get(); // Gazetka musi być nadal ważna
+
         $sum = 0;
-        foreach ($blogCategory as $item) {
-            $sum += $item['qty'];
+        foreach ($blogCategories as $item) {
+            $sum += $item['blogs_count'];
         }
+
+        $blogs = Blog::with(['user.profile', 'category'])
+            ->where('blog_category_id', '=', $blogCategory->id)
+            ->orderBy('created_at', 'desc')->paginate(7);
 
         $vouchers = Voucher::with('voucherStore')->get();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'ABC Zakupowicza', 'url' => route('main.blogs')],
-            ['label' => $category, 'url' => ''],
+            ['label' => $blogCategory->name, 'url' => ''],
         ];
 
         return view('main.blogs.index_category', data:
@@ -110,7 +126,9 @@ class BlogController extends Controller
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'descriptions' => $descriptions,
+                'blogCategories' => $blogCategories,
                 'blogCategory' => $blogCategory,
+                'blogs' => $blogs,
                 'sum' => $sum,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -118,24 +136,66 @@ class BlogController extends Controller
             ]);
     }
 
-    public function show($category, $article, $descriptions, $blogCategory)
+    public function show($category, $article, $descriptions)
     {
+
+        $blogCategories = BlogCategory::withCount(['blogs' => function ($query) {
+            $query->where('status', '=', 'published');
+        }])->get();
+
+        $blogCategory = $blogCategories->where('slug', '=', $category)->first();
+
+        if(!$blogCategory)
+        {
+            abort(404);
+        }
+
+        $blogs = Blog::with(['user.profile', 'category'])
+            ->orderBy('created_at', 'desc')->get();
+
+        $blog = $blogs
+            ->where('slug', '=', $article)->first();
+
+        if(!$blog)
+        {
+            abort(404);
+        }
+
+        $blogs = $blogs
+            ->where('slug', '!=', $article);
+
+        $placesAll = Place::all();
+
+        $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
+
+        $location = Cookie::get('user_location');
+
+        if (!$location) {
+            $place = $placesAll->where('id', '=', 1172)->first();
+        } else {
+            $locationData = json_decode($location, true);
+            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'ABC Zakupowicza', 'url' => route('main.blogs')],
-            ['label' => $category, 'url' =>  route('main.blogs_category', ['category' => $category])],
-            ['label' => $article, 'url' => ''],
+            ['label' => $blogCategory->name, 'url' =>  route('main.blogs.category', ['category' => $category])],
+            ['label' => $blog->title, 'url' => ''],
         ];
 
         return view('main.blogs.show', data:
             [
-                'slug' => 'Warszawa',
+                'place' => $place->name,
+                'places' => $placesLimit40,
+
                 'h1_title'=> 'Jak wywołać zdjęcia w Rossmannie i zaoszczędzić pieniądze?',
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'descriptions' => $descriptions,
                 'blogCategory' => $blogCategory,
+                'blog' => $blog,
+                'blogs' => $blogs,
                 'breadcrumbs' => $breadcrumbs
             ]);
     }

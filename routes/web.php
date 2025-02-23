@@ -420,6 +420,19 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
         return app(ProductController::class)->show($slug, $descriptions);
     })->name('main.product');
 
+    //Blogs
+
+    // Route::get('/abc-zakupowicza/{category}/{article}',[BlogController::class, 'show'])->name('main.blogs.article');
+
+    Route::get('/abc-zakupowicza/{category}/{article}', function ($category, $article) use ($descriptions) {
+        return app(BlogController::class)->show($category, $article, $descriptions);
+    })->name('main.blogs.article');
+
+    // Route::get('/abc-zakupowicza/{category}',[BlogController::class, 'indexCategory'])->name('main.blogs.category');
+
+    Route::get('/abc-zakupowicza/{category}', function ($category) use ($descriptions) {
+        return app(BlogController::class)->indexCategory($category, $descriptions);
+    })->name('main.blogs.category');
 
    // Route::get('/abc-zakupowicza',[BlogController::class, 'index'])->name('main.blogs');
 
@@ -428,16 +441,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
     })->name('main.blogs');
 
 
-    // Route::get('/abc-zakupowicza/{category}',[BlogController::class, 'indexCategory'])->name('main.blogs_category');
 
-    Route::get('/abc-zakupowicza/{category}', function ($category) use ($descriptions, $blogCategory, $leaflets) {
-        return app(BlogController::class)->indexCategory($category, $descriptions, $blogCategory, $leaflets);
-    })->name('main.blogs.category');
-
-    // Route::get('/abc-zakupowicza/{category}/{article}',[BlogController::class, 'show'])->name('main.blogs_article');
-    Route::get('/abc-zakupowicza/{category}/{article}', function ($category, $article) use ($descriptions, $blogCategory) {
-        return app(BlogController::class)->show($category, $article, $descriptions, $blogCategory);
-    })->name('main.blogs_article');
 
     // Route::get('/lokalizacje', [PlaceController::class, 'index'])->name('main.map');
 

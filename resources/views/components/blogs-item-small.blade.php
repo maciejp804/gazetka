@@ -1,8 +1,17 @@
 @props(['item', 'blog'])
 <div class="col-span-6 md:col-span-3 lg:col-span-2 flex flex-col gap-y-2 border rounded border-gray-100">
-    <div class="flex">
-        <a href="{{route('main.blogs_article', ['category' => $blog->slug, 'article' => $item->slug])}}">
-            <img class="rounded-t object-cover" src="{{$item->image}}">
+    <div class="w-full">
+        <a href="{{route('main.blogs.article', ['category' => $blog->slug, 'article' => $item->slug])}}">
+            <picture>
+                <source srcset="{{ Storage::url($item->image.'.webp') }}" type="image/webp">
+                <source srcset="{{ Storage::url($item->image.'jpg')}}" type="image/jpeg">
+                <img
+                    decoding="async"
+                    src="{{ Storage::url($item->image.'jpg') }}"
+                    alt="{{$item->title}}"
+                    loading="lazy"
+                    class="rounded-t object-cover object-top w-full max-h-48">
+            </picture>
         </a>
     </div>
     <div class=" flex flex-col justify-center gap-y-2 p-2">

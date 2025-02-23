@@ -16,42 +16,64 @@
         <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
         <x-div-1060 class="2lg:flex-row">
             <div class="flex flex-col gap-y-4 w-full 2lg:w-4/5">
-                <x-header-blog>{{$h1_title}}</x-header-blog>
-                <x-excert-blog/>
+                <x-header-blog>{{$blog->title}}</x-header-blog>
+                <x-excerpt-blog :excerpt="$blog->excerpt"/>
                 <x-section>
-                    <x-blog-author class="mb-3"/>
+                    <x-blog-author  class="mb-3" :author="$blog->user"/>
                     <div class="flex justify-between">
                         <div class="swiper-slide px-2 lg:px-4 py-2 border bg-gray-200 hover:bg-gray-100 rounded !w-auto">
-                            <a class="text-xs lg:text-sm" href="{{route('main.blogs_category', ['category' => 'porady'])}}">Porady (10)</a>
+                            <a class="text-xs lg:text-sm"
+                               href="{{route('main.blogs.category', ['category' => $blogCategory->slug])}}">
+                                {{$blogCategory->name}} ({{$blogCategory->blogs_count}})
+                            </a>
                         </div>
                         <div class="flex self-center text-xs">
-                            <span>20.01.2015   | aktualizacja:  05.01.2024 </span>
+                            @if($blog->created_at != $blog->updated_at)
+                                <span>{{monthReplace($blog->created_at, 'excerpt')}}   | aktualizacja:  {{monthReplace($blog->updated_at, 'excerpt')}} </span>
+                            @else
+                                <span>utworzony: {{monthReplace($blog->created_at, 'excerpt')}} </span>
+                            @endif
+
                         </div>
                     </div>
                 </x-section>
                 <x-section>
-                    <img src="https://hoian.pl/assets/image/blog/zdjecia-rossmann.jpg" alt="Post Image" class="rounded object-cover">
+                    <div class="flex justify-center">
+                        <picture>
+                            <source srcset="{{ Storage::url($blog->image.'.webp') }}" type="image/webp">
+                            <source srcset="{{ Storage::url($blog->image)}}" type="image/jpeg">
+                            <img src="{{ Storage::url($blog->image) }}"
+                                 alt="Opis obrazu"
+                                 loading="lazy"
+                                 class="rounded  object-cover">
+                        </picture>
+                    </div>
                 </x-section>
                 <x-section>
-                    <x-body-blog/>
+                    <x-body-blog :body="$blog->body"/>
                 </x-section>
             </div>
             <div class="hidden 2lg:flex flex-col w-1/5 gap-y-4">
                 <span class="font-semibold text-gray-700 text-sm">Poleceane w kategorii</span>
-                @for($i=0; $i<=4; $i++)
+                @foreach($blogs as $article)
                     <div>
-                        <a href="/abc-zakupowicza/porady/chleb" class="flex gap-2">
+                        <a href="{{route('main.blogs.article',['category' => $article->category->slug, 'article' => $article->slug])}}" class="flex gap-2">
                             <picture class="flex aspect-square w-32 ">
-                                <source srcset="https://hoian.pl/assets/image/blog/rossmann-150.png" type="image/png">
-                                <img class="object-cover rounded" src="https://hoian.pl/assets/image/blog/rossmann-150.png" alt="Jak wywołać zdjęcia w Rossmannie i zaoszczędzić pieniądze?" loading="lazy" decoding="async">
+                                <source srcset="{{ Storage::url($article->image.'-100x100.webp') }}" type="image/webp">
+                                <source srcset="{{ Storage::url($article->image.'-100x100.jpg')}}" type="image/jpeg">
+                                <img src="{{ Storage::url($article->image.'-100x100.jpg') }}"
+                                     alt="{{$article->title}}"
+                                     loading="lazy"
+                                     class="rounded  object-cover">
                             </picture>
                             <div class="flex flex-col">
-                                <span class="text-xs">Jak wywołać zdjęcia w Rossmannie i zaoszczędzić pieniądze?</span>
-                                <span class="text-1xs">20 STY 2015</span>
+                                <span class="text-xs">{{$article->title}}</span>
+                                <span class="text-1xs">{{$article->updateed_at}}</span>
                             </div>
                         </a>
                     </div>
-                @endfor
+                @endforeach
+
 
             </div>
 

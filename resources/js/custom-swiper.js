@@ -241,9 +241,25 @@ window.addEventListener('load', function () {
         pagination: { el: ".swiper-pagination", dynamicBullets: true, clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
+    initSwiper('.swiper-category-blog', {
+        modules: [Navigation, FreeMode],
+        slidesPerView: 'auto',
+        spaceBetween: 5,
+        freeMode: true,
+        navigation: { enabled: false},
+        breakpoints: {
+            375: {sspaceBetween: 5},
+            425: {spaceBetween: 10},
+            475: {spaceBetween: 10},
+            640: {spaceBetween: 10},
+            768: {spaceBetween: 10},
+            1024: {spaceBetween: 10},
+            1060: {spaceBetween: 10},
+            1440: {spaceBetween: 15},
+        }
+    }, '.button-prev', '.button-next');
+
 });
-
-
 
 
 /* Swiper sieci handlowych na stronie sieci handlowych  */
@@ -575,51 +591,6 @@ const swiper8 = new Swiper('.vouchers-swiper-promo', {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
     },
-});
-
-const swiper11 = new Swiper('.swiperCategory', {
-    // configure Swiper to use modules
-    modules: [Navigation, FreeMode],
-    slidesPerView: "auto",
-    spaceBetween: 5,
-    freeMode: true,
-    breakpoints: {
-        // when window width is >= 320px
-        320: {
-            spaceBetween: 5,
-        },
-        425: {
-            spaceBetween: 10,
-        },
-        475: {
-            spaceBetween: 10,
-        },
-        1440: {
-            spaceBetween: 15,
-        }
-    },
-    navigation: {
-        nextEl: ".button-next",
-        prevEl: ".button-prev",
-    },
-    on: {
-        init: function() {
-            // Hide previous button at the start
-            toggleNavButtons(this, ".button-prev", ".button-next");
-        },
-        slideChange: function() {
-            // Toggle visibility of buttons after each slide change
-            toggleNavButtons(this, ".button-prev", ".button-next");
-        },
-        reachBeginning: function() {
-            // Hide the previous button at the start
-            document.querySelector('.button-prev').style.display = 'none';
-        },
-        reachEnd: function() {
-            // Hide the next button at the end
-            document.querySelector('.button-next').style.display = 'none';
-        }
-    }
 });
 
 

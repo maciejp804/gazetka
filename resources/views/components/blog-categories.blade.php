@@ -1,9 +1,9 @@
-@props(['blogCategory', 'sum'])
-<div class="hidden swiper swiperCategory w-full relative mb-4">
-    <div class="swiper-wrapper">
+@props(['blogCategory', 'sum', 'buttonClass'])
+<div class="swiper swiper-category-blog w-full relative mb-4 h-10.5">
+    <div class="swiper-wrapper swiper-load">
 
             <div
-                class="swiper-slide px-2 lg:px-4 py-2 border
+                class="swiper-slide px-2 lg:px-4 py-2 border mr-1
                 @if(request()->is('abc-zakupowicza'))
                 bg-white
                 @else
@@ -29,17 +29,17 @@
 
     </div>
 
-    <div class="button-next button-disabled absolute top-0 right-0 bg-gradient-to-r from-transparent to-white w-10 h-full z-10 justify-end">
-        <div class="flex self-center justify-center w-6 h-6 rounded-full">
-            <x-header.svg svg="chevron-right" size="5" colour="blue-550"/>
-        </div>
-    </div>
+{{--    <div class="button-next-{{$buttonClass}} absolute top-0 right-0 bg-gradient-to-r from-transparent to-white w-10 h-full z-10 justify-end">--}}
+{{--        <div class="flex self-center justify-center w-6 h-6 rounded-full">--}}
+{{--            <x-header.svg svg="chevron-right" size="5" colour="blue-550"/>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
-    <div class="top-0 left-0 bg-gradient-to-l from-transparent to-white w-10 h-full z-10 button-prev button-disabled absolute flex justify-start">
-        <div class="flex">
-            <x-header.svg svg="chevron-left" size="5" colour="blue-550"/>
-        </div>
-    </div>
+{{--    <div class="top-0 left-0 bg-gradient-to-l from-transparent to-white w-10 h-full z-10 button-prev-{{$buttonClass}} absolute flex justify-start">--}}
+{{--        <div class="flex">--}}
+{{--            <x-header.svg svg="chevron-left" size="5" colour="blue-550"/>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
 </div>
 
