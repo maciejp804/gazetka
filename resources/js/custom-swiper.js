@@ -241,24 +241,35 @@ window.addEventListener('load', function () {
         pagination: { el: ".swiper-pagination", dynamicBullets: true, clickable: true}
     }, '.button-prev-swiper', '.button-next-swiper');
 
-    initSwiper('.swiper-category-blog', {
-        modules: [Navigation, FreeMode],
-        slidesPerView: 'auto',
-        spaceBetween: 5,
-        freeMode: true,
-        navigation: { enabled: false},
-        breakpoints: {
-            375: {sspaceBetween: 5},
-            425: {spaceBetween: 10},
-            475: {spaceBetween: 10},
-            640: {spaceBetween: 10},
-            768: {spaceBetween: 10},
-            1024: {spaceBetween: 10},
-            1060: {spaceBetween: 10},
-            1440: {spaceBetween: 15},
-        }
-    }, '.button-prev', '.button-next');
 
+
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Symulujemy ładowanie danych – po 1 sekundzie zamieniamy skeleton na slider
+    setTimeout(() => {
+        document.getElementById('skeleton-slider').classList.add('hidden');
+        document.getElementById('actual-slider').classList.remove('!hidden');
+
+        // Inicjalizacja Swipera
+        initSwiper('.swiper-category-blog', {
+            modules: [Navigation, FreeMode],
+            slidesPerView: 'auto',
+            spaceBetween: 5,
+            freeMode: true,
+            navigation: { enabled: false},
+            breakpoints: {
+                375: {spaceBetween: 5},
+                425: {spaceBetween: 10},
+                475: {spaceBetween: 10},
+                640: {spaceBetween: 10},
+                768: {spaceBetween: 10},
+                1024: {spaceBetween: 10},
+                1060: {spaceBetween: 10},
+                1440: {spaceBetween: 15},
+            }
+        }, '.button-prev', '.button-next');
+    }, 1000);
 });
 
 

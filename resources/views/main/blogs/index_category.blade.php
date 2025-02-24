@@ -65,13 +65,12 @@
 
     </div>
 
-{{--    @push('scripts')--}}
+    @push('scripts')
 {{--        <script>--}}
 {{--            window.addEventListener('load', function() {--}}
-{{--                const swiperElement = document.querySelector('.swiper-load');--}}
-{{--                console.log(swiperElement);--}}
-{{--                swiperElement.classList.remove('hidden');--}}
+{{--                document.getElementById('skeleton-slider').classList.add('hidden');--}}
+{{--                document.getElementById('actual-slider').classList.remove('hidden');--}}
 {{--            });--}}
 {{--        </script>--}}
-{{--    @endpush--}}
+    @endpush
 </x-layout>

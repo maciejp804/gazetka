@@ -1,6 +1,19 @@
 @props(['blogCategory', 'sum', 'buttonClass'])
-<div class="swiper swiper-category-blog w-full relative mb-4 h-10.5">
-    <div class="swiper-wrapper swiper-load">
+
+<div id="skeleton-slider" class="w-full relative mb-4 h-10.5">
+    <!-- Skeleton screen -->
+    <div  class="flex">
+        @for($i = 0; $i < 5; $i++)
+            <div class="swiper-slide px-2 lg:px-4 py-2 border mr-4 rounded !w-auto bg-gray-300 animate-pulse">
+                <div class="h-7 w-20"></div>
+            </div>
+        @endfor
+    </div>
+</div>
+
+
+<div id="actual-slider" class="swiper swiper-category-blog w-full relative mb-4 h-10.5 !hidden">
+    <div class="swiper-wrapper ">
 
             <div
                 class="swiper-slide px-2 lg:px-4 py-2 border mr-1
