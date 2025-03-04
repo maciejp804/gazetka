@@ -1,5 +1,7 @@
+@props(['latitude', 'longitude', 'zoom', 'markers', 'place'])
 <!-- resources/views/components/map.blade.php -->
 <div id="{{ $mapId }}" style="width: 100%; height: 400px;"></div>
+
 <script>
 
      document.addEventListener('DOMContentLoaded', function () {
@@ -30,57 +32,39 @@
             className: "custom-after-border", // Ustawienie klasy CSS dla markerów
             html: '<img class="w-10 h-10 rounded-full border-2 border-blue-550" src="' +
                 '@if(!empty($marker))' +
-                'https://hoian.pl/assets/image/store/{{$marker['name']}}-marker.png' +
+                'https://hoian.pl/assets/image/store/{{$marker->shop->slug}}-marker.png' +
                 '@endif" />', // Definicja HTML dla markera
             iconSize: [40, 40], // Rozmiar markera
             iconAnchor: [20, 40] // Punkt zakotwiczenia markera
         });
 
-        var marker = L.marker([{{$marker['lat']}}, {{$marker['lng']}}], {icon: customIcon});
+        var marker = L.marker([{{$marker->lat}}, {{$marker->lng}}], {icon: customIcon});
 
         var contentString = '<div id="infobox">' +
-            '@if(isset($marker->stores->name) && !empty($marker->stores->name))' +
-            '<div class="infobox-image"><a href="https://{{$marker->stores->subdomain}}.gazetkapromocyjna.com.pl/{{$place->slug}}/">' +
-            '<img src="{{asset('assets/image/store/'.$marker->stores->subdomain)}}-69.png"/></a></div>' +
-            '<a href="https://{{$marker->stores->subdomain}}.' +
-            'gazetkapromocyjna.com.pl/godziny-otwarcia/{{$place->slug}}-{{$marker->slug}},{{$marker->id}}/">{{$marker->address}} <br/><br/>{{$place->name}}<br/></a>' +
+            '@if(isset($marker->shop->logo_xs) && !empty($marker->shop->logo_xs))' +
+            '<div class="infobox-image"><a href="{{route('subdomain.index_gps',['subdomain' => $marker->shop->slug, 'community' => $marker->place->slug])}}">' +
+            '<img src="{{$marker->shop->logo_xs}}"/></a></div>' +
+            '<a href="{{route('subdomain.shop_address', ['subdomain' => $marker->shop->slug,'community' => $marker->place->slug ,'address' => $marker->slug])}}">{{$marker->address}}, {{$place->name}}<br/></a>' +
             '@endif' +
             '<div class="open-houers"><span>Godziny otwarcia:</span><br/>' +
-            '<span class="' +
-            '@if(date("D") == "Mon")' +
-            'active-day' +
-            '@endif'
-            + '">poniedziałek: <span class="open-houers-days">9:00-21:00</span></span><br/>' +
-            '<span class="' +
-            '@if(date("D") == "Tue")' +
-            'active-day' +
-            '@endif'
-            + '">wtorek: <span class="open-houers-days">9:00-21:00</span></span><br/>' +
-            '<span class="' +
-            '@if(date("D") == "Wed")' +
-            'active-day' +
-            '@endif'
-            + '">środa: <span class="open-houers-days">9:00-21:00</span></span><br/>' +
-            '<span class="' +
-            '@if(date("D") == "Thu")' +
-            'active-day' +
-            '@endif'
-            + '">czwartek: <span class="open-houers-days">9:00-21:00</span></span><br/>' +
-            '<span class="' +
-            '@if(date("D") == "Fri")' +
-            'active-day' +
-            '@endif'
-            + '">piątek: <span class="open-houers-days">9:00-21:00</span></span><br/>' +
-            '<span class="' +
-            '@if(date("D") == "Sat")' +
-            'active-day' +
-            '@endif'
-            + '">sobota: <span class="open-houers-days">9:00-21:00</span></span><br/>' +
-            '<span class="' +
-            '@if(date("D") == "Sun")' +
-            'active-day' +
-            '@endif'
-            + '">niedziela handlowa: <span class="open-houers-days">9:00-21:00</span></span></div>';
+            '@if(isset($marker->hours) && !empty($marker->hours))' +
+            '@foreach($marker->hours as $hour)' +
+                '<span class="' +
+                '@if(date("l") == mb_ucfirst($hour->day_of_work) && date("l") !== 'Sunday')' +
+                    'font-semibold text-green-800' +
+                '@elseif(str_contains($hour->day_of_work, 'sunday') && date("l") == 'Sunday')' +
+                    'font-semibold text-green-800' +
+                '@endif' +
+            '">{{__('days.'.$hour->day_of_work)}}: <span>' +
+                '@if(str_contains($hour->day_of_work, 'non') && $hour->opening_time == '00:00:00')' +
+                    'zamkniete' +
+                '@else' +
+                    '{{date("G:i",strtotime($hour->opening_time))}}-{{date("G:i",strtotime($hour->closing_time))}}' +
+                '@endif' +
+            '</span></span><br/>' +
+            '@endforeach' +
+            '@endif' +
+            '</div>';
 
 
         // Stworzenie popupu dla markera

@@ -55,11 +55,11 @@
 
             <x-section>
                 <x-swiper-vouchers
+                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
                     main-route="main.vouchers"/>
-
             </x-section>
 
             <x-section>
@@ -80,9 +80,8 @@
 
     <div class="flex-col mx-4 xl:m-auto">
 
-
-
-
     </div>
-
+    <x-slot:scripts>
+        @vite(['resources/js/rating.js'])
+    </x-slot:scripts>
 </x-layout>

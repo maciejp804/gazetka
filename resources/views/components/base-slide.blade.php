@@ -7,7 +7,6 @@
         $route = route($urlData->routeNameSubdoamin, ['subdomain' => $item->slug]);
     }
 
-
 @endphp
 
 <div class="swiper-slide group">

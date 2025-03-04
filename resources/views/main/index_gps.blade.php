@@ -19,20 +19,26 @@
         <x-div-1060>
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
+
                 <x-swiper-leaflets-promo
                     button-class="1"
-                    :leaflets="$leaflets"
+                    :leaflets="$leaflets_promo"
                     main-route="main.leaflets"/>
             </x-section>
 
             <x-section>
-                <x-swiper-info :items="$static_description"/>
+                <x-swiper-info
+                    button-class="1"
+                    swiper-class="swiper-info"
+                    :items="$static_description"/>
             </x-section>
+
 
             <x-section>
                 <x-swiper
                     :items="$shops"
                     button-class="1"
+                    swiper-class="swiper-shops"
                     type="retailers"
                     title="Sieci handlowe w {{$place->name_locative}}"
                     main-route="main.retailers"
@@ -40,14 +46,11 @@
             </x-section>
 
             <x-section>
-                <x-city-descripton image="/build/assets/poznan-D9MWgM2z.png" bg="bg-white"/>
-            </x-section>
-
-            <x-section>
                 <x-swiper
                     :items="$products"
                     type="products"
-                    button-class="2"
+                    button-class="1"
+                    swiper-class="swiper-product"
                     title="Najlepsze promocje w {{$place->name_locative}}"
                     main-route="main.products"/>
             </x-section>
@@ -59,17 +62,21 @@
                     main-route="main.index">
                     Sklepy w pobliżu Twojej lokalizacji
                 </x-h2-title>
-                <x-shop-list/>
+                <x-shop-list
+                    :markers="$markers"
+                    :place="$place"
+                />
             </x-section>
 
             <x-section>
-                <x-map :map-id="'mapid'" :latitude="52.4057121" :longitude="16.9313448" :zoom="13" :markers="[
-                    ['lat' => 52.4057121, 'lng' => 16.9313448, 'name' => 'biedronka'],
-                    ['lat' => 52.4157121, 'lng' => 16.9213448, 'name' => 'lidl'],
-                    ['lat' => 52.4257121, 'lng' => 16.9413448, 'name' => 'tchibo'],
-                    ['lat' => 52.4257121, 'lng' => 16.9113448, 'name' => 'biedronka'],
-                    ['lat' => 52.4057121, 'lng' => 16.9213448, 'name' => 'lidl'],
-                ]" />
+                <x-map
+                    :map-id="'mapid'"
+                    :latitude="$place->lat"
+                    :longitude="$place->lng"
+                    :zoom="13"
+                    :markers="$markers"
+                    :place="$place"
+                />
 
             </x-section>
 
@@ -78,6 +85,7 @@
                     button-class="1"
                     title="Kategorie sieci handlowych"
                     :items="$shop_categories"
+                    swiper-class="category-swiper"
                     category-route="main.retailers.category"
                     main-route="main.retailers"
                 />
@@ -94,21 +102,22 @@
                     main-route="main.index.gps"
                     :items="$places"
                     />
+                <x-see-more class="lg:hidden pb-2" main-route="main.maps">Zobacz wszystkie</x-see-more>
             </x-section>
 
             <x-section>
                 <x-swiper-vouchers
+                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
-                    main-route="main.vouchers"
-                    />
+                    main-route="main.vouchers"/>
             </x-section>
 
             <x-ad-1 class="my-5"/>
 
             <x-section>
-                <x-h2-title class="flex">Przeglądaj gazetki i katalogi</x-h2-title>
+                <x-h2-title class="flex " main-route="main.leaflets">Przeglądaj gazetki i katalogi</x-h2-title>
                 <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
                     <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
                     <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
@@ -116,17 +125,28 @@
                               input-id="search-input-leaflet"
                               result-id="results-box-leaflet"
                               data-search-type="leaflets"
-                              data-container-id="leaflet-swiper"
+                              data-container-id="leaflet-swiper-search"
                     >
                         <x-loupe-button href="#"/>
                     </x-search>
                 </div>
-                <x-swiper-leaflets swiper-class="leaflet" data-container-id="leaflet-swiper" :leaflets="$leaflets" type="leaflets"/>
-                <x-see-more class="lg:hidden pb-2" href="#">Zobacz wszystkie</x-see-more>
+                <x-swiper-leaflets
+                    button-class="1"
+                    swiper-class="leaflet"
+                    data-container-id="leaflet-swiper-search"
+                    :leaflets="$leaflets"
+                    type="leaflet"/>
+                <x-see-more class="lg:hidden pb-2" main-route="main.leaflets">Zobacz wszystkie</x-see-more>
             </x-section>
 
             <x-section>
-                <x-swiper-blog title="Ostatnie wpisy blogowe"/>
+                <x-swiper-blog
+                    button-class="1"
+                    swiper-class="swiper-blog"
+                    title="Ostatnie wpisy blogowe"
+                    main-route="main.blogs"
+                    :blogs="$blogs"
+                />
             </x-section>
 
             <x-ad-1 class="my-5"/>

@@ -48,4 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
+// import './leaflet-swiper.js'; // ✅ Swiper dla gazetek
+import './geolocation.js';    // ✅ Obsługa geolokalizacji
+import './loader.js'; // ✅ Inicjalizacja wszytstkiego

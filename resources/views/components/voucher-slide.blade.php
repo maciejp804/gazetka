@@ -3,8 +3,8 @@
     <div class="flex h-36">
         <a href="{{$item->offer_url}}" class="flex" rel="nofollow">
         <div class="flex h-36 justify-center w-1/2">
-            <div class="flex w-full h-max-30">
-                <img class="object-cover rounded" src="{{$item->offer_image}}" alt="pro-img1">
+            <div class="w-full h-full overflow-hidden rounded">
+                <img class="object-cover h-full w-full" src="{{$item->offer_image}}" alt="pro-img1">
             </div>
         </div>
         <div class="flex flex-col w-1/2 px-2 gap-y-2">

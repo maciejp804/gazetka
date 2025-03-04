@@ -53,7 +53,14 @@
         <x-ad-2 justify="justify-end mt-10"/>
         <x-div-1060-leaftet>
             <x-section>
-                <x-leaflet-subdomain swiperClass="swiper-container" :is-mobile="$isMobile" :leaflet="$leaflet" :pages="$pages" :inserts="$inserts" :ads="$ads" :insert-data="$insertData"/>
+                <x-leaflet-subdomain
+                    swiperClass="swiper-container"
+                    :is-mobile="$isMobile"
+                    :leaflet="$leaflet"
+                    :pages="$pages"
+                    :inserts="$inserts"
+                    :ads="$ads"
+                    :insert-data="$insertData"/>
             </x-section>
 
             @if(!empty($leaflets))
@@ -74,9 +81,21 @@
 
 
             <x-section class="my-4">
-                <x-h2-title class="flex">Wybrane produkty z tej gazetki</x-h2-title>
-                <x-product-list :products="$products" :subdomain="$subdomain"/>
-                    <x-see-more class="lg:hidden py-2" >Zobacz wszystkie</x-see-more>
+                <x-h2-title
+                    class="flex"
+                    main-route="main.products">
+                    Wybrane produkty z tej gazetki
+                </x-h2-title>
+
+                <x-product-list
+                    :products="$products"
+                    :subdomain="$subdomain"/>
+
+                <x-see-more
+                    main-route="main.products"
+                    class="lg:hidden py-2">
+                    Zobacz wszystkie
+                </x-see-more>
             </x-section>
 
             <x-section class="my-4">
@@ -103,6 +122,17 @@
                 <x-see-more class="lg:hidden pb-2">Zobacz wszystkie</x-see-more>
             </x-section>
 
+            <x-section>
+                <x-swiper-blog
+                    button-class="1"
+                    swiper-class="swiper-blog"
+                    title="Ostatnie wpisy blogowe"
+                    main-route="main.blogs"
+                    :blogs="$blogs"
+                />
+            </x-section>
+
+
             <x-ad-1/>
 
         </x-div-1060-leaftet>
@@ -112,16 +142,9 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-
-        <x-shop-descripton image="/build/assets/cheery-little-girl-sitting-shopping-cart 1-HAk2Ec6j.png"/>
-
-        <section class="flex flex-col w-full 2lg:w-265 m-auto my-5">
-            <x-swiper-blog title="Ostatnie wpisy blogowe"/>
-        </section>
-
         <x-faq/>
-
-
     </div>
-
+    <x-slot:scripts>
+        @vite(['resources/js/rating.js', 'resources/js/leaflet-swiper.js'])
+    </x-slot:scripts>
 </x-layout>

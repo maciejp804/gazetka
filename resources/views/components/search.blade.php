@@ -24,13 +24,7 @@
             >
             <button
                 type="button"
-                class="clear-button absolute top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 w-5 hidden
-                @if($dataSearchType === 'places')
-                    right-2
-                @else
-                    right-12
-                @endif
-                ">
+                class="clear-button absolute top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 w-5 hidden right-2">
                 <x-header.svg svg="close" size="h-4 w-4" class="fill-gray-400"/>
             </button>
             {{ $slot }}

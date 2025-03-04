@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 use App\Models\Leaflet;
 use App\Models\PageClick;
 use App\Models\Place;
@@ -251,7 +252,7 @@ class LeafletController extends Controller
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne
 
-
+        $blogs = Blog::with('category')->where('status', '=','published')->get();
 
 
 
@@ -293,6 +294,9 @@ class LeafletController extends Controller
 
                 //Produkty
                 'products' => $products,
+
+                //Blogs
+                'blogs' => $blogs,
             ]);
     }
 

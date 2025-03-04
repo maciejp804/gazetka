@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\Leaflet;
 use App\Models\Place;
 use App\Models\Shop;
@@ -146,7 +147,7 @@ class ShopController extends Controller
             ]);
     }
 
-    public function subdomainShowAddress($subdomain, $community, $address, $leaflets)
+    public function subdomainShowAddress($subdomain, $community)
     {
         $placesAll = Place::all();
         $place = $placesAll->where('slug', '=', $community)->first();
@@ -185,9 +186,17 @@ class ShopController extends Controller
         ];
 
 
-        $leaflets_time = SortOptionsService::getSortOptions();
+        $leaflets_time = SortOptionsService::getSortOptions(false);
         $leaflets_category = SortOptionsService::getCategoryOptions();
-        $vouchers = Voucher::with('voucherStore')->get();
+
+        $vouchers = Voucher::with('voucherStore')
+            ->where('start_date', '<=', now('Europe/Warsaw')->toDateTime())
+            ->where('end_date', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'active')
+            ->limit(20)
+            ->get();
+
+        $blogs = Blog::with('category')->where('status', '=','published')->get();
 
         return view('subdomain.shop',
             [
@@ -211,6 +220,9 @@ class ShopController extends Controller
                 'leaflets_time' => $leaflets_time,
                 'leaflets' => $leaflets,
                 'vouchers' => $vouchers,
+
+                //Blog
+                'blogs' => $blogs,
             ]);
     }
 

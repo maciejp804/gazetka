@@ -13,11 +13,8 @@
         const mainDomain = " {{ config('app.main_domain') }}";
     </script>
 
-    @vite([
-            'resources/css/app.css',
-            'resources/js/app.js',
-            'resources/js/custom-swiper.js',
-          ])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
         window.googletag = window.googletag || {cmd: []};
@@ -45,15 +42,8 @@
         {{ $slot }}
     </main>
 <x-footer/>
-@vite([
-
-
-    'resources/js/leaflet-swiper.js',
-    'resources/js/filter.js',
-//    'resources/js/rating.js',
-    'resources/js/geolocation.js'
-
-])
-@stack('scripts')
+@isset($scripts)
+    {{ $scripts }}
+@endisset
 </body>
 </html>

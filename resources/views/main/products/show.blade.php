@@ -26,31 +26,24 @@
 
             <x-section>
                 <x-swiper-vouchers
+                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
                     main-route="main.vouchers"/>
             </x-section>
 
-            <x-section>
-                <x-h2-title class="flex" main-route="main.products">Podobne produkty w sklepach</x-h2-title>
-                <div class="w-full">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-4">
-                        @foreach($products as $item)
-                            <x-product
-                                :valid_from="$item['valid_from']"
-                                :valid_to="$item['valid_to']"
-                                :product_image="$item['product_image']"
-                                :product_name="$item['product_name']"
-                                :product_slug="$item['product_slug']"
-                                :promo_price="$item['promo_price']"
-                                :logo_xs="$item['logo_xs']"
-                            />
-                        @endforeach
-                    </div>
-                </div>
-                <x-see-more class="flex lg:hidden pb-2" type="button">Zobacz więcej</x-see-more>
-            </x-section>
+
+                <x-section>
+                    <x-swiper
+                        :items="$products"
+                        type="products"
+                        button-class="1"
+                        swiper-class="swiper-product"
+                        title="Produkty z tej samej kategorii"
+                        main-route="main.products"/>
+                </x-section>
+
 
             <x-ad-1 class="mb-5"/>
 
@@ -63,8 +56,10 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-        <x-descripton :items="$descriptions"/>
         <x-faq/>
     </div>
+    <x-slot:scripts>
+        @vite(['resources/js/rating.js'])
+    </x-slot:scripts>
 
 </x-layout>

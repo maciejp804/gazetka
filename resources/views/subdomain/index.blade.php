@@ -58,6 +58,7 @@
                     :items="$products"
                     type="products"
                     button-class="1"
+                    swiper-class="swiper-product"
                     title="Promocje w {{$shop->name_locative}}"
                     main-route="main.products"
                 />
@@ -65,6 +66,7 @@
 
             <x-section>
                 <x-swiper-vouchers
+                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
@@ -74,7 +76,8 @@
             <x-section>
                 <x-swiper
                     :items="$shops"
-                    button-class="2"
+                    button-class="1"
+                    swiper-class="swiper-shops"
                     type="retailers"
                     title="Podobne sieci handlowe"
                     main-route="main.retailers"
@@ -89,7 +92,15 @@
                     :items="$places"/>
             </x-section>
 
-
+            <x-section>
+                <x-swiper-blog
+                    button-class="1"
+                    swiper-class="swiper-blog"
+                    title="Ostatnie wpisy blogowe"
+                    main-route="main.blogs"
+                    :blogs="$blogs"
+                />
+            </x-section>
 
             <x-ad-1 class="my-5"/>
 
@@ -101,17 +112,10 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-
-
         <x-shop-descripton image="/build/assets/cheery-little-girl-sitting-shopping-cart 1-HAk2Ec6j.png"/>
-
-        <section class="flex flex-col w-full 2lg:w-265 m-auto my-5">
-            <x-swiper-blog title="Ostatnie wpisy blogowe"/>
-        </section>
-
         <x-faq/>
-
-
     </div>
-
+    <x-slot:scripts>
+        @vite(['resources/js/rating.js'])
+    </x-slot:scripts>
 </x-layout>

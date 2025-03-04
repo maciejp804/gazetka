@@ -1,6 +1,8 @@
 {{-- Wyniki dla gazetek w swiper --}}
 @if($searchType == 'leaflets')
+
     @foreach($results as $item)
+{{--        @dd($item)--}}
         <x-leaflet-slide
             class="swiper-slide"
             :valid_from="$item->valid_from"
@@ -10,7 +12,9 @@
             :slug="$item->shop->slug"
             :id="$item->id"
             :page="1"
-            :image="$item->image_cover"
+            :image_path="$item->path"
+            :webp_path="$item->webp_path"
+            :avif_path="$item->avif_path"
         />
     @endforeach
 @endif

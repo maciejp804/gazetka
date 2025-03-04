@@ -6,16 +6,28 @@ use Illuminate\Support\Collection;
 
 class SortOptionsService
 {
-    public static function getSortOptions(): Collection
+    public static function getSortOptions($maindomain = true): Collection
     {
-        return collect([
-            ['id' => 1, 'name' => 'Popularne sklepy'],
-            ['id' => 2, 'name' => 'Kończą się'],
-            ['id' => 3, 'name' => 'Nadchodzące'],
-            ['id' => 4, 'name' => 'Aktualne'],
-        ])->map(function ($item) {
-            return (object) $item; // Konwertuje każdy element na obiekt
-        });
+        if ($maindomain) {
+            return collect([
+                ['id' => 1, 'name' => 'Popularne sklepy'],
+                ['id' => 2, 'name' => 'Kończą się'],
+                ['id' => 3, 'name' => 'Nadchodzące'],
+                ['id' => 4, 'name' => 'Aktualne'],
+            ])->map(function ($item) {
+                return (object) $item; // Konwertuje każdy element na obiekt
+            });
+        } else {
+            return collect([
+
+                ['id' => 2, 'name' => 'Kończą się'],
+                ['id' => 3, 'name' => 'Nadchodzące'],
+                ['id' => 4, 'name' => 'Aktualne'],
+            ])->map(function ($item) {
+                return (object) $item; // Konwertuje każdy element na obiekt
+            });
+        }
+
     }
 
     public static function getSortPopularity(): Collection

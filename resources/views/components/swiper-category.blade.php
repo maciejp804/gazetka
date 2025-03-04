@@ -1,9 +1,9 @@
-@props(['title' => 'Brak', 'items', 'categoryRoute', 'mainRoute'])
+@props(['title' => 'Brak', 'items', 'categoryRoute', 'mainRoute', 'buttonClass', 'swiperClass'])
 
 <x-h2-title :main-route="$mainRoute" class="flex">{!! $title !!}</x-h2-title>
 
 <div class="w-full">
-    <div class="swiper category-swiper">
+    <div class="swiper {{$swiperClass}}">
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-10">
@@ -21,8 +21,16 @@
         <div class="swiper-pagination"></div>
 
         <!-- If we need navigation buttons -->
-        <div class="swiper-button-prev !hidden"></div>
-        <div class="swiper-button-next !hidden"></div>
+        <x-button-next
+            class="button-next-{{$swiperClass}}-{{$buttonClass}}"
+            size="w-4 h-4"
+            colour="gray-500"
+        />
+        <x-button-prev
+            class="button-prev-{{$swiperClass}}-{{$buttonClass}}"
+            size="w-4 h-4"
+            colour="gray-500"
+        />
 
     </div>
 </div>

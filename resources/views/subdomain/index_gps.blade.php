@@ -56,22 +56,27 @@
 
             <x-section class="mb-5">
                 <x-h2-title class="flex" :see-more-status="false">Sklepy {{$shop->name}} {{$place->name}} </x-h2-title>
-                <x-shop-list/>
+                <x-shop-list
+                    :markers="$markers"
+                    :place="$place"
+                />
             </x-section>
 
             <x-section>
-                <x-map :map-id="'mapid'" :latitude="52.4057121" :longitude="16.9313448" :zoom="13" :markers="[
-                    ['lat' => 52.4057121, 'lng' => 16.9313448, 'name' => 'biedronka'],
-                    ['lat' => 52.4157121, 'lng' => 16.9213448, 'name' => 'lidl'],
-                    ['lat' => 52.4257121, 'lng' => 16.9413448, 'name' => 'tchibo'],
-                    ['lat' => 52.4257121, 'lng' => 16.9113448, 'name' => 'biedronka'],
-                    ['lat' => 52.4057121, 'lng' => 16.9213448, 'name' => 'lidl'],
-                ]" />
+                <x-map
+                    :map-id="'mapid'"
+                    :latitude="$place->lat"
+                    :longitude="$place->lng"
+                    :zoom="13"
+                    :markers="$markers"
+                    :place="$place"
+                />
 
             </x-section>
 
             <x-section>
                 <x-swiper-vouchers
+                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
@@ -82,9 +87,20 @@
                 <x-swiper
                     :items="$shopsOther"
                     button-class="1"
+                    swiper-class="swiper-shops"
                     type="retailers"
                     title="Podobne sieci handlowe"
                     main-route="main.retailers"
+                />
+            </x-section>
+
+            <x-section>
+                <x-swiper-blog
+                    button-class="1"
+                    swiper-class="swiper-blog"
+                    title="Ostatnie wpisy blogowe"
+                    main-route="main.blogs"
+                    :blogs="$blogs"
                 />
             </x-section>
 
@@ -98,16 +114,10 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-
-        <x-shop-descripton image="/build/assets/cheery-little-girl-sitting-shopping-cart 1-HAk2Ec6j.png"/>
-
-        <section class="flex flex-col w-full 2lg:w-265 m-auto my-5">
-            <x-swiper-blog title="Ostatnie wpisy blogowe"/>
-        </section>
-
         <x-faq/>
-
-
     </div>
+    <x-slot:scripts>
+        @vite(['resources/js/rating.js'])
+    </x-slot:scripts>
 
 </x-layout>

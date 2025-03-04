@@ -41,10 +41,13 @@
             </x-section>
 
             <x-section>
-                <x-swiper-category title="Kategorie produktów"
-                                   :items="$product_categories"
-                                   category-route="main.products.category"
-                                   main-route="main.products"
+                <x-swiper-category
+                    button-class="1"
+                    swiper-class="category-swiper"
+                    title="Kategorie produktów"
+                    :items="$product_categories"
+                    category-route="main.products.category"
+                    main-route="main.products"
                 />
             </x-section>
 
@@ -53,9 +56,9 @@
                     :items="$products"
                     type="products"
                     button-class="1"
+                    swiper-class="swiper-product"
                     title="Najczęściej szukane produkty"
                     main-route="main.products"
-                    :uri="route('main.product',['slug' => 'pomidory', 'id' => 1])"
                 />
             </x-section>
 

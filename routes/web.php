@@ -302,16 +302,21 @@ Route::get('new', function ()
 });
 
 
+
+//START SEARCH
+Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
+Route::get('/search/triple/swiper',[SearchController::class,'triple'])->name('search.triple.swiper');
+Route::get('/search/triple/',[SearchController::class,'triple'])->name('search.triple');
+Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('search.quadruple');
+//END SEARCH
+
+
+
+
 Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData, $leaflets_category, $leaflets_time, $leaflets, $vouchers, $retailers, $products, $mainDomain) {
 
-
-
-
-
-    Route::get('/w-gazetce/{slug}' ,function ($subdomain, $slug) use ($leaflets) {
-        return app(ProductController::class)->showSubdomain($subdomain, $slug, $leaflets);
-    })->name('subdomain.products.show');
-
+    Route::get('/w-gazetce/{slug}', [ProductController::class, 'showSubdomain'])
+        ->name('subdomain.products.show');
 
     Route::get('/gazetka-promocyjna/{id}', function ($subdomain, $id) use ($pages, $inserts, $insertData, $ads, $leaflets) {
        return app(LeafletController::class)->subdomainLeaflet($subdomain, $id,  $insertData);
@@ -325,32 +330,11 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
         return app(MainController::class)->subdomainIndexGps($subdomain, $community, $leaflets);
     })->name('subdomain.index_gps');
 
-    Route::get('/', function ($subdomain) use ($leaflets) {
-        return app(MainController::class)->subdomainIndex($subdomain, $leaflets);
+    Route::get('/', function ($subdomain) {
+        return app(MainController::class)->subdomainIndex($subdomain);
     })->name('subdomain.index');
 
-
-
-
-
-    // Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
-
-    Route::get('/search/single/dropdown', function(Request $request) {
-        return app(SearchController::class)->single($request);
-    })->name('search.single');
-
-    Route::get('search/triple/swiper', function(Request $request) use ($leaflets) {
-        return app(SearchController::class)->tripleSwiper($request, $leaflets);
-    })->name('search.triple');
-
-    Route::get('search/triple', function(Request $request) use ($leaflets, $retailers, $products, $vouchers) {
-        return app(SearchController::class)->triple($request, $leaflets, $retailers, $products, $vouchers);
-    });
-
 });
-
-
-
 
 
 Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,  $leaflets_category, $leaflets_time, $retailers_category, $retailers_time, $leaflets, $retailers, $products, $vouchers, $mainDomain) {
@@ -475,25 +459,6 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     Route::get('/convert', [LeafletCoverController::class, 'storeCoverFromUrl']);
 
-    // Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
-
-    Route::get('/search/single/dropdown', function(Request $request) {
-        return app(SearchController::class)->single($request);
-    })->name('search.single');
-
-    Route::get('search/triple/swiper', function(Request $request) use ($leaflets) {
-        return app(SearchController::class)->tripleSwiper($request, $leaflets);
-    })->name('search.triple');
-
-    Route::get('search/triple', function(Request $request) use ($leaflets, $retailers, $products, $vouchers) {
-        return app(SearchController::class)->triple($request, $leaflets, $retailers, $products, $vouchers);
-    });
-
-    Route::get('search/quadruple', function(Request $request) use ($leaflets, $retailers, $products, $vouchers) {
-        return app(SearchController::class)->quadruple($request, $leaflets, $retailers, $products, $vouchers);
-    });
-
-
     Route::get('/test-test/{week}/{number}/{start}', [SearchController::class, 'test']);
 
     Route::get('/combination', [SearchController::class, 'combination'])
@@ -509,8 +474,6 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
     })->name('main.index.gps');
 
     // Route::get('/',[MainController::class,'index'])->name('main.index');
-
-
 
     Route::get('/', function () use ($descriptions) {
         return app(MainController::class)->index($descriptions);
@@ -536,8 +499,6 @@ Route::get('/shops/', function () {
             'image' => '',
         ]);
 });
-
-
 
 
 Route::post('/generator', [BackController::class, 'generator']);

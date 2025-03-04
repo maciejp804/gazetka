@@ -22,7 +22,6 @@
             <x-section class="flex flex-col gap-y-4 mb-10">
 
                 <x-blog-categories
-                    button-class="1"
                     :blogCategory="$blogCategories"
                     :sum="$sum"
                 />
@@ -42,6 +41,7 @@
             <x-ad-4-horizontal/>
             <x-section>
                 <x-swiper-vouchers
+                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Polecane kupony rabatowe"
                     :items="$vouchers"
@@ -51,7 +51,7 @@
             <x-section>
                 <x-h2-title class="flex" main-route="main.leaflets">Zobacz polecane gazetki</x-h2-title>
                 <x-swiper-leaflets-promo
-                    button-class="1"
+                    button-class="2"
                     title="Zobacz polecane gazetki"
                     :leaflets="$leaflets"
                     main-route="main.leaflets"/>

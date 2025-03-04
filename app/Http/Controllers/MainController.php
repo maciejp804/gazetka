@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 use App\Models\Leaflet;
+use App\Models\Marker;
 use App\Models\PageClick;
 use App\Models\Place;
-use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Shop;
 use App\Models\ShopCategory;
 use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
 class MainController extends Controller
@@ -44,7 +44,6 @@ class MainController extends Controller
             ->where('pinned', '=', 1)
             ->sortByDesc('priority')
             ->sortByDesc('updated_at')->take(20);
-
 
 
         $leaflets = $leaflets->sortByDesc('updated_at')->take(40);
@@ -81,10 +80,15 @@ class MainController extends Controller
             });
         });
 
+        $vouchers = Voucher::with('voucherStore')
+            ->where('start_date', '<=', now('Europe/Warsaw')->toDateTime())
+            ->where('end_date', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'active')
+            ->limit(20)
+            ->get();
 
-
-        $vouchers = Voucher::with('voucherStore')->get();
-
+        $blogs = Blog::with('category')->where('status', '=','published')->get();
+//        dd($blogs);
         $leaflets_time = SortOptionsService::getSortOptions();
 
         $leaflets_category = ProductCategory::where('status', 1)
@@ -94,12 +98,7 @@ class MainController extends Controller
 
         $static_description = StaticDescriptions::getDescriptions();
 
-        $shops = Shop::withCount(['leaflets' => function ($query) {
-            $query->where('valid_to', '>=', now())
-            ->where('status', '=', 'published')
-            ->where('valid_from', '<=', now());
-        }])->orderBy('ranking', 'desc')->get();
-
+        $shops = $this->shops();
 
         $breadcrumbs = [];
 
@@ -126,6 +125,7 @@ class MainController extends Controller
                 'products' => $products,
                 'vouchers' => $vouchers,
                 'shops' => $shops,
+                'blogs' => $blogs,
 
             ]);
     }
@@ -151,12 +151,27 @@ class MainController extends Controller
 
         $placesLimit40 = $placesAll->where('slug', '!=', $place->slug)->sortByDesc('population')->take(40);
 
-        $leaflets = Leaflet::with('shop')
-            ->where('valid_to', '>=', now()->toDateString())
+        $markers = Marker::with('shop', 'place', 'hours')
+            ->whereHas('shop', function ($query) {
+                $query->where('status', 1);
+            })
+            ->where('place_id', $place->id)
+            ->get();
+
+        $leaflets = Leaflet::with('shop', 'cover')
+            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'published')
             ->get(); // Gazetka musi być nadal ważna
 
-        $leaflets_promo = $leaflets->sortByDesc('valid_to')->take(20);
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+
+        $leaflets_promo = $leaflets
+            ->where('pinned', '=', 1)
+            ->sortByDesc('priority')
+            ->sortByDesc('updated_at')->take(20);
+
+
+
+        $leaflets = $leaflets->sortByDesc('updated_at')->take(40);
 
 
         $shop_categories = ShopCategory::where('status', 1)->get();
@@ -190,7 +205,12 @@ class MainController extends Controller
                 });
             });
 
-        $vouchers = Voucher::with('voucherStore')->get();
+        $vouchers = Voucher::with('voucherStore')
+            ->where('start_date', '<=', now('Europe/Warsaw')->toDateTime())
+            ->where('end_date', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'active')
+            ->limit(20)
+            ->get();
 
         $leaflets_time = SortOptionsService::getSortOptions();
 
@@ -198,12 +218,14 @@ class MainController extends Controller
 
         $static_description = StaticDescriptions::getDescriptions();
 
-        $shops = Shop::all();
+        $shops = $this->shops();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => $place->name, 'url' => ''],
         ];
+
+        $blogs = Blog::with('category')->where('status', '=','published')->get();
 
         return view('main.index_gps', data:
             [
@@ -228,20 +250,29 @@ class MainController extends Controller
                 'products' => $products,
                 'vouchers' => $vouchers,
                 'shops' => $shops,
+
+                //Blogs
+                'blogs' => $blogs,
+
+                //Markers
+                'markers' => $markers
             ]);
     }
 
     public function subdomainIndex($subdomain)
     {
 
-        $shops = Shop::all();
+        $shops = $this->shops();
+
         $shop = $shops->where('slug', $subdomain)->first();
-        $shops->where('slug', '!=', $subdomain);
 
         if(!$shop)
         {
             abort(404);
         }
+
+        $shops = $shops->where('slug', '!=', $shop->slug);
+
         $leaflets = Leaflet::with('shop')
             ->where('valid_to', '>=', now()->toDateString())
             ->where('shop_id',$shop->id)->get(); // Gazetka musi być nadal ważna
@@ -271,12 +302,19 @@ class MainController extends Controller
             ['label' => 'Gazetki '. $shop->name, 'url' => '']
         ];
 
-        $vouchers = Voucher::with('voucherStore')->get();
+        $vouchers = Voucher::with('voucherStore')
+            ->where('start_date', '<=', now('Europe/Warsaw')->toDateTime())
+            ->where('end_date', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'active')
+            ->limit(20)
+            ->get();
 
-        $leaflets_time = SortOptionsService::getSortOptions();
+        $leaflets_time = SortOptionsService::getSortOptions(false);
 
-        $leaflets_category = ProductCategory::where('status', 1)->get();
-
+        $leaflets_category = ProductCategory::where('status', 1)
+            ->where('parent_id', '=', null)
+            ->orderBy('name', 'asc')
+            ->get();
 
         $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
             ->where('valid_from', '<=', now())
@@ -302,6 +340,8 @@ class MainController extends Controller
                     ];
                 });
             });
+
+        $blogs = Blog::with('category')->where('status', '=','published')->get();
 
         return view('subdomain.index', [
             //Zmienne globalne
@@ -333,6 +373,9 @@ class MainController extends Controller
             'vouchers' => $vouchers, // kupony
             'shops' => $shops, // sklepy
             'shop' => $shop,
+
+            //Blog
+            'blogs' => $blogs,
         ]);
 
     }
@@ -341,13 +384,23 @@ class MainController extends Controller
     {
         $placesAll = Place::all();
         $place = $placesAll->where('slug', $community)->first();
-        $shops = Shop::all();
+
+        $shops = $this->shops();
+
         $shop = $shops->where('slug', $subdomain)->first();
 
         if(!$place || !$shop)
         {
             abort(404);
         }
+
+        $markers = Marker::with('shop', 'place', 'hours')
+            ->whereHas('shop', function ($query) use ($shop) {
+                $query->where('status', 1);
+            })
+            ->where('shop_id', $shop->id)
+            ->where('place_id', $place->id)
+            ->get();
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->where('shop_id',$shop->id)->get();
 
@@ -372,11 +425,22 @@ class MainController extends Controller
             ['label' => $shop->name.' '.$place->name, 'url' => ""]
         ];
 
-        $vouchers = Voucher::with('voucherStore')->get();
+        $vouchers = Voucher::with('voucherStore')
+            ->where('start_date', '<=', now('Europe/Warsaw')->toDateTime())
+            ->where('end_date', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'active')
+            ->limit(20)
+            ->get();
 
-        $leaflets_time = SortOptionsService::getSortOptions();
+        $leaflets_time = SortOptionsService::getSortOptions(false);
 
-        $leaflets_category = ProductCategory::where('status', 1)->get();
+        $leaflets_category = ProductCategory::where('status', 1)
+            ->where('parent_id', '=', null)
+            ->orderBy('name', 'asc')
+            ->get();
+
+        $blogs = Blog::with('category')->where('status', '=','published')->get();
+
 
          return view('subdomain.index_gps', [
                 //Zmienne globalne
@@ -384,6 +448,7 @@ class MainController extends Controller
 
                 //Lokalizacja
                 'place' => $place,
+                'markers' => $markers,
 
                 'h1_title'=> $shop->name. ' '. $place->name .' • gazetki promocyjne',
                 'page_title'=> $shop->name. ' '. $place->name .' • gazetka, godziny otwarcia | GazetkaPromocyjna.com.pl',
@@ -404,6 +469,9 @@ class MainController extends Controller
                 'vouchers' => $vouchers,
                 'shopsOther' => $shopsOther,
                 'shop' => $shop,
+
+                //Blogs
+                'blogs' => $blogs,
             ]);
     }
 
@@ -557,4 +625,16 @@ class MainController extends Controller
             ]
         );
     }
+
+protected function shops()
+{
+    return Shop::withCount(['leaflets' => function ($query) {
+        $query->where('valid_to', '>=',now('Europe/Warsaw')->toDateTime())
+            ->where('status', '=', 'published')
+            ->where('valid_from', '<=', now('Europe/Warsaw')->toDateTime());
+    }])->where('status', '=', 1)
+        ->orderBy('ranking', 'desc')->take(30)->get();
 }
+
+}
+

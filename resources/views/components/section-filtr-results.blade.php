@@ -1,6 +1,7 @@
 @props(['adsStatus' => false, 'items', 'dataContainerId', 'type'])
 
 @if($type == 'leaflets')
+
     <div {{$attributes->merge(['class' => 'w-full'])}} id="{{$dataContainerId}}">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
@@ -8,7 +9,6 @@
                     <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-50">
                         <x-leaflet-slide
                             class="relative w-full"
-
                             :valid_from="$item->valid_from"
                             :valid_to="$item->valid_to"
                             :logo="$item->shop->logo_xs"

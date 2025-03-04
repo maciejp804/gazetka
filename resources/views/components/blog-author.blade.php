@@ -13,6 +13,6 @@ if($size == 'small'){
 @endphp
 
 <div {{$attributes->merge(['class' => 'flex gap-x-2'])}}>
-    <img class="rounded-full {{$imgClass}}" src="{{ Storage::url($author->profile->image) }}">
+    <img class="rounded-full {{$imgClass}}" src="{{ Storage::url($author->profile->image) }}"  alt="Autor artykułu"/>
     <span class="flex items-center {{$spanClass}}">{{$author->name}}</span>
 </div>

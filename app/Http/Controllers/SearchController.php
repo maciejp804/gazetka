@@ -45,18 +45,20 @@ class SearchController extends Controller
     public function tripleSwiper(Request $request)
     {
         $query = $request->input('query');
+
         if ($query !== '') {
             $query = strtolower($query);
         }
+
         $searchType = $request->input('searchType');
         $category = $request->input('category');
         $time = $request->input('time');
 
-
         if ($searchType === 'leaflets') {
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop', 'products.category')
+            $leaflets = Leaflet::with('shop', 'cover','products.product_category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
+                ->join('leaflet_covers', 'leaflets.id' , '=' , 'leaflet_covers.leaflet_id')
                 ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
                 ->whereHas('shop', function ($queryBuilder) use ($query) {
@@ -66,7 +68,7 @@ class SearchController extends Controller
             // Filtrowanie według kategorii
                 if ($category != 'all')
                 {
-                    $leaflets->whereHas('products.category', function ($queryProduct) use ($category) {
+                    $leaflets->whereHas('products.product_category', function ($queryProduct) use ($category) {
                         $queryProduct->where('id', $category)
                             ->orWhere('parent_id', $category);
                     });
@@ -80,8 +82,8 @@ class SearchController extends Controller
 
             $results = $leaflets->get();
 
-        }
 
+        }
 
         // Zwrócenie wyników jako JSON z widokiem
         return response()->json([
@@ -90,7 +92,7 @@ class SearchController extends Controller
 
     }
 
-    public function triple($request)
+    public function triple(Request $request)
     {
         $query = $request->input('query');
         if ($query !== '') {
@@ -108,10 +110,11 @@ class SearchController extends Controller
         if ($searchType === 'leaflets') {
 
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop', 'products.product_category')
+            $leaflets = Leaflet::with('shop', 'cover', 'products.product_category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
                 ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
+                ->select('leaflets.*') // wybieramy tylko kolumny z tabeli leaflets
                 ->whereHas('shop', function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', $query . '%');
                 });
@@ -244,7 +247,7 @@ class SearchController extends Controller
         ]);
     }
 
-   public function quadruple($request)
+   public function quadruple(Request $request)
     {
         $query = $request->input('query');
         if ($query !== '') {

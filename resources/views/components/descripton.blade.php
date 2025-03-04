@@ -8,7 +8,11 @@
 
         <div {{$attributes->merge(['class' => $classes])}}>
         <div class="flex w-full md:w-5/12">
-            <img src="{{asset($item['img'])}}" class="object-cover rounded" alt="picture">
+            <img
+                src="{{asset($item['img'])}}"
+                class="object-cover rounded"
+                loading="lazy"
+                alt="picture">
         </div>
         <div class="flex rounded md:w-7/12 p-4 2lg:px-14 md:py-4 {{$bg}}">
             <div class=" xl:flex xl:flex-col xl:h-full xl:justify-center w-full relative">

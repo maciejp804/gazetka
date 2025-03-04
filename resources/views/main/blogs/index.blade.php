@@ -44,6 +44,7 @@
 
             <x-section>
                 <x-swiper-vouchers
+                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Polecane kupony rabatowe"
                     :items="$vouchers"
@@ -72,13 +73,13 @@
         <x-faq/>
     </div>
     @push('scripts')
-        <script>
-            window.addEventListener('load', function() {
-                const swiperElement = document.querySelector('.swiperCategory');
-                swiperElement.classList.remove('hidden');
-                swiperElement.classList.add('flex');
-            });
-        </script>
+{{--        <script>--}}
+{{--            window.addEventListener('load', function() {--}}
+{{--                const swiperElement = document.querySelector('.swiperCategory');--}}
+{{--                swiperElement.classList.remove('hidden');--}}
+{{--                swiperElement.classList.add('flex');--}}
+{{--            });--}}
+{{--        </script>--}}
     @endpush
 </x-layout>
 

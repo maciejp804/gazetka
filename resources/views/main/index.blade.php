@@ -28,13 +28,17 @@
             </x-section>
 
             <x-section>
-                <x-swiper-info :items="$static_description"/>
+                <x-swiper-info
+                    button-class="1"
+                    swiper-class="swiper-info"
+                    :items="$static_description"/>
             </x-section>
 
             <x-section>
                 <x-swiper
                     :items="$shops"
                     button-class="1"
+                    swiper-class="swiper-shops"
                     type="retailers"
                     title="Sieci handlowe"
                     main-route="main.retailers"
@@ -45,7 +49,8 @@
                 <x-swiper
                     :items="$products"
                     type="products"
-                    button-class="2"
+                    button-class="1"
+                    swiper-class="swiper-product"
                     title="Najlepsze promocje"
                     main-route="main.products"/>
             </x-section>
@@ -55,6 +60,7 @@
                     button-class="1"
                     title="Kategorie sieci handlowych"
                     :items="$shop_categories"
+                    swiper-class="category-swiper"
                     category-route="main.retailers.category"
                     main-route="main.retailers"
                 />
@@ -93,7 +99,7 @@
                               input-id="search-input-leaflet"
                               result-id="results-box-leaflet"
                               data-search-type="leaflets"
-                              data-container-id="leaflet-swiper"
+                              data-container-id="leaflet-swiper-search"
                     >
                         <x-loupe-button href="#"/>
                     </x-search>
@@ -101,7 +107,7 @@
                 <x-swiper-leaflets
                     button-class="1"
                     swiper-class="leaflet"
-                    data-container-id="leaflet-swiper"
+                    data-container-id="leaflet-swiper-search"
                     :leaflets="$leaflets"
                     type="leaflet"/>
                 <x-see-more class="lg:hidden pb-2" main-route="main.leaflets">Zobacz wszystkie</x-see-more>
@@ -110,8 +116,11 @@
             <x-section>
                 <x-swiper-blog
                     button-class="1"
+                    swiper-class="swiper-blog"
                     title="Ostatnie wpisy blogowe"
-                    main-route="main.blogs"/>
+                    main-route="main.blogs"
+                    :blogs="$blogs"
+                />
             </x-section>
 
             <x-ad-1 class="mb-5"/>

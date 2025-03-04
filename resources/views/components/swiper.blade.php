@@ -1,4 +1,4 @@
-@props(['type' => 'base', 'items' => '' ,'image' => '', 'name' => '', 'offer' => '', 'uri' => 'http://dino.gazetkapromocyjna.local',
+@props(['type' => 'base', 'items' => '' ,'image' => '', 'name' => '', 'offer' => '',
 'hoverDesc'=> 'Gazetka promocyjna <strong>Biedronka</strong>', 'swiperClass' => 'mySwiper',
 'link' => '#', 'title' => 'Missing title', 'buttonClass', 'mainRoute'])
 
@@ -57,12 +57,12 @@
 
         <!-- If we need navigation buttons -->
         <x-button-next
-            class="button-next-{{$buttonClass}}"
+            class="button-next-{{$swiperClass}}-{{$buttonClass}}"
             size="w-4 h-4"
             colour="gray-500"
         />
         <x-button-prev
-            class="button-prev-{{$buttonClass}}"
+            class="button-prev-{{$swiperClass}}-{{$buttonClass}}"
             size="w-4 h-4"
             colour="gray-500"
         />

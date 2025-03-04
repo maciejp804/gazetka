@@ -40,22 +40,24 @@
             </x-section>
 
             <x-section>
-                <x-swiper-category title="Kategorie produktów"
-                                   :items="$product_categories"
-                                   category-route="main.products.category"
-                                   main-route="main.products"
+                <x-swiper-category
+                    button-class="1"
+                    swiper-class="category-swiper"
+                    title="Kategorie produktów"
+                    :items="$product_categories"
+                    category-route="main.products.category"
+                    main-route="main.products"
                 />
             </x-section>
 
 
-{{--            <x-section>--}}
-{{--                <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>--}}
-{{--                <x-swiper-leaflets-promo--}}
-{{--                    button-class="1"--}}
-{{--                    title="Najnowsze gazetki promocyjne"--}}
-{{--                    :leaflets="$leaflets"--}}
-{{--                    main-route="main.leaflets"/>--}}
-{{--            </x-section>--}}
+            <x-section>
+                <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>
+                <x-swiper-leaflets-promo
+                    button-class="1"
+                    :leaflets="$leaflets"
+                    main-route="main.leaflets"/>
+            </x-section>
 
 
 
