@@ -4,12 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
-use App\Models\BlogCategory;
+use App\Models\Category;
 use App\Models\Leaflet;
 use App\Models\Place;
-use App\Models\User;
 use App\Models\Voucher;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
 class BlogController extends Controller
@@ -41,18 +39,18 @@ class BlogController extends Controller
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'ABC Zakupowicza', 'url' => ''],
         ];
-        $blogCategory = BlogCategory::withCount(['blogs' => function ($query) {
+        $categories = Category::withCount(['blogs' => function ($query) {
             $query->where('status', '=', 'published');
-    }])->get();
+                }])->where('status','active')->where('type', 'blog')->get();
 
         $sum = 0;
-        foreach ($blogCategory as $item) {
+        foreach ($categories as $item) {
             $sum += $item['blogs_count'];
         }
 
-        $blogs = BlogCategory::with(['blogs' => function($query) {
+        $blogs = Category::with(['blogs' => function($query) {
             $query->with('user.profile')->orderBy('created_at', 'desc')->take(4);
-        }])->get();
+        }])->where('status','active')->where('type', 'blog')->get();
 
 
 
@@ -67,7 +65,7 @@ class BlogController extends Controller
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'descriptions' => $descriptions,
-                'blogCategory' => $blogCategory,
+                'blogCategory' => $categories,
                 'blogs' => $blogs,
                 'sum' => $sum,
                 'breadcrumbs' => $breadcrumbs,
@@ -78,11 +76,11 @@ class BlogController extends Controller
 
     public function indexCategory($category, $descriptions)
     {
-        $blogCategories = BlogCategory::withCount(['blogs' => function ($query) {
+        $categories = Category::withCount(['blogs' => function ($query) {
             $query->where('status', '=', 'published');
-        }])->get();
+        }])->where('status','active')->where('type', 'blog')->get();
 
-        $blogCategory = $blogCategories->where('slug', '=', $category)->first();
+        $blogCategory = $categories->where('slug', '=', $category)->first();
 
         if(!$blogCategory)
         {
@@ -101,12 +99,12 @@ class BlogController extends Controller
             ->get(); // Gazetka musi być nadal ważna
 
         $sum = 0;
-        foreach ($blogCategories as $item) {
+        foreach ($categories as $item) {
             $sum += $item['blogs_count'];
         }
 
         $blogs = Blog::with(['user.profile', 'category'])
-            ->where('blog_category_id', '=', $blogCategory->id)
+            ->where('category_id', '=', $blogCategory->id)
             ->orderBy('created_at', 'desc')->paginate(7);
 
         $vouchers = Voucher::with('voucherStore')->get();
@@ -126,7 +124,7 @@ class BlogController extends Controller
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'descriptions' => $descriptions,
-                'blogCategories' => $blogCategories,
+                'blogCategories' => $categories,
                 'blogCategory' => $blogCategory,
                 'blogs' => $blogs,
                 'sum' => $sum,
@@ -139,11 +137,11 @@ class BlogController extends Controller
     public function show($category, $article, $descriptions)
     {
 
-        $blogCategories = BlogCategory::withCount(['blogs' => function ($query) {
+        $categories = Category::withCount(['blogs' => function ($query) {
             $query->where('status', '=', 'published');
-        }])->get();
+        }])->where('status','active')->where('type', 'blog')->get();
 
-        $blogCategory = $blogCategories->where('slug', '=', $category)->first();
+        $blogCategory = $categories->where('slug', '=', $category)->first();
 
         if(!$blogCategory)
         {

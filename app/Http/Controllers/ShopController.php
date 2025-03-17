@@ -3,35 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Category;
+use App\Models\Description;
 use App\Models\Leaflet;
 use App\Models\Place;
 use App\Models\Shop;
 use App\Http\Controllers\Controller;
-use App\Models\ShopCategory;
 use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Route;
 
 class ShopController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index($descriptions)
+    public function index()
     {
+        $placesAll = Place::all();
+
         $location = Cookie::get('user_location');
+
         if (!$location) {
-            $placesAll = Place::all();
             $place = $placesAll->where('id', '=', 1172)->first();
         } else {
             $locationData = json_decode($location, true);
-            $place = (object)$locationData;
+            $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
-        $retailers_category = ShopCategory::where('status', 1)->get();
-        $retailers = Shop::where('status', 1)->paginate(10);
+        $categories = Category::where('status', 'active')->where('type', 'shop')->get();
+
+        $retailers = Shop::withCount(['leaflets' => function ($query) {
+            $query->where('valid_to', '>=',now('Europe/Warsaw')->toDateTime())
+                ->where('status', '=', 'published')
+                ->where('valid_from', '<=', now('Europe/Warsaw')->toDateTime());
+        }])->where('status', 'active')->paginate(10);
         $retailers_time = SortOptionsService::getSortPopularity();
         $static_description = StaticDescriptions::getDescriptions();
 
@@ -46,7 +55,7 @@ class ShopController extends Controller
             ['label' => 'Sieci handlowe', 'url' => ''],
         ];
 
-
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
 
         return view('main.retailers.index', data:
             [
@@ -61,36 +70,38 @@ class ShopController extends Controller
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'retailers' => $retailers,
-                'retailers_category' => $retailers_category,
+                'retailers_category' => $categories,
                 'retailers_time' => $retailers_time,
 
             ]);
     }
 
-    public function indexCategory($category, $descriptions)
+    public function indexCategory($category)
     {
-        $retailers_category = ShopCategory::where('status', 1)->get();
-        $category = $retailers_category->where('slug', $category)->first();
+        $categories = Category::where('status', 'active')->where('type', 'shop')->get();
+        $category = $categories->where('slug', $category)->where('type', 'shop')->first();
 
         if (!$category)
         {
             abort(404);
         }
 
+        $placesAll = Place::all();
+
         $location = Cookie::get('user_location');
+
         if (!$location) {
-            $placesAll = Place::all();
             $place = $placesAll->where('id', '=', 1172)->first();
         } else {
             $locationData = json_decode($location, true);
-            $place = (object)$locationData;
+            $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
         $static_description = StaticDescriptions::getDescriptions();
 
         $retailers_time = SortOptionsService::getSortPopularity();
 
-        $retailers = Shop::where('status', 1)->where('shop_category_id', $category->id)->paginate(10);
+        $retailers = Shop::where('status', 1)->where('category_id', $category->id)->paginate(10);
 
         $leaflets = Leaflet::with('shop')
             ->where('valid_to','>=', now())
@@ -104,7 +115,7 @@ class ShopController extends Controller
             ['label' => $category->name, 'url' => ''],
         ];
 
-
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
 
         return view('main.retailers.index_category', data:
             [
@@ -119,31 +130,9 @@ class ShopController extends Controller
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'retailers' => $retailers,
-                'retailers_category' => $retailers_category,
+                'retailers_category' => $categories,
                 'retailers_time' => $retailers_time,
                 'category' => $category,
-            ]);
-    }
-
-    public function indexGps($community, $descriptions, $retailers, $retailers_category, $retailers_time, $leaflets, $products)
-    {
-        $breadcrumbs = [
-            ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Sieci handlowe', 'url' => route('main.retailers')],
-            ['label' => $community, 'url' => ''],
-        ];
-
-        return view('main.retailers.index_gps', data:
-            [
-                'slug' => 'Poznań',
-                'h1Title'=> 'Sieci <strong>handlowe</strong>',
-                'descriptions' => $descriptions,
-                'breadcrumbs' => $breadcrumbs,
-                'leaflets' => $leaflets,
-                'retailers' => $retailers,
-                'retailers_category' => $retailers_category,
-                'retailers_time' => $retailers_time,
-                'products' => $products,
             ]);
     }
 
@@ -187,11 +176,11 @@ class ShopController extends Controller
 
 
         $leaflets_time = SortOptionsService::getSortOptions(false);
-        $leaflets_category = SortOptionsService::getCategoryOptions();
+        $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
         $vouchers = Voucher::with('voucherStore')
-            ->where('start_date', '<=', now('Europe/Warsaw')->toDateTime())
-            ->where('end_date', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('vouchers.valid_from', '<=', now('Europe/Warsaw')->toDateTime())
+            ->where('vouchers.valid_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('status', '=', 'active')
             ->limit(20)
             ->get();
@@ -216,7 +205,7 @@ class ShopController extends Controller
                 'ratingCount' => $ratingCount,
                 'model' => "Place",
 
-                'leaflets_category' => $leaflets_category,
+                'leaflets_category' => $categories,
                 'leaflets_time' => $leaflets_time,
                 'leaflets' => $leaflets,
                 'vouchers' => $vouchers,

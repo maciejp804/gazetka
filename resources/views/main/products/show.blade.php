@@ -21,7 +21,7 @@
 
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-product-domain :product="$product" :ratingCount="$ratingCount" :averageRating="$averageRating" :model="$model"/>
+                <x-header-product-domain :product="$product" :ratingCount="$ratingCount" :averageRating="$averageRating" :model="$model" :descriptions="$descriptions"/>
             </x-section>
 
             <x-section>
@@ -56,7 +56,15 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-        <x-faq/>
+
+        @if($descriptions)
+            <x-description :items="$descriptions" :product="$product"/>
+            @if($descriptions->faq)
+                <x-faq :items="$descriptions"/>
+            @endif
+
+        @endif
+
     </div>
     <x-slot:scripts>
         @vite(['resources/js/rating.js'])

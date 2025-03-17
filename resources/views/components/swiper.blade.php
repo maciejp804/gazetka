@@ -31,7 +31,7 @@
 
                     @endphp
                     <!-- Slides -->
-                    <x-base-slide :item="$item" :type="$type" :image="$item->logo" :name="$item->name" :offer="$offer"  :hover-desc="$item->name"/>
+                    <x-base-slide :item="$item" :type="$type" :image="$item->image" :name="$item->name" :offer="$offer"  :hover-desc="$item->name"/>
                 @endforeach
             @elseif($type === 'products')
                 @foreach($items as $item)
@@ -44,7 +44,7 @@
                         :product_name="$item['product_name']"
                         :product_slug="$item['product_slug']"
                         :promo_price="$item['promo_price']"
-                        :logo_xs="$item['logo_xs']"
+                        :shop_image="$item['shop_image']"
                     />
                 @endforeach
              @endif

@@ -29,7 +29,7 @@
 <div class="flex flex-col md:flex-row mt-4 gap-x-3">
     <div class="flex w-full md:w-50 justify-center">
         <a href="{{route('subdomain.index', ['subdomain' => $shop->slug])}}">
-            <img class="flex self-center" src="{{$shop->logo}}" alt="logo" />
+            <img class="flex self-center" src="{{$shop->image}}" alt="logo" />
         </a>
     </div>
     <div class="flex w-full">

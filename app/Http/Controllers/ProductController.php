@@ -3,23 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Leaflet;
-use App\Models\Page;
 use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
-use App\Models\ProductCategory;
+use App\Models\ProductDescription;
 use App\Models\Shop;
 use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use function Webmozart\Assert\Tests\StaticAnalysis\null;
 
 class ProductController extends Controller
 {
-    public function index($descriptions)
+    public function index()
     {
 
         $location = Cookie::get('user_location');
@@ -31,36 +29,16 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $product_categories = ProductCategory::where('status', 1)->where('parent_id', null)->get();
+        $product_categories = Category::where('status', 'active')
+            ->where('type', 'product')
+            ->where('parent_id', null)->get();
 
         $products = PageClick::with('page.leaflets.shop', 'leafletProduct.product')
             ->where('valid_from', '<=', now())
             ->where('valid_to', '>=', now())
             ->paginate(10);
 
-        $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
-            return $click->page->leaflets->map(function ($leaflet) use ($click) {
-                return [
-                    'click_id'      => $click->id,
-                    'valid_from'    => $click->valid_from,
-                    'valid_to'      => $click->valid_to,
-                    'page_id'       => $click->page->id,
-                    'leaflet_id'    => $leaflet->id,
-                    'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
-                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
-                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
-                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
-                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
-                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
-                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
-                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
-                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
-                ];
-            });
-        });
-
-        // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
-        $products->setCollection($flattenedCollection);
+        $products = $this->flattenedCollection($products);
 
 
         $product_sort = SortOptionsService::getSortOptionsProducts();
@@ -83,7 +61,7 @@ class ProductController extends Controller
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
-                'descriptions' => $descriptions,
+                'descriptions' => null,
                 'breadcrumbs' => $breadcrumbs,
 
                 'product_sort' => $product_sort,
@@ -93,10 +71,11 @@ class ProductController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions)
+    public function indexCategory($category)
     {
-        $product_categories = ProductCategory::with('children')
-            ->where('status', 1)
+        $product_categories = Category::with('children')
+            ->where('status', 'active')
+            ->where('type', 'product')
             ->where('parent_id', null)
             ->get();
 
@@ -128,30 +107,7 @@ class ProductController extends Controller
             })
             ->paginate(10);
 
-
-        $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
-            return $click->page->leaflets->map(function ($leaflet) use ($click) {
-                return [
-                    'click_id'      => $click->id,
-                    'valid_from'    => $click->valid_from,
-                    'valid_to'      => $click->valid_to,
-                    'page_id'       => $click->page->id,
-                    'leaflet_id'    => $leaflet->id,
-                    'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
-                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
-                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
-                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
-                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
-                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
-                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
-                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
-                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
-                ];
-            });
-        });
-
-        // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
-        $products->setCollection($flattenedCollection);
+        $products = $this->flattenedCollection($products);
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
         $leaflets = $leaflets->sortByDesc('created_at')->take(40);
@@ -173,7 +129,7 @@ class ProductController extends Controller
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'static_description' => $static_description,
-                'descriptions' => $descriptions,
+                'descriptions' => null,
                 'breadcrumbs' => $breadcrumbs,
                 'product_sort' => $product_sort,
                 'products' => $products,
@@ -185,10 +141,11 @@ class ProductController extends Controller
             ]);
     }
 
-    public function indexSubCategory($category, $subcategory, $descriptions)
+    public function indexSubCategory($category, $subcategory)
     {
-        $product_categories = ProductCategory::with('children')
-            ->where('status', 1)
+        $product_categories = Category::with('children')
+            ->where('type', 'product')
+            ->where('status', 'active')
             ->where('parent_id', null)
             ->get();
 
@@ -216,34 +173,11 @@ class ProductController extends Controller
             ->where('valid_from', '<=', now())
             ->where('valid_to', '>=', now())
             ->whereHas('leafletProduct.product.category', function ($query) use ($subcategory) {
-                $query->where('product_category_id', $subcategory->id);
+                $query->where('category_id', $subcategory->id);
             })
             ->paginate(10);
 
-        $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
-            return $click->page->leaflets->map(function ($leaflet) use ($click) {
-                return [
-                    'click_id'      => $click->id,
-                    'valid_from'    => $click->valid_from,
-                    'valid_to'      => $click->valid_to,
-                    'page_id'       => $click->page->id,
-                    'leaflet_id'    => $leaflet->id,
-                    'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
-                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
-                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
-                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
-                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
-                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
-                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
-                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
-                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
-                ];
-            });
-        });
-
-        // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
-        $products->setCollection($flattenedCollection);
-
+        $products = $this->flattenedCollection($products);
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
         $leaflets = $leaflets->sortByDesc('created_at')->take(40);
@@ -266,7 +200,7 @@ class ProductController extends Controller
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'static_description' => $static_description,
-                'descriptions' => $descriptions,
+                'descriptions' => null,
                 'breadcrumbs' => $breadcrumbs,
                 'product_sort' => $product_sort,
                 'products' => $products,
@@ -278,7 +212,7 @@ class ProductController extends Controller
             ]);
     }
 
-    public function show($slug, $descriptions)
+    public function show($slug)
     {
         $products = Product::with('ratings', 'leaflets')->get();
         $product = $products->where('slug', $slug)->first();
@@ -316,7 +250,7 @@ class ProductController extends Controller
                         'valid_to'      => $click->valid_to,
                         'page_id'       => $click->page->id,
                         'leaflet_id'    => $leaflet->id,
-                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_image'    => $leaflet->shop ? $leaflet->shop->image : null,
                         'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
                         'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
                         'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
@@ -333,18 +267,20 @@ class ProductController extends Controller
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Produkty', 'url' => route('main.products')],
-            ['label' => $product->name, 'url' => ''],
+            ['label' => mb_ucfirst($product->name), 'url' => ''],
         ];
 
+        $descriptions = ProductDescription::with('products')
+            ->where('product_id', $product->id)
+            ->first();
 
         return view('main.products.show', data:
             [
                 //Lokalizacja
                 'place' => $place->name,
 
-
-                'h1_title'=> $product->name.' - promocje w sklepach',
-                'page_title'=> $product->name.' - promocje, aktualna cena w sklepach | GazetkaPromocyjna.com.pl',
+                'h1_title'=> mb_ucfirst($product->name).' - promocje w sklepach',
+                'page_title'=> mb_ucfirst($product->name).' - promocje, aktualna cena w sklepach | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'name' => $slug,
                 'descriptions' => $descriptions,
@@ -361,14 +297,14 @@ class ProductController extends Controller
             ]);
     }
 
-    public function showSubdomain($subdomain, $slug, $leaflets)
+    public function showSubdomain($subdomain, $slug)
     {
 
         $products = Product::with('ratings');
         $product = $products->where('slug', $slug)->first();
         $shops = Shop::all();
         $shop = $shops->where('slug', $subdomain)->first();
-
+        $leaflets = Leaflet::with('shop')->get();
         if(!$product || !$shop)
         {
             abort(404);
@@ -404,7 +340,7 @@ class ProductController extends Controller
                     'leaflet_id' => $leaflet->id,
                     'name' => $leaflet->shop->name ?? 'Brak sklepu',
                     'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
-                    'logo'=> $leaflet->shop->logo_xs,
+                    'shop_image'=> $leaflet->shop->image,
                     'pages' => $leaflet->pages->map(function ($page) {
                         return [
                             'page_number' => $page->page_number,
@@ -451,7 +387,7 @@ class ProductController extends Controller
                     'leaflet_id' => $leaflet->id,
                     'name' => $leaflet->shop->name ?? 'Brak sklepu',
                     'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
-                    'logo'=> $leaflet->shop->logo_xs,
+                    'shop_image'=> $leaflet->shop->image,
                     'pages' => $leaflet->pages->map(function ($page) {
                         return [
                             'page_number' => $page->page_number,
@@ -483,6 +419,10 @@ class ProductController extends Controller
             ['label' => $product->name, 'url' => ""]
         ];
 
+        $descriptions = ProductDescription::with('products')
+            ->where('product_id', $product->id)
+            ->first();
+
 
         return view('subdomain.products.show', data:
             [
@@ -504,6 +444,36 @@ class ProductController extends Controller
 
                 'productsInShopLeaflets' => $productsInShopLeaflets,
                 'productsInNoShopLeaflets' => $productsInNoShopLeaflets,
+
+                //Opis strony
+                'descriptions' => $descriptions
             ]);
+    }
+
+    protected function flattenedCollection($products)
+    {
+        $flattenedCollection = $products->getCollection()->flatMap(function ($click) {
+            return $click->page->leaflets->map(function ($leaflet) use ($click) {
+                return [
+                    'click_id'      => $click->id,
+                    'valid_from'    => $click->valid_from,
+                    'valid_to'      => $click->valid_to,
+                    'page_id'       => $click->page->id,
+                    'leaflet_id'    => $leaflet->id,
+                    'shop_image'       => $leaflet->shop ? $leaflet->shop->image : null,
+                    'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
+                    'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
+                    'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
+                    'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
+                    'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
+                    'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                    'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
+                    'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
+                ];
+            });
+        });
+
+        // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
+        return $products->setCollection($flattenedCollection);
     }
 }

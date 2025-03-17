@@ -1,4 +1,4 @@
-@props(['product', 'averageRating', 'ratingCount', 'model', 'city' => '', 'subdomain' => '', 'id' => ''])
+@props(['product', 'averageRating', 'ratingCount', 'model', 'city' => '', 'subdomain' => '', 'id' => '', 'descriptions'])
 
 <x-rating-form :rateableId="$product->id"
                :averageRating="$averageRating"
@@ -30,7 +30,9 @@
         </div>
         <div class="flex flex-col sm:flex-row my-5 gap-x-3">
             <div class="flex justify-between w-full mb-2">
-                <x-values-list/>
+                @if(isset($descriptions->content[0]['parameter']))
+                    <x-values-list :descriptions="$descriptions"/>
+                @endif
             </div>
         </div>
     </div>

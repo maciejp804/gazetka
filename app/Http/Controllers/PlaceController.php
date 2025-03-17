@@ -3,16 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Place;
 use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Models\Shop;
-use App\Models\ShopCategory;
 use App\Models\Voivodeship;
 use App\Models\Voucher;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 
 class PlaceController extends Controller
@@ -35,7 +33,7 @@ class PlaceController extends Controller
             $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
-        $shop_categories = ShopCategory::where('status', 1)->get();
+        $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
         $products = Product::all();
 
@@ -43,7 +41,7 @@ class PlaceController extends Controller
 
         $leaflets_time = SortOptionsService::getSortOptions();
 
-        $leaflets_category = ProductCategory::where('status', 1)->get();
+        $leaflets_category = Category::where('status', 'active')->where('type', 'product')->get();
 
         $static_description = StaticDescriptions::getDescriptions();
 
@@ -67,7 +65,7 @@ class PlaceController extends Controller
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
-                'shop_categories' => $shop_categories,
+                'shop_categories' => $categories,
                 'leaflets_time' => $leaflets_time,
                 'products' => $products,
                 'vouchers' => $vouchers,
@@ -94,7 +92,7 @@ class PlaceController extends Controller
         }
 
 
-        $shop_categories = ShopCategory::where('status', 1)->get();
+        $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
         $products = Product::all();
 
@@ -102,7 +100,7 @@ class PlaceController extends Controller
 
         $leaflets_time = SortOptionsService::getSortOptions();
 
-        $leaflets_category = ProductCategory::where('status', 1)->get();
+        $leaflets_category = Category::where('status', 'active')->where('type', 'product')->get();
 
         $static_description = StaticDescriptions::getDescriptions();
 
@@ -129,7 +127,7 @@ class PlaceController extends Controller
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
-                'shop_categories' => $shop_categories,
+                'shop_categories' => $categories,
                 'leaflets_time' => $leaflets_time,
                 'products' => $products,
                 'vouchers' => $vouchers,

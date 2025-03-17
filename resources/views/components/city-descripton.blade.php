@@ -5,13 +5,13 @@
     </div>
     <div class="flex rounded md:w-7/12 p-4 2lg:px-4 md:py-4 {{$bg}}">
         <div class="xl:flex xl:flex-col xl:h-full xl:justify-center">
-            <x-descripton-h2>
+            <x-description-h2>
                 Integer condimentum sem turpis, volutpat mattis nisl porttitor in. Sed vulputate at mi a viverra. Praesent elementum dui in lectus sodales lobortis.
             </x-descripton-h2>
-            <x-descripton-h3>
+            <x-description-h3>
                 Cras sed felis vitae ligula accumsan vestibulum quis aliquet magna. Praesent sit amet nisi vulputate, sollicitudin arcu a, varius justo. Integer condimentum sem turpis, volutpat mattis nisl porttitor in. Sed vulputate at mi a viverra. Praesent elementum dui in lectus sodales lobortis.
             </x-descripton-h3>
-            <x-descripton-p>
+            <x-description-p>
                 <div class="flex py-1">
                     <span class="font-semibold w-1/4">Powierzchnia:</span>
                     <span class="font-normal text-gray-400">261,8 km²</span>

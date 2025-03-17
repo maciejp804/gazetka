@@ -7,12 +7,8 @@ use App\Models\Leaflet;
 use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
-use App\Models\ProductCategory;
 use App\Models\Shop;
-use App\Models\ShopCategory;
-use App\Models\Tag;
 use App\Models\Voucher;
-use App\Models\VoucherStore;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -56,7 +52,7 @@ class SearchController extends Controller
 
         if ($searchType === 'leaflets') {
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop', 'cover','products.product_category')
+            $leaflets = Leaflet::with('shop', 'cover','products.category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
                 ->join('leaflet_covers', 'leaflets.id' , '=' , 'leaflet_covers.leaflet_id')
                 ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
@@ -68,7 +64,7 @@ class SearchController extends Controller
             // Filtrowanie według kategorii
                 if ($category != 'all')
                 {
-                    $leaflets->whereHas('products.product_category', function ($queryProduct) use ($category) {
+                    $leaflets->whereHas('products.category', function ($queryProduct) use ($category) {
                         $queryProduct->where('id', $category)
                             ->orWhere('parent_id', $category);
                     });
@@ -110,7 +106,7 @@ class SearchController extends Controller
         if ($searchType === 'leaflets') {
 
             // Filtrowanie według nazwy
-            $leaflets = Leaflet::with('shop', 'cover', 'products.product_category')
+            $leaflets = Leaflet::with('shop', 'cover', 'products.category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
                 ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
@@ -122,7 +118,7 @@ class SearchController extends Controller
             // Filtrowanie według kategorii
             if ($category != 'all')
             {
-                $leaflets->whereHas('products.product_category', function ($queryProduct) use ($category) {
+                $leaflets->whereHas('products.category', function ($queryProduct) use ($category) {
                     $queryProduct->where('id', $category)
                     ->orWhere('parent_id', $category);
                 });
@@ -137,13 +133,20 @@ class SearchController extends Controller
 
         } elseif ($searchType === 'retailers') {
 
-            $retailers = Shop::where('name', 'like', $query . '%');
+//            $retailers = Shop::where('status', 'active')
+//                ->where('name', 'like', $query . '%');
+
+            $retailers = Shop::withCount(['leaflets' => function ($query) {
+                $query->where('valid_to', '>=',now('Europe/Warsaw')->toDateTime())
+                    ->where('status', '=', 'published')
+                    ->where('valid_from', '<=', now('Europe/Warsaw')->toDateTime());
+            }])->where('status', 'active')->where('name', 'like', $query . '%');
 
             // Filtrowanie według kategorii
             if($category != 'all')
             {
                 $retailers = $retailers
-                    ->where('shop_category_id', $category);
+                    ->where('category_id', $category);
             }
 
             // Obsługa czasu (sortowanie i filtrowanie)
@@ -163,13 +166,14 @@ class SearchController extends Controller
                             ->orderBy('name', 'asc');
                         break;
 
-                    case '4': //
-
+                    case '4': // Filtracja sklepów z ofertą większą niż 0 i sortowanie alfabetyczne
+                        $retailers = $retailers
+                            ->orderBy('leaflets_count', 'desc');
                         break;
                 }
             }
             $results = $retailers->paginate($limit, ['*'], 'page', $page);
-
+//            dd($results);
         } elseif ($searchType === 'products') {
 
             $products = PageClick::select('page_clicks.*')
@@ -213,7 +217,7 @@ class SearchController extends Controller
                         'valid_to'      => $click->valid_to,
                         'page_id'       => $click->page->id,
                         'leaflet_id'    => $leaflet->id,
-                        'logo_xs'       => $leaflet->shop ? $leaflet->shop->logo_xs : null,
+                        'shop_image'       => $leaflet->shop ? $leaflet->shop->image : null,
                         'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
                         'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
                         'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
@@ -273,7 +277,7 @@ class SearchController extends Controller
 
             // Filtrowanie według kategorii
             if ($category != 'all') {
-                $vouchers = $vouchers->where('voucher_category_id', $category);
+                $vouchers = $vouchers->where('category_id', $category);
             }
 
             // Filtrowanie według tagów

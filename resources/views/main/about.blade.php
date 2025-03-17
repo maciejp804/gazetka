@@ -14,7 +14,7 @@
 
     <x-section class="flex-col mx-4 xl:m-auto">
         <x-h1-title h1Title="O nas" />
-        <x-descripton :items="$descriptions"/>
+        <x-description :items="$descriptions"/>
     </x-section>
 
 

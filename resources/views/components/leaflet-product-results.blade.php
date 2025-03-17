@@ -6,20 +6,23 @@
             @if($productsInLeaflets->count() > 0)
                 @foreach($productsInLeaflets as $shopWithProducts)
                     @foreach($shopWithProducts['pages'] as $item)
-                        <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-48">
+{{--                        @dd($shopWithProducts)--}}
+
                             <x-leaflet-slide
                                 class="relative"
                                 :valid_from="$item['clicks'][0]['valid_from']"
                                 :valid_to="$item['clicks'][0]['valid_to']"
                                 :type="$type"
-                                :logo="$shopWithProducts['logo']"
+                                :logo="$shopWithProducts['shop_image']"
                                 :name="$shopWithProducts['name']"
                                 :slug="$shopWithProducts['slug']"
                                 :id="$shopWithProducts['leaflet_id']"
                                 :page="$item['page_number']"
-                                :image="$item['page_image']"
+                                :image_path="$item['page_image']"
+                                :avif_path="$item['page_image']"
+                                :webp_path="$item['page_image']"
                             />
-                        </div>
+
                     @endforeach
                     @if($adsStatus === true)
                         @switch($loop->iteration)

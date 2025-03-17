@@ -16,6 +16,8 @@ return new class extends Migration
             $table->bigInteger('voivodeship_id')->unsigned();
             $table->string('name')->unique();
             $table->string('slug')->unique();
+            $table->decimal('lat', 10,8)->nullable();
+            $table->decimal('lng', 10,8)->nullable();
             $table->timestamps();
         });
     }

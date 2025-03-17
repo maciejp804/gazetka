@@ -113,7 +113,10 @@
 
     <div class="flex-col mx-4 xl:m-auto">
         <x-shop-descripton image="/build/assets/cheery-little-girl-sitting-shopping-cart 1-HAk2Ec6j.png"/>
-        <x-faq/>
+
+        @if($descriptions->faq)
+            <x-faq :items="$descriptions"/>
+        @endif
     </div>
     <x-slot:scripts>
         @vite(['resources/js/rating.js'])

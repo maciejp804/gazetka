@@ -1,4 +1,4 @@
-@props(['valid_to', 'valid_from', 'product_image', 'product_slug', 'product_name', 'promo_price', 'logo_xs'])
+@props(['valid_to', 'valid_from', 'product_image', 'product_slug', 'product_name', 'promo_price', 'shop_image'])
 @php
     $toEnd = validationDate($valid_to, $valid_from);
 @endphp
@@ -31,7 +31,7 @@
 
         <div class="flex py-2 justify-between">
             <div class="flex self-start text-blue-550 font-semibold text-base 2xs:text-xl"><span class="old-price">{{ $promo_price }} zł</span></div>
-            <img class="flex self-end max-w-8" src="{{$logo_xs}}" alt="pro-img1">
+            <img class="flex self-end max-w-8" src="{{$shop_image}}" alt="pro-img1">
         </div>
         <div class="flex">
             <span class="flex justify-center text-white text-xs font-bold p-1 rounded w-full {{$toEnd['classes']}}">{{ $toEnd['end'] }}</span>

@@ -28,8 +28,7 @@
 
 
             <x-section>
-                <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki z tym produktem w Dino</x-h2-title>
-
+                <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki z tym produktem w {{$shop->name}}</x-h2-title>
                 <x-leaflet-product-results
                     :ads-status="true"
                     :products-in-leaflets="$productsInShopLeaflets"
@@ -60,7 +59,9 @@
 
     <div class="flex-col mx-4 xl:m-auto">
 
-        <x-faq/>
+        @if($descriptions)
+            <x-faq :items="$descriptions"/>
+        @endif
 
     </div>
 

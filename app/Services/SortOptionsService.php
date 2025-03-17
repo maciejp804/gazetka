@@ -36,6 +36,7 @@ class SortOptionsService
             //['id' => 1, 'name' => 'Ulubione'],
             ['id' => 2, 'name' => 'Najwyżej oceniane'],
             ['id' => 3, 'name' => 'Alfabetycznie'],
+            ['id' => 4, 'name' => 'Z ofertą']
 
         ])->map(function ($item) {
             return (object) $item; // Konwertuje każdy element na obiekt

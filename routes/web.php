@@ -305,7 +305,7 @@ Route::get('new', function ()
 
 //START SEARCH
 Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
-Route::get('/search/triple/swiper',[SearchController::class,'triple'])->name('search.triple.swiper');
+Route::get('/search/triple/swiper',[SearchController::class,'tripleSwiper'])->name('search.triple.swiper');
 Route::get('/search/triple/',[SearchController::class,'triple'])->name('search.triple');
 Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('search.quadruple');
 //END SEARCH
@@ -361,17 +361,10 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
         return app(ShopController::class)->indexCategory($category, $descriptions);
     })->name('main.retailers.category');
 
-    //    Route::get('/sieci-handlowe/{community}',[ShopController::class,'indexGps'])->name('main.retailers.gps');
-
-    Route::get('/sieci-handlowe/{community}', function ($community) use ($descriptions, $retailers, $retailers_category, $retailers_time, $leaflets, $products) {
-        return app(ShopController::class)->indexGps($community, $descriptions, $retailers, $retailers_category, $retailers_time, $leaflets, $products);
-    })->name('main.retailers.gps');
-
-
     //    Route::get('/kupony-rabatowe',[ShopController::class,'indexGps'])->name('main.retailers.gps');
 
-    Route::get('/kupony-rabatowe', function () use ($descriptions, $retailers_category, $retailers_time, $products) {
-      return app(VoucherController::class)->index($descriptions, $retailers_category, $retailers_time, $products);
+    Route::get('/kupony-rabatowe', function () use ($descriptions) {
+      return app(VoucherController::class)->index($descriptions);
     })->name('main.vouchers');
 
     Route::get('/kupony-rabatowe/{category}', function ($category) use ($descriptions, $retailers_category, $retailers_time, $products) {

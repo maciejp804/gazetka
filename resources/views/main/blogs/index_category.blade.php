@@ -51,7 +51,7 @@
             <x-section>
                 <x-h2-title class="flex" main-route="main.leaflets">Zobacz polecane gazetki</x-h2-title>
                 <x-swiper-leaflets-promo
-                    button-class="2"
+                    button-class="1"
                     title="Zobacz polecane gazetki"
                     :leaflets="$leaflets"
                     main-route="main.leaflets"/>

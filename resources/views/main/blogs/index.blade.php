@@ -68,10 +68,17 @@
 
     </div>
 
-    <div class="flex-col mx-4 xl:m-auto">
-        <x-descripton :items="$descriptions"/>
-        <x-faq/>
-    </div>
+{{--    <div class="flex-col mx-4 xl:m-auto">--}}
+{{--         @if($descriptions != null)--}}
+{{--            @if($descriptions->content != null)--}}
+{{--                <x-description :items="$descriptions"/>--}}
+{{--            @endif--}}
+
+{{--            @if($descriptions->faq != null)--}}
+{{--                <x-faq :items="$descriptions"/>--}}
+{{--            @endif--}}
+{{--        @endif--}}
+{{--    </div>--}}
     @push('scripts')
 {{--        <script>--}}
 {{--            window.addEventListener('load', function() {--}}

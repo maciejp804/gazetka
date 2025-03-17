@@ -4,18 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Tests\Integration\Database\EloquentHasManyThroughTest\Category;
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Blog extends Model
 {
     use HasFactory;
 
-    public function category()
+    public function category(): BelongsTo
     {
-        return $this->belongsTo(BlogCategory::class, 'blog_category_id');
+        return $this->belongsTo(Category::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

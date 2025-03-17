@@ -29,7 +29,11 @@ export function handleSingleDropdownSearch(query, searchType, resultsBox, input)
 
 export function handleTripleSwiperSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, swiperInstance) {
 
-    const searchUrl = `/search/triple/swiper?query=${encodeURIComponent(query)}&category=${encodeURIComponent(categorySelect)}&time=${encodeURIComponent(timeSelect)}&searchType=${searchType}`;
+    const searchUrl = `/search/triple/swiper?` +
+        `query=${encodeURIComponent(query)}` +
+        `&category=${encodeURIComponent(categorySelect)}&` +
+        `time=${encodeURIComponent(timeSelect)}&` +
+        `searchType=${searchType}`;
 
     fetch(searchUrl)
         .then(response => response.json())
@@ -46,7 +50,7 @@ export function handleTripleSwiperSearch(query, searchType, categorySelect, time
 
 }
 
-export function handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId, subcategory, currentPage = 1 ) {
+export function handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId, subcategory = null, currentPage = 1 ) {
 
     const searchUrl = `/search/triple?` +
         `query=${encodeURIComponent(query)}` +
@@ -98,7 +102,7 @@ export function handleTripleSearch(query, searchType, categorySelect, timeSelect
                     data.pagination,
                     query, searchType,
                     categorySelect, timeSelect,
-                    resultsBox, input
+                    resultsBox, input, subcategory
                 );
             }
 
@@ -175,7 +179,7 @@ export function handleQuadrupleSearch(query, searchType, categorySelect, typeSel
 
 }
 
-function renderPagination(containerId, pagination, query, searchType, categorySelect, timeSelect, resultsBox, input, typeSelect = null) {
+function renderPagination(containerId, pagination, query, searchType, categorySelect, timeSelect, resultsBox, input, subcategory = null, typeSelect = null) {
 
     const resultsContainer = document.getElementById(containerId);
 
@@ -203,7 +207,7 @@ function renderPagination(containerId, pagination, query, searchType, categorySe
         prevButton.disabled = pagination.currentPage <= 1;
         prevButton.addEventListener('click', () => {
             if (typeSelect == null){
-                handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId, pagination.currentPage - 1);
+                handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId, subcategory, pagination.currentPage - 1);
             } else {
                 handleQuadrupleSearch(query, searchType, categorySelect, typeSelect, timeSelect, resultsBox, input, containerId, pagination.currentPage - 1)
             }
@@ -222,7 +226,7 @@ function renderPagination(containerId, pagination, query, searchType, categorySe
         nextButton.disabled = pagination.currentPage >= pagination.totalPages;
         nextButton.addEventListener('click', () => {
             if (typeSelect == null){
-                handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId, pagination.currentPage + 1);
+                handleTripleSearch(query, searchType, categorySelect, timeSelect, resultsBox, input, containerId, subcategory, pagination.currentPage + 1);
             } else {
                 handleQuadrupleSearch(query, searchType, categorySelect, typeSelect, timeSelect, resultsBox, input, containerId, pagination.currentPage + 1)
             }

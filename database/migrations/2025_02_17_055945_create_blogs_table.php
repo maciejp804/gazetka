@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('category_id')->constrained('categories');
             $table->string('meta_title');
             $table->string('meta_description');
             $table->string('title');
@@ -20,8 +22,6 @@ return new class extends Migration
             $table->text('excerpt')->nullable();
             $table->text('body');
             $table->string('image');
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('blog_category_id')->constrained('blog_categories');
             $table->enum('status', ['published', 'draft', 'archive'])->default('published');
             $table->dateTime('published_at')->nullable();
             $table->timestamps();

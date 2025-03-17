@@ -14,7 +14,7 @@
                         style="width: 200px;"
                         :valid_from="$leaflet->valid_from"
                         :valid_to="$leaflet->valid_to"
-                        :logo="$leaflet->shop->logo_xs"
+                        :logo="$leaflet->shop->image"
                         :name="$leaflet->shop->name"
                         :slug="$leaflet->shop->slug"
                         :id="$leaflet->id"
@@ -26,16 +26,19 @@
                     />
                 @else
                     @foreach($leaflet['pages'] as $item)
+{{--                        @dd($leaflet)--}}
                         <x-leaflet-slide
                             class="swiper-slide"
                             :valid_from="$item['clicks'][0]['valid_from']"
                             :valid_to="$item['clicks'][0]['valid_to']"
-                            :logo="$leaflet['logo']"
+                            :logo="$leaflet['shop_image']"
                             :name="$leaflet['name']"
                             :slug="$leaflet['slug']"
                             :id="$leaflet['leaflet_id']"
                             :page="$item['page_number']"
-                            :image="$item['page_image']"
+                            :image_path="$item['page_image']"
+                            :avif_path="$item['page_image']"
+                            :webp_path="$item['page_image']"
                         />
                     @endforeach
                 @endif

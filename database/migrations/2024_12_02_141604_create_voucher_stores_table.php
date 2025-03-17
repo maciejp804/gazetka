@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('voucher_stores', function (Blueprint $table) {
             $table->id();
-            $table->integer('shop_id')->nullable();
+            $table->foreignId('shop_id')->nullable()->constrained('shops');
+            $table->foreignId('category_id')->constrained('categories');
             $table->string('name');
             $table->string('program_id');
-            $table->string('logo_url')->nullable();
-            $table->foreignId('voucher_store_category_id')->constrained();
+            $table->string('image')->nullable();
+            $table->enum('status', ['active', 'inactive', 'draft'])->default('inactive');
             $table->timestamps();
         });
     }

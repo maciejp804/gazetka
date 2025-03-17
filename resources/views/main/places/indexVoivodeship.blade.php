@@ -49,8 +49,15 @@
         <div class="bg-gray-200 rounded py-4 mb-5 sm:py-20 ">
             <x-about class="1xl:w-265 lg:m-auto"/>
         </div>
-        <x-descripton :items="$descriptions"/>
-        <x-faq/>
+         @if($descriptions != null)
+            @if($descriptions->content != null)
+                <x-description :items="$descriptions"/>
+            @endif
+
+            @if($descriptions->faq != null)
+                <x-faq :items="$descriptions"/>
+            @endif
+        @endif
     </x-section>
 
 </x-layout>

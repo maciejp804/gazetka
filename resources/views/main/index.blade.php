@@ -31,7 +31,7 @@
                 <x-swiper-info
                     button-class="1"
                     swiper-class="swiper-info"
-                    :items="$static_description"/>
+                    :items="$info_description"/>
             </x-section>
 
             <x-section>
@@ -135,8 +135,11 @@
         <div class="bg-gray-200 rounded py-4 mb-5 sm:py-20 ">
             <x-about class="1xl:w-265 lg:m-auto"/>
         </div>
-        <x-descripton :items="$descriptions"/>
-        <x-faq/>
+        <x-description :items="$descriptions"/>
+        @if($descriptions->faq)
+            <x-faq :items="$descriptions"/>
+        @endif
+
     </x-section>
 
 </x-layout>

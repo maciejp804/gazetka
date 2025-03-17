@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('shops', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained('categories');
             $table->string('name');
             $table->string('name_genitive')->nullable();
             $table->string('name_locative')->nullable();
             $table->string('slug');
-            $table->string('logo')->nullable();
-            $table->string('logo_xs')->nullable();
-            $table->foreignId('shop_category_id')->constrained();
-            $table->string('status')->nullable();
+            $table->string('image')->nullable();
+            $table->enum('status', ['active', 'inactive', 'draft'])->default('inactive');
             $table->decimal('ranking')->nullable();
             $table->timestamps();
         });

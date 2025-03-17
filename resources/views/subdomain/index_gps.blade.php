@@ -114,7 +114,9 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-        <x-faq/>
+        @if($descriptions->faq)
+            <x-faq :items="$descriptions"/>
+        @endif
     </div>
     <x-slot:scripts>
         @vite(['resources/js/rating.js'])

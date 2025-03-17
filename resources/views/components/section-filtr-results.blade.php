@@ -11,7 +11,7 @@
                             class="relative w-full"
                             :valid_from="$item->valid_from"
                             :valid_to="$item->valid_to"
-                            :logo="$item->shop->logo_xs"
+                            :logo="$item->shop->image"
                             :name="$item->shop->name"
                             :slug="$item->shop->slug"
                             :id="$item->id"
@@ -51,22 +51,22 @@
             @if(count($items) > 0)
                 @foreach($items as $item)
                     @php
-                        if ($item->ranking == 0)
+                        if ($item->leaflets_count == 0)
                         {
                             $offer = 'Brak ofert';
-                        } elseif ($item->ranking == 1){
-                            $offer = $item->ranking. ' oferta';
-                        } elseif ($item->ranking > 1 && $item->ranking < 5)
+                        } elseif ($item->leaflets_count == 1){
+                            $offer = $item->leaflets_count. ' oferta';
+                        } elseif ($item->leaflets_count > 1 && $item->leaflets_count < 5)
                         {
-                            $offer = $item->ranking. ' oferty';
+                            $offer = $item->leaflets_count. ' oferty';
                         } else {
-                             $offer = $item->ranking. ' ofert';
+                             $offer = $item->leaflets_count. ' ofert';
                         }
 
                     @endphp
 
                     <div class="w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-46 2lg:w-50">
-                        <x-base-slide :item="$item" :type="$type" :image="$item->logo" :name="$item->name" offer="1 oferta" :uri="$item->logo" :hover-desc="$item->name"/>
+                        <x-base-slide :item="$item" :type="$type" :image="$item->image" :name="$item->name" :offer="$offer" :uri="$item->logo" :hover-desc="$item->name"/>
 
                     </div>
                     @if($adsStatus === true)
@@ -107,7 +107,7 @@
                         :product_name="$item['product_name']"
                         :product_slug="$item['product_slug']"
                         :promo_price="$item['promo_price']"
-                        :logo_xs="$item['logo_xs']"
+                        :shop_image="$item['shop_image']"
                     />
                 @if($adsStatus === true)
                     @switch($loop->iteration)

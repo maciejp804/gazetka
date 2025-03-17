@@ -13,18 +13,21 @@ return new class extends Migration
     {
         Schema::create('vouchers', function (Blueprint $table) {
             $table->id();
-            $table->string('voucher_id');
+            $table->foreignId('category_id')->default(null)->constrained('categories')->onDelete('cascade');
             $table->foreignId('voucher_store_id')->constrained('voucher_stores')->onDelete('cascade');
-            $table->string('title');
+            $table->string('voucher_id')->nullable();
+            $table->string('title')->nullable();
             $table->string('excerpt')->nullable();
             $table->string('body')->nullable();
-            $table->string('offer_url')->nullable();
-            $table->string('offer_image')->default('assets/images/vouchers/default.png');
-            $table->string('code');
-            $table->foreignId('voucher_category_id')->constrained();
+            $table->string('url')->nullable();
+            $table->string('image')->nullable();
+            $table->string('code')->nullable();
             $table->string('conditions')->nullable();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->enum('status', ['active', 'expired', 'draft'])->default('active');
+            $table->integer('usage_count')->default(0);
+            $table->tinyInteger('is_featured')->default(0);
+            $table->timestamp('valid_from')->nullable();
+            $table->timestamp('valid_to')->nullable();
             $table->timestamps();
         });
     }
