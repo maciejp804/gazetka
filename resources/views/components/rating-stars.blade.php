@@ -5,6 +5,7 @@ switch ($model)
 {
     case 'Product':
     case 'Place':
+    case 'Marker':
         $divClasses = 'flex flex-row justify-center stars cursor-pointer text-gray-400';
         $spanClasses = 'text-center text-gray-600 text-sm';
     break;

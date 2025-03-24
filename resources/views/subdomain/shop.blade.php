@@ -1,6 +1,6 @@
 <x-layout>
      <x-slot:place>
-        {{  $place->name }}
+        {{  $placeAddress->place->name }}
     </x-slot:place>
     <x-slot:page_title>
         {{  $page_title }}
@@ -23,7 +23,8 @@
             <section class="mx-2 xs:mx-4">
                 <x-h1-title :h1Title="$h1_title"/>
                 <x-header-shop-subdomain
-                    :rateableId="$place->id"
+                    :placeAddress="$placeAddress"
+                    :rateableId="$placeAddress->id"
                     :ratingCount="$ratingCount"
                     :averageRating="$averageRating"
                     :city="$place->slug"
@@ -33,7 +34,7 @@
 
 
             <x-section>
-                <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi Dino</x-h2-title>
+                <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi {{$placeAddress->shop->name}}</x-h2-title>
                 <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
                     <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
                     <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
@@ -63,7 +64,7 @@
             </x-section>
 
             <x-section>
-                <x-h2-title class="flex" :see-more-status="false">Sklepy Dino w pobliżu Twojej lokalizacji</x-h2-title>
+                <x-h2-title class="flex" :see-more-status="false">Sklepy {{$placeAddress->shop->name}} w pobliżu Twojej lokalizacji</x-h2-title>
                 <x-shop-list/>
             </x-section>
 

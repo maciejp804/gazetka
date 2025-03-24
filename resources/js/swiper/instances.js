@@ -3,54 +3,71 @@ import { Grid, Navigation, Pagination, Zoom, Autoplay, FreeMode } from "swiper/m
 
 // ✅ Konfiguracja dla .leaflet
 export function initLeafletSwiper() {
-    if (document.querySelector(".leaflet")) {
+    if (document.querySelector(".category-swiper")) {
         console.log("✅ Inicjalizuję Swiper dla .leaflet");
-        initSwiper(".leaflet", {
-            modules: [Navigation, Pagination, Grid],
-            slidesPerView: 2,
-            spaceBetween: 5,
-            grid: {rows: 2, fill: "row"},
-            breakpoints: {
-                320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2, fill: "row"}},
-                425: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2, fill: "row"}},
-                475: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2, fill: "row"}},
-                640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2, fill: "row"}},
-                768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 2, fill: "row"}},
-                1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 3, fill: "row"}},
-                1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 3, fill: "row"}},
-            },
-            pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true},
-        }, ".button-prev-leaflet", ".button-next-leaflet");
+            initSwiper(".leaflet", {
+                modules: [Navigation, Pagination, Grid],
+                slidesPerView: 2,
+                spaceBetween: 5,
+                grid: {rows: 2, fill: "row"},
+                breakpoints: {
+                    320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2, fill: "row"}},
+                    425: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2, fill: "row"}},
+                    475: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2, fill: "row"}},
+                    640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2, fill: "row"}},
+                    768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 2, fill: "row"}},
+                    1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 3, fill: "row"}},
+                    1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 3, fill: "row"}},
+                },
+                pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true},
+            }, ".button-prev-leaflet", ".button-next-leaflet");
     } else {
-    console.warn("❌ Nie znaleziono Swipera .leaflet lub `initSwiper` nie istnieje.");
+        console.warn("❌ Nie znaleziono Swipera .leaflet lub `initSwiper` nie istnieje.");
     }
 }
 
 // ✅ Konfiguracja dla .leafletPromo
 export function initLeafletPromoSwiper() {
-    if (document.querySelector(".leafletPromo")) {
-        console.log("✅ Inicjalizuję Swiper dla .leafletPromo");
-        initSwiper('.leafletPromo', {
-            modules: [Navigation, Pagination, Grid, Zoom],
-            observer: true,
-            observeParents: true,
-            slidesPerView: 2,
-            spaceBetween: 5,
-            grid: {rows: 2, fill: 'row'},
-            breakpoints: {
-                320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
-                425: {slidesPerView: 2, spaceBetween: 15, grid: {rows: 2}},
-                475: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
-                640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2}},
-                768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
-                1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
-                1440: {slidesPerView: 5, spaceBetween: 7, grid: {rows: 1}}
-            },
-            pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true},
-        }, ".button-prev-leafletPromo", ".button-next-leafletPromo");
-    } else {
-        console.warn("❌ Nie znaleziono Swipera .leafletPromo lub `initSwiper` nie istnieje.");
-    }
+
+    const sliders = document.querySelectorAll(".leafletPromo");
+
+        if (sliders.length === 0) {
+            console.warn("❌ Nie znaleziono żadnego Swipera `.leafletPromo`.");
+            return;
+        }
+
+        console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .leafletPromo`);
+
+        sliders.forEach((slider, index) => {
+            setTimeout(() => {
+                const skeletonElement = document.getElementById(`skeleton-slider-leafletPromo`);
+                const actualElement = document.getElementById(`leaflet-swiper-leafletPromo`);
+
+                if (skeletonElement && actualElement) {
+                    skeletonElement.classList.add('!hidden');
+                    actualElement.classList.remove('!hidden');
+                }
+
+                initSwiper('.leafletPromo', {
+                    modules: [Navigation, Pagination, Grid, Zoom],
+                    observer: true,
+                    observeParents: true,
+                    slidesPerView: 2,
+                    spaceBetween: 5,
+                    grid: {rows: 2, fill: 'row'},
+                    breakpoints: {
+                        320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
+                        425: {slidesPerView: 2, spaceBetween: 15, grid: {rows: 2}},
+                        475: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
+                        640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2}},
+                        768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
+                        1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
+                        1440: {slidesPerView: 5, spaceBetween: 7, grid: {rows: 1}}
+                    },
+                    pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true},
+                }, ".button-prev-leafletPromo", ".button-next-leafletPromo");
+            }, 1000);
+        });
 }
 
 // ✅ Konfiguracja dla .category-swiper
@@ -98,7 +115,7 @@ export function initCategorySwiperSmall() {
                 1024: { slidesPerView: 10, spaceBetween: 18, grid: { rows : 1}},
                 1440: { slidesPerView: 10, spaceBetween: 25, grid: { rows : 1}}
             }
-        }, '.prev-swiper', '.next-swiper');
+        }, '.prev-swiper-category-swiper-small', '.next-swiper-category-swiper-small');
     } else {
         console.warn("❌ Nie znaleziono Swipera .category-swiper-small lub `initSwiper` nie istnieje.");
     }
@@ -203,29 +220,98 @@ export function initSwiperBlog() {
     }
 }
 
+// ✅ Konfiguracja dla .leafletSingle
 export function initSwiperLeafletSingle() {
-    if (document.querySelector(".leafletSingle")) {
-        console.log("✅ Inicjalizuję Swiper dla .leafletSingle");
-        initSwiper('.leafletSingle', {
-            modules: [Navigation, Pagination, Grid, Zoom],
-            slidesPerView: 2,
-            spaceBetween: 5,
-            grid: {rows: 1, fill: 'row'},
-            breakpoints: {
-                320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 1}},
-                425: {slidesPerView: 3, spaceBetween: 10, grid: {rows: 1}},
-                475: {slidesPerView: 3, spaceBetween: 5},
-                640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 1}},
-                768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
-                1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
-                1440: {slidesPerView: 5, spaceBetween: 15, grid: {rows: 1}}
-            },
-            pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
-        }, '.button-prev-leafletSingle', '.button-next-leafletSingle');
-    } else {
-        console.warn("❌ Nie znaleziono Swipera .leafletSingle lub `initSwiper` nie istnieje.");
+
+    const sliders = document.querySelectorAll(".leafletSingle");
+
+    if (sliders.length === 0) {
+        console.warn("❌ Nie znaleziono żadnego Swipera `.leafletSingle`.");
+        return;
     }
+
+    console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .leafletSingle`);
+
+    sliders.forEach((slider, index) => {
+        setTimeout(() => {
+            const skeletonElement = document.getElementById(`skeleton-slider-leafletSingle`);
+            const actualElement = document.getElementById(`leaflet-swiper-leafletSingle`);
+
+            if (skeletonElement && actualElement) {
+                skeletonElement.classList.add('!hidden');
+                actualElement.classList.remove('!hidden');
+            }
+
+            initSwiper('.leafletSingle', {
+                modules: [Navigation, Pagination, Grid, Zoom],
+                observer: true,
+                observeParents: true,
+                slidesPerView: 2,
+                spaceBetween: 5,
+                grid: {rows: 2, fill: 'row'},
+                breakpoints: {
+                    320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
+                    425: {slidesPerView: 2, spaceBetween: 15, grid: {rows: 2}},
+                    475: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
+                    640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2}},
+                    768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
+                    1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
+                    1440: {slidesPerView: 5, spaceBetween: 7, grid: {rows: 1}}
+                },
+                pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true},
+            }, ".button-prev-leafletSingle", ".button-next-leafletSingle");
+        }, 1000);
+    });
 }
+
+
+// ✅ Konfiguracja dla .leafletSingleOther
+export function initSwiperLeafletSingleOther() {
+
+    const sliders = document.querySelectorAll(".leafletSingleOther");
+
+    if (sliders.length === 0) {
+        console.warn("❌ Nie znaleziono żadnego Swipera `.leafletSingleOther`.");
+        return;
+    }
+
+    console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .leafletSingleOther`);
+
+    sliders.forEach((slider, index) => {
+        setTimeout(() => {
+
+            const slideIndex = index + 1; // Numeracja od 1
+
+            const skeletonElement = document.getElementById(`skeleton-slider-leafletSingleOther`);
+            const actualElement = document.getElementById(`leaflet-swiper-leafletSingleOther`);
+
+            if (skeletonElement && actualElement) {
+                skeletonElement.classList.add('!hidden');
+                actualElement.classList.remove('!hidden');
+            }
+
+            initSwiper('.leafletSingleOther', {
+                modules: [Navigation, Pagination, Grid, Zoom],
+                observer: true,
+                observeParents: true,
+                slidesPerView: 2,
+                spaceBetween: 5,
+                grid: {rows: 2, fill: 'row'},
+                breakpoints: {
+                    320: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
+                    425: {slidesPerView: 2, spaceBetween: 15, grid: {rows: 2}},
+                    475: {slidesPerView: 2, spaceBetween: 25, grid: {rows: 2}},
+                    640: {slidesPerView: 3, spaceBetween: 5, grid: {rows: 2}},
+                    768: {slidesPerView: 4, spaceBetween: 5, grid: {rows: 1}},
+                    1024: {slidesPerView: 5, spaceBetween: 5, grid: {rows: 1}},
+                    1440: {slidesPerView: 5, spaceBetween: 7, grid: {rows: 1}}
+                },
+                pagination: {el: `.swiper-pagination`, dynamicBullets: true, clickable: true},
+            }, ".button-prev-leafletSingleOther", ".button-next-leafletSingleOther");
+        }, 1000);
+    });
+}
+
 
 export function initSwiperCategoryBlog() {
     if (document.querySelector(".swiper-category-blog")) {

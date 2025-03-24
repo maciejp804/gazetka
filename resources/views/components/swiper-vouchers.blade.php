@@ -1,4 +1,4 @@
-@props(['swiperClass' => 'leafletPromo', 'mainRoute', 'title' => 'Brak', 'items', 'buttonClass'])
+@props(['swiperClass' => 'leafletPromo', 'mainRoute', 'title' => 'Brak', 'items'])
 
 <x-h2-title class="flex" :main-route="$mainRoute">{!! $title !!}</x-h2-title>
 
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div id="actual-slider-vouchers" class="swiper {{$swiperClass}} !hidden">
+    <div id="actual-slider-vouchers" class="swiper {{$swiperClass}} !hidden relative">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-16">
             @foreach($items as $item)
@@ -28,12 +28,12 @@
 
         <!-- If we need navigation buttons -->
         <x-button-next
-            class="button-next-{{$swiperClass}}-{{$buttonClass}}"
+            class="button-next-{{$swiperClass}}"
             size="w-4 h-4"
             colour="gray-500"
         />
         <x-button-prev
-            class="button-prev-{{$swiperClass}}-{{$buttonClass}}"
+            class="button-prev-{{$swiperClass}}"
             size="w-4 h-4"
             colour="gray-500"
         />

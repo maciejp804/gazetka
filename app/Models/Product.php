@@ -42,4 +42,9 @@ class Product extends Model
         return $this->ratings()->count();
     }
 
+    public function leafletProducts()
+    {
+        return $this->hasMany(LeafletProduct::class);
+    }
+
 }

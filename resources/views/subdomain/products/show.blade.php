@@ -40,8 +40,8 @@
             <x-section class="my-4">
                 <x-h2-title class="flex" main-route="main.leaflets" :see-more-status="false">Nie znalazłeś czego szukasz? Sprawdź inne gazetki!</x-h2-title>
                 <x-swiper-leaflets-promo
-                    class="leafletSingle"
-                    button-class="1"
+                    swiper-class="leafletSingle"
+                    data-container-id="leaflet-swiper"
                     title="Nie znalazłeś czego szukasz? Sprawdź inne gazetki!"
                     :leaflets="$productsInNoShopLeaflets"
                     main-route="main.leaflets"/>

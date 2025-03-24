@@ -73,13 +73,14 @@
 
                     <x-swiper-leaflets-promo
                         swiper-class="leafletSingle"
+                        data-container-id="leaflet-swiper"
                         button-class="1"
                         :leaflets="$leaflets"
                         main-route="main.leaflets"/>
                 </x-section>
             @endif
 
-
+            @if($products->isNotEmpty())
             <x-section class="my-4">
                 <x-h2-title
                     class="flex"
@@ -97,7 +98,7 @@
                     Zobacz wszystkie
                 </x-see-more>
             </x-section>
-
+            @endif
             <x-section class="my-4">
                 <x-h2-title
                     class="flex"
@@ -106,8 +107,9 @@
                 </x-h2-title>
 
                 <x-swiper-leaflets-promo
-                    swiper-class="leafletSingle"
-                    button-class="2"
+                    swiper-class="leafletSingleOther"
+                    data-container-id="leaflet-swiper"
+                    button-class="1"
                     :leaflets="$similarLeaflets"
                     main-route="main.leaflets"/>
             </x-section>

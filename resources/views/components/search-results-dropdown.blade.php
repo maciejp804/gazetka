@@ -4,7 +4,10 @@
         <div class="mx-4 py-1 text-xs font-base text-gray-400">Produkty</div>
         @foreach($products as $product)
             <a href="{{route('main.product', ['slug' => $product->slug])}}" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
-                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="inline-block w-6 h-6 mr-2">
+                @if($product->image)
+                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="inline-block w-6 h-6 mr-2">
+                @endif
+
                 {{ $product->name }}
             </a>
         @endforeach
@@ -19,7 +22,7 @@
         ">Sklepy</div>
         @foreach($retailers as $retailer)
             <a href="{{route('subdomain.index', ['subdomain' => $retailer->slug])}}" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
-                <img src="{{ $retailer['logo'] }}" alt="{{ $retailer['name'] }} logo" class="inline-block w-6 h-6 mr-2">
+                <img src="{{ $retailer['image'] }}" alt="{{ $retailer['name'] }} logo" class="inline-block w-6 h-6 mr-2">
                 {{ $retailer['name'] }}
             </a>
         @endforeach

@@ -22,14 +22,13 @@
                 <x-h1-title :h1Title="$h1_title"/>
 
                 <x-swiper-leaflets-promo
-                    button-class="1"
+                    data-container-id="leaflet-swiper"
                     :leaflets="$leaflets_promo"
                     main-route="main.leaflets"/>
             </x-section>
 
             <x-section>
                 <x-swiper-info
-                    button-class="1"
                     swiper-class="swiper-info"
                     :items="$info_description"/>
             </x-section>
@@ -37,7 +36,6 @@
             <x-section>
                 <x-swiper
                     :items="$shops"
-                    button-class="1"
                     swiper-class="swiper-shops"
                     type="retailers"
                     title="Sieci handlowe"
@@ -49,7 +47,6 @@
                 <x-swiper
                     :items="$products"
                     type="products"
-                    button-class="1"
                     swiper-class="swiper-product"
                     title="Najlepsze promocje"
                     main-route="main.products"/>
@@ -57,7 +54,6 @@
 
             <x-section>
                 <x-swiper-category
-                    button-class="1"
                     title="Kategorie sieci handlowych"
                     :items="$shop_categories"
                     swiper-class="category-swiper"
@@ -81,7 +77,6 @@
 
             <x-section>
                 <x-swiper-vouchers
-                    button-class="1"
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
@@ -92,30 +87,31 @@
 
             <x-section>
                 <x-h2-title class="flex " main-route="main.leaflets">Przeglądaj gazetki i katalogi</x-h2-title>
-                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row">
-                    <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
-                    <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
-                    <x-search placeholder="Wpisz nazwę sieci... " :border="true"
-                              input-id="search-input-leaflet"
-                              result-id="results-box-leaflet"
-                              data-search-type="leaflets"
-                              data-container-id="leaflet-swiper-search"
-                    >
-                        <x-loupe-button href="#"/>
-                    </x-search>
+                <div class="filter-box">
+                    <div class="flex flex-col gap-4 mb-4 lg:flex-row">
+                        <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
+                        <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
+                        <x-search placeholder="Wpisz nazwę sieci... " :border="true"
+                                  input-id="search-input-leaflet"
+                                  result-id="results-box-leaflet"
+                                  data-search-type="leaflets"
+                                  data-container-id="leaflet-swiper-search"
+                        >
+                            <x-loupe-button href="#"/>
+                        </x-search>
+                    </div>
+                    <x-swiper-leaflets-search
+                        swiper-class="leaflet"
+                        data-container-id="leaflet-swiper-search"
+                        :leaflets="$leaflets"
+                        type="leaflet"/>
                 </div>
-                <x-swiper-leaflets
-                    button-class="1"
-                    swiper-class="leaflet"
-                    data-container-id="leaflet-swiper-search"
-                    :leaflets="$leaflets"
-                    type="leaflet"/>
+
                 <x-see-more class="lg:hidden pb-2" main-route="main.leaflets">Zobacz wszystkie</x-see-more>
             </x-section>
 
             <x-section>
                 <x-swiper-blog
-                    button-class="1"
                     swiper-class="swiper-blog"
                     title="Ostatnie wpisy blogowe"
                     main-route="main.blogs"

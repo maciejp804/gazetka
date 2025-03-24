@@ -1,4 +1,4 @@
-<div {{$attributes->merge(['class' => 'min-w-full 1xl:min-w-265 1xl:w-265 mx-auto flex flex-col'])}}>
+<div {{$attributes->merge(['class' => 'flex flex-col w-full 1xl:w-265 mx-auto '])}}>
 
 {{ $slot }}
 

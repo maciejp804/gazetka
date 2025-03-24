@@ -12,12 +12,16 @@ class Page extends Model
 
     protected $fillable = [
         'page_number',
-        'image_path'
+        'image_path',
+        'width',
+        'height'
         ];
 
     public function leaflets()
     {
-        return $this->belongsToMany(Leaflet::class)->withTimestamps();
+        return $this->belongsToMany(Leaflet::class, 'leaflet_page')
+            ->withPivot('sort_order') // ✅ Pobieranie `sort_order` z pivot table
+            ->orderBy('sort_order');  // ✅ Sortowanie stron w kolejności
     }
 
     public function clicks(): HasMany

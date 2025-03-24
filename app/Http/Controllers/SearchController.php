@@ -9,11 +9,20 @@ use App\Models\Place;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Models\Voucher;
+use App\Services\SearchService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+
+    protected SearchService $searchService;
+
+    public function __construct(SearchService $searchService)
+    {
+        $this->searchService = $searchService;
+    }
+
     public function single(Request $request)
     {
         $query = $request->input('query');
@@ -23,9 +32,11 @@ class SearchController extends Controller
 
         if ($searchType === 'products-retailers') {
 
-            $products = Product::where('name', 'like', $query . '%')->get();
+            $products = Product::where('name', 'like', $query . '%')
+                ->where('status', 1)->get();
 
-            $retailers = Shop::where('name', 'like', $query . '%')->get();
+            $retailers = Shop::where('name', 'like', $query . '%')
+                ->where('status', 'active')->get();
 
         } elseif ($searchType === 'places') {
 
@@ -176,64 +187,7 @@ class SearchController extends Controller
 //            dd($results);
         } elseif ($searchType === 'products') {
 
-            $products = PageClick::select('page_clicks.*')
-                ->join('leaflet_products', 'page_clicks.leaflet_product_id', '=', 'leaflet_products.id')
-                ->where('valid_from', '<=', now())
-                ->where('valid_to', '>=', now())
-                ->whereHas('leafletProduct.product', function ($queryName) use ($query) {
-                    $queryName->where('name', 'like', $query . '%');
-                });
-
-            // Filtrowanie według kategorii
-            if ($category != 'all') {
-                if ($subcategory != 'all') {
-                    // Filtrowanie po konkretnej subkategorii – produkt musi mieć product_category_id równy $subcategory.
-                    $products = $products->whereHas('leafletProduct.product.category', function ($queryCategory) use ($subcategory) {
-                        $queryCategory->where('id', $subcategory);
-                    });
-                } else {
-                    // Filtrowanie po głównej kategorii – produkt może być przypisany do głównej kategorii
-                    // lub do którejś z jej subkategorii (czyli tam, gdzie parent_id = $category).
-                    $products = $products->whereHas('leafletProduct.product.category', function ($queryCategory) use ($category) {
-                        $queryCategory->where('id', $category)
-                            ->orWhere('parent_id', $category);
-                    });
-                }
-            }
-
-            // Obsługa czasu (sortowanie i filtrowanie)
-
-            $products = $this->productsGetOrderBy($time, $products);
-
-            $results = $products->paginate($limit, ['*'], 'page', $page);
-
-
-
-            $flattenedCollection = $results->getCollection()->flatMap(function ($click) {
-                return $click->page->leaflets->map(function ($leaflet) use ($click) {
-                    return [
-                        'click_id'      => $click->id,
-                        'valid_from'    => $click->valid_from,
-                        'valid_to'      => $click->valid_to,
-                        'page_id'       => $click->page->id,
-                        'leaflet_id'    => $leaflet->id,
-                        'shop_image'       => $leaflet->shop ? $leaflet->shop->image : null,
-                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
-                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
-                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
-                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
-                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
-                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
-                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
-                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
-                    ];
-                });
-            });
-
-            // Podmiana kolekcji w paginatorze – zachowujemy metadane paginacji
-            $results->setCollection($flattenedCollection);
-
-
+            $results = $this->searchService->searchProducts($query, $category, $subcategory, $time, $limit, $page);
 
         }
 
@@ -487,5 +441,60 @@ class SearchController extends Controller
                 break;
         }
         return $products;
+    }
+
+    public function tchibo()
+    {
+        $start = $_GET['start'];
+        set_time_limit(300);
+
+$startId = $start;
+$endId = $start + 600;
+$saveDir = "tchibo_image/";
+
+// Utwórz folder jeśli nie istnieje
+if (!is_dir($saveDir)) {
+    mkdir($saveDir, 0777, true);
+}
+
+for ($catalogId = $startId; $catalogId <= $endId; $catalogId++) {
+    $xmlUrl = "https://katalog.tchibo.de/frontend/mvc/api/catalogs/{$catalogId}/v1/xml/catalog.xml";
+    $downloadUrl = "https://catalogue.tchibo.pl/frontend/getappcatalogdata.do?path=img&f=catcover.jpg&catalogid={$catalogId}&catalogVersion=1&upperHalfCover=false";
+    $savePath = $saveDir . "catcover_{$catalogId}.jpg";
+
+    echo "🔍 Sprawdzam katalog: $catalogId\n";
+
+    $xml = @simplexml_load_file($xmlUrl);
+    if (!$xml) {
+        echo "❌ Nie udało się wczytać XML dla katalogu $catalogId</br>";
+        continue;
+    }
+
+    $found = false;
+
+    foreach ($xml->xpath('//string[@id="map_image_path"]') as $node) {
+        $value = (string)$node['value'];
+        if (strpos($value, 'tchibo') !== false) {
+            $found = true;
+            break;
+        }
+    }
+
+    if ($found) {
+        echo "✅ Znaleziono 'tchibo' – pobieram obrazek dla katalogu $catalogId...</br>";
+        $image = @file_get_contents($downloadUrl);
+        if ($image) {
+            file_put_contents($savePath, $image);
+            echo "📥 Zapisano jako: $savePath\n\n";
+        } else {
+            echo "⚠️ Nie udało się pobrać obrazka z: $downloadUrl</br>";
+        }
+    } else {
+        echo "ℹ️ Brak 'tchibo' w map_image_path – pomijam.</br>";
+    }
+}
+
+
+
     }
 }

@@ -99,15 +99,19 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
                 @foreach($items as $item)
-                    {{--                    @dd($item->product_slug)--}}
+{{--                                        @dd($item)--}}
                     <x-product
                         :valid_from="$item['valid_from']"
                         :valid_to="$item['valid_to']"
-                        :product_image="$item['product_image']"
+                        :product_image="$item['product_image'] ?: $item['page_image']"
                         :product_name="$item['product_name']"
                         :product_slug="$item['product_slug']"
                         :promo_price="$item['promo_price']"
                         :shop_image="$item['shop_image']"
+                        :shop_slug="$item['shop_slug']"
+                        :page_number="$item['page_number']"
+                        :leaflet_id="$item['leaflet_id']"
+
                     />
                 @if($adsStatus === true)
                     @switch($loop->iteration)

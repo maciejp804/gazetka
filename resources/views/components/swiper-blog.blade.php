@@ -1,7 +1,7 @@
-@props(['blogs','title' => 'Brak', 'mainRoute' => 'main.index', '$swiperClass'])
+@props(['blogs','title' => 'Brak', 'mainRoute' => 'main.index', 'swiperClass'])
 <x-h2-title class="flex" :main-route="$mainRoute">{!! $title !!}</x-h2-title>
 <div class="w-full">
-<div class="swiper {{$swiperClass}}">
+<div class="swiper {{$swiperClass}} relative">
     <!-- Additional required wrapper -->
     <div class="swiper-wrapper h-75 mb-10">
         @foreach($blogs as $item)
@@ -38,12 +38,12 @@
 
     <!-- If we need navigation buttons -->
     <x-button-next
-        class="button-next-{{$swiperClass}}-{{$buttonClass}}"
+        class="button-next-{{$swiperClass}}"
         size="w-4 h-4"
         colour="gray-500"
     />
     <x-button-prev
-        class="button-prev-{{$swiperClass}}-{{$buttonClass}}"
+        class="button-prev-{{$swiperClass}}"
         size="w-4 h-4"
         colour="gray-500"
     />

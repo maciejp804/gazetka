@@ -32,4 +32,9 @@ class LeafletProduct extends Model
     {
         return $this->belongsTo(Leaflet::class);
     }
+
+    public function page()
+    {
+        return $this->belongsTo(Page::class);
+    }
 }

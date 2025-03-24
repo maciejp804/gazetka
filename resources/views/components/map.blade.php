@@ -41,9 +41,9 @@
         var marker = L.marker([{{$marker->lat}}, {{$marker->lng}}], {icon: customIcon});
 
         var contentString = '<div id="infobox">' +
-            '@if(isset($marker->shop->logo_xs) && !empty($marker->shop->logo_xs))' +
+            '@if(isset($marker->shop->image) && !empty($marker->shop->image))' +
             '<div class="infobox-image"><a href="{{route('subdomain.index_gps',['subdomain' => $marker->shop->slug, 'community' => $marker->place->slug])}}">' +
-            '<img src="{{$marker->shop->logo_xs}}"/></a></div>' +
+            '<img src="{{$marker->shop->image}}"/></a></div>' +
             '<a href="{{route('subdomain.shop_address', ['subdomain' => $marker->shop->slug,'community' => $marker->place->slug ,'address' => $marker->slug])}}">{{$marker->address}}, {{$place->name}}<br/></a>' +
             '@endif' +
             '<div class="open-houers"><span>Godziny otwarcia:</span><br/>' +

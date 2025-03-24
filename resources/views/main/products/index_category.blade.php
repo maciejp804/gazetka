@@ -40,9 +40,9 @@
 
                     @if($subcategories->count() > 0)
                         <x-swiper-category-small
-                            class="swiper-category-small"
+                            data-container-id="leaflet-category"
+                            swiper-class="category-swiper-small"
                             data-subcategory="{{$subcategory}}"
-                            button-class="1"
                             :items="$subcategories"
                             :category="$category"
                             category-route="main.products.subcategory"
@@ -59,6 +59,7 @@
             <x-section>
                 <x-h2-title class="flex"  main-route="main.leaflets">Najnowsze gazetki promocyjne</x-h2-title>
                 <x-swiper-leaflets-promo
+                    data-container-id="leaflet-swiper"
                     button-class="1"
                     title="Najnowsze gazetki promocyjne"
                     :leaflets="$leaflets"

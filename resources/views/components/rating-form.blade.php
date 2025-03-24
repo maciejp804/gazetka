@@ -1,4 +1,4 @@
-@props(['rateableId', 'model', 'city' => '', 'subdomain' => '', 'averageRating', 'id'])
+@props(['rateableId', 'model', 'city' => '', 'subdomain' => null, 'averageRating', 'id'])
 <script>
     const averageRating = @json($averageRating) || 0;
 </script>

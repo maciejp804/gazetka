@@ -15,10 +15,10 @@
         <div class="w-full">
             <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,'id' =>$id])}}#{{$page}}">
                 <picture>
-                    <source srcset="{{ Storage::url($avif_path) }}" type="image/avif">
-                    <source srcset="{{ Storage::url($webp_path) }}" type="image/webp">
+                    <source srcset="{{ Storage::url($avif_path.'.avif') }}" type="image/avif">
+                    <source srcset="{{ Storage::url($webp_path.'.webp') }}" type="image/webp">
                     <img class="rounded object-cover object-top w-full h-40 2xs:h-52 xs:h-52 sm:h-60 md:h-56 2lg:h-60"
-                         src="{{ Storage::url($image_path) }}"
+                         src="{{ Storage::url($image_path.'.jpg') }}"
                          width="1920" height="1080"
                          alt="pro-img5">
                 </picture>

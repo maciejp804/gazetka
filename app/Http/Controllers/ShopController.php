@@ -6,6 +6,7 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Description;
 use App\Models\Leaflet;
+use App\Models\Marker;
 use App\Models\Place;
 use App\Models\Shop;
 use App\Http\Controllers\Controller;
@@ -136,15 +137,18 @@ class ShopController extends Controller
             ]);
     }
 
-    public function subdomainShowAddress($subdomain, $community)
+    public function subdomainShowAddress($subdomain, $community, $address)
     {
-        $placesAll = Place::all();
-        $place = $placesAll->where('slug', '=', $community)->first();
+        $place = Place::where('slug', '=', $community)->first();
 
-        $shops = Shop::all();
-        $shop = $shops->where('slug', $subdomain)->first();
+        $shop = Shop::where('slug', $subdomain)->first();
 
-        if(!$place || !$shop)
+        $placeAddress = Marker::with(['shop', 'place', 'hours'])->where('slug', '=', $address)
+            ->where('place_id', $place->id)
+            ->where('shop_id', $shop->id)
+            ->first();
+
+        if(!$placeAddress)
         {
             abort(404);
         }
@@ -157,8 +161,8 @@ class ShopController extends Controller
             'longitude' => $place->lng,
         ],JSON_PRETTY_PRINT), 60 * 24 * 7, '/', '.'.config('app.main_domain'), false, false); // Zapis na 7 dni
 
-        $averageRating = $shop->averageRating();
-        $ratingCount = $shop->ratingCount();
+        $averageRating = $placeAddress->averageRating();
+        $ratingCount = $placeAddress->ratingCount();
 
         $leaflets = Leaflet::with('shop')
             ->where('shop_id', $shop->id)
@@ -171,7 +175,7 @@ class ShopController extends Controller
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => $shop->name, 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
             ['label' => $shop->name.' '.$place->name, 'url' => route('subdomain.index_gps', ['subdomain' => $subdomain, 'community' => $community])],
-            ['label' => 'os. Przytorze 36', 'url' => ''],
+            ['label' => $placeAddress->address, 'url' => ''],
         ];
 
 
@@ -190,20 +194,20 @@ class ShopController extends Controller
         return view('subdomain.shop',
             [
                 'subdomain' => $subdomain,
-
                 'place' => $place,
+                'placeAddress' => $placeAddress,
 
-                'h1_title'=> $shop->name.' '.$place->name.', os. Przytorze 36',
+
+                'h1_title'=> $shop->name.' '.$place->name.', '.$placeAddress->address,
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-
 
                 'breadcrumbs' => $breadcrumbs,
 
                 // Rating
                 'averageRating' => $averageRating,
                 'ratingCount' => $ratingCount,
-                'model' => "Place",
+                'model' => "Marker",
 
                 'leaflets_category' => $categories,
                 'leaflets_time' => $leaflets_time,

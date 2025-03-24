@@ -1,36 +1,7 @@
-@props(['swiperClass',  'dataContainerId' => null, 'leaflets'])
-
-<div id="skeleton-slider-{{$swiperClass}}" class="flex w-full relative mb-4 h-140 2xs:h-184 md:h-96 lg:h-99">
-    <!-- Skeleton screen -->
-    <div  class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-12 w-96 1xs:w-102.5 xs:w-110.75 sm:w-152 md:w-184 lg:w-238 xl:w-257">
-        @for($i = 0; $i < 4; $i++)
-            <div {{$attributes->merge(['class' => 'border border-gray-200 rounded p-2 mb-5 relative w-full'])}}>
-                <div class="relative bg-white flex items-center justify-center group overflow-hidden">
-                    <div class="w-full">
-                        <div class="block w-full h-40 2xs:h-52 xs:h-52 sm:h-60 md:h-56 2lg:h-60 bg-gray-200 rounded animate-pulse"></div>
-                    </div>
-                </div>
-
-                {{-- Skeleton dla treści pod obrazkiem --}}
-                <div class="py-2 text-center hover:bg-white hover:opacity-20">
-                    <div class="w-8 h-8 mx-auto bg-gray-200 rounded animate-pulse"></div>
-                    <div class="h-4 bg-gray-200 rounded my-2 w-3/4 mx-auto animate-pulse"></div>
-                    <div class="h-3 bg-gray-200 rounded w-1/2 mx-auto animate-pulse"></div>
-                </div>
-
-                {{-- Skeleton dla ikon social media --}}
-                <div class="flex absolute justify-center w-full left-0 gap-3 z-20">
-                    <div class="border rounded-full w-7 h-7 bg-gray-200 flex justify-center -mt-1 shadow-2xl animate-pulse"></div>
-                    <div class="border rounded-full w-7 h-7 bg-gray-200 flex justify-center -mt-1 animate-pulse"></div>
-                    <div class="border rounded-full w-7 h-7 bg-gray-200 flex justify-center -mt-1 animate-pulse"></div>
-                </div>
-            </div>
-        @endfor
-    </div>
-</div>
+@props(['swiperClass', 'dataContainerId' => null, 'leaflets'])
 
 {{--<div class="w-full">--}}
-    <div class="swiper {{$swiperClass}} !hidden relative" id="{{$dataContainerId}}-{{$swiperClass}}">
+    <div class="swiper {{$swiperClass}} relative" id="{{$dataContainerId}}">
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-8 flex relative">

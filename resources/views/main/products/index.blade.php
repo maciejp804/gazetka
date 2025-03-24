@@ -54,6 +54,7 @@
             <x-section>
                 <x-h2-title class="flex"  :link="route('main.leaflets')">Najnowsze gazetki promocyjne</x-h2-title>
                 <x-swiper-leaflets-promo
+                    data-container-id="leaflet-swiper"
                     button-class="1"
                     :leaflets="$leaflets"
                     main-route="main.leaflets"/>

@@ -1,11 +1,10 @@
 @props(['type' => 'base', 'items' => '' ,'image' => '', 'name' => '', 'offer' => '',
 'hoverDesc'=> 'Gazetka promocyjna <strong>Biedronka</strong>', 'swiperClass' => 'mySwiper',
-'link' => '#', 'title' => 'Missing title', 'buttonClass', 'mainRoute'])
+'link' => '#', 'title' => 'Missing title', 'mainRoute'])
 
 <x-h2-title class="flex" :main-route="$mainRoute">{!! $title !!}</x-h2-title>
-
 <div class="w-full relative">
-    <div class="swiper {{$swiperClass}}">
+    <div class="swiper {{$swiperClass}} relative">
 
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-10">
@@ -36,15 +35,21 @@
             @elseif($type === 'products')
                 @foreach($items as $item)
                     <!-- Slides -->
+
                     <x-product
                         class="swiper-slide"
                         :valid_from="$item['valid_from']"
                         :valid_to="$item['valid_to']"
-                        :product_image="$item['product_image']"
+                        :product_image="$item['product_image'] ?: $item['page_image']"
                         :product_name="$item['product_name']"
                         :product_slug="$item['product_slug']"
-                        :promo_price="$item['promo_price']"
+                        :promo_price="$item['promo_price'] ?: null"
                         :shop_image="$item['shop_image']"
+                        :shop_slug="$item['shop_slug']"
+                        :page_number="$item['page_number']"
+                        :leaflet_id="$item['leaflet_id']"
+
+
                     />
                 @endforeach
              @endif
@@ -57,12 +62,12 @@
 
         <!-- If we need navigation buttons -->
         <x-button-next
-            class="button-next-{{$swiperClass}}-{{$buttonClass}}"
+            class="button-next-{{$swiperClass}}"
             size="w-4 h-4"
             colour="gray-500"
         />
         <x-button-prev
-            class="button-prev-{{$swiperClass}}-{{$buttonClass}}"
+            class="button-prev-{{$swiperClass}}"
             size="w-4 h-4"
             colour="gray-500"
         />

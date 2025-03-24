@@ -26,11 +26,17 @@ export function toggleNavButtons(swiper, prevSelector, nextSelector) {
 
 // ✅ Funkcja do inicjalizacji Swipera
 export function initSwiper(selector, options, prevSelector, nextSelector) {
+
+    if (selector instanceof HTMLElement) {
+        console.error("❌ BŁĄD: `selector` powinien być stringiem, a nie elementem HTML!", selector);
+        return;
+    }
+
     const swiperElements = document.querySelectorAll(selector);
 
     swiperElements.forEach((swiperElement, index) => {
-        const instancePrevSelector = `${prevSelector}-${index + 1}`;
-        const instanceNextSelector = `${nextSelector}-${index + 1}`;
+        const instancePrevSelector = `${prevSelector}`;
+        const instanceNextSelector = `${nextSelector}`;
 
         const swiper = new Swiper(swiperElement, {
             ...options,

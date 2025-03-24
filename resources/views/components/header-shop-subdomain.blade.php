@@ -1,4 +1,4 @@
-@props(['rateableId', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
+@props(['placeAddress','rateableId', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
 
 <x-rating-form :rateableId="$rateableId"
                :averageRating="$averageRating"
@@ -12,9 +12,10 @@
     <div class="flex flex-col gap-x-2 sm:flex-row">
         <div class="flex w-full mb-5 sm:w-1/4 sm:mb-0">
             <div class="w-full rounded lg:aspect-square ">
-                <div class="flex justify-center w-full h-full">
-                    <img class="flex self-center w-3/5" src="https://i.iplsc.com/00080QLHB6X63YKY-C112.png" alt="logo">
-                </div>
+                <a class="flex justify-center w-full h-full"
+                   href="{{route('subdomain.index_gps', ['subdomain' => $placeAddress->shop->slug, 'community' => $placeAddress->place->slug])}}">
+                   <img class="flex self-center w-3/5" src="{{$placeAddress->shop->image}}" alt="logo">
+                </a>
             </div>
         </div>
         <div class="flex flex-col w-full gap-x-2 1xs:flex-row sm:3/4">
@@ -30,8 +31,8 @@
                 <div class="1xs:aspect-square w-full rounded p-2 border bg-gray-100">
                     <div class="flex flex-col justify-center w-full h-full">
                         <x-header.svg svg="location"/>
-                        <span class="text-center text-xs">Dino Wieleń</span>
-                        <span class="text-center text-xs">os. Przytorze 36</span>
+                        <span class="text-center text-xs">{{$placeAddress->shop->name}}, {{$placeAddress->place->name}}</span>
+                        <span class="text-center text-xs">{{$placeAddress->address}}</span>
                         <x-rating-stars
                             class="flex-col justify-center"
                             :model="$model"
@@ -44,7 +45,7 @@
     </div>
     <div class="flex flex-col sm:flex-row my-5 gap-x-3">
         <div class="flex justify-between w-full mb-2">
-            <x-week-list/>
+            <x-week-list :placeAddress="$placeAddress"/>
         </div>
         <div class="flex w-full lg:hidden">
             <img class="object-cover rounded" src="{{asset('build/assets/shop-map-BX1_uGKc.png')}}" alt="image"/>
@@ -53,7 +54,15 @@
 </div>
 
     <div class="hidden lg:flex lg:w-1/3">
-        <img class="object-cover rounded" src="{{asset('build/assets/shop-map-BX1_uGKc.png')}}" alt="image">
+
+        <x-map-single
+            :map-id="'mapid'"
+            :latitude="$placeAddress->lat"
+            :longitude="$placeAddress->lng"
+            :zoom="13"
+            :marker="$placeAddress"
+            :place="$placeAddress->place"
+        />
     </div>
 
 

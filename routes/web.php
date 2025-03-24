@@ -311,7 +311,7 @@ Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('sear
 //END SEARCH
 
 
-
+Route::get('tchibo',[SearchController::class,'tchibo'])->name('search.tchibo');
 
 Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, $inserts, $insertData, $leaflets_category, $leaflets_time, $leaflets, $vouchers, $retailers, $products, $mainDomain) {
 
@@ -322,8 +322,8 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () use ($pages, $ads, 
        return app(LeafletController::class)->subdomainLeaflet($subdomain, $id,  $insertData);
     })->name('subdomain.leaflet');
 
-    Route::get('/{community}/{address}' ,function ($subdomain, $community, $address) use ($leaflets) {
-        return app(ShopController::class)->subdomainShowAddress($subdomain, $community, $address, $leaflets);
+    Route::get('/{community}/{address}' ,function ($subdomain, $community, $address) {
+        return app(ShopController::class)->subdomainShowAddress($subdomain, $community, $address);
     })->name('subdomain.shop_address');
 
     Route::get('/{community}', function ($subdomain, $community) use ($leaflets) {
@@ -450,7 +450,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
     Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
-    Route::get('/convert', [LeafletCoverController::class, 'storeCoverFromUrl']);
+    Route::get('/convert', [LeafletCoverController::class, 'storePage']);
 
     Route::get('/test-test/{week}/{number}/{start}', [SearchController::class, 'test']);
 
@@ -476,8 +476,7 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
 
 
-
-
+Route::get('tchibo',[SearchController::class,'tchibo'])->name('search.tchibo');
 
 Route::get('/panel/', [Backcontroller::class, 'index']);
 

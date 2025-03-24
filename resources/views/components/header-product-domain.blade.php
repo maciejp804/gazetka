@@ -1,4 +1,4 @@
-@props(['product', 'averageRating', 'ratingCount', 'model', 'city' => '', 'subdomain' => '', 'id' => '', 'descriptions'])
+@props(['product', 'productsInLeaflets','averageRating', 'ratingCount', 'model', 'city' => '', 'subdomain' => '', 'id' => '', 'descriptions'])
 
 <x-rating-form :rateableId="$product->id"
                :averageRating="$averageRating"
@@ -13,7 +13,11 @@
             <div class="w-full rounded lg:aspect-square ">
                 <div class="flex justify-center w-full h-full">
                     <img class="flex self-center w-4/5"
-                         src="{{$product->image}}"
+                         @if(!empty($product->image))
+                            src="{{$product->image}}"
+                         @else
+                            src="{{asset($product->category->logo)}}"
+                         @endif
                          alt="logo">
                 </div>
             </div>
@@ -47,16 +51,23 @@
                         :rating-count="$ratingCount"
                         :model="$model"/>
 
-                    <span class="text-center font-bold text-1xl">11.22 zł</span>
-                    <button type="submit" class="flex self-center bg-orange-500 rounded-3xl px-4 py-2 text-white font-semibold text-sm">Przejdź do gazetki</button>
+                    @if($productsInLeaflets->isNotEmpty())
+                        <span class="text-center font-bold text-1xl">od {{$productsInLeaflets[0]['promo_price']}}zł</span>
+                        <a href="{{route('subdomain.leaflet',['subdomain'=> $productsInLeaflets[0]['shop_slug'], 'id' => $productsInLeaflets[0]['leaflet_id']])}}#{{$productsInLeaflets[0]['page_number']}}" class="flex self-center bg-orange-500 rounded-3xl px-4 py-2 text-white font-semibold text-sm">Przejdź do gazetki</a>
+                    @else
+                        <span class="text-center font-bold text-1xl">Brak ofert</span>
+                    @endif
 
                 </div>
             </div>
         </div>
-        <div class="flex flex-col sm:flex-row my-5 gap-x-3">
-            <div class="flex justify-between w-full mb-2">
-                <x-price-list/>
+        @if($productsInLeaflets->isNotEmpty())
+            <div class="flex flex-col sm:flex-row my-5 gap-x-3">
+                <div class="flex justify-between w-full mb-2">
+                    <x-price-list :items="$productsInLeaflets"/>
+                </div>
             </div>
-        </div>
+        @endif
+
     </div>
 </div>

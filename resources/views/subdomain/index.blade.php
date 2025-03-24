@@ -53,16 +53,19 @@
 
             </x-section>
 
-            <x-section>
-                <x-swiper
-                    :items="$products"
-                    type="products"
-                    button-class="1"
-                    swiper-class="swiper-product"
-                    title="Promocje w {{$shop->name_locative}}"
-                    main-route="main.products"
-                />
-            </x-section>
+            @if($products->isNotEmpty())
+                <x-section>
+                    <x-swiper
+                        :items="$products"
+                        type="products"
+                        button-class="1"
+                        swiper-class="swiper-product"
+                        title="Promocje w {{$shop->name_locative}}"
+                        main-route="main.products"
+                    />
+                </x-section>
+            @endif
+
 
             <x-section>
                 <x-swiper-vouchers

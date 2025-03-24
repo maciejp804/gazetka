@@ -43,6 +43,16 @@
 
     @endforeach
 
-    <img src="{{$pages[$index]->image_path}}" class="swiper-lazy sm:max-w-[520px] sm:max-h-[750px] lg:max-w-[447px]" loading="lazy" alt="slide" id="slideImg"/>
+        <picture>
+            <source srcset="{{ Storage::url($pages[$index]->image_path.'.avif') }}" type="image/avif">
+            <source srcset="{{ Storage::url($pages[$index]->image_path.'.webp') }}" type="image/webp">
+            <img class="swiper-lazy sm:max-w-[520px] sm:max-h-[750px] lg:max-w-[447px]"
+                 loading="lazy"
+                 id="slideImg"
+                 src="{{ Storage::url($pages[$index]->image_path.'.jpg') }}"
+                 width="1920" height="1080"
+                 alt="pro-img5">
+        </picture>
+{{--    <img src="{{ Storage::url($pages[$index]->image_path.'.webp') }}" class="swiper-lazy sm:max-w-[520px] sm:max-h-[750px] lg:max-w-[447px]" loading="lazy" alt="slide" id="slideImg"/>--}}
     <div class="swiper-lazy-preloader"></div>
 </div>

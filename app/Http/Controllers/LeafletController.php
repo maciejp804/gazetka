@@ -10,6 +10,7 @@ use App\Models\Leaflet;
 use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Shop;
+use App\Services\ProductService;
 use App\Services\SortOptionsService;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,13 @@ use Jenssegers\Agent\Agent;
 
 class LeafletController extends Controller
 {
+    protected ProductService $productService;
+
+    public function __construct(ProductService $productService)
+    {
+        $this->productService = $productService;
+    }
+
     public function index()
     {
         $leaflets = $this->getLeafletsSimplePaginate(10);
@@ -38,7 +46,7 @@ class LeafletController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $products = $this->products();
+        $products = $this->productService->getProducts();
 
         $leaflet_sort = SortOptionsService::getSortOptions();
 
@@ -83,7 +91,7 @@ class LeafletController extends Controller
             abort(404);
         }
 
-        $products = $this->products();
+        $products = $this->productService->getProducts();
 
 //        dd($products);
 
@@ -262,14 +270,15 @@ class LeafletController extends Controller
                         'valid_from'    => $click->valid_from,
                         'valid_to'      => $click->valid_to,
                         'page_id'       => $click->page->id,
+                        'page_image'    => $click->page->image_path,
                         'leaflet_id'    => $leaflet->id,
-                        'shop_image'       => $leaflet->shop ? $leaflet->shop->image : null,
+                        'shop_image'    => $leaflet->shop ? $leaflet->shop->image : null,
                         'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
                         'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
                         'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
                         'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
                         'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
-                        'product_image'  => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
+                        'product_image' => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
                         'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
                         'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
                     ];

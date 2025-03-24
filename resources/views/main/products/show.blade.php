@@ -21,9 +21,21 @@
 
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-product-domain :product="$product" :ratingCount="$ratingCount" :averageRating="$averageRating" :model="$model" :descriptions="$descriptions"/>
+
+                <x-header-product-domain :product="$product" :products-in-leaflets="$productInLeaflets" :ratingCount="$ratingCount" :averageRating="$averageRating" :model="$model" :descriptions="$descriptions"/>
+            </x-section>
+            <x-section>
+                <x-swiper
+                    :items="$products"
+                    type="products"
+                    button-class="1"
+                    swiper-class="swiper-product"
+                    title="Produkty z tej samej kategorii"
+                    main-route="main.products"/>
             </x-section>
 
+
+            <x-ad-1 class="mb-5"/>
             <x-section>
                 <x-swiper-vouchers
                     button-class="1"
@@ -34,18 +46,7 @@
             </x-section>
 
 
-                <x-section>
-                    <x-swiper
-                        :items="$products"
-                        type="products"
-                        button-class="1"
-                        swiper-class="swiper-product"
-                        title="Produkty z tej samej kategorii"
-                        main-route="main.products"/>
-                </x-section>
 
-
-            <x-ad-1 class="mb-5"/>
 
 
         </x-div-1060>

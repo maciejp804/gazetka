@@ -6,7 +6,7 @@ import {
     initSwiperInfo,
     initSwiperBlog,
     initSwiperLeafletSingle,
-    initSwiperCategoryBlog, initSwiperVoucherPromo, initShopsSwiper, initProductSwiper
+    initSwiperCategoryBlog, initSwiperVoucherPromo, initShopsSwiper, initProductSwiper, initSwiperLeafletSingleOther
 } from "./swiper/instances";
 
 import {debounce, restoreInputStyle} from "./filter/helpers";
@@ -30,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCategorySwiperSmall();
     initSwiperBlog();
     initSwiperLeafletSingle();
+    initSwiperLeafletSingleOther();
     initSwiperCategoryBlog();
     initSwiperVoucherPromo();
 
@@ -48,16 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const searchType = input.getAttribute('data-search-type');
         const containerId = input.getAttribute('data-container-id');
-
-        // const swiperElement = document.querySelector('.leaflet'); // Pobranie elementu po klasie
-        // const swiperInstance = swiperElement ? swiperElement.swiper : null;
-        //
-        // console.log(swiperInstance);
+        const swiperBig = filterBox.querySelector('.leaflet');
+        console.log(containerId); // Sprawdź, czy containerId ma wartość
 
         const swiperInstance = containerId && document.querySelector(`#${containerId}`)
             ? document.querySelector(`#${containerId}`).swiper
             : null;
 
+        console.log(swiperInstance); // Sprawdź, czy containerId ma wartość
 
         const clearButton = input.parentElement.querySelector('.clear-button');
 
