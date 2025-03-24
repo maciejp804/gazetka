@@ -7,6 +7,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css', // ✅ Ładowanie głównego CSS
                 'resources/js/app.js',   // ✅ Ładowanie tylko `app.js`, który zawiera resztę importów
+                'resources/js/leaflet-swiper.js',
                 'resources/js/rating.js',
                 'resources/js/geolocation.js',
             ],
