@@ -19,16 +19,17 @@
                                     colour="fill-gray-300"/>
                             </div>
                             @if($hour->opening_time == '00:00:00' || $hour->closing_time == '00:00:00')
-                                @php
-                                    $default_time = json_decode($marker->default_opening_hours, true);
-                                @endphp
+{{--                                @dd($marker->default_opening_hours)--}}
+{{--                                @php--}}
+{{--                                    $default_time = json_decode($marker->default_opening_hours, true);--}}
+{{--                                @endphp--}}
                                 <span>
                                 @if(date("l") == 'Sunday')
-                                        {{$default_time['non_trading_sunday']}}
+                                        {{$marker->default_opening_hours['non_trading_sunday']}}
                                     @elseif(date("l") == 'Saturday')
-                                        {{$default_time['saturday']}}
+                                        {{$marker->default_opening_hours['saturday']}}
                                     @else
-                                        {{$default_time['monday']}}
+                                        {{$marker->default_opening_hours['monday']}}
                                     @endif
                             </span>
                             @else

@@ -34,11 +34,7 @@
     </div>
     <div class="flex w-full">
          <span class="text-sm font-normal p-2">
-             Integer condimentum sem turpis, volutpat mattis nisl porttitor in. Sed vulputate at mi a viverra.
-             Praesent elementum dui in lectus sodales lobortis. Cras sed felis vitae ligula accumsan vestibulum
-             quis aliquet magna. Praesent sit amet nisi vulputate, sollicitudin arcu a, varius justo.
-             Nunc venenatis vestibulum varius. Nullam pellentesque, enim eget finibus dignissim,
-             lorem tellus ultricies ante, sed dignissim metus risus nec massa.
+
          </span>
     </div>
 </div>

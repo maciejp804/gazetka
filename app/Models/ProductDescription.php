@@ -18,6 +18,7 @@ class ProductDescription extends Model
         'content' => 'array',
         'body' => 'array',
         'faq' => 'array',
+        'parameters' => 'array'
     ];
 
     public function products()

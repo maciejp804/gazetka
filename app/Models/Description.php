@@ -20,16 +20,13 @@ class Description extends Model
         'faq' => 'array',
     ];
 
-    public static function getByRouteAndPlace($route, $place = null)
+    public static function getByRouteAndPlace($route, $shop_id = null, $place = null)
     {
-        if ($place != null) {
-            $placeId = $place->id;
-        } else {
-            $placeId = null;
-        }
+        $placeId = $place != null ? $place->id : null;
 
         return self::where('route_name',  $route)
             ->where('place_id',$placeId)
+            ->where('shop_id', $shop_id)
             ->first();
     }
 
@@ -45,6 +42,7 @@ class Description extends Model
             'meta_description' => str_replace('{city}', $place->name_locative, $defaults['meta_description']),
             'meta_keywords' => str_replace('{city}', $place->name, $defaults['meta_keywords']),
             'h1_title' => str_replace('{city}', $place->name_locative, $defaults['h1_title'])
+//            Aktualna oferta sieci Biedronka Wipsowo to nie jedyny atut naszego serwisu. W dostępnych na naszej stronie gazetkach promocyjnych Biedronki znajdziesz produkty potrzebne w domu każdego dnia. Aktualna gazetka Biedronka Wipsowo jest zawsze pełna świeżych warzyw i owoców - zarówno tych egzotycznych, jak i polskich. Najnowsze ulotki Biedronki w mieście Wipsowo pokazują smaki z różnych zakątków świata. Biedronka chętnie sprowadza artykuły spożywcze inspirowane kuchnią amerykańską, japońską czy śródziemnomorską. Biedronka gazetka Wipsowo przedstawiają także niskie ceny chlebów, pączków czy kajzerek, które zachwycą Cię świeżością. W serwisie GazetkaPromocyjna.com.pl znajdziesz też godziny otwarcia sklepów Biedronka Wipsowo pod konkretnymi adresami w tym mieście.
         ]);
     }
 

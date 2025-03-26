@@ -10,7 +10,7 @@
         <span class="font-bold py-2 col-span-6">Ważne parametry:</span>
     </div>
 
-    @foreach($descriptions->content[0]['parameter'] as $key => $value)
+    @foreach($descriptions->parameters as $key => $value)
         <div class="grid grid-cols-6 px-2 odd:bg-gray-100 even:bg-white py-2">
             <div class="col-span-3 flex items-center">
                 <span class="font-semibold">{{mb_ucfirst($key)}}:</span>

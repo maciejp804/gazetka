@@ -85,8 +85,7 @@ class MainController extends Controller
 
         $breadcrumbs = [];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName())
-            ?: Description::getDefault(Route::currentRouteName());
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName()) ?: Description::getDefault(Route::currentRouteName());
 
 
 
@@ -97,7 +96,7 @@ class MainController extends Controller
                 'places' => $placesLimit40,
 
                 // Opisy i dane globalne
-                'h1_title'=> $descriptions->h1_title,
+                'h1_title'=> $descriptions->h1_title != null ? $descriptions->h1_title : 'Domyślny tytuł',
                 'page_title'=> $descriptions->meta_title,
                 'meta_description' => $descriptions->meta_description,
                 'info_description' => $info_description,
@@ -144,6 +143,7 @@ class MainController extends Controller
                 $query->where('status', 1);
             })
             ->where('place_id', $place->id)
+            ->where('slug', '!=', '')
             ->get();
 
         $leaflets = Leaflet::with('shop', 'cover')
@@ -185,7 +185,7 @@ class MainController extends Controller
 
         $blogs = Blog::with('category')->where('status', '=','published')->get();
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), null, $place) ?? Description::getDefault(Route::currentRouteName(), $place);
 
         return view('main.index_gps', data:
             [
@@ -193,9 +193,9 @@ class MainController extends Controller
                 'place' => $place,
                 'places' => $placesLimit40,
 
-                'h1_title'=> $descriptions->h1_title,
-                'page_title'=> $descriptions->meta_title,
-                'meta_description' => $descriptions->meta_description,
+                'h1_title'=> $descriptions->h1_title != null ? $descriptions->h1_title : "Wszystkie <strong>gazetki promocyjne</strong> w jednym miejscu w $place->name_locative | GazetkaPromocyjna.com.pl",
+                'page_title'=> $descriptions->meta_title != null ? $descriptions->meta_title : "Gazetki promocyjne, nowe i nadchodzące promocje w $place->name_locative | GazetkaPromocyjna.com.pl",
+                'meta_description' => $descriptions->meta_description != null ? $descriptions->meta_description : "Znajdź najlepsze promocje i oferty w $place->name_locative. Sprawdź aktualne gazetki i rabaty.",
                 'info_description' => $info_description,
                 'descriptions' => $descriptions,
                 'breadcrumbs' => $breadcrumbs,
@@ -274,7 +274,7 @@ class MainController extends Controller
 
         $blogs = Blog::with('category')->where('status', '=','published')->get();
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id) ?? Description::getDefault(Route::currentRouteName(), $place);
 
         return view('subdomain.index', [
             //Zmienne globalne

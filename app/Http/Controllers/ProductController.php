@@ -261,16 +261,20 @@ class ProductController extends Controller
 
     public function showSubdomain($subdomain, $slug)
     {
-
-        $products = Product::with('ratings');
-        $product = $products->where('slug', $slug)->first();
         $shops = Shop::all();
         $shop = $shops->where('slug', $subdomain)->first();
-        $leaflets = Leaflet::with('shop')->get();
+
+        $product = Product::with(['category', 'descriptions' => function($q) use ($shop) {
+            $q->where('shop_id', $shop->id);
+        }])
+            ->where('slug', $slug)
+            ->first();
+
         if(!$product || !$shop)
         {
             abort(404);
         }
+        $leaflets = Leaflet::with('shop')->get();
 
         $productsInShopLeaflets = Leaflet::with('shop')
             ->where('shop_id', $shop->id)
@@ -381,10 +385,8 @@ class ProductController extends Controller
             ['label' => mb_ucfirst($product->name), 'url' => ""]
         ];
 
-        $descriptions = ProductDescription::with('products')
-            ->where('product_id', $product->id)
-            ->first();
 
+//        dd($product->descriptions);
 
         return view('subdomain.products.show', data:
             [
@@ -408,7 +410,7 @@ class ProductController extends Controller
                 'productsInNoShopLeaflets' => $productsInNoShopLeaflets,
 
                 //Opis strony
-                'descriptions' => $descriptions
+                'descriptions' => $product->descriptions
             ]);
     }
 

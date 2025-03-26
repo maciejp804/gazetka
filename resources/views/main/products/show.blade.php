@@ -59,7 +59,7 @@
     <div class="flex-col mx-4 xl:m-auto">
 
         @if($descriptions)
-            <x-description :items="$descriptions" :product="$product"/>
+            <x-description :items="$descriptions"/>
             @if($descriptions->faq)
                 <x-faq :items="$descriptions"/>
             @endif

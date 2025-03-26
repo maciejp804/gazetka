@@ -55,19 +55,21 @@
                     title="Najlepsze promocje w {{$place->name_locative}}"
                     main-route="main.products"/>
             </x-section>
+           @if($markers->isNotEmpty())
+                <x-section>
+                    <x-h2-title
+                        class="flex"
+                        :see-more-status="false"
+                        main-route="main.index">
+                        Sklepy w pobliżu Twojej lokalizacji
+                    </x-h2-title>
+                    <x-shop-list
+                        :markers="$markers"
+                        :place="$place"
+                    />
+                </x-section>
+           @endif
 
-            <x-section>
-                <x-h2-title
-                    class="flex"
-                    :see-more-status="false"
-                    main-route="main.index">
-                    Sklepy w pobliżu Twojej lokalizacji
-                </x-h2-title>
-                <x-shop-list
-                    :markers="$markers"
-                    :place="$place"
-                />
-            </x-section>
 
             <x-section>
                 <x-map

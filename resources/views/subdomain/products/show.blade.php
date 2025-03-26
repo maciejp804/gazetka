@@ -20,10 +20,10 @@
 
         <x-div-1060>
 
-
+{{--    @dd($product)--}}
             <x-section>
                 <x-h1-title :h1Title="$h1_title"/>
-                <x-header-product-subdomain/>
+                <x-header-product-subdomain :item="$descriptions" :product="$product"/>
             </x-section>
 
 

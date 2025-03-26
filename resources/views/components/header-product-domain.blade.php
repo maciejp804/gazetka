@@ -34,7 +34,7 @@
         </div>
         <div class="flex flex-col sm:flex-row my-5 gap-x-3">
             <div class="flex justify-between w-full mb-2">
-                @if(isset($descriptions->content[0]['parameter']))
+                @if(isset($descriptions->parameters))
                     <x-values-list :descriptions="$descriptions"/>
                 @endif
             </div>

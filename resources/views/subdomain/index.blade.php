@@ -115,8 +115,8 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-        <x-shop-descripton image="/build/assets/cheery-little-girl-sitting-shopping-cart 1-HAk2Ec6j.png"/>
 
+        <x-description :items="$descriptions"/>
         @if($descriptions->faq)
             <x-faq :items="$descriptions"/>
         @endif

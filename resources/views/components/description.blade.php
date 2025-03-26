@@ -1,4 +1,4 @@
-@props(['bg' => 'bg-white', 'items', 'product'])
+@props(['bg' => 'bg-white', 'items'])
 
 @foreach($items->content as $item)
     @php

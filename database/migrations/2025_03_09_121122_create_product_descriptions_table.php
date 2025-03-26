@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained();
             $table->foreignId('shop_id')->nullable()->constrained();
-            $table->json('content');
+            $table->text('excerpt')->nullable();
+            $table->json('parameters')->nullable();
+            $table->json('content')->nullable();
             $table->json('faq')->nullable();
             $table->string('h1_title')->nullable();
             $table->string('meta_title')->nullable();
