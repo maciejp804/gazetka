@@ -13,6 +13,7 @@
     @vite(['resources/js/app.js', 'resources/css/app.css'])
 </head>
 <body class="h-full">
+<x-flash-massage/>
 {{ $slot }}
 </body>
 </html>

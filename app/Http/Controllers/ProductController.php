@@ -315,6 +315,7 @@ class ProductController extends Controller
                                 return [
                                     'valid_from' => $click->valid_from,
                                     'valid_to' => $click->valid_to,
+                                    'updated_at' => $click->updated_at
                                 ];
                             }),
                         ];
@@ -362,6 +363,7 @@ class ProductController extends Controller
                                 return [
                                     'valid_from' => $click->valid_from,
                                     'valid_to' => $click->valid_to,
+                                    'updated_at' => $click->updated_at
                                 ];
                             }),
                         ];

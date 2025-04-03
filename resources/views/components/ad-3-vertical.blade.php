@@ -1,5 +1,5 @@
 @props(['site'])
-<div {{$attributes->merge(['class' => 'w-full'])}}>
+<div {{$attributes->merge(['class' => ' w-full'])}}>
     <div class="hidden 2xl:flex {{$site}}">
         <img src="https://placehold.co/300x600?text=Ads+300+x+600" alt="ad">
     </div>

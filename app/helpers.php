@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Cookie;
@@ -96,16 +97,12 @@ if (!function_exists('validationDate'))
         $dataNow = new DateTime('now'); // przykład bieżącej daty
         $dataEnd = new DateTime($endDate); // przykład końcowej daty
         $dataStart = new DateTime($startDate);
-        $dataCreate = new DateTime($createDate);
         $diff = $dataEnd->diff($dataNow);
 
         $new = false;
-        if ($createDate !== NULL) {
-            $diff2 = $dataCreate->diff($dataNow);
-            if($diff2->invert == 0 && $diff2->days < 1 )
-            {
-                $new = true;
-            }
+        if (!is_null($createDate)) {
+            $new = Carbon::parse($createDate)->isToday();
+
         }
 
 

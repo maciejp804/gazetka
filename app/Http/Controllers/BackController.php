@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Voucher;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Symfony\Component\DomCrawler\Crawler;
@@ -13,6 +14,13 @@ class BackController extends Controller
     public function index()
     {
         return view('panel.index');
+    }
+
+    public function voucherIndex(Request $request)
+    {
+
+        $vouchers = Voucher::with('voucherStore')->get();
+        return view('panel.voucher.index',['vouchers'=>$vouchers]);
     }
 
     public function clickableIndex($shop=null)

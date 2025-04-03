@@ -15,16 +15,12 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <!-- GPT loader -->
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
         window.googletag = window.googletag || {cmd: []};
-        googletag.cmd.push(function() {
-            googletag.defineSlot('/7894359647/SI_ABF_970x250', [[300, 100], [336, 280], [300, 250], [970, 90], [970, 100], [970, 250]], 'div-gpt-ad-1736141195381-0').addService(googletag.pubads());
-            googletag.pubads().enableSingleRequest();
-            googletag.enableServices();
-        });
-
     </script>
+
 
 
 </head>

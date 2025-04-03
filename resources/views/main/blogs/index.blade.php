@@ -19,9 +19,25 @@
         <x-ad-3-vertical site="justify-end"/>
 
         <div class="w-full 1xl:min-w-265 1xl:w-265 m-auto flex flex-col">
+            <x-h1-title :h1Title="$h1_title"/>
             <x-section class="flex flex-col">
 
                 <x-blog-categories :blogCategory="$blogCategory" :sum="$sum"/>
+
+
+                    <x-h2-title class="flex"  see-more-status="false" >Ostatnie wpisy</x-h2-title>
+                    <div class="grid grid-cols-6 gap-x-3 gap-y-6 p-2 rounded">
+                        @foreach($blogsNewtest as $item)
+                            @if($loop->first)
+                                <x-blogs-item-big :item="$item" />
+                            @else
+                                <x-blogs-item-small :item="$item" />
+                            @endif
+                        @endforeach
+                    </div>
+                    <x-ad-4-horizontal/>
+
+
 
                 @foreach($blogs as $blog)
 
@@ -55,6 +71,7 @@
                 <x-h2-title class="flex" :link="route('main.leaflets')">Zobacz polecane gazetki</x-h2-title>
                 <x-swiper-leaflets-promo
                     button-class="1"
+                    data-container-id="leaflet-swiper"
                     title="Zobacz polecane gazetki"
                     :leaflets="$leaflets"
                     main-route="main.leaflets"/>

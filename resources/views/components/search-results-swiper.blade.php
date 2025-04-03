@@ -7,6 +7,7 @@
             class="swiper-slide"
             :valid_from="$item->valid_from"
             :valid_to="$item->valid_to"
+            :updated_at="$item->updated_at"
             :logo="$item->shop->logo_xs"
             :name="$item->shop->name"
             :slug="$item->shop->slug"

@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded-full border border-gray-200  ">
         <div class="aspect-square rounded-full flex justify-center group-hover:bg-blue-550 group-hover:bg-opacity-50">
             <a class="self-center w-full" href="{{route($categoryRoute, ['category' => $item->slug])}}">
-                <img class="w-3/4 rounded-full m-auto" src="{{ asset($item->logo) }}" alt="pro-img1">
+                <img class="w-3/4 rounded-full m-auto" src="{{ $item->logo ? asset($item->logo) : asset('assets/images/categories/default.webp') }}" alt="pro-img1">
             </a>
         </div>
     </div>

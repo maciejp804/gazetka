@@ -11,6 +11,7 @@
                             class="relative w-full"
                             :valid_from="$item->valid_from"
                             :valid_to="$item->valid_to"
+                            :updated_at="$item->updated_at"
                             :logo="$item->shop->image"
                             :name="$item->shop->name"
                             :slug="$item->shop->slug"
@@ -142,7 +143,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-7 gap-y-5">
 
             @foreach($items as $item)
-                <div class="w-full sm:w-72 md:w-80 lg:w-75 2lg:w-80 1xl:w-80 m-auto h-80">
+                <div class="flex w-full sm:w-72 md:w-80 lg:w-75 2lg:w-80 1xl:w-80 m-auto h-80">
                     <x-voucher-slide
                         :item="$item"
                     />

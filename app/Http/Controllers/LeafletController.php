@@ -120,6 +120,7 @@ class LeafletController extends Controller
         ];
 
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+
         return view('main.leaflets.index_category', data:
             [
                 'h1_title'=> 'Gazetki <strong>promocyjne</strong> - aktualne gazetki i katalogi',

@@ -1,4 +1,4 @@
-@props(['shop', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
+@props(['shop', 'excerpt','averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
 
 
 
@@ -34,6 +34,11 @@
     </div>
     <div class="flex w-full">
          <span class="text-sm font-normal p-2">
+             @if($shop->excerpt)
+                 {{$shop->excerpt}}
+             @else
+                 {{$excerpt}}
+             @endif
 
          </span>
     </div>

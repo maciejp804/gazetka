@@ -25,14 +25,14 @@
                     :blogCategory="$blogCategories"
                     :sum="$sum"
                 />
-                <x-h2-title class="flex"  main-route="main.blogs.category" :category="$blogCategory->slug">{{$blogCategory->name}}</x-h2-title>
+                <x-h2-title class="flex"  main-route="main.blogs">{{$blogCategory->name}}</x-h2-title>
                 <div class="grid grid-cols-6 gap-x-3 gap-y-6 p-2 rounded">
                 @foreach($blogs as $blog)
 {{--                    @dd()--}}
                                 @if($loop->first)
                                     <x-blogs-item-big :item="$blog" :blog="$blogCategory"/>
                                 @else
-                                    <x-blogs-item-small :item="$blog" :blog="$blog"/>
+                                    <x-blogs-item-small :item="$blog"/>
                                 @endif
                 @endforeach
                 </div>

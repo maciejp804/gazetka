@@ -10,11 +10,11 @@
         <div class="aspect-square rounded-full flex justify-center group-hover:bg-blue-550 group-hover:bg-opacity-50">
             @if(request()->is('produkty/'.$category->slug.'/'.$item->slug))
                 <span class="self-center w-full">
-                    <img class="w-3/4 rounded-full m-auto" src="{{ asset($item->logo) }}" alt="pro-img1">
+                    <img class="w-3/4 rounded-full m-auto" src="{{ $item->logo ? asset($item->logo) : asset('assets/images/categories/default.webp') }}" alt="pro-img1">
                 </span>
             @else
                 <a class="self-center w-full" href="{{route($categoryRoute, ['category' => $category->slug, 'subcategory' => $item->slug])}}">
-                    <img class="w-3/4 rounded-full m-auto" src="{{ asset($item->logo) }}" alt="pro-img1">
+                    <img class="w-3/4 rounded-full m-auto" src="{{ $item->logo ? asset($item->logo) : asset('assets/images/categories/default.webp') }}" alt="pro-img1">
                 </a>
             @endif
 

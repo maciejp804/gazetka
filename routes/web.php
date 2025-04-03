@@ -14,6 +14,7 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
+use App\Http\Controllers\VoucherStoreController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -298,7 +299,7 @@ Route::get('new', function ()
     \Illuminate\Support\Facades\Mail::to('biuro@hoian.pl')->send(
         new \App\Mail\ContactMail()
     );
-    return 'Done';;
+    return 'Done';
 });
 
 
@@ -309,6 +310,32 @@ Route::get('/search/triple/swiper',[SearchController::class,'tripleSwiper'])->na
 Route::get('/search/triple/',[SearchController::class,'triple'])->name('search.triple');
 Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('search.quadruple');
 //END SEARCH
+
+//VOUCHER
+Route::get('voucher/store/create',[VoucherStoreController::class,'create'])->name('voucher.create');
+Route::get('voucher/store/update/tradedoubler',[VoucherStoreController::class,'updateTradedoubler'])->name('voucher.store.update.tradedoubler');
+Route::get('voucher/store/update/tradetracker',[VoucherStoreController::class,'updateTradetracker'])->name('voucher.store.update.tradetracker');
+Route::get('voucher/update/tradedoubler',[VoucherStoreController::class,'updateVouchersTradedoubler'])->name('voucher.update.tradedoubler');
+Route::get('voucher/update/tradetracker',[VoucherStoreController::class,'updateVouchersTradetracker'])->name('voucher.update.tradetracker');
+
+
+Route::get('panel/shops/{shop}', [BackController::class, 'clickableIndex']);
+
+Route::get('/panel/vouchers', [BackController::class, 'voucherIndex'])->name('vouchers.index');
+Route::get('/panel/vouchers/create', [VoucherController::class, 'create'])->name('vouchers.create');
+Route::post('/panel/vouchers/add', [VoucherController::class, 'add'])->name('vouchers.add');
+
+Route::get('/panel/vouchers/{voucher}/edit', [VoucherController::class, 'edit'])->name('vouchers.edit');
+Route::put('/panel/vouchers/{voucher}/update', [VoucherController::class, 'update'])->name('vouchers.update');
+Route::post('/panel/vouchers/{voucher}/upload-image', [VoucherController::class, 'uploadImage'])->name('vouchers.uploadImage');
+Route::post('panel//vouchers/{voucher}/upload-logo', [VoucherController::class, 'uploadLogo'])->name('vouchers.uploadLogo');
+
+Route::get('/panel/vouchers/store/create', [VoucherStoreController::class,'create'])->name('vouchers.store.create');
+Route::post('/panel/vouchers/store/add', [VoucherStoreController::class,'add'])->name('vouchers.store.add');
+Route::post('/panel/vouchers/store/{store}/edit', [VoucherStoreController::class,'edit'])->name('vouchers.store.edit');
+Route::post('/panel/vouchers/store/{store}/update', [VoucherStoreController::class,'update'])->name('vouchers.store.update');
+
+Route::get('panel', [Backcontroller::class, 'index']);
 
 
 Route::get('tchibo',[SearchController::class,'tchibo'])->name('search.tchibo');
@@ -478,9 +505,9 @@ Route::domain($mainDomain)->group(function () use ($descriptions, $blogCategory,
 
 Route::get('tchibo',[SearchController::class,'tchibo'])->name('search.tchibo');
 
-Route::get('/panel/', [Backcontroller::class, 'index']);
 
-Route::get('/panel/shops/{shop}/', [BackController::class, 'clickableIndex']);
+
+
 
 
 Route::get('/shops/', function () {

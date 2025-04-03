@@ -224,7 +224,7 @@ class SearchController extends Controller
 
             // Filtrowanie według nazwy
             $vouchers = Voucher::with('voucherStore')
-                ->where('end_date', '>=',now())
+                ->where('valid_to', '>=',now('Europe/Warsaw')->toDateTime())
                 ->whereHas('voucherStore', function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', $query . '%');
                 });
@@ -249,15 +249,15 @@ class SearchController extends Controller
                         break;
 
                     case '2':
-                        $vouchers = $vouchers->orderBy('end_date', 'asc');
+                        $vouchers = $vouchers->orderBy('valid_to', 'asc');
                         break;
 
                     case '3':
-                        $vouchers = $vouchers->where('start_date','>', now());
+                        $vouchers = $vouchers->where('valid_from','>', now());
                         break;
 
                     case '4':
-                        $vouchers = $vouchers->where('start_date','<', now());
+                        $vouchers = $vouchers->where('valid_from','<', now());
                         break;
                     // Dodaj inne przypadki, jeśli są wymagane
                 }

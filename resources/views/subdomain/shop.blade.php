@@ -24,6 +24,7 @@
                 <x-h1-title :h1Title="$h1_title"/>
                 <x-header-shop-subdomain
                     :placeAddress="$placeAddress"
+                    :excerpt="$excerpt"
                     :rateableId="$placeAddress->id"
                     :ratingCount="$ratingCount"
                     :averageRating="$averageRating"

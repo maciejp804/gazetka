@@ -12,7 +12,7 @@ class Description extends Model
 
     protected $fillable = [
         'route_name', 'place_id', 'type', 'content', 'faq',
-        'meta_title', 'meta_description', 'meta_keywords', 'h1_title'
+        'meta_title', 'meta_description', 'meta_keywords', 'h1_title', 'excerpt'
     ];
 
     protected $casts = [
@@ -30,19 +30,19 @@ class Description extends Model
             ->first();
     }
 
-    public static function getDefault($routeName, $place = null)
+    public static function getDefault($routeName, $place = null, $shop = null, $category = 'default')
     {
         // Zamiana kropek na podkreślenia (zgodnie z config/descriptions.php)
         $routeKey = str_replace('.', '_', $routeName);
         // Pobranie domyślnych wartości dla danej trasy lub użycie "default"
-        $defaults = config("descriptions.defaults.{$routeKey}", config('descriptions.defaults.default'));
+        $defaults = config("descriptions.defaults.{$routeKey}.{$category}", config('descriptions.defaults.default'));
 
         return new self([
-            'meta_title' => str_replace('{city}', $place->name_locative, $defaults['meta_title']),
-            'meta_description' => str_replace('{city}', $place->name_locative, $defaults['meta_description']),
-            'meta_keywords' => str_replace('{city}', $place->name, $defaults['meta_keywords']),
-            'h1_title' => str_replace('{city}', $place->name_locative, $defaults['h1_title'])
-//            Aktualna oferta sieci Biedronka Wipsowo to nie jedyny atut naszego serwisu. W dostępnych na naszej stronie gazetkach promocyjnych Biedronki znajdziesz produkty potrzebne w domu każdego dnia. Aktualna gazetka Biedronka Wipsowo jest zawsze pełna świeżych warzyw i owoców - zarówno tych egzotycznych, jak i polskich. Najnowsze ulotki Biedronki w mieście Wipsowo pokazują smaki z różnych zakątków świata. Biedronka chętnie sprowadza artykuły spożywcze inspirowane kuchnią amerykańską, japońską czy śródziemnomorską. Biedronka gazetka Wipsowo przedstawiają także niskie ceny chlebów, pączków czy kajzerek, które zachwycą Cię świeżością. W serwisie GazetkaPromocyjna.com.pl znajdziesz też godziny otwarcia sklepów Biedronka Wipsowo pod konkretnymi adresami w tym mieście.
+            'meta_title' => str_replace(['{city}', '{shop}'], [$place->name_locative, $shop], $defaults['meta_title']),
+            'meta_description' => str_replace(['{city}', '{shop}'], [$place->name_locative, $shop], $defaults['meta_description']),
+            'meta_keywords' => str_replace(['{city}', '{shop}'], [$place->name, $shop], $defaults['meta_keywords']),
+            'h1_title' => str_replace(['{city}', '{shop}'], [$place->name_locative, $shop], $defaults['h1_title']),
+            'excerpt' => str_replace(['{city}', '{shop}'], [$place->name_locative, $shop], $defaults['excerpt']),
         ]);
     }
 

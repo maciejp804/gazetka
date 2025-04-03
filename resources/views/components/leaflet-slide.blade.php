@@ -1,7 +1,7 @@
-@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image_path','webp_path', 'avif_path', 'valid_to', 'valid_from', 'name', 'slug'])
+@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image_path','webp_path', 'avif_path', 'valid_to', 'valid_from','updated_at', 'name', 'slug'])
 @php
 
-    $toEnd = validationDate($valid_to, $valid_from, $valid_to);
+    $toEnd = validationDate($valid_to, $valid_from, $updated_at);
 
 @endphp
 

@@ -65,9 +65,7 @@ class MainController extends Controller
 
         $vouchers = $this->vouchers();
 
-        $blogs = Blog::with('category')
-            ->where('status', 'published')
-            ->get();
+        $blogs = Blog::getAll();
 
 
         $leaflets_time = SortOptionsService::getSortOptions();
@@ -222,7 +220,7 @@ class MainController extends Controller
     public function subdomainIndex($subdomain)
     {
 
-        $shop = Shop::where('slug', $subdomain)->first();
+        $shop = Shop::with('category')->where('slug', $subdomain)->first();
 
         if(!$shop)
         {
@@ -273,8 +271,11 @@ class MainController extends Controller
         $products = $this->productService->getProducts('normal', null, null, $shop->slug, null);
 
         $blogs = Blog::with('category')->where('status', '=','published')->get();
+//        dd($shop);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id) ?? Description::getDefault(Route::currentRouteName(), $place, $shop->name);
+        $category = $shop->category ? $shop->category->slug : 'default';
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions_defaults = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
 
         return view('subdomain.index', [
             //Zmienne globalne
@@ -288,6 +289,7 @@ class MainController extends Controller
             'h1_title' => $shop->name . ' • gazetka promocyjna ' . date('d.m', strtotime('now')) . ' • aktualne promocje',
             'page_title' => $shop->name . ' gazetka aktualna • promocje, oferta ' . date('d.m', strtotime('now')) . ' | GazetkaPromocyjna.com.pl',
             'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+            'excerpt' => $descriptions->excerpt ? $descriptions->excerpt : $descriptions_defaults->excerpt,
 
             'breadcrumbs' => $breadcrumbs,
 
@@ -373,9 +375,16 @@ class MainController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $blogs = Blog::with('category')->where('status', '=','published')->get();
+        $blogs = Blog::with('category')
+            ->where('status', '=','published')
+            ->orderByDesc('published_at')
+            ->limit(10)
+            ->get();
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id) ?? Description::getDefault(Route::currentRouteName(), $place, $shop->name);
+        $category = $shop->category ? $shop->category->slug : 'default';
+
+        $descriptions_defaults = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
 
          return view('subdomain.index_gps', [
                 //Zmienne globalne
@@ -388,7 +397,7 @@ class MainController extends Controller
                 'h1_title'=> $shop->name. ' '. $place->name .' • gazetki promocyjne',
                 'page_title'=> $shop->name. ' '. $place->name .' • gazetka, godziny otwarcia | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-
+                'excerpt' => $descriptions->excerpt ? $descriptions->excerpt : $descriptions_defaults->excerpt,
                 'breadcrumbs' => $breadcrumbs,
 
 

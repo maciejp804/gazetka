@@ -39,6 +39,7 @@ class BlogController extends Controller
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'ABC Zakupowicza', 'url' => ''],
         ];
+
         $categories = Category::withCount(['blogs' => function ($query) {
             $query->where('status', '=', 'published');
                 }])->where('status','active')->where('type', 'blog')->get();
@@ -52,7 +53,7 @@ class BlogController extends Controller
             $query->with('user.profile')->orderBy('created_at', 'desc')->take(4);
         }])->where('status','active')->where('type', 'blog')->get();
 
-
+        $blogsNewtest = Blog::getAll(4);
 
 
         return view('main.blogs.index', data:
@@ -67,6 +68,7 @@ class BlogController extends Controller
                 'descriptions' => $descriptions,
                 'blogCategory' => $categories,
                 'blogs' => $blogs,
+                'blogsNewtest' => $blogsNewtest,
                 'sum' => $sum,
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
@@ -160,7 +162,7 @@ class BlogController extends Controller
         }
 
         $blogs = $blogs
-            ->where('slug', '!=', $article);
+            ->where('slug', '!=', $article)->take(10);
 
         $placesAll = Place::all();
 

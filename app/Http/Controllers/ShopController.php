@@ -141,7 +141,7 @@ class ShopController extends Controller
     {
         $place = Place::where('slug', '=', $community)->first();
 
-        $shop = Shop::where('slug', $subdomain)->first();
+        $shop = Shop::with('category')->where('slug', $subdomain)->first();
 
         $placeAddress = Marker::with(['shop', 'place', 'hours'])->where('slug', '=', $address)
             ->where('place_id', $place->id)
@@ -191,6 +191,12 @@ class ShopController extends Controller
 
         $blogs = Blog::with('category')->where('status', '=','published')->get();
 
+        $category = $shop->category ? $shop->category->slug : 'default';
+
+        $descriptions_defaults = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
+        $excerpt = str_replace(['{address}'], [$placeAddress->address], $descriptions_defaults['excerpt']);
+
+
         return view('subdomain.shop',
             [
                 'subdomain' => $subdomain,
@@ -201,7 +207,7 @@ class ShopController extends Controller
                 'h1_title'=> $shop->name.' '.$place->name.', '.$placeAddress->address,
                 'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-
+                'excerpt' => $excerpt,
                 'breadcrumbs' => $breadcrumbs,
 
                 // Rating

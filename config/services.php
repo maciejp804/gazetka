@@ -39,4 +39,11 @@ return [
         'secret' => env('RECAPTCHA_SECRET_KEY'),   // Tajny klucz
     ],
 
+    'tradedoubler' => [
+        'token' => env('TRADEDOUBLER_API_TOKEN'),
+    ],
+
+    'tradetracker' => [
+    'token' => env('TRADETRACKER_ID'),
+    ],
 ];

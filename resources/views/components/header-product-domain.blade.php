@@ -28,7 +28,7 @@
         <div class="flex flex-col gap-x-2 sm:flex-row">
             <div class="flex flex-col w-full gap-x-2 1xs:flex-row sm:2/3">
                 <div class="flex flex-col text-sm text-gray-700 w-full">
-                    <span>{{$product->description}}</span>
+                    <span>{{$descriptions->excerpt}}</span>
                 </div>
             </div>
         </div>

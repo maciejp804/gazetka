@@ -26,6 +26,7 @@
                 <x-h1-title :h1Title="$h1_title"/>
                 <x-header-index-subdomain
                     :shop="$shop"
+                    :excerpt="$excerpt"
                     :ratingCount="$ratingCount"
                     :averageRating="$averageRating"
                     :model="$model"/>

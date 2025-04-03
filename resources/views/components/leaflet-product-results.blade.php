@@ -6,12 +6,13 @@
             @if($productsInLeaflets->count() > 0)
                 @foreach($productsInLeaflets as $shopWithProducts)
                     @foreach($shopWithProducts['pages'] as $item)
-{{--                        @dd($shopWithProducts)--}}
+{{--                        @dd($productsInLeaflets)--}}
 
                             <x-leaflet-slide
                                 class="relative"
                                 :valid_from="$item['clicks'][0]['valid_from']"
                                 :valid_to="$item['clicks'][0]['valid_to']"
+                                :updated_at="$item['clicks'][0]['updated_at']"
                                 :type="$type"
                                 :logo="$shopWithProducts['shop_image']"
                                 :name="$shopWithProducts['name']"

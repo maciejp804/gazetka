@@ -1,4 +1,4 @@
-@props(['placeAddress','rateableId', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
+@props(['placeAddress', 'excerpt','rateableId', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
 
 <x-rating-form :rateableId="$rateableId"
                :averageRating="$averageRating"
@@ -20,12 +20,7 @@
         </div>
         <div class="flex flex-col w-full gap-x-2 1xs:flex-row sm:3/4">
             <div class="flex flex-col text-sm text-gray-700 w-full 1xs:w-4/6">
-                <p class="font-semibold mb-2">Integer condimentum sem turpis, volutpat mattis nisl porttitor in. </p>
-                <span>
-                            Sed vulputate at mi a viverra. Praesent elementum dui in lectus sodales lobortis.
-                            Cras sed felis vitae ligula accumsan vestibulum quis aliquet magna.
-                            Praesent sit amet nisi vulputate, sollicitudin arcu a, varius justo.
-                        </span>
+                <span>{{$excerpt}}</span>
             </div>
             <div class="flex w-full 1xs:w-2/6">
                 <div class="1xs:aspect-square w-full rounded p-2 border bg-gray-100">

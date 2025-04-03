@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('descriptions', function (Blueprint $table) {
             $table->string('h1_title')->after('faq')->nullable();
             $table->foreignId('shop_id')->after('place_id')->nullable()->constrained('shops')->cascadeOnDelete();
+            $table->text('excerpt')->after('is_global')->nullable();
         });
     }
 
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->dropColumn('h1_title');
             $table->dropForeign(['shop_id']); // najpierw usuwa klucz obcy
             $table->dropColumn('shop_id');    // następnie usuwa kolumnę
+            $table->dropColumn('excerpt');
         });
     }
 };

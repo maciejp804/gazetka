@@ -9,4 +9,6 @@ class VoucherStore extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
 }

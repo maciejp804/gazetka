@@ -35,7 +35,7 @@
                     </x-search>
                 </div>
                 <x-section-filtr-results :ads-status="true" data-container-id="vouchers-container" :items="$vouchers" type="vouchers"/>
-                <x-see-more class="pb-2" type="button">Zobacz więcej</x-see-more>
+                {{ $vouchers->links('custom-paginator') }}
             </x-section>
 
             <x-section class="bg-gray-200 rounded py-4">
