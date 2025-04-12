@@ -9,10 +9,7 @@ class ProductDescription extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'product_id', 'shop_id', 'content', 'faq',
-        'meta_title', 'meta_description', 'meta_keywords', 'h1_title'
-    ];
+   protected $guarded = [];
 
     protected $casts = [
         'content' => 'array',

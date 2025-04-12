@@ -1,14 +1,15 @@
 <x-layout-panel>
 
-    <x-header-back/>
+    <x-admin.header-back/>
 
     <header class="bg-white shadow mb-6">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold tracking-tight text-gray-900">Voucher</h1>
         </div>
     </header>
+
 <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-    <form action="{{ route('vouchers.add') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.vouchers.add') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <x-form.input name="title" label="Tytuł"/>
@@ -25,7 +26,7 @@
             :selected="old('voucher_store_id')"
         />
         <div class="flex justify-between">
-            <x-buttons.primary-a :url="route('vouchers.store.create')">Dodaj</x-buttons.primary-a>
+            <x-buttons.primary-a :url="route('admin.vouchers.store.create')">Dodaj</x-buttons.primary-a>
 {{--            <x-buttons.primary-a :url="route('vouchers.edit', ['voucher' => $voucher])">Edytuj</x-buttons.primary-a>--}}
         </div>
 

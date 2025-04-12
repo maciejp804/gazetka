@@ -152,6 +152,14 @@ return [
                 'h1_title' => "Gazetki promocyjne",
                 'excerpt' => '']
         ],
+//        'subdomain_leaflet' => [
+//            'default' => [
+//                'meta_title' => "Gazetki promocyjne {shop} - {city}",
+//                'meta_description' => "Aktualne promocje {shop} w {city}. Sprawdź, co warto kupić!",
+//                'meta_keywords' => "{shop}, gazetki, {city}",
+//                'h1_title' => "Gazetki promocyjne",
+//                'excerpt' => '']
+//        ],
         'subdomain_shop_address' => [
             'drogerie-i-apteki' => [
                 'meta_title' => "Gazetki promocyjne {shop}",

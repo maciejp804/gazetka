@@ -10,6 +10,9 @@ class Product extends Model
 {
     use HasFactory;
 
+
+    protected $guarded = [];
+
     public function leaflets()
     {
         return $this->belongsToMany(Leaflet::class, 'leaflet_products', 'product_id', 'leaflet_id')
@@ -24,6 +27,16 @@ class Product extends Model
     public function descriptions()
     {
         return $this->hasOne(ProductDescription::class, 'product_id');
+    }
+
+    public function globalDescription()
+    {
+        return $this->hasOne(ProductDescription::class)->whereNull('shop_id');
+    }
+
+    public function shopDescriptions()
+    {
+        return $this->hasMany(ProductDescription::class)->whereNotNull('shop_id');
     }
 
     public function ratings()
@@ -46,5 +59,19 @@ class Product extends Model
     {
         return $this->hasMany(LeafletProduct::class);
     }
+
+    public function shops()
+    {
+        return $this->hasManyThrough(
+            Shop::class,
+            ProductDescription::class,
+            'product_id',    // Foreign key on ProductDescription
+            'id',            // Local key on Shop
+            'id',            // Local key on Product
+            'shop_id'        // Foreign key on ProductDescription
+        )->distinct(); // unikaj duplikatów jeśli są
+    }
+
+
 
 }

@@ -198,7 +198,9 @@ class ProductController extends Controller
 
     public function show($slug)
     {
-        $product = Product::with('ratings', 'leaflets', 'category')->where('slug', $slug)->first();
+        $product = Product::with('ratings', 'leaflets', 'category')
+            ->where('slug', $slug)
+            ->first();
 
         if(!$product)
         {
@@ -231,6 +233,7 @@ class ProductController extends Controller
 
         $descriptions = ProductDescription::with('products')
             ->where('product_id', $product->id)
+            ->where('shop_id', null)
             ->first();
 
         return view('main.products.show', data:

@@ -16,13 +16,6 @@ class BackController extends Controller
         return view('panel.index');
     }
 
-    public function voucherIndex(Request $request)
-    {
-
-        $vouchers = Voucher::with('voucherStore')->get();
-        return view('panel.voucher.index',['vouchers'=>$vouchers]);
-    }
-
     public function clickableIndex($shop=null)
     {
 

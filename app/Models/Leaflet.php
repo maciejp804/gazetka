@@ -10,6 +10,7 @@ class Leaflet extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
     public function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
@@ -52,5 +53,21 @@ class Leaflet extends Model
             'id',
             'product_id');
     }
+
+    public function productsNew()
+    {
+        return $this->belongsToMany(Product::class, 'leaflet_products')
+            ->withPivot('status', 'price', 'promo_price')  // Kolumny w tabeli pośredniej
+            ->withTimestamps();
+    }
+
+    public function productsOnPage($pageId)
+    {
+        return $this->belongsToMany(Product::class, 'leaflet_products', 'leaflet_id', 'product_id')
+            ->withPivot('status', 'price', 'promo_price')
+            ->join('page_clicks', 'leaflet_products.id', '=', 'page_clicks.leaflet_product_id')
+            ->where('page_clicks.page_id', $pageId);  // Filtrowanie po page_id
+    }
+
 
 }

@@ -208,6 +208,18 @@ if (! function_exists('chunkMyCollection'))
 
 }
 
+if (!function_exists('asset_from_storage')) {
+    function asset_from_storage(?string $path, string $extension = 'webp'): string
+    {
+        if (!$path) return asset('placeholder.webp'); // lub inny fallback
+        return str_starts_with($path, 'http') ? $path : Storage::url($path . '.' . $extension);
+
+    }
+}
+
+
+
+
 if (! function_exists('siteValidator'))
 {
     function siteValidator ($site, $place = null)

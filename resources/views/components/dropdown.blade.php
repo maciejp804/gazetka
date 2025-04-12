@@ -15,7 +15,7 @@ $width = match ($width) {
 
 <div class="relative" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false">
     <div @click="open = ! open">
-        <x-nav-link type="button" :active="false">Sieci handlowe</x-nav-link>
+        <x-nav-link type="button" :active="false">Tworzenie gazetek</x-nav-link>
 
 {{--        {{ $trigger }}--}}
     </div>

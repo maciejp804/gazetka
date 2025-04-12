@@ -25,6 +25,7 @@ import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 
+
 window.Alpine = Alpine;
 
 Alpine.plugin(collapse)
@@ -51,3 +52,4 @@ document.addEventListener('DOMContentLoaded', () => {
 //import './leaflet-swiper.js'; // ✅ Swiper dla gazetek
 import './geolocation.js';    // ✅ Obsługa geolokalizacji
 import './loader.js'; // ✅ Inicjalizacja wszytstkiego
+// import './sort/sortOrder.js';  //Sortowanie stron

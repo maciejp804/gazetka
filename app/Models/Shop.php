@@ -10,9 +10,7 @@ class Shop extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'ranking'
-    ];
+    protected $guarded = [];
 
     public function category()
     {

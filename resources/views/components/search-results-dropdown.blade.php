@@ -1,15 +1,33 @@
 <div>
     {{-- Wyniki dla produktów --}}
     @if(isset($products) && count($products) > 0)
+        @if($searchType !== 'admin-products')
         <div class="mx-4 py-1 text-xs font-base text-gray-400">Produkty</div>
+        @endif
         @foreach($products as $product)
-            <a href="{{route('main.product', ['slug' => $product->slug])}}" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
-                @if($product->image)
-                    <img src="{{ $product->image }}" alt="{{ $product->name }}" class="inline-block w-6 h-6 mr-2">
-                @endif
+            @if($searchType !== 'admin-products')
+                <a href="{{route('main.product', ['slug' => $product->slug])}}" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
+                    @if($product->image)
+                        <img src="{{ Storage::url($product->image.'.webp') }}" alt="{{ $product->name }}" class="inline-block w-6 h-6 mr-2">
+                    @endif
+                    {{ $product->name }}
+                </a>
+            @else
+                    <form action="{{route('admin.leaflets.page.product.add',[$leafletId])}}" method="POST" id="add-product-form-{{ $product->id }}">
+                        @csrf
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="page_id" value="{{ $pageId }}">
+                        <input type="hidden" name="leaflet_id" value="{{ $leafletId }}">
+                        <a href="#" onclick="document.getElementById('add-product-form-{{ $product->id }}').submit();"
+                           class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
+                            @if($product->image)
+                                <img src="{{ Storage::url($product->image.'.webp') }}" alt="{{ $product->name }}" class="inline-block w-6 h-6 mr-2">
+                            @endif
+                            {{ $product->name }}
+                        </a>
+                    </form>
+            @endif
 
-                {{ $product->name }}
-            </a>
         @endforeach
     @endif
 

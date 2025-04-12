@@ -199,6 +199,8 @@ class LeafletController extends Controller
 
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
 
+
+
         return view('subdomain.leaflet', data:
             [
                 'place' => $place,
@@ -237,6 +239,8 @@ class LeafletController extends Controller
 
                 //Opis strony
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt
+
             ]);
     }
 

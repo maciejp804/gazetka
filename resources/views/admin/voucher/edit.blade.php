@@ -1,6 +1,6 @@
 <x-layout-panel>
 
-    <x-header-back/>
+    <x-admin.header-back/>
 
     <header class="bg-white shadow mb-6">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -8,7 +8,7 @@
         </div>
     </header>
 <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-    <form action="{{ route('vouchers.update', $voucher) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.vouchers.update', $voucher) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -26,7 +26,7 @@
             :selected="$voucher->voucher_store_id"
         />
         <div class="flex justify-between">
-            <x-buttons.primary-a :url="route('vouchers.store.create')">Dodaj</x-buttons.primary-a>
+            <x-buttons.primary-a :url="route('admin.vouchers.store.create')">Dodaj</x-buttons.primary-a>
 {{--            <x-buttons.primary-a :url="route('vouchers.edit', ['voucher' => $voucher])">Edytuj</x-buttons.primary-a>--}}
         </div>
 
@@ -36,7 +36,6 @@
             :options="$categories->pluck('name', 'id')"
             :selected="$voucher->category_id"
         />
-
 
         <x-form.select
             name="status"
@@ -64,6 +63,11 @@
         </div>
 
         <x-form.submit label="Aktualizuj kupon"/>
+    </form>
+    <form action="{{ route('admin.vouchers.destroy', $voucher) }}" method="POST" onsubmit="return confirm('Na pewno chcesz usunąć?')" class="flex justify-end">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="text-lg text-red-600 hover:underline">Usuń</button>
     </form>
 </div>
 </x-layout-panel>

@@ -10,15 +10,7 @@ class PageClick extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'page_id',
-        'leaflet_product_id',
-        'url',
-        'x',
-        'y',
-        'width',
-        'height',
-    ];
+    protected $guarded = [];
 
     public function page(): BelongsTo
     {

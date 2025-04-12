@@ -44,6 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const dropdownUrl = filterBox.querySelector('.dropdown-url');
         const dropdownValue = dropdownUrl ? dropdownUrl.getAttribute('data-dropdown') : null;
         const resultsBoxId = input.getAttribute('data-results-box-id');
+
+        const leafletId = input.getAttribute('data-leaflet-id');
+        const pageId = input.getAttribute('data-page-id');
+
         const resultsBox = document.getElementById(resultsBoxId);
         const swiperSmall = filterBox.querySelector('.swiper-category-small');
 
@@ -55,8 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const swiperInstance = containerId && document.querySelector(`#${containerId}`)
             ? document.querySelector(`#${containerId}`).swiper
             : null;
-
-        console.log(swiperInstance); // Sprawdź, czy containerId ma wartość
 
         const clearButton = input.parentElement.querySelector('.clear-button');
 
@@ -124,6 +126,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     case 'places':
                     case 'products-retailers':
                         handleSingleDropdownSearch(query, searchType, resultsBox, input);
+                        break;
+                    case 'admin-products':
+                        handleSingleDropdownSearch(query, searchType, resultsBox, input, leafletId, pageId);
                         break;
 
                     case 'leaflets':

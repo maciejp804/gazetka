@@ -27,16 +27,22 @@ class SearchController extends Controller
     {
         $query = $request->input('query');
         $searchType = $request->input('searchType');
+        $leafletId = $request->input('leafletId');
+        $pageId = $request->input('pageId');
 
         $products = $retailers = $places = [];
 
-        if ($searchType === 'products-retailers') {
+        if ($searchType === 'products-retailers' || $searchType === 'admin-products') {
 
             $products = Product::where('name', 'like', $query . '%')
                 ->where('status', 1)->get();
 
-            $retailers = Shop::where('name', 'like', $query . '%')
-                ->where('status', 'active')->get();
+            if($searchType !== 'admin-products') {
+
+                $retailers = Shop::where('name', 'like', $query . '%')
+                    ->where('status', 'active')->get();
+            }
+
 
         } elseif ($searchType === 'places') {
 
@@ -45,7 +51,7 @@ class SearchController extends Controller
         }
         // Zwrócenie wyników jako JSON z dwoma kategoriami
         return response()->json([
-            'html' => view('components.search-results-dropdown', compact('products', 'retailers', 'places'))->render()
+            'html' => view('components.search-results-dropdown', compact('products', 'retailers', 'places', 'searchType', 'leafletId', 'pageId'))->render()
         ]);
     }
 
@@ -285,7 +291,7 @@ class SearchController extends Controller
     public function test($week, $number, $start)
     {
         set_time_limit(3200);
-        $data = json_decode(file_get_contents(storage_path('app\public\json\kombinacje.json')), true);
+        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p.json')), true);
         $i = 0;
         $l = 356406;
         foreach ($data['combinations'] as $combination) {

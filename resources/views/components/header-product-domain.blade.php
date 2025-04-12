@@ -12,13 +12,26 @@
         <div class="flex w-full mb-5">
             <div class="w-full rounded lg:aspect-square ">
                 <div class="flex justify-center w-full h-full">
-                    <img class="flex self-center w-4/5"
-                         @if(!empty($product->image))
-                            src="{{$product->image}}"
-                         @else
-                            src="{{asset($product->category->logo)}}"
-                         @endif
-                         alt="logo">
+                    @if(empty($product->image))
+                        <picture>
+                            <source srcset="{{ $product->category->logo ? Storage::url($product->category->logo.'.avif') : asset('assets/images/categories/default.webp')}}" type="image/avif">
+                            <source srcset="{{ $product->category->logo ? Storage::url($product->category->logo.'.webp') : asset('assets/images/categories/default.webp') }}" type="image/webp">
+                            <img class="flex self-center w-full"
+                                 src="{{ $product->category->logo ?  Storage::url($product->category->logo.'.jpg') : asset('assets/images/categories/default.webp')}}"
+                                 width="1920" height="1080"
+                                 alt="{{$product->name}}">
+                        </picture>
+                    @else
+                        <picture>
+                            <source srcset="{{ Storage::url($product->image.'.avif') }}" type="image/avif">
+                            <source srcset="{{ Storage::url($product->image.'.webp') }}" type="image/webp">
+                            <img class="flex self-center w-full"
+                                 src="{{ Storage::url($product->image.'.jpg') }}"
+                                 width="1920" height="1080"
+                                 alt="{{$product->name}}">
+                        </picture>
+                    @endif
+
                 </div>
             </div>
         </div>
@@ -28,7 +41,7 @@
         <div class="flex flex-col gap-x-2 sm:flex-row">
             <div class="flex flex-col w-full gap-x-2 1xs:flex-row sm:2/3">
                 <div class="flex flex-col text-sm text-gray-700 w-full">
-                    <span>{{$descriptions->excerpt}}</span>
+                    <span>{{$descriptions->excerpt ?? ''}}</span>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 <x-layout-panel>
 
-    <x-header-back/>
+    <x-admin.header-back/>
 
     <header class="bg-white shadow mb-6">
         <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -11,7 +11,7 @@
         <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
             <h1 class="text-xl font-bold mb-6">Dodaj nowy sklep</h1>
 
-            <form action="{{route('vouchers.store.add')}}" method="POST" enctype="multipart/form-data" >
+            <form action="{{route('admin.vouchers.store.add')}}" method="POST" enctype="multipart/form-data" >
                 @csrf
 
                 <x-form.input name="name" label="Nazwa sklepu" />

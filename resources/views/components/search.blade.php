@@ -31,7 +31,7 @@
 
             <!-- Kontener na wyniki wyszukiwania -->
             <div id="{{$resultId}}" class="search-results hidden absolute top-11 left-0 border-l border-b border-r w-full
-            bg-white-50 rounded-b-md max-h-40 overflow-y-auto scrollbar-thin min-h-10 z-40"></div>
+            bg-white-50 rounded-b-md max-h-80 overflow-y-auto scrollbar-thin min-h-10 z-40"></div>
 
         </div>
 </div>

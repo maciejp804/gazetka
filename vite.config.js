@@ -10,6 +10,7 @@ export default defineConfig({
                 'resources/js/leaflet-swiper.js',
                 'resources/js/rating.js',
                 'resources/js/geolocation.js',
+                'resources/js/sort/sortOrder.js',
             ],
             refresh: true, // ✅ Automatyczne odświeżanie po zmianach w plikach
         }),

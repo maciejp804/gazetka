@@ -1,8 +1,8 @@
 import {toggleInputStyle, setupKeyboardNavigation, updateSwiperContent} from "./helpers";
 
 
-export function handleSingleDropdownSearch(query, searchType, resultsBox, input) {
-    const searchUrl = `/search/single/dropdown?query=${encodeURIComponent(query)}&searchType=${searchType}`;
+export function handleSingleDropdownSearch(query, searchType, resultsBox, input, leafletId = null, pageId = null) {
+    const searchUrl = `/search/single/dropdown?query=${encodeURIComponent(query)}&searchType=${searchType}&leafletId=${leafletId}&pageId=${pageId}`;
 
     fetch(searchUrl)
         .then(response => response.json())

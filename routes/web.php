@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ProductDescriptionController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
@@ -14,9 +15,15 @@ use App\Http\Controllers\RatingController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
-use App\Http\Controllers\VoucherStoreController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
+use App\Http\Controllers\Admin\VoucherStoreController as AdminVoucherStoreController;
+use App\Http\Controllers\Admin\ShopController as AdminShopController;
+use App\Http\Controllers\Admin\LeafletController as AdminLeafletController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductDescriptionController as AdminProductDescriptionController ;
+use App\Http\Controllers\Admin\PageController as AdminPageController; ;
+use App\Http\Controllers\Admin\PageClickController as AdminPageClickController;
 
 
 $mainDomain = env('MAIN_DOMAIN', 'gazetkapromocyjna.local');
@@ -312,30 +319,102 @@ Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('sear
 //END SEARCH
 
 //VOUCHER
-Route::get('voucher/store/create',[VoucherStoreController::class,'create'])->name('voucher.create');
-Route::get('voucher/store/update/tradedoubler',[VoucherStoreController::class,'updateTradedoubler'])->name('voucher.store.update.tradedoubler');
-Route::get('voucher/store/update/tradetracker',[VoucherStoreController::class,'updateTradetracker'])->name('voucher.store.update.tradetracker');
-Route::get('voucher/update/tradedoubler',[VoucherStoreController::class,'updateVouchersTradedoubler'])->name('voucher.update.tradedoubler');
-Route::get('voucher/update/tradetracker',[VoucherStoreController::class,'updateVouchersTradetracker'])->name('voucher.update.tradetracker');
+
+Route::get('/panel/vouchers', [AdminVoucherController::class, 'index'])->name('admin.vouchers.index');
+Route::get('/panel/vouchers/create', [AdminVoucherController::class, 'create'])->name('admin.vouchers.create');
+Route::post('/panel/vouchers/add', [AdminVoucherController::class, 'add'])->name('admin.vouchers.add');
+Route::delete('/panel/vouchers/{voucher}/delete', [AdminVoucherController::class, 'destroy'])->name('admin.vouchers.destroy');
+Route::get('/panel/vouchers/{voucher}/edit', [AdminVoucherController::class, 'edit'])->name('admin.vouchers.edit');
+Route::put('/panel/vouchers/{voucher}/update', [AdminVoucherController::class, 'update'])->name('admin.vouchers.update');
+Route::post('/panel/vouchers/{voucher}/upload-image', [AdminVoucherController::class, 'uploadImage'])->name('admin.vouchers.upload.image');
+Route::post('panel/vouchers/{voucher}/upload-logo', [AdminVoucherController::class, 'uploadLogo'])->name('admin.vouchers.upload.logo');
+Route::get('voucher/update/tradedoubler',[AdminVoucherController::class,'updateVouchersTradedoubler'])->name('admin.vouchers.update.tradedoubler');
+Route::get('voucher/update/tradetracker',[AdminVoucherController::class,'updateVouchersTradetracker'])->name('admin.vouchers.update.tradetracker');
 
 
-Route::get('panel/shops/{shop}', [BackController::class, 'clickableIndex']);
+Route::get('/panel/vouchers/store/create', [AdminVoucherStoreController::class,'create'])->name('admin.vouchers.store.create');
+Route::post('/panel/vouchers/store/add', [AdminVoucherStoreController::class,'add'])->name('admin.vouchers.store.add');
+Route::post('/panel/vouchers/store/{store}/edit', [AdminVoucherStoreController::class,'edit'])->name('admin.vouchers.store.edit');
+Route::post('/panel/vouchers/store/{store}/update', [AdminVoucherStoreController::class,'update'])->name('admin.vouchers.store.update');
+Route::get('voucher/store/update/tradedoubler',[AdminVoucherStoreController::class,'updateTradedoubler'])->name('admin.vouchers.stores.update.tradedoubler');
+Route::get('voucher/store/update/tradetracker',[AdminVoucherStoreController::class,'updateTradetracker'])->name('admin.vouchers.stores.update.tradetracker');
 
-Route::get('/panel/vouchers', [BackController::class, 'voucherIndex'])->name('vouchers.index');
-Route::get('/panel/vouchers/create', [VoucherController::class, 'create'])->name('vouchers.create');
-Route::post('/panel/vouchers/add', [VoucherController::class, 'add'])->name('vouchers.add');
+//SHOPS
+Route::get('/panel/shops', [AdminShopController::class, 'index'])->name('admin.shops.index');
+Route::get('/panel/shops/create', [AdminShopController::class, 'create'])->name('admin.shops.create');
+Route::post('/panel/shops/add', [AdminShopController::class, 'add'])->name('admin.shops.add');
+Route::delete('/panel/shops/{shop}/delete', [AdminShopController::class, 'destroy'])->name('admin.shops.destroy');
+Route::get('/panel/shops/{shop}/edit', [AdminShopController::class, 'edit'])->name('admin.shops.edit');
+Route::put('/panel/shops/{shop}/update', [AdminShopController::class, 'update'])->name('admin.shops.update');
 
-Route::get('/panel/vouchers/{voucher}/edit', [VoucherController::class, 'edit'])->name('vouchers.edit');
-Route::put('/panel/vouchers/{voucher}/update', [VoucherController::class, 'update'])->name('vouchers.update');
-Route::post('/panel/vouchers/{voucher}/upload-image', [VoucherController::class, 'uploadImage'])->name('vouchers.uploadImage');
-Route::post('panel//vouchers/{voucher}/upload-logo', [VoucherController::class, 'uploadLogo'])->name('vouchers.uploadLogo');
+//LEAFLETS
+Route::prefix('/panel/leaflets')->name('admin.leaflets.')->group(function () {
+    Route::get('/', [AdminLeafletController::class, 'index'])->name('index');
+    Route::get('/create', [AdminLeafletController::class, 'create'])->name('create');
+    Route::post('/add', [AdminLeafletController::class, 'add'])->name('add');
+    Route::get('/search', [AdminLeafletController::class, 'search'])->name('search');
+    Route::get('/{leaflet}', [AdminLeafletController::class, 'manage'])->name('manage');
+    Route::delete('/{leaflet}/delete', [AdminLeafletController::class, 'destroy'])->name('destroy');
+    Route::get('/{leaflet}/edit', [AdminLeafletController::class, 'edit'])->name('edit');
+    Route::put('/{leaflet}/update', [AdminLeafletController::class, 'update'])->name('update');
+    Route::get('/{leaflet}/pages', [AdminPageController::class, 'manage'])->name('page.manage');
+    Route::get('/{leaflet}/pages/create', [AdminPageController::class, 'create'])->name('page.create');
+    Route::put('/{leaflet}/pages/add', [AdminPageController::class, 'add'])->name('page.add');
+    Route::get('/{leaflet}/pages/edit', [AdminPageController::class, 'edit'])->name('page.edit');
+    Route::put('/{leaflet}/pages/update', [AdminPageController::class, 'update'])->name('page.update');
+    Route::get('/{leaflet}/pages/order', [AdminPageController::class, 'editOrder'])->name('page.edit.order');
+    Route::put('/{leaflet}/pages/updateOrder', [AdminPageController::class, 'updateOrder'])->name('page.update.order');
+    Route::get('/{leaflet}/pages/products/create', [AdminPageClickController::class, 'create'])->name('page.product.create');
+    Route::post('/{leaflet}/pages/products/add', [AdminPageClickController::class, 'add'])->name('page.product.add');
+    Route::delete('/{leaflet}/{pageClick}/delete', [AdminPageClickController::class, 'destroy'])->name('page.product.destroy');
 
-Route::get('/panel/vouchers/store/create', [VoucherStoreController::class,'create'])->name('vouchers.store.create');
-Route::post('/panel/vouchers/store/add', [VoucherStoreController::class,'add'])->name('vouchers.store.add');
-Route::post('/panel/vouchers/store/{store}/edit', [VoucherStoreController::class,'edit'])->name('vouchers.store.edit');
-Route::post('/panel/vouchers/store/{store}/update', [VoucherStoreController::class,'update'])->name('vouchers.store.update');
 
-Route::get('panel', [Backcontroller::class, 'index']);
+});
+
+//PRODUCTS
+Route::prefix('panel/products')->name('admin.products.')->group(function () {
+    Route::get('/', [AdminProductController::class, 'index'])->name('index');
+    Route::get('/search', [AdminProductController::class, 'search'])->name('search'); //Wyszukiwarka produktów
+    Route::get('/{product:slug}', [AdminProductController::class, 'manage'])->name('manage');
+    Route::post('/{product}/upload-image', [AdminProductController::class, 'uploadImage'])->name('upload.image'); //Dodawanie, zmiana grafiki
+
+    // DESCRIPTION
+    Route::prefix('/{product:slug}/description')->name('description.')->group(function () {
+        Route::get('/edit', [AdminProductDescriptionController::class, 'edit'])->name('edit'); //Edit - Dane podstawowe
+        Route::put('/update', [AdminProductDescriptionController::class, 'update'])->name('update');
+        Route::get('/faq/edit', [AdminProductDescriptionController::class, 'editFaq'])->name('faq.edit'); //Edit - FAQ
+        Route::put('/faq/update', [AdminProductDescriptionController::class, 'updateFaq'])->name('faq.update');
+        Route::get('/excerpt/edit', [AdminProductDescriptionController::class, 'editExcerpt'])->name('excerpt.edit'); //Edit - Excerpt
+        Route::put('/excerpt/update', [AdminProductDescriptionController::class, 'updateExcerpt'])->name('excerpt.update');
+        Route::get('/parameters/edit', [AdminProductDescriptionController::class, 'editParameters'])->name('parameters.edit'); //Edit - Parametry
+        Route::put('/parameters/update', [AdminProductDescriptionController::class, 'updateParameters'])->name('parameters.update');
+        Route::get('/content/edit', [AdminProductDescriptionController::class, 'editContent'])->name('content.edit'); //Edit - Główny opis
+        Route::put('/content/update', [AdminProductDescriptionController::class, 'updateContent'])->name('content.update');
+        Route::put('/image/{index}', [AdminProductDescriptionController::class, 'updateContentImage']) // Dodawanie, edycja zdjęcia w wpisie głownym
+            ->name('content.update.image');
+
+        // SHOP DESCRIPTION
+        Route::prefix('/shop')->name('shop.')->group(function () {
+            Route::get('/{shop:slug}/edit', [AdminProductDescriptionController::class, 'editShop'])->name('editShop');
+            Route::put('/{shop}/update', [AdminProductDescriptionController::class, 'updateShop'])->name('updateShop');
+            Route::get('/{shop:slug}/faq/edit', [AdminProductDescriptionController::class, 'editShopFaq'])->name('editShopFaq');
+            Route::put('/{shop}/faq/update', [AdminProductDescriptionController::class, 'updateShopFaq'])->name('updateShopFaq');
+            Route::get('/{shop:slug}/create', [AdminProductDescriptionController::class, 'createShop'])->name('createShop');
+            Route::get('/{shop}/add', [AdminProductDescriptionController::class, 'addShop'])->name('addShop');
+            Route::get('/{shop:slug}', [AdminProductDescriptionController::class, 'manageShop'])->name('manageShop');
+
+            Route::get('/', [AdminProductDescriptionController::class, 'indexShop'])->name('indexShop');
+        });
+    });
+
+
+});
+
+
+
+
+//Route::get('panel/shops/{shop}', [BackController::class, 'clickableIndex']);
+Route::get('panel', [Backcontroller::class, 'index'])->name('admin.index');
 
 
 Route::get('tchibo',[SearchController::class,'tchibo'])->name('search.tchibo');

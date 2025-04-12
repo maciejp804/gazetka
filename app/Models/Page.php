@@ -10,12 +10,7 @@ class Page extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'page_number',
-        'image_path',
-        'width',
-        'height'
-        ];
+    protected $guarded = [];
 
     public function leaflets()
     {

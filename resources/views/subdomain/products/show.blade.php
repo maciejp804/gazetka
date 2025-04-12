@@ -58,8 +58,8 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-
-        @if($descriptions)
+        
+        @if($descriptions->faq)
             <x-faq :items="$descriptions"/>
         @endif
 

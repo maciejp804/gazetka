@@ -9,7 +9,7 @@
         <div {{$attributes->merge(['class' => $classes])}}>
         <div class="flex w-full md:w-5/12">
             <img
-                src="{{asset($item['image'])}}"
+                src="{{Storage::url($item['image'].'.webp')}}"
                 class="object-cover rounded"
                 loading="lazy"
                 alt="picture">
