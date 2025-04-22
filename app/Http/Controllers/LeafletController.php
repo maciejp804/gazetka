@@ -46,7 +46,7 @@ class LeafletController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $products = $this->productService->getProducts();
+        $products = $this->productService->getHotSpots();
 
         $leaflet_sort = SortOptionsService::getSortOptions();
 
@@ -91,7 +91,7 @@ class LeafletController extends Controller
             abort(404);
         }
 
-        $products = $this->productService->getProducts();
+        $products = $this->productService->getHotSpots();
 
 //        dd($products);
 
@@ -143,7 +143,7 @@ class LeafletController extends Controller
     {
         $shop = Shop::where('slug', $subdomain)->first();
 
-        $leaflet = Leaflet::with('shop', 'pages.clicks.leafletProduct.product', 'inserts.clicks', 'leafletAds','products')
+        $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
             ->find($id);
 
 //        dd($leaflet);
@@ -152,6 +152,7 @@ class LeafletController extends Controller
         }
         $pages = $leaflet->pages->sortByDesc('sort_order');
         $pages = $pages->chunk(1);
+
         $inserts = $leaflet->inserts;
         $ads = $leaflet->leafletAds;
         $products = $leaflet->products->unique('id');
@@ -187,7 +188,7 @@ class LeafletController extends Controller
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne
 
-        $blogs = Blog::with('category')->where('status', '=','published')->get();
+        $blogs = Blog::getAll();
 
 
 

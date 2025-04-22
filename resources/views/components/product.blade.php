@@ -7,7 +7,14 @@
     <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded border border-gray-200 p-2">
         <div class="rounded flex justify-center">
             <div class="self-center w-full">
-                <img class="w-full rounded h-20 2xs:h-32 object-cover" src="{{ Storage::url($product_image.'.webp') }}" alt="pro-img1">
+                <picture>
+                    <source srcset="{{ Storage::url($product_image.'.avif') }}" type="image/avif">
+                    <source srcset="{{ Storage::url($product_image.'.webp') }}" type="image/webp">
+                    <img class="w-full rounded h-20 2xs:h-32 object-cover"
+                         src="{{ Storage::url($product_image.'.jpg') }}"
+                         width="300" height="300"
+                         alt="{{$product_name}}">
+                </picture>
             </div>
 {{--            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}
         </div>
@@ -22,12 +29,7 @@
             <!--{% check_like item request as liked %}-->
 {{--            <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}
         </a>
-        <div class="text-center min-h-12">
-            <h3 class="text-gray-800 text-base ">
-                <a href="{{route('subdomain.leaflet', ['subdomain'=> $shop_slug, 'id' => $leaflet_id ])}}#{{$page_number}}" class="font-semibold group-hover:font-bold">
-                    <span class="line-clamp-2">{{ $product_name }}</span></a>
-            </h3>
-        </div>
+
 
         <div class="flex py-2 justify-between">
             <div class="flex self-start text-blue-550 font-semibold text-base 2xs:text-xl">
@@ -40,6 +42,12 @@
         <div class="flex">
             <span class="flex justify-center text-white text-xs font-bold p-1 rounded w-full {{$toEnd['classes']}}">{{ $toEnd['end'] }}</span>
         </div>
+    </div>
+    <div class="text-center min-h-12">
+        <h3 class="text-gray-800 text-base ">
+            <a href="{{route('subdomain.leaflet', ['subdomain'=> $shop_slug, 'id' => $leaflet_id ])}}#{{$page_number}}" class="font-semibold group-hover:font-bold">
+                <span class="line-clamp-2">{{ $product_name }}</span></a>
+        </h3>
     </div>
 
 </div>

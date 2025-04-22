@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HotSpot;
 use App\Models\Leaflet;
 use App\Models\LeafletProduct;
 use App\Models\Page;
@@ -88,22 +89,29 @@ class PageClickController extends Controller
         return redirect()->back()->with('success', 'Produkt dodany');
     }
 
-    public function destroy(Leaflet $leaflet, PageClick $pageClick)
+    public function destroy(Leaflet $leaflet, HotSpot $hotSpot)
     {
-        // Usuwamy rekord PageClick (łączy produkt ze stroną)
-        $pageClick->delete();
+        // Usuwamy rekord HotSpot (łączy produkt ze stroną)
+        $hotSpot->delete();
 
-        // Pobieramy powiązany produkt z tabeli `leaflet_product`
-        $leaflet_product = LeafletProduct::with('pageClicks')->find($pageClick->leaflet_product_id);
+        // Sprawdzamy, czy produkt nie jest już przypisany do tej strony
+        $hotSpotInPage = HotSpot::where('page_id', $hotSpot->page_id)
+            ->where('product_id', $hotSpot->product_id)
+            ->first();  // Pobieramy pierwszy rekord (jeśli istnieje)
 
-        // Sprawdzamy, czy produkt nie ma żadnych powiązanych rekordów PageClick
-        if ($leaflet_product && $leaflet_product->pageClicks->count() === 0) {
-            // Jeśli nie ma powiązań z żadnymi stronami, usuwamy rekord w `leaflet_product`
-            $leaflet_product->delete();
+        // Sprawdzamy, czy produkt nie jest już przypisany do żadnej strony
+        $leaflet_product = LeafletProduct::where('leaflet_id', $leaflet->id)
+            ->where('product_id', $hotSpot->product_id)
+            ->first();  // Pobieramy pierwszy rekord (jeśli istnieje)
+
+        // Jeśli nie ma żadnych innych HotSpotów dla tej strony i produktu, usuwamy rekord w `leaflet_product`
+        if (empty($hotSpotInPage) && !empty($leaflet_product)) {
+            $leaflet_product->delete(); // Usuwamy powiązanie z gazetką
         }
 
         return redirect()->back()->with('success', 'Produkt został usunięty ze strony.');
     }
+
 
 
 }

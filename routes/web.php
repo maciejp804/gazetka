@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\ProductDescriptionController;
+
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
@@ -23,7 +23,8 @@ use App\Http\Controllers\Admin\LeafletController as AdminLeafletController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\ProductDescriptionController as AdminProductDescriptionController ;
 use App\Http\Controllers\Admin\PageController as AdminPageController; ;
-use App\Http\Controllers\Admin\PageClickController as AdminPageClickController;
+use App\Http\Controllers\Admin\HotSpotController as AdminHotSpotController;
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 
 
 $mainDomain = env('MAIN_DOMAIN', 'gazetkapromocyjna.local');
@@ -318,8 +319,8 @@ Route::get('/search/triple/',[SearchController::class,'triple'])->name('search.t
 Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('search.quadruple');
 //END SEARCH
 
+//ZAPLECZE
 //VOUCHER
-
 Route::get('/panel/vouchers', [AdminVoucherController::class, 'index'])->name('admin.vouchers.index');
 Route::get('/panel/vouchers/create', [AdminVoucherController::class, 'create'])->name('admin.vouchers.create');
 Route::post('/panel/vouchers/add', [AdminVoucherController::class, 'add'])->name('admin.vouchers.add');
@@ -353,6 +354,8 @@ Route::prefix('/panel/leaflets')->name('admin.leaflets.')->group(function () {
     Route::get('/create', [AdminLeafletController::class, 'create'])->name('create');
     Route::post('/add', [AdminLeafletController::class, 'add'])->name('add');
     Route::get('/search', [AdminLeafletController::class, 'search'])->name('search');
+    Route::post('/hotspot/create', [AdminHotSpotController::class, 'createHotSpot'])->name('hotspot.create');
+    Route::put('/hotspot/update', [AdminHotSpotController::class, 'updateHotSpot'])->name('hotspot.update');
     Route::get('/{leaflet}', [AdminLeafletController::class, 'manage'])->name('manage');
     Route::delete('/{leaflet}/delete', [AdminLeafletController::class, 'destroy'])->name('destroy');
     Route::get('/{leaflet}/edit', [AdminLeafletController::class, 'edit'])->name('edit');
@@ -364,11 +367,14 @@ Route::prefix('/panel/leaflets')->name('admin.leaflets.')->group(function () {
     Route::put('/{leaflet}/pages/update', [AdminPageController::class, 'update'])->name('page.update');
     Route::get('/{leaflet}/pages/order', [AdminPageController::class, 'editOrder'])->name('page.edit.order');
     Route::put('/{leaflet}/pages/updateOrder', [AdminPageController::class, 'updateOrder'])->name('page.update.order');
-    Route::get('/{leaflet}/pages/products/create', [AdminPageClickController::class, 'create'])->name('page.product.create');
-    Route::post('/{leaflet}/pages/products/add', [AdminPageClickController::class, 'add'])->name('page.product.add');
-    Route::delete('/{leaflet}/{pageClick}/delete', [AdminPageClickController::class, 'destroy'])->name('page.product.destroy');
 
-
+    Route::prefix('{leaflet}/hotspots')->name('hotspots.')->group(function () {
+        Route::get('/create', [AdminHotSpotController::class, 'create'])->name('create');
+        Route::post('/add', [AdminHotSpotController::class, 'add'])->name('add');
+        Route::delete('/delete', [AdminHotSpotController::class, 'delete'])->name('delete');
+        Route::delete('/{page}/deletePage', [AdminHotSpotController::class, 'deletePage'])->name('deletePage');
+        Route::delete('/{hotSpot}/deleteSpot', [AdminHotSpotController::class, 'deleteHotSpot'])->name('deleteHotSpot');
+    });
 });
 
 //PRODUCTS
@@ -408,6 +414,19 @@ Route::prefix('panel/products')->name('admin.products.')->group(function () {
     });
 
 
+});
+
+//BLOG
+Route::prefix('panel/blogs')->name('admin.blogs.')->group(function () {
+    Route::get('/', [AdminBlogController::class, 'index'])->name('index');
+    Route::get('/create', [AdminBlogController::class, 'create'])->name('create');
+    Route::post('/add', [AdminBlogController::class, 'add'])->name('add');
+    Route::post('/tiny/upload-image', [AdminBlogController::class, 'uploadImageTiny'])->name('upload.image.tiny');
+    Route::get('/{slug:blog}/edit', [AdminBlogController::class, 'edit'])->name('edit');
+    Route::put('/{slug:blog}/update', [AdminBlogController::class, 'update'])->name('update');
+
+    Route::post('/{blog}/upload-image', [AdminBlogController::class, 'uploadImage'])->name('upload.image'); //Dodawanie, zmiana grafiki
+    Route::delete('/{slug:blog}/delete', [AdminBlogController::class, 'delete'])->name('delete');
 });
 
 

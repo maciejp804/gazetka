@@ -19,9 +19,10 @@ class Page extends Model
             ->orderBy('sort_order');  // ✅ Sortowanie stron w kolejności
     }
 
-    public function clicks(): HasMany
+    // Relacja do hot_spot (produkty przypisane do tej strony)
+    public function hotSpots()
     {
-        return $this->hasMany(PageClick::class);
+        return $this->hasMany(HotSpot::class);
     }
 
 }

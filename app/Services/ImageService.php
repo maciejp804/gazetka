@@ -113,5 +113,68 @@ class ImageService
             return [];
         }
     }
+
+    public function cropAndStore($source, $pathWithoutExtension, int $x, int $y, int $width, int $height, int $imageWidth, int $imageHeight): array
+    {
+        try {
+            // 1. Rozpoznanie, czy źródło to URL
+            if (Str::startsWith($source, ['http://', 'https://'])) {
+                $response = Http::get($source);
+
+                if ($response->failed()) {
+                    Log::warning('❌ Nie udało się pobrać obrazu z URL', ['url' => $source]);
+                    return [];
+                }
+
+                $image = Image::read($response->body());
+            } else {
+                // 2. Jeśli nie URL, zakładamy że to już jest zawartość pliku
+                $image = Image::read($source);
+            }
+            [$cropX, $cropY, $cropWidth, $cropHeight] = $this->calculateImageDimensions($image->width(), $image->height(), $imageWidth, $imageHeight, $x, $y, $width, $height);
+//            dd($cropX, $cropY, $cropWidth, $cropHeight);
+
+            // 3. Przycinanie obrazu na podstawie współrzędnych
+
+
+            $image->crop($cropWidth, $cropHeight, $cropX, $cropY);
+
+            // 4. Zapisz obraz w formacie JPG
+            $jpgPath = $pathWithoutExtension . '.jpg';
+            $jpgImage = $image->encode(new JpegEncoder(quality: 65));
+            Storage::disk('public')->put($jpgPath, (string) $jpgImage);
+
+
+            // WebP
+            $webpPath = $pathWithoutExtension . '.webp';
+            $webpImage = $image->encode(new WebpEncoder(quality: 80));
+            Storage::disk('public')->put($webpPath, (string) $webpImage);
+
+            // AVIF
+            $avifPath = $pathWithoutExtension . '.avif';
+            $avifImage = $image->encode(new AvifEncoder(quality: 80));
+            Storage::disk('public')->put($avifPath, (string) $avifImage);
+
+            return [
+                'path' => $pathWithoutExtension
+            ];
+        } catch (\Throwable $e) {
+            Log::warning('❌ Nie udało się obciąć obrazu', ['url' => $source, 'error' => $e->getMessage()]);
+            return [];
+        }
+    }
+
+    public function calculateImageDimensions(int $naturalWidth, int $naturalHeight, int $imageWidth, int $imageHeight, int $x, int $y, int $width, int $height): array
+    {
+        // Obliczanie współrzędnych przycięcia w oryginalnych wymiarach obrazu
+        $cropX = round(($naturalWidth * $x) / $imageWidth);
+        $cropY = round(($naturalHeight * $y) / $imageHeight);
+
+        // Obliczanie szerokości i wysokości przycięcia w oryginalnych wymiarach obrazu
+        $cropWidth = round(($width * $naturalWidth) / $imageWidth);
+        $cropHeight = round(($height * $naturalHeight) / $imageHeight);
+
+        return [$cropX, $cropY, $cropWidth, $cropHeight];
+    }
 }
 

@@ -189,8 +189,8 @@ class ShopController extends Controller
             ->limit(20)
             ->get();
 
-        $blogs = Blog::with('category')->where('status', '=','published')->get();
 
+        $blogs = Blog::getAll();
         $category = $shop->category ? $shop->category->slug : 'default';
 
         $descriptions_defaults = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);

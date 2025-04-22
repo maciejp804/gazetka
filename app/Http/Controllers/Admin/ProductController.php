@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\HotSpot;
 use App\Models\Product;
 use App\Models\Voucher;
 use App\Services\ImageService;
@@ -73,6 +74,10 @@ class ProductController extends Controller
 
             $pathWithoutExtension = 'images/products/logo/logo_' . uniqid();
 
+            $hotspots = HotSpot::where('image', $product->image)
+                ->where('valid_to', '>=', now('Europe/Warsaw'))->count();
+
+
             $result = app(ImageService::class)->convertAndStore(
                 $request->file('image')->getContent(),
                 $pathWithoutExtension,
@@ -84,7 +89,17 @@ class ProductController extends Controller
                 // zapisujemy tylko path bez rozszerzenia
 
                 if ($product->image && Storage::disk('public')->exists($product->image . '.webp')) {
-                    Storage::disk('public')->delete([$product->image . '.webp', $product->image . '.avif', $product->image . '.jpg']);
+                    if(str_contains($product->image, 'images/hotspots'))
+                    {
+                        $hotspots = HotSpot::where('image', $product->image)
+                            ->where('valid_to', '>=', now('Europe/Warsaw'))->count();
+                        if($hotspots == 0){
+                            Storage::disk('public')->delete([$product->image . '.webp', $product->image . '.avif', $product->image . '.jpg']);
+                        }
+                    } else {
+                        Storage::disk('public')->delete([$product->image . '.webp', $product->image . '.avif', $product->image . '.jpg']);
+                    }
+
                 }
 
                 $product->update([
@@ -121,7 +136,7 @@ class ProductController extends Controller
         );
 
 
-        
+
         return response()->json([
             'html' => view('components.admin.product-item', compact('items'))->render()
         ]);

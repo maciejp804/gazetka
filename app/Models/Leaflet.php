@@ -69,5 +69,4 @@ class Leaflet extends Model
             ->where('page_clicks.page_id', $pageId);  // Filtrowanie po page_id
     }
 
-
 }

@@ -38,8 +38,14 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         on: {
             init: function () {
-                document.getElementById('preloader').style.display = 'none';
-                document.querySelector('.swiper-container').style.display = 'block';
+                const skeletonElement = document.getElementById('skeleton-slider-swiper-container');
+                const actualElement = document.getElementById('swiper-container');
+
+                if (skeletonElement && actualElement) {
+                    skeletonElement.classList.add('!hidden');
+                    actualElement.classList.remove('!hidden');
+                }
+
                 updateNestedSwiperHeight();
             },
             slideChangeTransitionEnd: function () {

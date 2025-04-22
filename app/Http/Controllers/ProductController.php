@@ -40,7 +40,7 @@ class ProductController extends Controller
             ->where('type', 'product')
             ->where('parent_id', null)->get();
 
-        $products = $this->productService->getProducts('normal', null, null,null,10);
+        $products = $this->productService->getHotSpots('low', null, null,null,10);
 
         $product_sort = SortOptionsService::getSortOptionsProducts();
 
@@ -99,7 +99,7 @@ class ProductController extends Controller
         }
 
 
-        $products = $this->productService->getProducts('normal', $category->id, null,null,10);
+        $products = $this->productService->getHotSpots('low', $category->id, null,null,10);
 
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
@@ -161,7 +161,7 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $products = $this->productService->getProducts('normal',null, $subcategory->id, null,10);
+        $products = $this->productService->getHotSpots('low',null, $subcategory->id, null,10);
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
         $leaflets = $leaflets->sortByDesc('created_at')->take(40);
@@ -200,14 +200,20 @@ class ProductController extends Controller
     {
         $product = Product::with('ratings', 'leaflets', 'category')
             ->where('slug', $slug)
+            ->where('status', 1)
             ->first();
+
+
 
         if(!$product)
         {
             abort(404);
         }
 
+
         $productInLeaflets = $this->productService->getProductOccurrences($product->id);
+
+//        dd($productInLeaflets);
 
         $averageRating = $product->averageRating();
         $ratingCount = $product->ratingCount();
@@ -221,7 +227,7 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $products = $this->productService->getProducts('normal',null, $product->category_id, null,null);
+        $products = $this->productService->getHotSpots('low',null, $product->category_id, null,null);
 
         $vouchers = Voucher::with('voucherStore')->get();
 

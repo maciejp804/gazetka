@@ -26,7 +26,7 @@
             </a>
         </div>
         <a href="{{route('subdomain.leaflet', ['subdomain' => $slug, 'id' =>$id])}}#{{$page}}" class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">
-            <div  class="hidden text-white group-hover:flex self-center justify-center font-bold text-xs w-24 h-8 bg-blue-550 rounded duration-300">
+            <div class="hidden text-white group-hover:flex self-center justify-center font-bold text-xs w-24 h-8 bg-blue-550 rounded duration-300">
                 <span class="flex self-center">Zobacz więcej</span>
             </div>
         </a>

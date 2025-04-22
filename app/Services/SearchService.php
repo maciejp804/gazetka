@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Models\HotSpot;
 use App\Models\PageClick;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -14,17 +15,16 @@ class SearchService
     public function searchProducts($query, $category = 'all', $subcategory = 'all', $time = null, $perPage = 10, $page = 1)
     {
         // Tworzymy bazowe zapytanie
-        $products = PageClick::select('page_clicks.*')
-            ->join('leaflet_products', 'page_clicks.leaflet_product_id', '=', 'leaflet_products.id')
+        $products = HotSpot::with('product')
             ->where('valid_from', '<=', now())
             ->where('valid_to', '>=', now())
-            ->whereHas('leafletProduct.product', function ($queryName) use ($query) {
+            ->whereHas('product', function ($queryName) use ($query) {
                 $queryName->where('name', 'like', $query . '%');
             });
 
         // Filtrowanie według kategorii i podkategorii
         if ($category !== 'all') {
-            $products = $products->whereHas('leafletProduct.product.category', function ($queryCategory) use ($category, $subcategory) {
+            $products = $products->whereHas('product.category', function ($queryCategory) use ($category, $subcategory) {
                 if ($subcategory !== 'all') {
                     $queryCategory->where('id', $subcategory);
                 } else {
@@ -91,25 +91,25 @@ class SearchService
      */
     private function transformProducts(Collection $products): Collection
     {
-        return $products->flatMap(function ($click) {
-            return $click->page->leaflets->map(function ($leaflet) use ($click) {
+        return $products->flatMap(function ($hotSpot) {
+            return $hotSpot->page->leaflets->map(function ($leaflet) use ($hotSpot) {
                 return [
-                    'click_id'      => $click->id,
-                    'valid_from'    => $click->valid_from,
-                    'valid_to'      => $click->valid_to,
-                    'page_id'       => $click->page->id,
-                    'page_image'    => $click->page->image_path,
+                    'click_id'      => $hotSpot->id,
+                    'valid_from'    => $hotSpot->valid_from,
+                    'valid_to'      => $hotSpot->valid_to,
+                    'page_id'       => $hotSpot->page->id,
+                    'page_image'    => $hotSpot->page->image_path,
                     'page_number'   => optional($leaflet->pivot)->sort_order,
                     'leaflet_id'    => $leaflet->id,
                     'shop_image'    => optional($leaflet->shop)->image,
                     'shop_name'     => optional($leaflet->shop)->name,
                     'shop_slug'     => optional($leaflet->shop)->slug,
-                    'product_id'    => optional($click->leafletProduct->product)->id,
-                    'product_name'  => optional($click->leafletProduct->product)->name,
-                    'product_slug'  => optional($click->leafletProduct->product)->slug,
-                    'product_image' => optional($click->leafletProduct->product)->image,
-                    'price'         => optional($click->leafletProduct)->price,
-                    'promo_price'   => optional($click->leafletProduct)->promo_price
+                    'product_id'    => optional($hotSpot->product)->id,
+                    'product_name'  => optional($hotSpot->product)->name,
+                    'product_slug'  => optional($hotSpot->product)->slug,
+                    'product_image' => optional($hotSpot->product)->image,
+                    'price'         => optional($hotSpot)->price,
+                    'promo_price'   => optional($hotSpot)->promo_price
                 ];
             });
         });

@@ -61,7 +61,8 @@ class MainController extends Controller
         ])->get();
 
 
-        $products = $this->productService->getProducts('promo', null, null, null, null);
+        $products = $this->productService->getHotSpots();
+
 
         $vouchers = $this->vouchers();
 
@@ -162,7 +163,7 @@ class MainController extends Controller
 
         $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
-        $products = $this->productService->getProducts('promo', null, null, null, null);
+        $products = $this->productService->getHotSpots();
 
         $vouchers = $this->vouchers();
 
@@ -181,7 +182,7 @@ class MainController extends Controller
             ['label' => $place->name, 'url' => ''],
         ];
 
-        $blogs = Blog::with('category')->where('status', '=','published')->get();
+        $blogs = Blog::getAll();
 
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), null, $place) ?? Description::getDefault(Route::currentRouteName(), $place);
 
@@ -268,9 +269,9 @@ class MainController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $products = $this->productService->getProducts('normal', null, null, $shop->slug, null);
+        $products = $this->productService->getHotSpots('low', null, null, $shop->slug, null);
 
-        $blogs = Blog::with('category')->where('status', '=','published')->get();
+        $blogs = Blog::getAll();
 //        dd($shop);
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id) ?? Description::getDefault(Route::currentRouteName(), $place, $shop->name);
         $category = $shop->category ? $shop->category->slug : 'default';

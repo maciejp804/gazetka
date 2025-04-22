@@ -53,7 +53,8 @@
     <div class="flex mb-5">
         <x-ad-2 justify="justify-end mt-10"/>
         <x-div-1060-leaftet>
-            <x-section>
+            <x-section class="relative">
+                <x-skeleton.leaflet-subdomain-skeleton :is-mobile="$isMobile" swiperClass="swiper-container"/>
                 <x-leaflet-subdomain
                     swiperClass="swiper-container"
                     :is-mobile="$isMobile"

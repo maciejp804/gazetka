@@ -29,32 +29,32 @@
 
             <x-section>
                 <x-swiper-info
-                    button-class="1"
+                    data-container-id="info-swiper"
                     swiper-class="swiper-info"
                     :items="$info_description"/>
             </x-section>
 
-
             <x-section>
                 <x-swiper
                     :items="$shops"
-                    button-class="1"
+                    data-container-id="shop-swiper"
                     swiper-class="swiper-shops"
                     type="retailers"
-                    title="Sieci handlowe w {{$place->name_locative}}"
+                    title="Sieci handlowe"
                     main-route="main.retailers"
                 />
             </x-section>
 
             <x-section>
-                <x-swiper
+                <x-swiper-products
+                    data-container-id="product-swiper"
                     :items="$products"
                     type="products"
-                    button-class="1"
                     swiper-class="swiper-product"
-                    title="Najlepsze promocje w {{$place->name_locative}}"
+                    title="Najlepsze promocje"
                     main-route="main.products"/>
             </x-section>
+
            @if($markers->isNotEmpty())
                 <x-section>
                     <x-h2-title

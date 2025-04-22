@@ -4,7 +4,7 @@
     <!-- Skeleton screen -->
     <div  class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-12 w-96 1xs:w-102.5 xs:w-110.75 sm:w-152 md:w-184 lg:w-238 xl:w-257">
         @for($i = 0; $i < 4; $i++)
-            <div {{$attributes->merge(['class' => 'border border-gray-200 rounded p-2 mb-5 relative w-full'])}}>
+            <div class= "border border-gray-200 rounded p-2 mb-5 relative w-full">
                 <div class="relative bg-white flex items-center justify-center group overflow-hidden">
                     <div class="w-full">
                         <div class="block w-full h-40 2xs:h-52 xs:h-52 sm:h-60 md:h-56 2lg:h-60 bg-gray-200 rounded animate-pulse"></div>

@@ -1,8 +1,17 @@
 @props(['swiperClass', 'items', 'category', 'categoryRoute', 'mainRoute', 'dataContainerId'])
 
 <div {{$attributes->merge(['class'=> "w-full"])}}>
-    <div class="swiper {{$swiperClass}}">
+    <div id="skeleton-slider-{{$swiperClass}}" class="flex w-full relative h-20  lg:h-28">
+        <!-- Skeleton screen -->
+        <div  class="grid grid-cols-4 2xs:grid-cols-5 sm:grid-cols-10 gap-x-1 2xs:gap-x-2 1xl:gap-x-4 gap-y-1 w-full">
+        @for($i=0; $i<= 3; $i++)
+            <x-skeleton.category-small-slide-skeleton/>
+        @endfor
+        </div>
+    </div>
 
+
+    <div class="swiper {{$swiperClass}} !hidden" id="{{$dataContainerId}}-{{$swiperClass}}">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full">
             <div class="swiper-slide group ">

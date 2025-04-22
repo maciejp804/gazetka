@@ -81,6 +81,7 @@
                 <x-swiper
                     :items="$shops"
                     button-class="1"
+                    data-container-id="shop-swiper"
                     swiper-class="swiper-shops"
                     type="retailers"
                     title="Podobne sieci handlowe"

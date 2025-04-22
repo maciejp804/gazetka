@@ -13,7 +13,7 @@
                     {{ $product->name }}
                 </a>
             @else
-                    <form action="{{route('admin.leaflets.page.product.add',[$leafletId])}}" method="POST" id="add-product-form-{{ $product->id }}">
+                    <form action="{{route('admin.leaflets.hotspots.add',[$leafletId])}}" method="POST" id="add-product-form-{{ $product->id }}">
                         @csrf
                         <input type="hidden" name="product_id" value="{{ $product->id }}">
                         <input type="hidden" name="page_id" value="{{ $pageId }}">

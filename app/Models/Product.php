@@ -72,6 +72,9 @@ class Product extends Model
         )->distinct(); // unikaj duplikatów jeśli są
     }
 
-
+    public function hotSpots()
+    {
+        return $this->hasMany(HotSpot::class);
+    }
 
 }

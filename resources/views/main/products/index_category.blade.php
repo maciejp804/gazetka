@@ -40,7 +40,7 @@
 
                     @if($subcategories->count() > 0)
                         <x-swiper-category-small
-                            data-container-id="leaflet-category"
+                            data-container-id="small-category"
                             swiper-class="category-swiper-small"
                             data-subcategory="{{$subcategory}}"
                             :items="$subcategories"

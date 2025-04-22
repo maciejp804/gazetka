@@ -29,6 +29,7 @@
 
             <x-section>
                 <x-swiper-info
+                    data-container-id="info-swiper"
                     swiper-class="swiper-info"
                     :items="$info_description"/>
             </x-section>
@@ -36,6 +37,7 @@
             <x-section>
                 <x-swiper
                     :items="$shops"
+                    data-container-id="shop-swiper"
                     swiper-class="swiper-shops"
                     type="retailers"
                     title="Sieci handlowe"
@@ -44,7 +46,8 @@
             </x-section>
 
             <x-section>
-                <x-swiper
+                <x-swiper-products
+                    data-container-id="product-swiper"
                     :items="$products"
                     type="products"
                     swiper-class="swiper-product"

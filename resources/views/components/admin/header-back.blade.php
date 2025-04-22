@@ -9,7 +9,7 @@
                     <div class="ml-10 flex items-baseline space-x-4">
                         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
 
-                        <x-nav-link href="/panel" :active="request()->is('/panel')">Dashboard</x-nav-link>
+                        <x-nav-link href="/panel" :active="request()->is('panel')">Dashboard</x-nav-link>
                         <x-nav-link href="{{route('admin.shops.index')}}" :active="request()->is('/panel/shops')">Sieci handlowe</x-nav-link>
                         <x-dropdown-menu
                             label="Gazetki"
@@ -17,8 +17,9 @@
                                 ['label' => 'Baza gazetek', 'href' => route('admin.leaflets.index')],
                             ]"
                         />
-                        <x-nav-link href="{{route('admin.vouchers.index')}}" :active="request()->is('/panel/vouchers')">Kupony</x-nav-link>
-                        <x-nav-link href="{{route('admin.products.index')}}" :active="request()->is('/panel/vouchers')">Produkty</x-nav-link>
+                        <x-nav-link href="{{route('admin.vouchers.index')}}" :active="request()->is('panel/vouchers')">Kupony</x-nav-link>
+                        <x-nav-link href="{{route('admin.products.index')}}" :active="request()->is('panel/products')">Produkty</x-nav-link>
+                        <x-nav-link href="{{route('admin.blogs.index')}}" :active="request()->is('panel/blogs')">Blog</x-nav-link>
                         <x-dropdown-menu
                             label="Tworzenie gazetek"
                             :items="[

@@ -8,15 +8,15 @@
 
 @endphp
 
-<div id="preloader">Loading...</div>
-<div class="swiper {{ $swiperClass }} relative" style="display: none">
+
+<div class="swiper {{ $swiperClass }} relative !hidden" id="swiper-container">
     <div class="flex relative h-10">
         <div class="swiper-pagination"></div>
     </div>
     <div class="swiper-wrapper">
         @if(!$isMobile)
             @for ($index = 0; $index <= count($pages); $index += 2)
-
+{{--                @dd($pages[$index])--}}
                 <div class="swiper-slide cursor-grab z-20 relative" data-hash="{{$index + 1}}" data-history="{{$index + 1}}">
                     <div class="swiper-zoom-container">
                         <div class="swiper-zoom-target">

@@ -98,101 +98,170 @@ export function initCategorySwiper() {
 
 // ✅ Konfiguracja dla .category-swiper-small
 export function initCategorySwiperSmall() {
-    if (document.querySelector(".category-swiper-small")) {
-        console.log("✅ Inicjalizuję Swiper dla .category-swiper-small");
-        initSwiper('.category-swiper-small', {
-            modules: [Navigation, Grid],
-            slidesPerView: 2,
-            spaceBetween: 5,
-            grid: { rows : 1, fill: 'row'},
-            breakpoints: {
-                320: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
-                375: { slidesPerView: 5, spaceBetween: 10, grid: { rows : 1}},
-                425: { slidesPerView: 5, spaceBetween: 10, grid: { rows : 1}},
-                475: { slidesPerView: 5, spaceBetween: 10, grid: { rows: 1}},
-                640: { slidesPerView: 10, spaceBetween: 10, grid: { rows: 1}},
-                768: { slidesPerView: 10, spaceBetween: 10},
-                1024: { slidesPerView: 10, spaceBetween: 18, grid: { rows : 1}},
-                1440: { slidesPerView: 10, spaceBetween: 25, grid: { rows : 1}}
-            }
-        }, '.prev-swiper-category-swiper-small', '.next-swiper-category-swiper-small');
-    } else {
-        console.warn("❌ Nie znaleziono Swipera .category-swiper-small lub `initSwiper` nie istnieje.");
+
+    const sliders = document.querySelectorAll(".category-swiper-small");
+
+    if (sliders.length === 0) {
+        console.warn("❌ Nie znaleziono żadnego Swipera `.category-swiper-small`.");
+        return;
     }
+
+    console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .category-swiper-small`);
+
+    sliders.forEach((slider, index) => {
+        setTimeout(() => {
+            const skeletonElement = document.getElementById(`skeleton-slider-category-swiper-small`);
+            const actualElement = document.getElementById(`small-category-category-swiper-small`);
+
+            if (skeletonElement && actualElement) {
+                skeletonElement.classList.add('!hidden');
+                actualElement.classList.remove('!hidden');
+            }
+
+            initSwiper('.category-swiper-small', {
+                modules: [Navigation, Grid],
+                slidesPerView: 2,
+                spaceBetween: 5,
+                grid: { rows : 1, fill: 'row'},
+                breakpoints: {
+                    320: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
+                    375: { slidesPerView: 5, spaceBetween: 10, grid: { rows : 1}},
+                    425: { slidesPerView: 5, spaceBetween: 10, grid: { rows : 1}},
+                    475: { slidesPerView: 5, spaceBetween: 10, grid: { rows: 1}},
+                    640: { slidesPerView: 10, spaceBetween: 10, grid: { rows: 1}},
+                    768: { slidesPerView: 10, spaceBetween: 10},
+                    1024: { slidesPerView: 10, spaceBetween: 18, grid: { rows : 1}},
+                    1440: { slidesPerView: 10, spaceBetween: 25, grid: { rows : 1}}
+                }
+            }, '.prev-swiper-category-swiper-small', '.next-swiper-category-swiper-small');
+        }, 1000);
+    });
 }
 
 // ✅ Konfiguracja dla .swiper-shops
 export function initShopsSwiper() {
-    if (document.querySelector(".swiper-shops")) {
-        console.log("✅ Inicjalizuję Swiper dla .swiper-shops");
-        initSwiper('.swiper-shops', {
-            modules: [Navigation, Pagination, Grid],
-            slidesPerView: 2,
-            spaceBetween: 5,
-            grid: { rows: 2, fill: 'row'},
-            breakpoints: {
-                320: { slidesPerView: 2, spaceBetween: 5},
-                375: { slidesPerView: 2, spaceBetween: 5},
-                425: { slidesPerView: 2, spaceBetween: 25},
-                475: { slidesPerView: 3, spaceBetween: 10},
-                640: { slidesPerView: 3, spaceBetween: 5},
-                768: { slidesPerView: 4, spaceBetween: 5, grid: { rows: 1 }},
-                1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 }},
-                1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 }}
-            },
-            pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
-        }, '.button-prev-swiper-shops', '.button-next-swiper-shops');
-    } else {
-        console.warn("❌ Nie znaleziono Swipera .swiper-shops lub `initSwiper` nie istnieje.");
+
+    const sliders = document.querySelectorAll(".swiper-shops");
+
+    if (sliders.length === 0) {
+        console.warn("❌ Nie znaleziono żadnego Swipera `.swiper-shops`.");
+        return;
     }
+
+    console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .swiper-shops`);
+
+    sliders.forEach((slider, index) => {
+        setTimeout(() => {
+            const skeletonElement = document.getElementById(`skeleton-slider-swiper-shops`);
+            const actualElement = document.getElementById(`shop-swiper-swiper-shops`);
+
+            if (skeletonElement && actualElement) {
+                skeletonElement.classList.add('!hidden');
+                actualElement.classList.remove('!hidden');
+            }
+
+            initSwiper('.swiper-shops', {
+                modules: [Navigation, Pagination, Grid],
+                slidesPerView: 2,
+                spaceBetween: 5,
+                grid: { rows: 2, fill: 'row'},
+                breakpoints: {
+                    320: { slidesPerView: 2, spaceBetween: 5},
+                    375: { slidesPerView: 2, spaceBetween: 5},
+                    425: { slidesPerView: 2, spaceBetween: 25},
+                    475: { slidesPerView: 3, spaceBetween: 10},
+                    640: { slidesPerView: 3, spaceBetween: 5},
+                    768: { slidesPerView: 4, spaceBetween: 5, grid: { rows: 1 }},
+                    1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 }},
+                    1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 }}
+                },
+                pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
+            }, '.button-prev-swiper-shops', '.button-next-swiper-shops');
+        }, 1000);
+    });
 }
 
 // ✅ Konfiguracja dla .swiper-product
 export function initProductSwiper() {
-    if (document.querySelector(".swiper-product")) {
-        console.log("✅ Inicjalizuję Swiper dla .swiper-product");
-        initSwiper('.swiper-product', {
-            modules: [Navigation, Pagination, Grid],
-            slidesPerView: 2,
-            spaceBetween: 5,
-            grid: { rows: 2, fill: 'row'},
-            breakpoints: {
-                320: { slidesPerView: 2, spaceBetween: 5},
-                375: { slidesPerView: 2, spaceBetween: 5},
-                425: { slidesPerView: 2, spaceBetween: 25},
-                475: { slidesPerView: 3, spaceBetween: 10},
-                640: { slidesPerView: 3, spaceBetween: 5},
-                768: { slidesPerView: 4, spaceBetween: 5, grid: { rows: 1 }},
-                1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 }},
-                1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 }}
-            },
-            pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
-        }, '.button-prev-swiper-product', '.button-next-swiper-product');
-    } else {
-        console.warn("❌ Nie znaleziono Swipera .mySwiper lub `initSwiper` nie istnieje.");
+
+    const sliders = document.querySelectorAll(".swiper-product");
+
+    if (sliders.length === 0) {
+        console.warn("❌ Nie znaleziono żadnego Swipera `.swiper-product`.");
+        return;
     }
+
+    console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .swiper-product`);
+
+    sliders.forEach((slider, index) => {
+        setTimeout(() => {
+            const skeletonElement = document.getElementById(`skeleton-slider-swiper-product`);
+            const actualElement = document.getElementById(`product-swiper-swiper-product`);
+
+            if (skeletonElement && actualElement) {
+                skeletonElement.classList.add('!hidden');
+                actualElement.classList.remove('!hidden');
+            }
+
+            initSwiper('.swiper-product', {
+                modules: [Navigation, Pagination, Grid],
+                slidesPerView: 2,
+                spaceBetween: 5,
+                grid: { rows: 2, fill: 'row'},
+                breakpoints: {
+                    320: { slidesPerView: 2, spaceBetween: 5},
+                    375: { slidesPerView: 2, spaceBetween: 5},
+                    425: { slidesPerView: 2, spaceBetween: 25},
+                    475: { slidesPerView: 3, spaceBetween: 10},
+                    640: { slidesPerView: 3, spaceBetween: 5},
+                    768: { slidesPerView: 4, spaceBetween: 5, grid: { rows: 1 }},
+                    1024: { slidesPerView: 5, spaceBetween: 5, grid: { rows: 1 }},
+                    1440: { slidesPerView: 5, spaceBetween: 15, grid: { rows: 1 }}
+                },
+                pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true}
+            }, '.button-prev-swiper-product', '.button-next-swiper-product');
+        }, 1000);
+    });
+
 }
 
 // ✅ Konfiguracja dla .swiper-info
 export function initSwiperInfo() {
-    if (document.querySelector(".swiper-info")) {
-        console.log("✅ Inicjalizuję Swiper dla .swiper-info");
-        initSwiper('.swiper-info', {
-            modules: [Pagination, Navigation],
-            slidesPerView: 5,
-            spaceBetween: 5,
-            breakpoints: {
-                320: { slidesPerView: 2, spaceBetween: 5},
-                425:{ slidesPerView: 2, spaceBetween: 10},
-                475: { slidesPerView: 2, spaceBetween: 10},
-                640: { slidesPerView: 4, spaceBetween: 10},
-                1024: { slidesPerView: 5, spaceBetween: 15, loop:false},
-            },
-            pagination: { el: ".swiper-pagination", dynamicBullets: true, clickable: true}
-        }, '.button-prev-swiper-info', '.button-next-swiper-info');
-    } else {
-        console.warn("❌ Nie znaleziono Swipera .swiper-info lub `initSwiper` nie istnieje.");
+
+    const sliders = document.querySelectorAll(".swiper-info");
+
+    if (sliders.length === 0) {
+        console.warn("❌ Nie znaleziono żadnego Swipera `.swiper-info`.");
+        return;
     }
+
+    console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .swiper-info`);
+
+    sliders.forEach((slider, index) => {
+        setTimeout(() => {
+            const skeletonElement = document.getElementById(`skeleton-slider-swiper-info`);
+            const actualElement = document.getElementById(`info-swiper-swiper-info`);
+
+            if (skeletonElement && actualElement) {
+                skeletonElement.classList.add('!hidden');
+                actualElement.classList.remove('!hidden');
+            }
+
+            initSwiper('.swiper-info', {
+                modules: [Pagination, Navigation],
+                slidesPerView: 5,
+                spaceBetween: 5,
+                breakpoints: {
+                    320: { slidesPerView: 2, spaceBetween: 5},
+                    425:{ slidesPerView: 2, spaceBetween: 10},
+                    475: { slidesPerView: 2, spaceBetween: 10},
+                    640: { slidesPerView: 4, spaceBetween: 10},
+                    1024: { slidesPerView: 5, spaceBetween: 15, loop:false},
+                },
+                pagination: { el: ".swiper-pagination", dynamicBullets: true, clickable: true}
+            }, '.button-prev-swiper-info', '.button-next-swiper-info');
+        }, 1000);
+    });
 }
 
 // ✅ Konfiguracja dla .swiper-blog
