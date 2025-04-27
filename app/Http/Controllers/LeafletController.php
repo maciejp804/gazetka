@@ -235,7 +235,7 @@ class LeafletController extends Controller
                 $counter = $count_products;
             }
 
-            for ($i = 0; $i <= $counter; $i++){
+            for ($i = 0; $i < $counter; $i++){
                 if ($i == $counter){
                     $products_excerpt .= ' <strong>'.$products[$i]->name.'</strong>.';
                 } else {
