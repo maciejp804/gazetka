@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -77,16 +77,16 @@
 
     </div>
 
-    <div class="flex-col mx-4 xl:m-auto">
-         @if($descriptions != null)
-            @if($descriptions->content != null)
+    @if($descriptions)
+        <div class="flex-col mx-4 xl:m-auto">
+            @if(!empty($descriptions->content))
                 <x-description :items="$descriptions"/>
             @endif
 
-            @if($descriptions->faq != null)
+            @if(!empty($descriptions->faq))
                 <x-faq :items="$descriptions"/>
             @endif
-        @endif
-    </div>
+        </div>
+    @endif
 
 </x-layout>

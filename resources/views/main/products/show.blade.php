@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -24,15 +24,20 @@
 
                 <x-header-product-domain :product="$product" :products-in-leaflets="$productInLeaflets" :ratingCount="$ratingCount" :averageRating="$averageRating" :model="$model" :descriptions="$descriptions"/>
             </x-section>
-            <x-section>
-                <x-swiper
-                    :items="$products"
-                    type="products"
-                    button-class="1"
-                    swiper-class="swiper-product"
-                    title="Produkty z tej samej kategorii"
-                    main-route="main.products"/>
-            </x-section>
+            @if(isset($products) && $products->isNotEmpty())
+                <x-section>
+                    <x-swiper-products
+                        :items="$products"
+                        type="products"
+                        button-class="1"
+                        data-container-id="product-swiper"
+                        swiper-class="swiper-product"
+                        title="Produkty z tej samej kategorii"
+                        main-route="main.products"
+                    />
+                </x-section>
+
+            @endif
 
 
             <x-ad-1 class="mb-5"/>
@@ -56,17 +61,17 @@
 
     </div>
 
-    <div class="flex-col mx-4 xl:m-auto">
-
-        @if($descriptions)
-            <x-description :items="$descriptions"/>
-            @if($descriptions->faq)
-                <x-faq :items="$descriptions"/>
+    @if($descriptions)
+        <div class="flex-col mx-4 xl:m-auto">
+            @if(!empty($descriptions->content))
+                <x-description :items="$descriptions"/>
             @endif
 
-        @endif
-
-    </div>
+            @if(!empty($descriptions->faq))
+                <x-faq :items="$descriptions"/>
+            @endif
+        </div>
+    @endif
     <x-slot:scripts>
         @vite(['resources/js/rating.js'])
     </x-slot:scripts>

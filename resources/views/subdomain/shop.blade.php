@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $placeAddress->place->name }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>

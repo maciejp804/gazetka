@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -15,9 +15,9 @@
 {{--        <x-ad-3-vertical site="justify-end"/>--}}
         <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
         <div class="flex flex-col 2lg:flex-row w-full 1xl:w-312 mx-auto ">
-            <div class="flex flex-col gap-y-4 w-full 2lg:w-4/5">
-                <x-header-blog>{{$blog->title}}</x-header-blog>
-                <x-excerpt-blog :excerpt="$blog->excerpt"/>
+            <div class="flex flex-col gap-y-4 w-full 2lg:w-4/5 px-2 xs:px-4">
+                <x-header-blog>{{$h1_title}}</x-header-blog>
+                <x-excerpt-blog :excerpt="$excerpt"/>
                 <x-section>
                     <x-blog-author  class="mb-3" :author="$blog->user"/>
                     <div class="flex justify-between">

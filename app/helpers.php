@@ -10,20 +10,20 @@ if (!function_exists('monthReplace')) {
     function monthReplace ($date, $type, $format = 'd-m-Y', $separator = ' ')
     {
         $month_array = array(
-            1 => ['excerpt' => 'sty', 'full' => 'styczeń', 'full_gen' => 'stycznia'],
-            2 => ['excerpt' => 'lut', 'full' => 'luty', 'full_gen' => 'lutego'],
-            3 => ['excerpt' => 'mar', 'full' => 'marzec', 'full_gen' => 'marca'],
-            4 => ['excerpt' => 'kwi', 'full' => 'kwiecień', 'full_gen' => 'kwietnia'],
-            5 => ['excerpt' => 'maj', 'full' => 'maj', 'full_gen' => 'maja'],
-            6 => ['excerpt' => 'cze', 'full' => 'czerwiec', 'full_gen' => 'czerwca'],
-            7 => ['excerpt' => 'lip', 'full' => 'lipiec', 'full_gen' => 'lipca'],
-            8 => ['excerpt' => 'sie', 'full' => 'sierpień', 'full_gen' => 'sierpnia'],
-            9 => ['excerpt' => 'wrz', 'full' => 'wrzesień', 'full_gen' => 'września'],
-            10 => ['excerpt' => 'paź', 'full' => 'październik', 'full_gen' => 'października'],
-            11 => ['excerpt' => 'lis', 'full' => 'listopad', 'full_gen' => 'listopada'],
-            12 => ['excerpt' => 'gru', 'full' => 'grudzień', 'full_gen' => 'grudnia'],
-
+            1 => ['excerpt' => 'sty', 'full' => 'styczeń', 'full_gen' => 'stycznia', 'full_loc' => 'styczniu'],
+            2 => ['excerpt' => 'lut', 'full' => 'luty', 'full_gen' => 'lutego', 'full_loc' => 'lutym'],
+            3 => ['excerpt' => 'mar', 'full' => 'marzec', 'full_gen' => 'marca', 'full_loc' => 'marcu'],
+            4 => ['excerpt' => 'kwi', 'full' => 'kwiecień', 'full_gen' => 'kwietnia', 'full_loc' => 'kwietniu'],
+            5 => ['excerpt' => 'maj', 'full' => 'maj', 'full_gen' => 'maja', 'full_loc' => 'maju'],
+            6 => ['excerpt' => 'cze', 'full' => 'czerwiec', 'full_gen' => 'czerwca', 'full_loc' => 'czerwcu'],
+            7 => ['excerpt' => 'lip', 'full' => 'lipiec', 'full_gen' => 'lipca', 'full_loc' => 'lipcu'],
+            8 => ['excerpt' => 'sie', 'full' => 'sierpień', 'full_gen' => 'sierpnia', 'full_loc' => 'sierpniu'],
+            9 => ['excerpt' => 'wrz', 'full' => 'wrzesień', 'full_gen' => 'września', 'full_loc' => 'wrześniu'],
+            10 => ['excerpt' => 'paź', 'full' => 'październik', 'full_gen' => 'października', 'full_loc' => 'październiku'],
+            11 => ['excerpt' => 'lis', 'full' => 'listopad', 'full_gen' => 'listopada', 'full_loc' => 'listopadzie'],
+            12 => ['excerpt' => 'gru', 'full' => 'grudzień', 'full_gen' => 'grudnia', 'full_loc' => 'grudniu'],
         );
+
 
         // format daty jest YYYY-mm-dd
         $day = date('j', strtotime($date));
@@ -38,6 +38,8 @@ if (!function_exists('monthReplace')) {
             return $day . $separator . $month;
         } elseif ($format=== 'm-Y') {
             return $month . $separator . $year;
+        } elseif ($format=== 'm') {
+            return $month;
         }
     }
 }

@@ -2,12 +2,25 @@
 <div class="flex flex-col md:flex-row mt-4 gap-x-3">
     <div class="flex w-full md:w-72 justify-center aspect-square">
         @if(empty($product->image))
-            <img class="flex self-center"
-                 src="{{$product->category->logo ? asset($product->category->logo) : asset('assets/images/categories/default.webp')}}" alt="{{mb_ucfirst($product->name)}}" />
+            <picture>
+                <source srcset="{{ $product->category->logo ? Storage::url($product->category->logo.'.avif') : asset('assets/images/categories/default.webp')}}" type="image/avif">
+                <source srcset="{{ $product->category->logo ? Storage::url($product->category->logo.'.webp') : asset('assets/images/categories/default.webp') }}" type="image/webp">
+                <img class="flex self-center w-full"
+                     src="{{ $product->category->logo ?  Storage::url($product->category->logo.'.jpg') : asset('assets/images/categories/default.webp')}}"
+                     width="1920" height="1080"
+                     alt="{{$product->name}}">
+            </picture>
         @else
-            <img class="flex self-center"
-                 src="{{$product->image ? asset($product->image) : asset('assets/images/categories/default.webp')}}" alt="{{mb_ucfirst($product->name)}}" />
+            <picture>
+                <source srcset="{{ Storage::url($product->image.'.avif') }}" type="image/avif">
+                <source srcset="{{ Storage::url($product->image.'.webp') }}" type="image/webp">
+                <img class="flex self-center w-full"
+                     src="{{ Storage::url($product->image.'.jpg') }}"
+                     width="1920" height="1080"
+                     alt="{{$product->name}}">
+            </picture>
         @endif
+
     </div>
     <div class="flex w-full">
          <span class="text-sm font-normal p-2">

@@ -2,6 +2,7 @@
 
 @if($type == 'leaflets')
 
+
     <div {{$attributes->merge(['class' => 'w-full'])}} id="{{$dataContainerId}}">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
@@ -112,6 +113,7 @@
                         :shop_slug="$item['shop_slug']"
                         :page_number="$item['page_number']"
                         :leaflet_id="$item['leaflet_id']"
+                        :url="$item['url']"
 
                     />
                 @if($adsStatus === true)

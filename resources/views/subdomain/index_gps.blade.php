@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place->name }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -19,7 +19,7 @@
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
 
-        <div class="w-full 1xl:w-265 m-auto">
+        <x-div-1060>
 
             <x-section class="flex flex-col">
                 <x-h1-title :h1Title="$h1_title"/>
@@ -88,6 +88,7 @@
                 <x-swiper
                     :items="$shopsOther"
                     button-class="1"
+                    data-container-id="shop-swiper"
                     swiper-class="swiper-shops"
                     type="retailers"
                     title="Podobne sieci handlowe"
@@ -107,7 +108,7 @@
 
             <x-ad-1 class="my-5"/>
 
-        </div>
+        </x-div-1060>
 
         {{-- Reklama pionowa po prawej stronie --}}
         <x-ad-3-vertical site="justify-start"/>

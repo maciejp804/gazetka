@@ -3,6 +3,7 @@ import { Grid, Navigation, Pagination, Zoom, Autoplay, FreeMode } from "swiper/m
 
 // ✅ Konfiguracja dla .leaflet
 export function initLeafletSwiper() {
+
     if (document.querySelector(".category-swiper")) {
         console.log("✅ Inicjalizuję Swiper dla .leaflet");
             initSwiper(".leaflet", {
@@ -72,28 +73,46 @@ export function initLeafletPromoSwiper() {
 
 // ✅ Konfiguracja dla .category-swiper
 export function initCategorySwiper() {
-    if (document.querySelector(".category-swiper")) {
-        console.log("✅ Inicjalizuję Swiper dla .category-swiper");
-        initSwiper('.category-swiper', {
-            modules: [Navigation, Pagination, Grid],
-            slidesPerView: 3,
-            spaceBetween: 5,
-            grid: { rows : 2, fill: 'row'},
-            breakpoints: {
-                320: { slidesPerView: 3, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
-                375: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 2, fill: 'row'}},
-                425: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 2, fill: 'row'}},
-                475: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
-                640: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
-                768: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
-                1024: { slidesPerView: 7, spaceBetween: 18, grid: { rows : 1, fill: 'row'}},
-                1440: { slidesPerView: 7, spaceBetween: 25, grid: { rows : 1, fill: 'row'}}
-            },
-            pagination: {el: ".swiper-pagination", dynamicBullets: true,clickable: true}
-        }, '.button-prev-category-swiper', '.button-next-category-swiper');
-    } else {
-        console.warn("❌ Nie znaleziono Swipera .category-swiper lub `initSwiper` nie istnieje.");
+
+    const sliders = document.querySelectorAll(".category-swiper");
+
+    if (sliders.length === 0) {
+        console.warn("❌ Nie znaleziono żadnego Swipera `.category-swiper`.");
+        return;
     }
+
+    console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .category-swiper`);
+
+    sliders.forEach((slider, index) => {
+        setTimeout(() => {
+            const skeletonElement = document.getElementById(`skeleton-slider-category-swiper`);
+            const actualElement = document.getElementById(`swiper-category-category-swiper`);
+
+            if (skeletonElement && actualElement) {
+                skeletonElement.classList.add('!hidden');
+                actualElement.classList.remove('!hidden');
+            }
+
+            initSwiper('.category-swiper', {
+                modules: [Navigation, Pagination, Grid],
+                slidesPerView: 3,
+                spaceBetween: 5,
+                grid: { rows : 2, fill: 'row'},
+                breakpoints: {
+                    320: { slidesPerView: 3, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
+                    375: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 2, fill: 'row'}},
+                    425: { slidesPerView: 3, spaceBetween: 10, grid: { rows : 2, fill: 'row'}},
+                    475: { slidesPerView: 4, spaceBetween: 5, grid: { rows : 2, fill: 'row'}},
+                    640: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
+                    768: { slidesPerView: 5, spaceBetween: 5, grid: { rows : 1, fill: 'row'}},
+                    1024: { slidesPerView: 7, spaceBetween: 18, grid: { rows : 1, fill: 'row'}},
+                    1440: { slidesPerView: 7, spaceBetween: 25, grid: { rows : 1, fill: 'row'}}
+                },
+                pagination: {el: ".swiper-pagination", dynamicBullets: true,clickable: true}
+            }, '.button-prev-category-swiper', '.button-next-category-swiper');
+        }, 1000);
+    });
+
 }
 
 // ✅ Konfiguracja dla .category-swiper-small
@@ -424,7 +443,7 @@ export function initSwiperVoucherPromo() {
         console.log("✅ Inicjalizuję Swiper dla .vouchers-swiper-promo");
         setTimeout(() => {
 
-            const skeletonVoucherElement= document.getElementById('skeleton-slider-vouchers');
+            const skeletonVoucherElement= document.getElementById('skeleton-slider-vouchers-swiper-promo');
             const actualVoucherElement = document.getElementById('actual-slider-vouchers');
 
             if (skeletonVoucherElement && actualVoucherElement) {

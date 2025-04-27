@@ -16,7 +16,7 @@ class ProductService
      * @param int|null $perPage Ilość produktów na stronę (null = bez paginacji).
      * @return LengthAwarePaginator|Collection
      */
-    public function getHotSpots(string $priority = 'low', $category = null, $subcategory = null, string $shopSlug = null, int $perPage = null)
+    public function getHotSpots(string $priority = null, $category = null, $subcategory = null, string $shopSlug = null, int $perPage = null)
     {
         $now = now();
 
@@ -28,8 +28,12 @@ class ProductService
             }
         ])
             ->where('valid_from', '<=', $now)
-            ->where('valid_to', '>=', $now)
-            ->where('priority', $priority);
+            ->where('valid_to', '>=', $now);
+
+        //Filtorwanie po priority
+        if(!is_null($priority)) {
+            $query->where('priority', $priority);
+        }
 
         // Filtrowanie po sklepie (slug)
         if (!is_null($shopSlug)) {
@@ -102,7 +106,8 @@ class ProductService
                     'product_slug'   => optional($hotSpot->product)->slug,
                     'product_image'  => $hotSpot->image,
                     'price'          => optional($hotSpot)->price,
-                    'promo_price'    => optional($hotSpot)->promo_price
+                    'promo_price'    => optional($hotSpot)->promo_price,
+                    'url'            => optional($hotSpot)->url,
                 ];
             });
         })->flatten(1);

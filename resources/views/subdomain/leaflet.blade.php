@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place->name }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -62,7 +62,7 @@
                     :pages="$pages"
                     :inserts="$inserts"
                     :ads="$ads"
-                    :insert-data="$insertData"/>
+                />
             </x-section>
 
             @if(!empty($leaflets))
@@ -146,9 +146,12 @@
     </div>
 
     <div class="flex-col mx-4 xl:m-auto">
-        @if($descriptions->faq != null)
-            <x-faq :items="$descriptions"/>
+        @if($descriptions != null)
+            @if($descriptions->faq != null)
+                <x-faq :items="$descriptions"/>
+            @endif
         @endif
+
     </div>
     <x-slot:scripts>
         @vite(['resources/js/rating.js', 'resources/js/leaflet-swiper.js'])

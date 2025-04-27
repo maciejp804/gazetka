@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Description;
 use App\Models\Leaflet;
 use App\Models\PageClick;
 use App\Models\Place;
@@ -15,6 +16,7 @@ use App\Services\ProductService;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Route;
 
 class ProductController extends Controller
 {
@@ -40,29 +42,42 @@ class ProductController extends Controller
             ->where('type', 'product')
             ->where('parent_id', null)->get();
 
-        $products = $this->productService->getHotSpots('low', null, null,null,10);
+        $products = $this->productService->getHotSpots(null, null, null,null,10);
 
         $product_sort = SortOptionsService::getSortOptionsProducts();
 
 
-        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+        $leaflets = Leaflet::with('shop', 'cover', 'pages')
+            ->where('valid_to','>=',now())
+            ->whereHas('cover')
+            ->whereHas('pages')
+            ->orderBy('created_at', 'desc')
+            ->limit(40)
+            ->get();
+
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => 'Produkty', 'url' => ''],
         ];
 
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+
+        $default_descriptions = Description::getDefaultProducts(Route::currentRouteName());
+
         return view('main.products.index', data:
             [
                 'place' => $place->name,
 
 
-                'h1_title'=> '<strong>Produkty</strong> w gazetkach promocyjnych',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+                'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
 
-                'descriptions' => null,
+
                 'breadcrumbs' => $breadcrumbs,
 
                 'product_sort' => $product_sort,
@@ -99,7 +114,7 @@ class ProductController extends Controller
         }
 
 
-        $products = $this->productService->getHotSpots('low', $category->id, null,null,10);
+        $products = $this->productService->getHotSpots(null, $category->id, null,null,10);
 
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
@@ -112,17 +127,25 @@ class ProductController extends Controller
         ];
 
         $product_sort = SortOptionsService::getSortOptionsProducts();
-        $static_description = StaticDescriptions::getDescriptions();
+
+
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultProducts(Route::currentRouteName(), $category);
+
+
+
         return view('main.products.index_category', data:
             [
                 'place' => $place->name,
 
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+                'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
 
-                'h1_title'=> 'Produkty w gazetkach promocyjnych - kategoria <strong>'.strtolower($category->name).'</strong>',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'static_description' => $static_description,
-                'descriptions' => null,
+
                 'breadcrumbs' => $breadcrumbs,
                 'product_sort' => $product_sort,
                 'products' => $products,
@@ -161,7 +184,7 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $products = $this->productService->getHotSpots('low',null, $subcategory->id, null,10);
+        $products = $this->productService->getHotSpots(null,null, $subcategory->id, null,10);
 
         $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
         $leaflets = $leaflets->sortByDesc('created_at')->take(40);
@@ -174,17 +197,24 @@ class ProductController extends Controller
         ];
 
         $product_sort = SortOptionsService::getSortOptionsProducts();
-        $static_description = StaticDescriptions::getDescriptions();
+
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultProducts(Route::currentRouteName(), $category, $subcategory);
+
+
+
         return view('main.products.index_category', data:
             [
                 'place' => $place->name,
 
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+                'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
 
-                'h1_title'=> 'Produkty w gazetkach promocyjnych - kategoria <strong>'.strtolower($category->name).'</strong>',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'static_description' => $static_description,
-                'descriptions' => null,
+
                 'breadcrumbs' => $breadcrumbs,
                 'product_sort' => $product_sort,
                 'products' => $products,
@@ -227,7 +257,7 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $products = $this->productService->getHotSpots('low',null, $product->category_id, null,null);
+        $products = $this->productService->getHotSpots(null,null, $product->category_id, null,null);
 
         $vouchers = Voucher::with('voucherStore')->get();
 
@@ -237,21 +267,22 @@ class ProductController extends Controller
             ['label' => mb_ucfirst($product->name), 'url' => ''],
         ];
 
-        $descriptions = ProductDescription::with('products')
-            ->where('product_id', $product->id)
-            ->where('shop_id', null)
-            ->first();
+        $descriptions = ProductDescription::getByProductAndShop($product->id);
+
+        $default_descriptions = ProductDescription::getDefaultProduct(Route::currentRouteName(), $product);
 
         return view('main.products.show', data:
             [
                 //Lokalizacja
                 'place' => $place->name,
 
-                'h1_title'=> mb_ucfirst($product->name).' - promocje w sklepach',
-                'page_title'=> mb_ucfirst($product->name).' - promocje, aktualna cena w sklepach | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'name' => $slug,
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+                'name' => $slug,
                 'breadcrumbs' => $breadcrumbs,
 
                 //Products
@@ -283,44 +314,34 @@ class ProductController extends Controller
         {
             abort(404);
         }
+
         $leaflets = Leaflet::with('shop')->get();
 
-        $productsInShopLeaflets = Leaflet::with('shop')
+        $productsInShopLeaflets = Leaflet::with('shop', 'pages')
             ->where('shop_id', $shop->id)
             ->where('valid_to', '>=', now()->toDateString()) // Gazetka musi być nadal ważna
-            ->whereHas('pages.clicks.leafletProduct', function ($query) use ($product) {
-                $query->where('product_id', $product->id)
+            ->whereHas('pages.hotSpots', function ($q) use ($product) {
+                $q->where('product_id', $product->id)
                     ->where('valid_from', '<=', now()->toDateString()) // Oferta już aktywna
                     ->where('valid_to', '>=', now()->toDateString()); // Oferta nadal ważna
-            })->with([
-                'pages' => function ($query) use ($product) {
-                    $query->whereHas('clicks.leafletProduct', function ($q) use ($product) {
-                        $q->where('product_id', $product->id)
-                            ->where('valid_from', '<=', now()->toDateString())
-                            ->where('valid_to', '>=', now()->toDateString());
-                    });
-                },
-                'pages.clicks' => function ($query) use ($product) {
-                    $query->whereHas('leafletProduct', function ($q) use ($product) {
-                        $q->where('product_id', $product->id)
-                            ->where('valid_from', '<=', now()->toDateString())
-                            ->where('valid_to', '>=', now()->toDateString());
-                    });
-                },
-                'pages.clicks.leafletProduct.product'
-            ])
+            })
             ->get()
-            ->map(function ($leaflet) {
+            ->map(function ($leaflet) use ($product) {
                 return [
                     'leaflet_id' => $leaflet->id,
                     'name' => $leaflet->shop->name ?? 'Brak sklepu',
                     'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
                     'shop_image'=> $leaflet->shop->image,
-                    'pages' => $leaflet->pages->map(function ($page) {
+                    'pages' => $leaflet->pages->filter(function ($page) use ($product) {
+                        // Filtrujemy strony, które zawierają dany produkt w hotSpots
+                        return $page->hotSpots->contains(function ($click) use ($product) {
+                            return $click->product_id === $product->id;
+                        });
+                    })->map(function ($page) {
                         return [
                             'page_number' => $page->page_number,
                             'page_image' => $page->image_path,
-                            'clicks' => $page->clicks->map(function ($click) {
+                            'clicks' => $page->hotSpots->map(function ($click) {
                                 return [
                                     'valid_from' => $click->valid_from,
                                     'valid_to' => $click->valid_to,
@@ -332,43 +353,33 @@ class ProductController extends Controller
                 ];
             });
 
+//        dd($productsInShopLeaflets);
 
-        $productsInNoShopLeaflets = Leaflet::with('shop')
-            ->where('shop_id','!=', $shop->id)
+        $productsInNoShopLeaflets = Leaflet::with('shop', 'pages')
+            ->where('shop_id', '!=',$shop->id)
             ->where('valid_to', '>=', now()->toDateString()) // Gazetka musi być nadal ważna
-            ->whereHas('pages.clicks.leafletProduct', function ($query) use ($product) {
-                $query->where('product_id', $product->id)
+            ->whereHas('pages.hotSpots', function ($q) use ($product) {
+                $q->where('product_id', $product->id)
                     ->where('valid_from', '<=', now()->toDateString()) // Oferta już aktywna
                     ->where('valid_to', '>=', now()->toDateString()); // Oferta nadal ważna
-            })->with([
-                'pages' => function ($query) use ($product) {
-                    $query->whereHas('clicks.leafletProduct', function ($q) use ($product) {
-                        $q->where('product_id', $product->id)
-                            ->where('valid_from', '<=', now()->toDateString())
-                            ->where('valid_to', '>=', now()->toDateString());
-                    });
-                },
-                'pages.clicks' => function ($query) use ($product) {
-                    $query->whereHas('leafletProduct', function ($q) use ($product) {
-                        $q->where('product_id', $product->id)
-                            ->where('valid_from', '<=', now()->toDateString())
-                            ->where('valid_to', '>=', now()->toDateString());
-                    });
-                },
-                'pages.clicks.leafletProduct.product'
-            ])
+            })
             ->get()
-            ->map(function ($leaflet) {
+            ->map(function ($leaflet) use ($product) {
                 return [
                     'leaflet_id' => $leaflet->id,
                     'name' => $leaflet->shop->name ?? 'Brak sklepu',
                     'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
                     'shop_image'=> $leaflet->shop->image,
-                    'pages' => $leaflet->pages->map(function ($page) {
+                    'pages' => $leaflet->pages->filter(function ($page) use ($product) {
+                        // Filtrujemy strony, które zawierają dany produkt w hotSpots
+                        return $page->hotSpots->contains(function ($click) use ($product) {
+                            return $click->product_id === $product->id;
+                        });
+                    })->map(function ($page) {
                         return [
                             'page_number' => $page->page_number,
                             'page_image' => $page->image_path,
-                            'clicks' => $page->clicks->map(function ($click) {
+                            'clicks' => $page->hotSpots->map(function ($click) {
                                 return [
                                     'valid_from' => $click->valid_from,
                                     'valid_to' => $click->valid_to,
@@ -397,7 +408,12 @@ class ProductController extends Controller
         ];
 
 
-//        dd($product->descriptions);
+        $descriptions = ProductDescription::getByProductAndShop($product->id, $shop->id);
+
+        $default_descriptions = ProductDescription::getDefaultProduct(Route::currentRouteName(), $product, $shop);
+
+//        dd($default_descriptions);
+
 
         return view('subdomain.products.show', data:
             [
@@ -409,19 +425,22 @@ class ProductController extends Controller
                 //Lokalizacja
                 'place' => $place,
 
-                'h1_title'=> mb_ucfirst($product->name).' w '.$shop->name.' - aktualne promocje',
-                'page_title'=> mb_ucfirst($product->name).' '.$shop->name.' - '.monthReplace(date('Y-m-d',strtotime('now')), 'full', 'm-Y').' • GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+                'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+                'name' => $slug,
+                'breadcrumbs' => $breadcrumbs,
 
-                "breadcrumbs" => $breadcrumbs,
                 'leaflets' => $leaflets,
                 "leaflets_others" => $leaflets,
 
                 'productsInShopLeaflets' => $productsInShopLeaflets,
                 'productsInNoShopLeaflets' => $productsInNoShopLeaflets,
 
-                //Opis strony
-                'descriptions' => $product->descriptions
+
             ]);
     }
 

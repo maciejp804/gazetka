@@ -1,4 +1,4 @@
-<div class="swiper-slide group relative w-36 2xs:w-42 1xs:w-48 xs:w-52 sm:w-48 md:w-58 lg:w-44 2lg:w-50 xl:w-48">
+<div class="swiper-slide group relative w-36 2xs:w-42 1xs:w-56 xs:w-52 sm:w-48 md:w-58 lg:w-44 2lg:w-50 xl:w-48">
     <div class="flex flex-col gap-y-2 text-center aspect-square justify-center w-full rounded border border-gray-200 p-2">
         <div class="rounded flex justify-center">
             <div class="self-center w-full">
@@ -24,5 +24,8 @@
     </div>
     <div class="text-center min-h-12">
         <h3 class="skeleton w-3/4 h-4 bg-gray-300 rounded mx-auto mt-2"></h3> <!-- Skeleton Title -->
+    </div>
+    <div class="flex justify-center min-h-12">
+        <div class="px-4 py-2 border rounded-full self-center bg-gray-300"></div>
     </div>
 </div>

@@ -2,9 +2,9 @@
     <x-slot:place>
         {{ $place }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -59,6 +59,7 @@
                 <x-swiper-category
                     title="Kategorie sieci handlowych"
                     :items="$shop_categories"
+                    data-container-id="swiper-category"
                     swiper-class="category-swiper"
                     category-route="main.retailers.category"
                     main-route="main.retailers"
@@ -80,6 +81,7 @@
 
             <x-section>
                 <x-swiper-vouchers
+                    data-container-id="vouchers-swiper"
                     swiper-class="vouchers-swiper-promo"
                     title="Kupony rabatowe"
                     :items="$vouchers"
@@ -132,8 +134,9 @@
 
     <x-section class="flex-col mx-4 xl:m-auto">
         <div class="bg-gray-200 rounded py-4 mb-5 sm:py-20 ">
-            <x-about class="1xl:w-265 lg:m-auto"/>
+            <x-about class="1xl:w-265 lg:m-auto" :counter_leaflets="$counter_leaflets" :counter_shops="$counter_shops" :counter_products="$counter_products"/>
         </div>
+
         <x-description :items="$descriptions"/>
         @if($descriptions->faq)
             <x-faq :items="$descriptions"/>

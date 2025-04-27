@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -42,6 +42,7 @@
             <x-section>
                 <x-swiper-category
                     button-class="1"
+                    data-container-id="swiper-category"
                     swiper-class="category-swiper"
                     title="Kategorie produktów"
                     :items="$product_categories"
@@ -51,11 +52,12 @@
             </x-section>
 
             <x-section>
-                <x-swiper
+                <x-swiper-products
                     :items="$products"
                     type="products"
                     button-class="1"
                     swiper-class="swiper-product"
+                    data-container-id="product-swiper"
                     title="Najczęściej szukane produkty"
                     main-route="main.products"
                 />

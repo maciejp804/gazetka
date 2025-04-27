@@ -109,7 +109,8 @@ class SearchService
                     'product_slug'  => optional($hotSpot->product)->slug,
                     'product_image' => optional($hotSpot->product)->image,
                     'price'         => optional($hotSpot)->price,
-                    'promo_price'   => optional($hotSpot)->promo_price
+                    'promo_price'   => optional($hotSpot)->promo_price,
+                    'url'           => optional($hotSpot)->url,
                 ];
             });
         });

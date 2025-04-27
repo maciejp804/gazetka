@@ -39,17 +39,16 @@ class MainController extends Controller
             $place = Place::find($locationData['id']);
         }
 
-        $leaflets = Leaflet::with(['shop', 'cover'])
-            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('status', 'published')
-            ->orderByDesc('updated_at') // Sortujemy od razu w bazie!
-            ->limit(40) // Ograniczamy wynik od razu
-            ->get();
 
-        $leaflets_promo = Leaflet::with(['shop', 'cover'])
+        [$leaflets, $counter_leaflets] = $this->leaflets(40);
+
+
+        $leaflets_promo = Leaflet::with(['shop', 'cover','pages'])
             ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('status', 'published')
             ->where('pinned', 1)
+            ->whereHas('cover')
+            ->whereHas('pages')
             ->orderByDesc('priority')
             ->orderByDesc('updated_at')
             ->limit(20)
@@ -62,7 +61,7 @@ class MainController extends Controller
 
 
         $products = $this->productService->getHotSpots();
-
+        $counter_products = count($products);
 
         $vouchers = $this->vouchers();
 
@@ -80,12 +79,13 @@ class MainController extends Controller
 
         $info_description = StaticDescriptions::getDescriptions();
 
-        $shops = $this->shops();
+        [$shops, $counter_shops]= $this->shops(null, 'main.index');
+
 
         $breadcrumbs = [];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName()) ?: Description::getDefault(Route::currentRouteName());
-
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions =  Description::getDefault(Route::currentRouteName());
 
 
         return view('main.index', [
@@ -95,22 +95,31 @@ class MainController extends Controller
                 'places' => $placesLimit40,
 
                 // Opisy i dane globalne
-                'h1_title'=> $descriptions->h1_title != null ? $descriptions->h1_title : 'Domyślny tytuł',
-                'page_title'=> $descriptions->meta_title,
-                'meta_description' => $descriptions->meta_description,
-                'info_description' => $info_description,
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'info_description' => $info_description,
                 'breadcrumbs' => $breadcrumbs,
 
                 //Gazetki
+                'counter_leaflets' => $counter_leaflets,
                 'leaflets_promo' => $leaflets_promo,
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
                 'shop_categories' => $shop_categories,
                 'leaflets_time' => $leaflets_time,
+
+
+                //Produkty
                 'products' => $products,
+                'counter_products' => $counter_products,
                 'vouchers' => $vouchers,
+
+                //Sieci handlowe
                 'shops' => $shops,
+                'counter_shops' => $counter_shops,
+
                 'blogs' => $blogs,
 
             ]);
@@ -145,26 +154,22 @@ class MainController extends Controller
             ->where('slug', '!=', '')
             ->get();
 
-        $leaflets = Leaflet::with('shop', 'cover')
+        [$leaflets, $counter_leaflets] = $this->leaflets(40);
+
+        $leaflets_promo = Leaflet::with(['shop', 'cover'])
             ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('status', '=', 'published')
-            ->get(); // Gazetka musi być nadal ważna
-
-
-        $leaflets_promo = $leaflets
-            ->where('pinned', '=', 1)
-            ->sortByDesc('priority')
-            ->sortByDesc('updated_at')->take(20);
-
-
-
-        $leaflets = $leaflets->sortByDesc('updated_at')->take(40);
+            ->where('status', 'published')
+            ->where('pinned', 1)
+            ->orderByDesc('priority')
+            ->orderByDesc('updated_at')
+            ->limit(20)
+            ->get();
 
 
         $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
         $products = $this->productService->getHotSpots();
-
+        $counter_products = count($products);
         $vouchers = $this->vouchers();
 
         $leaflets_time = SortOptionsService::getSortOptions();
@@ -175,7 +180,7 @@ class MainController extends Controller
 
         $info_description = StaticDescriptions::getDescriptions();
 
-        $shops = $this->shops();
+        [$shops, $counter_shops]= $this->shops(null, 'main.index_gps');
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -184,7 +189,10 @@ class MainController extends Controller
 
         $blogs = Blog::getAll();
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), null, $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), null, $place);
+        $default_descriptions = Description::getDefault(Route::currentRouteName(), $place);
+
+
 
         return view('main.index_gps', data:
             [
@@ -192,23 +200,31 @@ class MainController extends Controller
                 'place' => $place,
                 'places' => $placesLimit40,
 
-                'h1_title'=> $descriptions->h1_title != null ? $descriptions->h1_title : "Wszystkie <strong>gazetki promocyjne</strong> w jednym miejscu w $place->name_locative | GazetkaPromocyjna.com.pl",
-                'page_title'=> $descriptions->meta_title != null ? $descriptions->meta_title : "Gazetki promocyjne, nowe i nadchodzące promocje w $place->name_locative | GazetkaPromocyjna.com.pl",
-                'meta_description' => $descriptions->meta_description != null ? $descriptions->meta_description : "Znajdź najlepsze promocje i oferty w $place->name_locative. Sprawdź aktualne gazetki i rabaty.",
-                'info_description' => $info_description,
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'info_description' => $info_description,
                 'breadcrumbs' => $breadcrumbs,
 
                 'shop_categories' => $categories,
 
                 //Gazetki
+                'counter_leaflets' => $counter_leaflets,
                 'leaflets_promo' => $leaflets_promo,
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
                 'leaflets_time' => $leaflets_time,
+
+                //Produkty
                 'products' => $products,
+                'counter_products' => $counter_products,
                 'vouchers' => $vouchers,
+
+                //Sieci handlowe
                 'shops' => $shops,
+                'counter_shops' => $counter_shops,
 
                 //Blogs
                 'blogs' => $blogs,
@@ -227,16 +243,12 @@ class MainController extends Controller
         {
             abort(404);
         }
-        $shops = $this->shops();
-        $shops = $shops->where('slug', '!=', $shop->slug);
 
-        $leaflets = Leaflet::with('shop')
-            ->where('valid_to', '>=', now()->toDateString())
-            ->where('shop_id',$shop->id)->get(); // Gazetka musi być nadal ważna
+        [$shops, $counter_shops] = $this->shops($shop->slug);
 
 
+        [$leaflets, $counter_leaflets] = $this->leaflets('all', $shop->id);
 
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
 
         $placesAll = Place::all();
 
@@ -273,10 +285,11 @@ class MainController extends Controller
 
         $blogs = Blog::getAll();
 //        dd($shop);
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id) ?? Description::getDefault(Route::currentRouteName(), $place, $shop->name);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id);
+
         $category = $shop->category ? $shop->category->slug : 'default';
 
-        $descriptions_defaults = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
+        $default_descriptions = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
 
         return view('subdomain.index', [
             //Zmienne globalne
@@ -287,10 +300,11 @@ class MainController extends Controller
             'places' => $placesLimit40,
 
             // Opisy i dane globalne
-            'h1_title' => $shop->name . ' • gazetka promocyjna ' . date('d.m', strtotime('now')) . ' • aktualne promocje',
-            'page_title' => $shop->name . ' gazetka aktualna • promocje, oferta ' . date('d.m', strtotime('now')) . ' | GazetkaPromocyjna.com.pl',
-            'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-            'excerpt' => $descriptions->excerpt ? $descriptions->excerpt : $descriptions_defaults->excerpt,
+            'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+            'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+            'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+            'descriptions' => $descriptions,
+            'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
 
             'breadcrumbs' => $breadcrumbs,
 
@@ -313,8 +327,7 @@ class MainController extends Controller
             //Blog
             'blogs' => $blogs,
 
-            //Opis strony
-            'descriptions' => $descriptions,
+
         ]);
 
     }
@@ -324,8 +337,6 @@ class MainController extends Controller
         $placesAll = Place::all();
         $place = $placesAll->where('slug', $community)->first();
 
-
-
         $shop = Shop::where('slug', $subdomain)->first();
 
         if(!$place || !$shop)
@@ -333,7 +344,7 @@ class MainController extends Controller
             abort(404);
         }
 
-        $shops = $this->shops();
+        [$shops, $counter_shops] = $this->shops($shop->slug);
 
         $markers = Marker::with('shop', 'place', 'hours')
             ->whereHas('shop', function ($query) use ($shop) {
@@ -343,9 +354,7 @@ class MainController extends Controller
             ->where('place_id', $place->id)
             ->get();
 
-        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->where('shop_id',$shop->id)->get();
-
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+        [$leaflets, $counter_leaflets] = $this->leaflets('all', $shop->id);
 
         // Zapisz lokalizację w ciasteczku
         Cookie::queue('user_location', json_encode([
@@ -354,8 +363,6 @@ class MainController extends Controller
             'latitude' => $place->lat,
             'longitude' => $place->lng,
         ],JSON_PRETTY_PRINT), 60 * 24 * 7, '/', '.'.config('app.main_domain'), false, false); // Zapis na 7 dni
-
-        $shopsOther = $shops->where('slug', '!=', $subdomain);
 
         $averageRating = $shop->averageRating();
         $ratingCount = $shop->ratingCount();
@@ -376,50 +383,45 @@ class MainController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $blogs = Blog::with('category')
-            ->where('status', '=','published')
-            ->orderByDesc('published_at')
-            ->limit(10)
-            ->get();
+        $blogs = Blog::getAll();
 
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id) ?? Description::getDefault(Route::currentRouteName(), $place, $shop->name);
         $category = $shop->category ? $shop->category->slug : 'default';
 
-        $descriptions_defaults = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
+        $default_descriptions = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
 
          return view('subdomain.index_gps', [
-                //Zmienne globalne
-                'subdomain' => $subdomain,
+             //Zmienne globalne
+             'subdomain' => $subdomain,
 
-                //Lokalizacja
-                'place' => $place,
-                'markers' => $markers,
+             //Lokalizacja
+             'place' => $place,
+             'markers' => $markers,
 
-                'h1_title'=> $shop->name. ' '. $place->name .' • gazetki promocyjne',
-                'page_title'=> $shop->name. ' '. $place->name .' • gazetka, godziny otwarcia | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'excerpt' => $descriptions->excerpt ? $descriptions->excerpt : $descriptions_defaults->excerpt,
-                'breadcrumbs' => $breadcrumbs,
+             // Opisy i dane globalne
+             'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+             'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+             'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+             'descriptions' => $descriptions,
+             'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+             'breadcrumbs' => $breadcrumbs,
 
+             // Rating
+             'averageRating' => $averageRating,
+             'ratingCount' => $ratingCount,
+             'model' => "Shop",
 
-                // Rating
-                'averageRating' => $averageRating,
-                'ratingCount' => $ratingCount,
-                'model' => "Shop",
+             //Gazetki
+             'leaflets_category' => $leaflets_category,
+             'leaflets_time' => $leaflets_time,
+             'leaflets' => $leaflets,
+             'vouchers' => $vouchers,
+             'shopsOther' => $shops,
+             'shop' => $shop,
 
-                //Gazetki
-                'leaflets_category' => $leaflets_category,
-                'leaflets_time' => $leaflets_time,
-                'leaflets' => $leaflets,
-                'vouchers' => $vouchers,
-                'shopsOther' => $shopsOther,
-                'shop' => $shop,
+             //Blogs
+             'blogs' => $blogs,
 
-                //Blogs
-                'blogs' => $blogs,
-
-                //Opis strony
-                'descriptions' => $descriptions,
             ]);
     }
 
@@ -447,7 +449,7 @@ class MainController extends Controller
 
                 // Opisy i dane globalne
                 'h1_title'=> 'Najnowsze <strong>gazetki promocyjne</strong> - aktualne i nadchodzące promocje',
-                'page_title'=> 'Masz pytanie? Wypróbuj kontakt do nas | GazetkaPromocyjna.com.pl',
+                'meta_title'=> 'Masz pytanie? Wypróbuj kontakt do nas | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'breadcrumbs' => $breadcrumbs,
@@ -491,7 +493,7 @@ class MainController extends Controller
 
                 // Opisy i dane globalne
                 'h1_title'=> 'Polityka prywatności',
-                'page_title'=> 'Polityka prywatności | GazetkaPromocyjna.com.pl',
+                'meta_title'=> 'Polityka prywatności | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'breadcrumbs' => $breadcrumbs,
@@ -523,7 +525,7 @@ class MainController extends Controller
 
                 // Opisy i dane globalne
                 'h1_title'=> 'Polityka cookies',
-                'page_title'=> 'Polityka cookies | GazetkaPromocyjna.com.pl',
+                'meta_title'=> 'Polityka cookies | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'breadcrumbs' => $breadcrumbs,
@@ -554,7 +556,7 @@ class MainController extends Controller
 
                 // Opisy i dane globalne
                 'h1_title'=> 'Regulamin',
-                'page_title'=> 'Regulamin | GazetkaPromocyjna.com.pl',
+                'meta_title'=> 'Regulamin | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'breadcrumbs' => $breadcrumbs,
@@ -563,19 +565,65 @@ class MainController extends Controller
         );
     }
 
-    protected function shops()
+    protected function shops(string $slug = null, $route = null)
     {
         $now = now('Europe/Warsaw')->toDateTime(); // Unikamy wielokrotnego wywoływania now()
 
-        return Shop::withCount(['leaflets' => function ($query) use ($now) {
+        // Tworzymy zapytanie
+        $shopsQuery = Shop::withCount(['leaflets' => function ($query) use ($now) {
             $query->whereBetween('valid_to', [$now, '9999-12-31 23:59:59']) // Szybsza wersja zamiast >=
             ->where('status', 'published')
                 ->where('valid_from', '<=', $now);
         }])
             ->where('status', 'active')
-            ->orderByDesc('ranking')
-            ->take(30)
-            ->get();
+            ->orderByDesc('ranking');
+
+        // Jeśli slug jest podany, filtrujemy
+        if (!is_null($slug)) {
+            $shopsQuery->where('slug', '!=',$slug);
+        }
+
+        if ($route == 'main.index' || $route == 'main.index_gps') {
+            $counter_shops = $shopsQuery->count() ?? 0;
+        } else {
+            $counter_shops = 0;
+        }
+        // Liczymy łączną liczbę sklepów spełniających warunki
+
+
+        // Ograniczamy wyniki do 30
+        $shops = $shopsQuery->take(30)->get();
+
+        return [$shops, $counter_shops];
+    }
+
+
+    protected function leaflets($limit = 'all', $shop_id = null)
+    {
+        $leaflets = Leaflet::with(['shop', 'cover', 'pages'])
+            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('status', 'published')
+            ->whereHas('cover') // dodane: tylko jeśli istnieje cover
+            ->whereHas('pages');
+
+            if(!is_null($shop_id)){
+                $leaflets = $leaflets->where('shop_id', '=', $shop_id);
+            }
+
+        $leaflets = $leaflets->orderByDesc('updated_at')->get(); // Sortujemy od razu w bazie!
+
+        if(is_null($shop_id)) {
+            $counter_leaflets = $leaflets->count();
+        } else {
+            $counter_leaflets = 0;
+        }
+
+        if ($limit != 'all') {
+            $leaflets->take($limit);
+        }
+
+        return [$leaflets, $counter_leaflets];
+
     }
 
 

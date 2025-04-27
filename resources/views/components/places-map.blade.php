@@ -1,4 +1,4 @@
-@props(['markers', 'items', 'voivodeship' => 'Wszystkie', 'mainDomain', 'latitude', 'longitude', 'scale' => 6])
+@props(['markers', 'items', 'voivodeship' => 'Wszystkie',  'latitude', 'longitude', 'scale' => 6])
 
 <div class="flex relative h-full w-full z-10">
     <!-- Panel boczny -->
@@ -33,6 +33,8 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+
+        const gpsRouteBase = "{{ route('main.index.gps', ['community' => '__slug__']) }}"; // __slug__ jako placeholder
         // Inicjalizacja mapy
         const map = L.map('map',{
             gestureHandling: true
@@ -129,7 +131,8 @@
                 map.flyTo(marker.getLatLng(), 15, { duration: 1.5 });
                 marker.openPopup();
                 setTimeout(() => {
-                    window.location.href = `http://{{$mainDomain}}/${location.slug}`;
+                    const redirectUrl = gpsRouteBase.replace('__slug__', location.slug);
+                    window.location.href = redirectUrl
                 }, 500);
             });
         });

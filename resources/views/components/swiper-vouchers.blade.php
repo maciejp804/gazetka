@@ -3,18 +3,16 @@
 <x-h2-title class="flex" :main-route="$mainRoute">{!! $title !!}</x-h2-title>
 
 <div class="w-full">
-    <div id="skeleton-slider-vouchers" class="w-full relative mb-4 h-80">
+    <div id="skeleton-slider-{{$swiperClass}}" class="flex w-full relative h-173.5 2xs:h-172 1xs:h-174.5 xs:h-165 sm:h-126 md:h-60 lg:h-64 mb-4">
         <!-- Skeleton screen -->
-        <div  class="flex">
-            @for($i = 0; $i < 2; $i++)
-                <div class="swiper-slide px-2 lg:px-4 py-2 border mr-5 rounded !w-auto bg-gray-300 animate-pulse">
-                    <div class="h-80 w-72"></div>
-                </div>
+        <div  class="grid grid-cols-1 md:grid-cols-3 grid-rows-2 lg:grid-cols-5 gap-x-1 1xs:gap-x-6 xs:gap-x-2.5 md:gap-x-1 lg:gap-x-4 gap-y-4 w-96 1xs:w-102.5 xs:w-110.75 sm:w-152 md:w-184 lg:w-238 xl:w-257">
+            @for($i=0; $i<=1; $i++)
+                <x-skeleton.voucher-slide-skeleton />
             @endfor
         </div>
     </div>
 
-    <div id="actual-slider-vouchers" class="swiper {{$swiperClass}} !hidden relative">
+    <div id="actual-slider-vouchers" class="swiper {{$swiperClass}}  relative">
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-16">
             @foreach($items as $item)

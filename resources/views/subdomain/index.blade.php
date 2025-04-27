@@ -2,9 +2,9 @@
     <x-slot:place>
         {{ $place->name }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -56,11 +56,11 @@
 
             @if($products->isNotEmpty())
                 <x-section>
-                    <x-swiper
+                    <x-swiper-products
                         :items="$products"
                         type="products"
-                        button-class="1"
                         swiper-class="swiper-product"
+                        data-container-id="product-swiper"
                         title="Promocje w {{$shop->name_locative}}"
                         main-route="main.products"
                     />

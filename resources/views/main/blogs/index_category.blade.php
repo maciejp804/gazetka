@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -18,14 +18,15 @@
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
 
-        <div class="w-full 1xl:min-w-265 1xl:w-265 m-auto flex flex-col">
+        <div class="w-full 1xl:min-w-265 1xl:w-265 m-auto flex flex-col px-2 xs:px-4">
+            <x-h1-title :h1Title="$h1_title"/>
             <x-section class="flex flex-col gap-y-4 mb-10">
 
                 <x-blog-categories
                     :blogCategory="$blogCategories"
                     :sum="$sum"
                 />
-                <x-h2-title class="flex"  main-route="main.blogs">{{$blogCategory->name}}</x-h2-title>
+
                 <div class="grid grid-cols-6 gap-x-3 gap-y-6 p-2 rounded">
                 @foreach($blogs as $blog)
 {{--                    @dd()--}}
@@ -54,6 +55,7 @@
                     button-class="1"
                     title="Zobacz polecane gazetki"
                     :leaflets="$leaflets"
+                    data-container-id="leaflet-swiper"
                     main-route="main.leaflets"/>
             </x-section>
 

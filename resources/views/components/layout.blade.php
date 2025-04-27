@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="noindex">
-    <title>@if($page_title) {{ $page_title }} @else Brak tytułu @endif </title>
+    <title>@if($meta_title) {{ $meta_title }} @else Brak tytułu @endif </title>
     <meta name="Description" content="@if($meta_description) {{ $meta_description }} @else Brak tytułu @endif ">
 
     <script>

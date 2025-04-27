@@ -127,6 +127,8 @@ class SearchController extends Controller
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
                 ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
+                ->whereHas('cover')
+                ->whereHas('pages')
                 ->select('leaflets.*') // wybieramy tylko kolumny z tabeli leaflets
                 ->whereHas('shop', function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', $query . '%');

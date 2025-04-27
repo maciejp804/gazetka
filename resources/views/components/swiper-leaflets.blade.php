@@ -1,6 +1,6 @@
 @props(['swiperClass',  'dataContainerId' => null, 'leaflets'])
 
-<div id="skeleton-slider-{{$swiperClass}}" class="flex w-full relative mb-4 h-140 2xs:h-184 md:h-96 lg:h-99">
+<div id="skeleton-slider-{{$swiperClass}}" class="flex w-full relative mb-4 h-160 2xs:h-184 md:h-96 lg:h-99">
     <!-- Skeleton screen -->
     <div  class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-12 w-96 1xs:w-102.5 xs:w-110.75 sm:w-152 md:w-184 lg:w-238 xl:w-257">
         @for($i = 0; $i < 4; $i++)

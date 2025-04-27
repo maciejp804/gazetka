@@ -2,9 +2,9 @@
      <x-slot:place>
         {{  $place->name }}
     </x-slot:place>
-    <x-slot:page_title>
-        {{  $page_title }}
-    </x-slot:page_title>
+    <x-slot:meta_title>
+        {{  $meta_title }}
+    </x-slot:meta_title>
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
@@ -36,6 +36,19 @@
                 </div>
                 <x-section-filtr-results :ads-status="true" data-container-id="vouchers-container" :items="$vouchers" type="vouchers"/>
                 {{ $vouchers->links('custom-paginator') }}
+            </x-section>
+
+            <x-section>
+                <x-h2-title class="flex"
+                            :link="route('main.leaflets')">
+                    Najnowsze gazetki promocyjne
+                </x-h2-title>
+
+                <x-swiper-leaflets-promo
+                    data-container-id="leaflet-swiper"
+                    button-class="1"
+                    :leaflets="$leaflets"
+                    main-route="main.leaflets"/>
             </x-section>
 
             <x-section class="bg-gray-200 rounded py-4">

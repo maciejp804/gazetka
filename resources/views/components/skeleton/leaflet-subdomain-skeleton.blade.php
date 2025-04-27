@@ -7,7 +7,7 @@
         $class = 'flex flex-row';
 
 @endphp
-<div id="skeleton-slider-{{$swiperClass}}" class="flex flex-col justify-center w-full relative mb-3 h-126 2xs:h-166">
+<div id="skeleton-slider-{{$swiperClass}}" class="flex flex-col justify-center w-full relative mb-3 h-126 2xs:h-186">
     <div class="skeleton m-auto w-1/5 h-12 mb-2 bg-gray-300 rounded"></div> <!-- Skeleton for slide -->
     @if(!$isMobile)
         <div class="p-2 w-full h-full flex justify-around">

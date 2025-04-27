@@ -47,11 +47,16 @@ class VoucherController extends Controller
             ['label' => 'Kupony rabatowe', 'url' => ''],
         ];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultVouchers(Route::currentRouteName());
 
-        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
-
+        $leaflets = Leaflet::with('shop','cover', 'pages')
+            ->where('valid_to','>=',now())
+            ->whereHas('cover')
+            ->whereHas('pages')
+            ->orderBy('created_at', 'desc')
+            ->limit(40)
+            ->get();
 
         return view('main.vouchers.index', data:
             [
@@ -59,12 +64,14 @@ class VoucherController extends Controller
                 //Lokalizacja
                 'place' => $place,
 
-                'h1_title'=> 'Aktualne kody rabatowe '.monthReplace(date('Y-m-d',strtotime('now')), 'full', 'm-Y').' - kupony na zniżki promocyjne',
-                'page_title'=> 'Aktualne kody rabatowe, promocje, zniżki '.monthReplace(date('Y-m-d',strtotime('now')), 'full', 'm-Y').' | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
                 'breadcrumbs' => $breadcrumbs,
+
 
                 'voucher_categories' => $categories,
                 'tags' => $tags,
@@ -75,7 +82,7 @@ class VoucherController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions, $retailers_category, $retailers_time, $products)
+    public function indexCategory($category)
     {
 
         $categories = Category::where('status','active')->where('type', 'voucher')->get();
@@ -104,8 +111,13 @@ class VoucherController extends Controller
 
         $shops = $this->shops(32);
 
-        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+        $leaflets = Leaflet::with('shop','cover', 'pages')
+            ->where('valid_to','>=',now())
+            ->whereHas('cover')
+            ->whereHas('pages')
+            ->orderBy('created_at', 'desc')
+            ->limit(40)
+            ->get();
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -115,22 +127,21 @@ class VoucherController extends Controller
 
         $voucher_sort = SortOptionsService::getSortOptions();
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultVouchers(Route::currentRouteName(), $category);
 
         return view('main.vouchers.index_category', data:
             [
                 'place' => $place,
 
-
-                'h1_title'=> 'Aktualne kody rabatowe w kategorii <strong>'.mb_strtolower($category->name).'</strong> '.monthReplace(date('Y-m-d',strtotime('now')), 'full', 'm-Y').' - kupony na zniżki promocyjne',
-                'page_title'=> 'Aktualne kody rabatowe, promocje, zniżki w kategorii '.$category->name.' '.monthReplace(date('Y-m-d',strtotime('now')), 'full', 'm-Y').' | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
                 'breadcrumbs' => $breadcrumbs,
-                'retailers_category' => $retailers_category,
-                'retailers_time' => $retailers_time,
-                'products' => $products,
+
                 'voucher_categories' => $categories,
                 'tags' => $tags,
                 'voucher_sort' => $voucher_sort,

@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\Category;
+use App\Models\Description;
 use App\Models\Leaflet;
 use App\Models\Place;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Route;
 
 class BlogController extends Controller
 {
-    public function index($descriptions)
+    public function index()
     {
         $placesAll = Place::all();
 
@@ -55,17 +57,22 @@ class BlogController extends Controller
 
         $blogsNewtest = Blog::getAll(4);
 
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultBlogs(Route::currentRouteName());
 
         return view('main.blogs.index', data:
             [
                 'place' => $place->name,
                 'places' => $placesLimit40,
 
-                'h1_title'=> 'ABC Zakupowicza',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+
+
+
                 'blogCategory' => $categories,
                 'blogs' => $blogs,
                 'blogsNewtest' => $blogsNewtest,
@@ -76,7 +83,7 @@ class BlogController extends Controller
             ]);
     }
 
-    public function indexCategory($category, $descriptions)
+    public function indexCategory($category)
     {
         $categories = Category::withCount(['blogs' => function ($query) {
             $query->where('status', '=', 'published');
@@ -117,15 +124,20 @@ class BlogController extends Controller
             ['label' => $blogCategory->name, 'url' => ''],
         ];
 
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultBlogs(Route::currentRouteName(), $category);
+
         return view('main.blogs.index_category', data:
             [
                 'place' => $place->name,
                 'places' => $places,
 
-                'h1_title'=> 'ABC Zakupowicza',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+
                 'blogCategories' => $categories,
                 'blogCategory' => $blogCategory,
                 'blogs' => $blogs,
@@ -136,7 +148,7 @@ class BlogController extends Controller
             ]);
     }
 
-    public function show($category, $article, $descriptions)
+    public function show($category, $article)
     {
 
         $categories = Category::withCount(['blogs' => function ($query) {
@@ -189,10 +201,11 @@ class BlogController extends Controller
                 'place' => $place->name,
                 'places' => $placesLimit40,
 
-                'h1_title'=> 'Jak wywołać zdjęcia w Rossmannie i zaoszczędzić pieniądze?',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'descriptions' => $descriptions,
+                'h1_title' => $blog->title ?? "DoMyślny",
+                'meta_title'=> $blog->meta_title ?? $blog->title ?? "DoMyślny",
+                'meta_description' => !empty($blog->meta_description) ? $blog->meta_description : (!empty($blog->excerpt) ? $blog->excerpt : 'DoMyślny'),
+                'excerpt' => $blog->excerpt ?? "DoMyślny",
+
                 'blogCategory' => $blogCategory,
                 'blog' => $blog,
                 'blogs' => $blogs,

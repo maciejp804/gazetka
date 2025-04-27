@@ -43,7 +43,6 @@ class ShopController extends Controller
                 ->where('valid_from', '<=', now('Europe/Warsaw')->toDateTime());
         }])->where('status', 'active')->paginate(10);
         $retailers_time = SortOptionsService::getSortPopularity();
-        $static_description = StaticDescriptions::getDescriptions();
 
         $leaflets = Leaflet::with('shop')
             ->where('valid_to','>=', now())
@@ -56,18 +55,21 @@ class ShopController extends Controller
             ['label' => 'Sieci handlowe', 'url' => ''],
         ];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultShops(Route::currentRouteName());
 
         return view('main.retailers.index', data:
             [
-
                 'place' => $place->name,
-                'h1_title'=> 'Sieci <strong>handlowe</strong>',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'static_description' => $static_description,
 
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+
+
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'retailers' => $retailers,
@@ -98,8 +100,6 @@ class ShopController extends Controller
             $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
-        $static_description = StaticDescriptions::getDescriptions();
-
         $retailers_time = SortOptionsService::getSortPopularity();
 
         $retailers = Shop::where('status', 1)->where('category_id', $category->id)->paginate(10);
@@ -116,18 +116,20 @@ class ShopController extends Controller
             ['label' => $category->name, 'url' => ''],
         ];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultShops(Route::currentRouteName(), $category);
 
         return view('main.retailers.index_category', data:
             [
 
                 'place' => $place,
-                'h1_title'=> 'Sieci handlowe - markety i sklepy spożywcze',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-                'static_description' => $static_description,
-
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'retailers' => $retailers,
@@ -164,9 +166,11 @@ class ShopController extends Controller
         $averageRating = $placeAddress->averageRating();
         $ratingCount = $placeAddress->ratingCount();
 
-        $leaflets = Leaflet::with('shop')
+        $leaflets = Leaflet::with('shop', 'cover', 'pages')
             ->where('shop_id', $shop->id)
             ->where('valid_to','>=', now())
+            ->whereHas('cover')
+            ->whereHas('pages')
             ->orderBy('created_at', 'desc')
             ->limit(40)
             ->get();
@@ -205,7 +209,7 @@ class ShopController extends Controller
 
 
                 'h1_title'=> $shop->name.' '.$place->name.', '.$placeAddress->address,
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'meta_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'excerpt' => $excerpt,
                 'breadcrumbs' => $breadcrumbs,

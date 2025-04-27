@@ -37,7 +37,7 @@
              @if($shop->excerpt)
                  {{$shop->excerpt}}
              @else
-                 {{$excerpt}}
+                 {!! $excerpt !!}
              @endif
 
          </span>

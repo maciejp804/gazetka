@@ -15,6 +15,7 @@ use App\Services\SortOptionsService;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
+use function PHPUnit\Framework\isNull;
 
 class LeafletController extends Controller
 {
@@ -57,17 +58,28 @@ class LeafletController extends Controller
             ['label' => 'Gazetki promocyjne', 'url' => ''],
         ];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+
+
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultLeaflets(Route::currentRouteName());
+
+
+//        dd($default_descriptions);
 
         return view('main.leaflets.index', data:
             [
-                'h1_title'=> 'Gazetki <strong>promocyjne</strong> - aktualne gazetki i katalogi',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+                'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+
+                'breadcrumbs' => $breadcrumbs,
 
                 'place' => $place->name,
-                'descriptions' => $descriptions,
-                'breadcrumbs' => $breadcrumbs,
+
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
                 'leaflet_sort' => $leaflet_sort,
@@ -119,17 +131,23 @@ class LeafletController extends Controller
             ['label' => $category->name, 'url' => ''],
         ];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), null, $place);
+
+        $default_descriptions = Description::getDefaultLeaflets(Route::currentRouteName(), $category);
+
+//        dd($descriptions);
 
         return view('main.leaflets.index_category', data:
             [
-                'h1_title'=> 'Gazetki <strong>promocyjne</strong> - aktualne gazetki i katalogi',
-                'page_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
-
                 'place' => $place->name,
 
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,
                 'leaflets_category' => $leaflets_category,
@@ -139,7 +157,7 @@ class LeafletController extends Controller
                 'category' => $category,
             ]);
     }
-    public function subdomainLeaflet($subdomain, $id, $insertData)
+    public function subdomainLeaflet($subdomain, $id)
     {
         $shop = Shop::where('slug', $subdomain)->first();
 
@@ -157,7 +175,12 @@ class LeafletController extends Controller
         $ads = $leaflet->leafletAds;
         $products = $leaflet->products->unique('id');
 
-        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->where('shop_id',$shop->id)->get();
+        $leaflets = Leaflet::with('shop', 'cover', 'pages')
+            ->where('valid_to','>=',now())
+            ->where('shop_id',$shop->id)
+            ->whereHas('cover')
+            ->whereHas('pages')
+            ->get();
 
         // Pobranie identyfikatorów podobnych sklepów
         $similarShopIds = Shop::where('category_id', $shop->category_id)
@@ -198,7 +221,30 @@ class LeafletController extends Controller
             ['label' => 'Gazetka promocyjna '. $shop->name, 'url' => '']
         ];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $place) ?? Description::getDefault(Route::currentRouteName(), $place);
+        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
+        $default_descriptions = Description::getDefaultLeaflets(Route::currentRouteName());
+//        dd(monthReplace($leaflet->valid_from,'full_gen'));
+
+        $products_excerpt = 'W ofercie znajdują się promocje na:';
+
+        if($products->count()){
+            $count_products = count($products);
+            if ($count_products >= 5){
+                $counter = 5;
+            } else {
+                $counter = $count_products;
+            }
+
+            for ($i = 0; $i <= $counter; $i++){
+                if ($i == $counter){
+                    $products_excerpt .= ' <strong>'.$products[$i]->name.'</strong>.';
+                } else {
+                    $products_excerpt .= ' <strong>'.$products[$i]->name.'</strong>,';
+                }
+            }
+        } else {
+            $products_excerpt = 'Nie czekaj! Sprawdź, co jeszcze ma do zaoferowania Aldi w miesiącu kwiecień!';
+        }
 
 
 
@@ -209,18 +255,32 @@ class LeafletController extends Controller
 
                 'shop' => $shop,
 
-                'h1_title'=> 'Gazetka promocyjna '.$shop->name.' od '.monthReplace($leaflet->valid_from, 'full_gen', 'd-m').' do '.monthReplace($leaflet->valid_to,'full_gen'),
-                'page_title'=> 'Gazetka promocyjna '.$shop->name.' od 12.11 do 24.12 | GazetkaPromocyjna.com.pl',
-                'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
+                        [$leaflet->title,$shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to,'full_gen')],
+                        $default_descriptions->h1_title) ?? "DoMyślny",
+                'meta_title'=> $descriptions->meta_title ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}'],
+                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to,'full_gen', 'd-m')],
+                        $default_descriptions->meta_title) ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}'],
+                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to,'full_gen', 'd-m')],
+                        $default_descriptions->meta_description) ?? "DoMyślny",
+                'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}', '{month}', '{products}'],
+                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'),
+                            monthReplace($leaflet->valid_to,'full_gen', 'd-m'),
+                            monthReplace($leaflet->valid_to,'full_loc', 'm'), $products_excerpt],
+                        $default_descriptions->excerpt) ?? "DoMyślny",
+                'breadcrumbs' => $breadcrumbs,
 
                 'isMobile' => $isMobile,
                 'pages' => $pages,
                 'inserts' => $inserts,
-                'insertData' => $insertData,
+
                 'ads' => $ads,
                 'subdomain' => $subdomain,
                 'id' => $id,
-                'breadcrumbs' => $breadcrumbs,
+
 
                 // Rating
                 'averageRating' => $averageRating,
@@ -238,9 +298,7 @@ class LeafletController extends Controller
                 //Blogs
                 'blogs' => $blogs,
 
-                //Opis strony
-                'descriptions' => $descriptions,
-                'excerpt' => $descriptions->excerpt
+
 
             ]);
     }
@@ -250,7 +308,9 @@ class LeafletController extends Controller
 
         $leaflets = Leaflet::with('shop', 'cover', 'products.category')
             ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('leaflets.status', '=', 'published');
+            ->where('leaflets.status', '=', 'published')
+            ->whereHas('cover')
+            ->whereHas('pages');
 
         if ($category != 'all')
         {

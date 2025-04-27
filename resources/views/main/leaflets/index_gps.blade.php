@@ -51,6 +51,7 @@
 
             <x-section>
                 <x-swiper-category title="Kategorie produktów"
+                                   data-container-id="swiper-category"
                                    :items="$product_categories"
                                    :link="route('main.products')"
                 />

@@ -72,7 +72,6 @@ class HotSpotController extends Controller
             'priority' => 'low',
             'valid_from' => $leaflet->valid_from,
             'valid_to' => $leaflet->valid_to,
-            'url' => ' ',
             'x' => 10,
             'y' => 10,
             'width' => 10,
