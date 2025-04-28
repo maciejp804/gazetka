@@ -1,5 +1,5 @@
 import { initSwiper } from "./helpers";
-import { Grid, Navigation, Pagination, Zoom, Autoplay, FreeMode } from "swiper/modules";
+import { Grid, Navigation, Pagination, Zoom, FreeMode } from "swiper/modules";
 
 // ✅ Konfiguracja dla .leaflet
 export function initLeafletSwiper() {
@@ -39,7 +39,7 @@ export function initLeafletPromoSwiper() {
 
         console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .leafletPromo`);
 
-        sliders.forEach((slider, index) => {
+        sliders.forEach(() => {
             setTimeout(() => {
                 const skeletonElement = document.getElementById(`skeleton-slider-leafletPromo`);
                 const actualElement = document.getElementById(`leaflet-swiper-leafletPromo`);
@@ -83,7 +83,7 @@ export function initCategorySwiper() {
 
     console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .category-swiper`);
 
-    sliders.forEach((slider, index) => {
+    sliders.forEach(() => {
         setTimeout(() => {
             const skeletonElement = document.getElementById(`skeleton-slider-category-swiper`);
             const actualElement = document.getElementById(`swiper-category-category-swiper`);
@@ -127,7 +127,7 @@ export function initCategorySwiperSmall() {
 
     console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .category-swiper-small`);
 
-    sliders.forEach((slider, index) => {
+    sliders.forEach(() => {
         setTimeout(() => {
             const skeletonElement = document.getElementById(`skeleton-slider-category-swiper-small`);
             const actualElement = document.getElementById(`small-category-category-swiper-small`);
@@ -169,7 +169,7 @@ export function initShopsSwiper() {
 
     console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .swiper-shops`);
 
-    sliders.forEach((slider, index) => {
+    sliders.forEach(() => {
         setTimeout(() => {
             const skeletonElement = document.getElementById(`skeleton-slider-swiper-shops`);
             const actualElement = document.getElementById(`shop-swiper-swiper-shops`);
@@ -212,7 +212,7 @@ export function initProductSwiper() {
 
     console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .swiper-product`);
 
-    sliders.forEach((slider, index) => {
+    sliders.forEach(() => {
         setTimeout(() => {
             const skeletonElement = document.getElementById(`skeleton-slider-swiper-product`);
             const actualElement = document.getElementById(`product-swiper-swiper-product`);
@@ -256,7 +256,7 @@ export function initSwiperInfo() {
 
     console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .swiper-info`);
 
-    sliders.forEach((slider, index) => {
+    sliders.forEach(() => {
         setTimeout(() => {
             const skeletonElement = document.getElementById(`skeleton-slider-swiper-info`);
             const actualElement = document.getElementById(`info-swiper-swiper-info`);
@@ -320,7 +320,7 @@ export function initSwiperLeafletSingle() {
 
     console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .leafletSingle`);
 
-    sliders.forEach((slider, index) => {
+    sliders.forEach(() => {
         setTimeout(() => {
             const skeletonElement = document.getElementById(`skeleton-slider-leafletSingle`);
             const actualElement = document.getElementById(`leaflet-swiper-leafletSingle`);
@@ -365,10 +365,8 @@ export function initSwiperLeafletSingleOther() {
 
     console.log(`✅ Inicjalizuję Swiper dla ${sliders.length} instancji .leafletSingleOther`);
 
-    sliders.forEach((slider, index) => {
+    sliders.forEach(() => {
         setTimeout(() => {
-
-            const slideIndex = index + 1; // Numeracja od 1
 
             const skeletonElement = document.getElementById(`skeleton-slider-leafletSingleOther`);
             const actualElement = document.getElementById(`leaflet-swiper-leafletSingleOther`);

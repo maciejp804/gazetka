@@ -293,7 +293,7 @@ class SearchController extends Controller
     public function test($week, $number, $start)
     {
         set_time_limit(3200);
-        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p.json')), true);
+        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p_i.json')), true);
         $i = 0;
         $l = 356406;
         foreach ($data['combinations'] as $combination) {

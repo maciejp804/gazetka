@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+
 use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Description;
@@ -15,7 +15,7 @@ use App\Services\SortOptionsService;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
-use function PHPUnit\Framework\isNull;
+
 
 class LeafletController extends Controller
 {
@@ -44,7 +44,7 @@ class LeafletController extends Controller
         $product_categories = Category::where('status', "active")
             ->where('type', 'product')
             ->where('parent_id', '=', null)
-            ->orderBy('name', 'asc')
+            ->orderBy('name')
             ->get();
 
         $products = $this->productService->getHotSpots();
@@ -94,7 +94,7 @@ class LeafletController extends Controller
         $product_categories = Category::where('status', 'active')
             ->where('type', 'product')
             ->where('parent_id', '=', null)
-            ->orderBy('name', 'asc')
+            ->orderBy('name')
             ->get();
 
         $category = $product_categories->where('slug', $category)->first();
@@ -236,7 +236,7 @@ class LeafletController extends Controller
             }
 
             for ($i = 0; $i < $counter; $i++){
-                if ($i == $counter){
+                if ($i == $counter - 1){
                     $products_excerpt .= ' <strong>'.$products[$i]->name.'</strong>.';
                 } else {
                     $products_excerpt .= ' <strong>'.$products[$i]->name.'</strong>,';
@@ -320,7 +320,7 @@ class LeafletController extends Controller
             });
         }
 
-        return $leaflets->paginate($pages, ['*'], 'page');
+        return $leaflets->paginate($pages, ['*']);
     }
 
     protected function products()

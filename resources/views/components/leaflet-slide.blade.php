@@ -5,6 +5,21 @@
 
 @endphp
 
+{{--@push('head')--}}
+{{--    <link--}}
+{{--        rel="preload"--}}
+{{--        as="image"--}}
+{{--        href="{{ Storage::url($avif_path.'.avif' ?? $webp_path.'.webp' ?? $image_path.'.jpg') }}"--}}
+{{--        @if ($avif_path || $webp_path)--}}
+{{--            imagesrcset="--}}
+{{--                {{ $avif_path ? Storage::url($avif_path.'.avif') . ' 1920w,' : '' }}--}}
+{{--                {{ $webp_path ? Storage::url($webp_path.'.webp') . ' 1024w,' : '' }}--}}
+{{--                {{ Storage::url($image_path.'.jpg') }} 480w--}}
+{{--            "--}}
+{{--        imagesizes="(max-width: 600px) 480px, (max-width: 1200px) 1024px, 1920px"--}}
+{{--        @endif--}}
+{{--    >--}}
+{{--@endpush--}}
 
 {{--@dd($item)--}}
 <div {{$attributes->merge(['class' => 'border border-gray-200 rounded p-2 mb-5'])}}>

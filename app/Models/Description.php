@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 class Description extends Model
 {
-    use HasFactory;
 
     protected $guarded = [];
 

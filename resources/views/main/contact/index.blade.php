@@ -1,5 +1,5 @@
 <x-layout :main_domain>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script src="{{asset('js/google/recaptcha/api.js')}}" async defer></script>
     <x-slot:place>
         {{ $place }}
     </x-slot:place>
@@ -45,7 +45,7 @@
                     <div class="flex flex-col w-full md:w-3/5">
                         <h2 class="mx-4 text-2xl font-semibold text-gray-500 mb-4">Skontaktuj się z nami!</h2>
                         <p class="mx-4 text-base font-semibold text-gray-500">Wypełnij poniższy formularz, a my skontaktujemy się z Tobą w najbliższym czasie.</p>
-                        <div class="contact-page">
+                        <div class="contact-page mb-4">
                             <form action="/send-contact" method="POST" class="flex flex-col">
                                 @csrf
                                 <div class="form-group mx-4 my-2 grid grid-cols-6">

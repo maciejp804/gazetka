@@ -1,6 +1,6 @@
 @props(['item', 'product'])
 <div class="flex flex-col md:flex-row mt-4 gap-x-3">
-    <div class="flex w-full md:w-72 justify-center aspect-square">
+    <div class="flex w-full md:w-72 justify-center aspect-square overflow-hidden">
         @if(empty($product->image))
             <picture>
                 <source srcset="{{ $product->category->logo ? Storage::url($product->category->logo.'.avif') : asset('assets/images/categories/default.webp')}}" type="image/avif">

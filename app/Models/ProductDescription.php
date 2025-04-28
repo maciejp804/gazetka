@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductDescription extends Model
 {
-    use HasFactory;
 
    protected $guarded = [];
 

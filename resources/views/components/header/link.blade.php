@@ -1,4 +1,4 @@
-@props(['link' => 'a', 'type' => false, 'svg' => null, 'sizeSvg' => 'h-5 w-5', 'sizeLi' => 'h-11.25 w-11.25'])
+@props(['link' => 'a', 'svg' => null, 'sizeSvg' => 'h-5 w-5', 'sizeLi' => 'h-11.25 w-11.25'])
 
 <li class="flex justify-center rounded-3xl bg-white-50 {{ $sizeLi }}">
     @if($link === 'button')
@@ -15,12 +15,11 @@
                                     <x-header.svg :svg="$svg" :size="$sizeSvg" />
                                 @else
                                     PL
-                        @endif
+                                @endif
 
-                        @if($link === 'button')
+                                @if($link !== 'button')
+                            </a>
+                            @else
                     </button>
-                    @else
-                        </a>
         @endif
 </li>
-
