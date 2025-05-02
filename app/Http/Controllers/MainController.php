@@ -12,6 +12,7 @@ use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Shop;
 use App\Models\Voucher;
+use App\Services\LeafletService;
 use App\Services\ProductService;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
@@ -22,10 +23,12 @@ class MainController extends Controller
 {
 
     protected $productService;
+    protected $leafletService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, LeafletService $leafletService)
     {
         $this->productService = $productService;
+        $this->leafletService = $leafletService;
     }
     public function index()
     {
@@ -39,20 +42,14 @@ class MainController extends Controller
             $place = Place::find($locationData['id']);
         }
 
+        [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets(40, null, [['pinned', 'desc']]);
 
-        [$leaflets, $counter_leaflets] = $this->leaflets(40);
 
 
-        $leaflets_promo = Leaflet::with(['shop', 'cover','pages'])
-            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('status', 'published')
-            ->where('pinned', 1)
-            ->whereHas('cover')
-            ->whereHas('pages')
-            ->orderByDesc('priority')
-            ->orderByDesc('updated_at')
-            ->limit(20)
-            ->get();
+
+        [ $leaflets_promo , $counter] = $this->leafletService->getLeaflets(20,  null, [['updated_at', 'desc']], 1);
+
+
 
         $shop_categories = Category::where([
             ['status', 'active'],
@@ -154,12 +151,14 @@ class MainController extends Controller
             ->where('slug', '!=', '')
             ->get();
 
-        [$leaflets, $counter_leaflets] = $this->leaflets(40);
+        [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets(40);
 
-        $leaflets_promo = Leaflet::with(['shop', 'cover'])
+        $leaflets_promo = Leaflet::with(['shop', 'cover', 'pages'])
             ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('status', 'published')
             ->where('pinned', 1)
+            ->whereHas('cover')
+            ->whereHas('pages')
             ->orderByDesc('priority')
             ->orderByDesc('updated_at')
             ->limit(20)
@@ -246,9 +245,7 @@ class MainController extends Controller
 
         [$shops, $counter_shops] = $this->shops($shop->slug);
 
-
-        [$leaflets, $counter_leaflets] = $this->leaflets('all', $shop->id);
-
+        [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets('all', $shop->id);
 
         $placesAll = Place::all();
 
@@ -354,7 +351,8 @@ class MainController extends Controller
             ->where('place_id', $place->id)
             ->get();
 
-        [$leaflets, $counter_leaflets] = $this->leaflets('all', $shop->id);
+
+        [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets('all', $shop->id);
 
         // Zapisz lokalizację w ciasteczku
         Cookie::queue('user_location', json_encode([

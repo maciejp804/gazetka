@@ -12,6 +12,7 @@ use App\Models\Tag;
 use App\Models\Voucher;
 use App\Models\VoucherStore;
 use App\Services\ImageService;
+use App\Services\LeafletService;
 use App\Services\SortOptionsService;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Http\Request;
@@ -19,6 +20,12 @@ use Illuminate\Support\Facades\Route;
 
 class VoucherController extends Controller
 {
+    protected LeafletService $leafletService;
+
+    public function __construct(LeafletService $leafletService)
+    {
+        $this->leafletService = $leafletService;
+    }
     public function index()
     {
         $placesAll = Place::all();
@@ -34,7 +41,9 @@ class VoucherController extends Controller
 
         $shops = $this->shops(32);
 
-        $categories = Category::where('status','active')->where('type', 'voucher')->get();
+        $categories = Category::where('status','active')
+            ->where('type', 'voucher')
+            ->orderBy('name')->get();
         $model = new Voucher(); // Przykład: szukamy tagów dla kuponów
         $tags = Tag::whereJsonContains('applies_to', class_basename($model))->where('start_date', '<', now())->where('end_date', '>', now())->get();
         $vouchers = Voucher::with('voucherStore')
@@ -50,13 +59,7 @@ class VoucherController extends Controller
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
         $default_descriptions = Description::getDefaultVouchers(Route::currentRouteName());
 
-        $leaflets = Leaflet::with('shop','cover', 'pages')
-            ->where('valid_to','>=',now())
-            ->whereHas('cover')
-            ->whereHas('pages')
-            ->orderBy('created_at', 'desc')
-            ->limit(40)
-            ->get();
+        [$leaflets, $counter] = $this->leafletService->getLeaflets(20);
 
         return view('main.vouchers.index', data:
             [
@@ -111,13 +114,7 @@ class VoucherController extends Controller
 
         $shops = $this->shops(32);
 
-        $leaflets = Leaflet::with('shop','cover', 'pages')
-            ->where('valid_to','>=',now())
-            ->whereHas('cover')
-            ->whereHas('pages')
-            ->orderBy('created_at', 'desc')
-            ->limit(40)
-            ->get();
+        [$leaflets, $counter] = $this->leafletService->getLeaflets(20);
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],

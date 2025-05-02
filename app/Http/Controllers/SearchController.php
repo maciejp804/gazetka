@@ -72,8 +72,10 @@ class SearchController extends Controller
             $leaflets = Leaflet::with('shop', 'cover','products.category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
                 ->join('leaflet_covers', 'leaflets.id' , '=' , 'leaflet_covers.leaflet_id')
-                ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+                ->where('display_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
+                ->whereHas('cover')
+                ->whereHas('pages')
                 ->whereHas('shop', function ($queryBuilder) use ($query) {
                     $queryBuilder->where('name', 'like', $query . '%');
                 });
@@ -125,7 +127,7 @@ class SearchController extends Controller
             // Filtrowanie według nazwy
             $leaflets = Leaflet::with('shop', 'cover', 'products.category')
                 ->join('shops', 'leaflets.shop_id', '=', 'shops.id')
-                ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+                ->where('display_to', '>=', now('Europe/Warsaw')->toDateTime())
                 ->where('leaflets.status', '=', 'published')
                 ->whereHas('cover')
                 ->whereHas('pages')

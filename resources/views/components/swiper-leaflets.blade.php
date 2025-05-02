@@ -35,7 +35,7 @@
         <!-- Additional required wrapper -->
         <div class="swiper-wrapper h-full mb-8 flex relative">
            @foreach($leaflets as $leaflet)
-
+{{--                @dd($leaflets)--}}
                 @if(!is_array($leaflet))
 
                     <x-leaflet-slide
@@ -55,23 +55,23 @@
 
                     />
                 @else
-                    @foreach($leaflet['pages'] as $item)
+
 {{--                        @dd($leaflet)--}}
                         <x-leaflet-slide
                             class="swiper-slide"
-                            :valid_from="$item['clicks'][0]['valid_from']"
-                            :valid_to="$item['clicks'][0]['valid_to']"
-                            :updated_at="$item['clicks'][0]['updated_at']"
+                            :valid_from="$leaflet['valid_from']"
+                            :valid_to="$leaflet['valid_to']"
+                            :updated_at="$leaflet['updated_at']"
                             :logo="$leaflet['shop_image']"
                             :name="$leaflet['name']"
                             :slug="$leaflet['slug']"
                             :id="$leaflet['leaflet_id']"
-                            :page="$item['page_number']"
-                            :image_path="$item['page_image'] ?? null"
-                            :avif_path="$item['page_image'] ?? null"
-                            :webp_path="$item['page_image'] ?? null"
+                            :page="$leaflet['page_number']"
+                            :image_path="$leaflet['page_image'] ?? null"
+                            :avif_path="$leaflet['page_image'] ?? null"
+                            :webp_path="$leaflet['page_image'] ?? null"
                         />
-                    @endforeach
+
                 @endif
            @endforeach
         </div>

@@ -12,6 +12,7 @@ use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
@@ -157,10 +158,33 @@ Route::get('tchibo',[SearchController::class,'tchibo'])->name('search.tchibo');
 
 Route::domain('{subdomain}.'.$mainDomain)->group(function () {
 
+    Route::get('/w-gazetce/{slug},{id}/', [RedirectController::class, 'productRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
+        ->name('productRedirect');
+
+
     Route::get('/w-gazetce/{slug}', [ProductController::class, 'showSubdomain'])
         ->name('subdomain.products.show');
+
+
+
     Route::get('/gazetka-promocyjna/{id}', [LeafletController::class, 'subdomainLeaflet'])
         ->name('subdomain.leaflet');
+
+
+
+    Route::get('/w-gazetce/{slug},{id}/', [RedirectController::class, 'productRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
+        ->name('productRedirect');
+
+    Route::get('/godziny-otwarcia/{city}-{address},{id}/', [RedirectController::class, 'addressRedirect'])
+        ->where(['city' => '[a-z-]+', 'address' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
+        ->name('addressRedirect');
+
+    Route::get('/{slug}-gazetka-promocyjna-{data},{id}/', [RedirectController::class, 'leafletRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'data' => '[0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
+        ->name('leafletRedirect');
+
     Route::get('/{community}/{address}', [ShopController::class, 'subdomainShowAddress'])
         ->name('subdomain.shop_address');
 
@@ -173,14 +197,42 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
 Route::domain($mainDomain)->group(function () {
 
     //Leaflets
-    Route::get('/gazetki-promocyjne',[LeafletController::class,'index'])->name('main.leaflets');
-    Route::get('/gazetki-promocyjne/{category}',[LeafletController::class,'indexCategory'])->name('main.leaflets.category');
+    Route::get('/gazetki-promocyjne-{slug},{id}/{place}/', [RedirectController::class, 'placeRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+', 'place' => '[a-zA-Z0-9-]+'])  // Doprecyzowanie wzorców
+        ->name('main.place.redirect');
+
+    Route::get('/gazetki-promocyjne-{slug},{id}', [RedirectController::class, 'leafletsRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców dla slug i id
+        ->name('main.leaflets.redirect');
+
+    // Trasa dla kategorii gazetek - powinna być po trasach z ID i slugi, aby uniknąć konfliktu
+    Route::get('/gazetki-promocyjne/{category}', [LeafletController::class, 'indexCategory'])
+        ->where('category', '[a-zA-Z0-9-]+')  // Doprecyzowanie dopasowania do kategorii
+        ->name('main.leaflets.category');
+
+    // Strona główna gazetek
+    Route::get('/gazetki-promocyjne', [LeafletController::class, 'index'])->name('main.leaflets');
+
+
+
 
     //Shops
+    Route::get('/sieci-handlowe-{slug},{id}/{place}/', [RedirectController::class, 'placeRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+', 'place' => '[a-zA-Z0-9-]+'])  // Doprecyzowanie wzorców
+        ->name('main.place.redirect');
+
+    Route::get('/sieci-handlowe-{slug},{id}/', [RedirectController::class, 'shopRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców dla slug i id
+        ->name('main.leaflets.redirect');
+
     Route::get('/sieci-handlowe/{category}', [ShopController::class,'indexCategory'])->name('main.retailers.category');
     Route::get('/sieci-handlowe',[ShopController::class,'index'])->name('main.retailers');
 
     //Vouchers
+    Route::get('/kupony-rabatowe-{slug},{id}/', [RedirectController::class, 'vouchersRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców dla slug i id
+        ->name('main.vouchers.redirect');
+
     Route::get('/kupony-rabatowe/{category}',[VoucherController::class, 'indexCategory'])->name('main.vouchers.category');
     Route::get('/kupony-rabatowe',[VoucherController::class, 'index'])->name('main.vouchers');
 
@@ -192,6 +244,10 @@ Route::domain($mainDomain)->group(function () {
 
 
     //Blogs
+    Route::get('/poradnik-{slug},{id}/',[RedirectController::class, 'articleRedirect'])
+        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców dla slug i id
+        ->name('main.blogs.redirect');
+
     Route::get('/abc-zakupowicza/{category}/{article}',[BlogController::class, 'show'])->name('main.blogs.article');
     Route::get('/abc-zakupowicza/{category}',[BlogController::class, 'indexCategory'])->name('main.blogs.category');
     Route::get('/abc-zakupowicza',[BlogController::class, 'index'])->name('main.blogs');

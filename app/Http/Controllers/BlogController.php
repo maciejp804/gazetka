@@ -9,11 +9,20 @@ use App\Models\Description;
 use App\Models\Leaflet;
 use App\Models\Place;
 use App\Models\Voucher;
+use App\Services\LeafletService;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
 
 class BlogController extends Controller
 {
+
+    protected LeafletService $leafletService;
+
+    public function __construct(LeafletService $leafletService)
+    {
+        $this->leafletService = $leafletService;
+    }
+
     public function index()
     {
         $placesAll = Place::all();
@@ -29,10 +38,7 @@ class BlogController extends Controller
             $place = $placesAll->where('id', '=', $locationData['id'])->first();
         }
 
-        $leaflets = Leaflet::with('shop', 'cover')
-            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('status', '=', 'published')
-            ->get(); // Gazetka musi być nadal ważna
+        [$leaflets, $counter] = $this->leafletService->getLeaflets(20);
 
 
         $vouchers = Voucher::with('voucherStore')->get();
@@ -102,10 +108,7 @@ class BlogController extends Controller
 
         $place = $places->first();
 
-        $leaflets = Leaflet::with('shop', 'cover')
-            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('status', '=', 'published')
-            ->get(); // Gazetka musi być nadal ważna
+        [$leaflets, $counter] = $this->leafletService->getLeaflets(20);
 
         $sum = 0;
         foreach ($categories as $item) {

@@ -11,14 +11,24 @@ use App\Models\Place;
 use App\Models\Shop;
 use App\Http\Controllers\Controller;
 use App\Models\Voucher;
+use App\Services\LeafletService;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 class ShopController extends Controller
 {
+
+    protected LeafletService $leafletService;
+
+    public function __construct(LeafletService $leafletService)
+    {
+        $this->leafletService = $leafletService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -44,11 +54,8 @@ class ShopController extends Controller
         }])->where('status', 'active')->paginate(10);
         $retailers_time = SortOptionsService::getSortPopularity();
 
-        $leaflets = Leaflet::with('shop')
-            ->where('valid_to','>=', now())
-            ->orderBy('created_at', 'desc')
-            ->limit(40)
-            ->get();
+        [$leaflets, $count_leflets] = $this->leafletService->getLeaflets(20);
+
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -104,11 +111,7 @@ class ShopController extends Controller
 
         $retailers = Shop::where('status', 1)->where('category_id', $category->id)->paginate(10);
 
-        $leaflets = Leaflet::with('shop')
-            ->where('valid_to','>=', now())
-            ->orderBy('created_at', 'desc')
-            ->limit(40)
-            ->get();
+        [$leaflets, $count_leflets] = $this->leafletService->getLeaflets(20);
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -141,6 +144,7 @@ class ShopController extends Controller
 
     public function subdomainShowAddress($subdomain, $community, $address)
     {
+        Log::info('Current Route:', [Route::currentRouteName()]);
         $place = Place::where('slug', '=', $community)->first();
 
         $shop = Shop::with('category')->where('slug', $subdomain)->first();
@@ -166,14 +170,8 @@ class ShopController extends Controller
         $averageRating = $placeAddress->averageRating();
         $ratingCount = $placeAddress->ratingCount();
 
-        $leaflets = Leaflet::with('shop', 'cover', 'pages')
-            ->where('shop_id', $shop->id)
-            ->where('valid_to','>=', now())
-            ->whereHas('cover')
-            ->whereHas('pages')
-            ->orderBy('created_at', 'desc')
-            ->limit(40)
-            ->get();
+        [$leaflets, $count_leflets] = $this->leafletService->getLeaflets(20);
+
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],

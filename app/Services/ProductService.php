@@ -2,7 +2,6 @@
 namespace App\Services;
 
 use App\Models\HotSpot;
-use App\Models\PageClick;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -148,6 +147,29 @@ class ProductService
                 return $item['effective_price'] ?? PHP_INT_MAX; // brak ceny → na koniec
             })
             ->values(); // resetuje klucze
+    }
+
+    public function productInLeaflet($product, $shop)
+    {
+        return HotSpot::with('product', 'page', 'page.leaflets.shop')
+            ->where('hot_spots.valid_to', '>=', now('Europe/Warsaw')->toDateString())
+            ->where('hot_spots.product_id', $product->id)
+            ->get()
+            ->map(function ($item) use ($shop) {
+                $leaflet = $item->page->leaflets->first();
+                return [
+                    'leaflet_id' => $leaflet->id ?? null,
+                    'name' => $leaflet->shop->name ?? 'Brak sklepu',
+                    'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
+                    'shop_image' => $leaflet->shop->image ?? 'Brak sklepu',
+                    'page_number' => $leaflet->pivot->sort_order ?? null,
+                    'page_image' => $item->page->image_path ?? null,
+                    'valid_from' => $item->valid_from,
+                    'valid_to' => $item->valid_to,
+                    'updated_at' => $item->updated_at->format('Y-m-d H:i:s'),
+                    'is_in_shop' => $leaflet->shop->id === $shop->id  // Dodajemy flagę informującą, czy jest w tym sklepie
+                ];
+            });
     }
 
 

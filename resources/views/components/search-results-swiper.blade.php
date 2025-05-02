@@ -8,7 +8,7 @@
             :valid_from="$item->valid_from"
             :valid_to="$item->valid_to"
             :updated_at="$item->updated_at"
-            :logo="$item->shop->logo_xs"
+            :logo="$item->shop->image"
             :name="$item->shop->name"
             :slug="$item->shop->slug"
             :id="$item->id"

@@ -10,25 +10,31 @@ use App\Models\Leaflet;
 use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Shop;
+use App\Services\LeafletService;
 use App\Services\ProductService;
 use App\Services\SortOptionsService;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Jenssegers\Agent\Agent;
 
 
 class LeafletController extends Controller
 {
-    protected ProductService $productService;
+    protected $productService;
+    protected $leafletService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, LeafletService $leafletService)
     {
         $this->productService = $productService;
+        $this->leafletService = $leafletService;
     }
 
     public function index()
     {
-        $leaflets = $this->getLeafletsSimplePaginate(10);
+        Log::info('Current Route:', [Route::currentRouteName()]);
+
+        $leaflets = $this->leafletService->getLeafletsSimplePaginate(10);
 
         $placesAll = Place::all();
 
@@ -90,7 +96,7 @@ class LeafletController extends Controller
 
     public function indexCategory($category)
     {
-
+        Log::info('Current Route:', [Route::currentRouteName()]);
         $product_categories = Category::where('status', 'active')
             ->where('type', 'product')
             ->where('parent_id', '=', null)
@@ -106,8 +112,7 @@ class LeafletController extends Controller
         $products = $this->productService->getHotSpots();
 
 //        dd($products);
-
-        $leaflets = $this->getLeafletsSimplePaginate(10, $category->id);
+        $leaflets = $this->leafletService->getLeafletsSimplePaginate(10, $category->id);
 
         $placesAll = Place::all();
 
@@ -175,12 +180,15 @@ class LeafletController extends Controller
         $ads = $leaflet->leafletAds;
         $products = $leaflet->products->unique('id');
 
+
         $leaflets = Leaflet::with('shop', 'cover', 'pages')
-            ->where('valid_to','>=',now())
+            ->where('display_to','>=',now())
             ->where('shop_id',$shop->id)
             ->whereHas('cover')
             ->whereHas('pages')
             ->get();
+
+        [$leaflets, $counter ] = $this->leafletService->getLeaflets();
 
         // Pobranie identyfikatorów podobnych sklepów
         $similarShopIds = Shop::where('category_id', $shop->category_id)
@@ -197,6 +205,7 @@ class LeafletController extends Controller
         $ratingCount = $shop->ratingCount();
 
         $placesAll = Place::all();
+
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
         $location = Cookie::get('user_location');
@@ -301,55 +310,6 @@ class LeafletController extends Controller
 
 
             ]);
-    }
-
-    protected function getLeafletsSimplePaginate($pages, $category = 'all')
-    {
-
-        $leaflets = Leaflet::with('shop', 'cover', 'products.category')
-            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('leaflets.status', '=', 'published')
-            ->whereHas('cover')
-            ->whereHas('pages');
-
-        if ($category != 'all')
-        {
-            $leaflets->whereHas('products.category', function ($queryProduct) use ($category) {
-                $queryProduct->where('id', $category)
-                ->orWhere('parent_id', $category);
-            });
-        }
-
-        return $leaflets->paginate($pages, ['*']);
-    }
-
-    protected function products()
-    {
-        return PageClick::with('page.leaflets.shop', 'leafletProduct.product')
-            ->where('valid_from', '<=', now())
-            ->where('valid_to', '>=', now())
-            ->get()
-            ->flatMap(function ($click) {
-                return $click->page->leaflets->map(function ($leaflet) use ($click) {
-                    return [
-                        'click_id'      => $click->id,
-                        'valid_from'    => $click->valid_from,
-                        'valid_to'      => $click->valid_to,
-                        'page_id'       => $click->page->id,
-                        'page_image'    => $click->page->image_path,
-                        'leaflet_id'    => $leaflet->id,
-                        'shop_image'    => $leaflet->shop ? $leaflet->shop->image : null,
-                        'shop_name'     => $leaflet->shop ? $leaflet->shop->name : null,
-                        'shop_slug'     => $leaflet->shop ? $leaflet->shop->slug : null,
-                        'product_id'    => $click->leafletProduct->product ? $click->leafletProduct->product->id : null,
-                        'product_name'  => $click->leafletProduct->product ? $click->leafletProduct->product->name : null,
-                        'product_slug'  => $click->leafletProduct->product ? $click->leafletProduct->product->slug : null,
-                        'product_image' => $click->leafletProduct->product ? $click->leafletProduct->product->image : null,
-                        'price'         => $click->leafletProduct ? $click->leafletProduct->price : null,
-                        'promo_price'   => $click->leafletProduct ? $click->leafletProduct->promo_price : null,
-                    ];
-                });
-            });
     }
 
 }
