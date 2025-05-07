@@ -11,6 +11,7 @@ use App\Models\PageClick;
 use App\Models\Product;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
@@ -84,6 +85,71 @@ class HotSpotController extends Controller
 
 
         return redirect()->back()->with('success', 'Produkt dodany');
+    }
+
+    public function import(Request $request, Leaflet $leaflet)
+    {
+        // Walidacja pliku
+        $validated = $request->validate([
+            'file' => 'required|mimes:csv,json|max:2048',
+        ]);
+
+        // Odczytanie zawartości pliku JSON
+        $fileContent = file_get_contents($validated['file']);
+        $data = json_decode($fileContent, true);
+
+        // Sprawdzanie formatu
+        if (isset($data[0]['page'])) {
+            // Format 2: { "page": 1, "page_id": 146, ... }
+            $this->importFormatTwo($data, $leaflet);
+        } else {
+            // Format 1: { "1": [ "44", "1881", ...] }
+            $this->importFormatOne($data, $leaflet);
+        }
+
+        return redirect()->back()->with('success', 'Produkty zostały zaimportowane');
+    }
+
+    public function export(Request $request, Leaflet $leaflet)
+    {
+        $hotspots = HotSpot::with('product', 'page.leaflets')
+            ->whereHas('page.leaflets', function ($query) use ($leaflet) {
+                $query->where('leaflets.id', $leaflet->id);
+            })
+            ->get()
+            ->map(function ($item) {
+                // Załadowanie pierwszego leaflet z relacji
+                $leaflet = $item->page->leaflets->first();
+
+                // Jeśli nie ma żadnego leaflet, pomijamy ten element
+                if (!$leaflet) {
+                    return null;
+                }
+
+                return [
+                    'page' => $leaflet->pivot->sort_order,  // sort_order z tabeli pivot
+                    'page_id' => $item->page_id,
+                    'product_id' => $item->product_id,  // ID produktu
+                    'status' => $item->status,
+                    'priority' => $item->priority,
+                    'image' => $item->image,
+                    'price' => $item->price,
+                    'promo_price' => $item->promo_price,
+                    'url' => $item->url,
+                    'x' => $item->x,
+                    'y' => $item->y,
+                    'width' => $item->width,
+                    'height' => $item->height,
+                    'image_width' => $item->image_width,
+                    'image_height' => $item->image_height,
+                    'valid_from' => $item->valid_from,
+                    'valid_to' => $item->valid_to,
+                ];
+            })
+            ->filter();  // Filtrujemy, aby usunąć puste wartości (gdy brak leaflet)
+
+
+        return response()->json($hotspots);
     }
 
     public function updateHotspot(Request $request)
@@ -230,5 +296,93 @@ class HotSpotController extends Controller
 
         return redirect()->back()->with('success', 'Produkt został usunięty ze strony.');
     }
+    protected function importFormatOne(array $data, Leaflet $leaflet)
+    {
+        // Format 1 import
+        foreach ($data as $page => $items) {
+            // Znalezienie id strony w tabeli pośredniczącej 'leaflet_page' na podstawie numeru strony (page)
+            $pageId = DB::table('leaflet_page')
+                ->where('leaflet_id', $leaflet->id)
+                ->where('sort_order', $page) // Numer strony
+                ->value('id');
 
+            foreach ($items as $productOldId) {
+                $product = Product::where('old_id', $productOldId)
+                    ->where('status', 1)
+                    ->first();
+
+                if ($product) {
+                    HotSpot::firstOrCreate(
+                        [
+                            'page_id' => $pageId,
+                            'product_id' => $product->id
+                        ],
+                        [
+                            'status' => 'hidden',
+                            'priority' => 'low',
+                            'valid_from' => $leaflet->valid_from,
+                            'valid_to' => $leaflet->valid_to,
+                            'x' => 50,
+                            'y' => 50,
+                            'width' => 50,
+                            'height' => 50,
+                        ]
+                    );
+
+                    LeafletProduct::firstOrCreate([
+                        'leaflet_id' => $leaflet->id,
+                        'product_id' => $product->id
+                    ]);
+                }
+            }
+        }
+    }
+
+    protected function importFormatTwo(array $data, Leaflet $leaflet)
+    {
+        // Format 2 import
+        foreach ($data as $item) {
+            $pageId = $item['page_id'];
+
+            // Znalezienie produktu na podstawie jego ID
+            $product = Product::where('id', $item['product_id'])
+                ->where('status', 1)  // Tylko aktywne produkty
+                ->first();
+
+            // Jeśli produkt istnieje, tworzymy HotSpot i LeafletProduct
+            if ($product) {
+                // Tworzymy lub aktualizujemy HotSpot
+                HotSpot::updateOrCreate(
+                    [
+                        'page_id' => $pageId,
+                        'product_id' => $product->id
+                    ],
+                    [
+                        'status' => $item['status'],
+                        'priority' => $item['priority'],
+                        'valid_from' => $item['valid_from'],
+                        'valid_to' => $item['valid_to'],
+                        'price' => $item['price'],
+                        'promo_price' => $item['promo_price'],
+                        'url' => $item['url'],
+                        'x' => $item['x'],
+                        'y' => $item['y'],
+                        'width' => $item['width'],
+                        'height' => $item['height'],
+                        'image_width' => $item['image_width'],
+                        'image_height' => $item['image_height'],
+                        'image' => $item['image']  // Zapisz ścieżkę obrazu
+                    ]
+                );
+
+                // Tworzymy lub aktualizujemy LeafletProduct (połączenie produktu z gazetką)
+                LeafletProduct::updateOrCreate(
+                    [
+                        'leaflet_id' => $leaflet->id,
+                        'product_id' => $product->id
+                    ]
+                );
+            }
+        }
+    }
 }

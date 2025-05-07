@@ -149,6 +149,15 @@ return [
                 'excerpt' => 'Szukasz aktualnych promocji w sklepach {shop} w {city}? Sprawdź dostępne oferty i przekonaj się, co warto kupić taniej. Niezależnie od tego, czy interesują Cię produkty do domu, artykuły spożywcze, sezonowe wyprzedaże czy codzienne zakupy – {shop} w {city} to dobry wybór. Dzięki stale aktualizowanym gazetkom zyskujesz szybki dostęp do aktualnych cen i rabatów. Znajdź najbliższy sklep, sprawdź promocje i zaplanuj zakupy w wygodny sposób.'
             ]
         ],
+        'subdomain_index_archive' => [
+            'default' => [
+                'meta_title' => "Archiwum gazetek promocyjnych {shop}",
+                'meta_description' => "Archiwalne promocje {shop}",
+                'meta_keywords' => "{shop}, gazetki, {city}, archiwum",
+                'h1_title' => "Archiwalne gazetki promocyjne {shop}",
+                'excerpt' => 'Szukasz aktualnych promocji w sklepach {shop} w {city}? Sprawdź dostępne oferty i przekonaj się, co warto kupić taniej. Niezależnie od tego, czy interesują Cię produkty do domu, artykuły spożywcze, sezonowe wyprzedaże czy codzienne zakupy – {shop} w {city} to dobry wybór. Dzięki stale aktualizowanym gazetkom zyskujesz szybki dostęp do aktualnych cen i rabatów. Znajdź najbliższy sklep, sprawdź promocje i zaplanuj zakupy w wygodny sposób.'
+            ]
+        ],
 //        'subdomain_leaflet' => [
 //            'default' => [
 //                'meta_title' => "Gazetki promocyjne {shop} - {city}",

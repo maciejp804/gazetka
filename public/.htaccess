@@ -26,6 +26,15 @@
     RewriteCond %{REQUEST_URI} ^/abc-zakupowicza,\d+/$
     RewriteRule ^abc-zakupowicza,\d+/$ /abc-zakupowicza [R=301,L]
 
+    # Przekierowanie z /godziny-otwarcia/[miasto]/ na /[miasto]
+    RewriteCond %{REQUEST_URI} ^/godziny-otwarcia/([a-zA-Z0-9_-]+)/$
+    RewriteRule ^godziny-otwarcia/([a-zA-Z0-9_-]+)/$ /%1 [L,R=301]
+
+    # Przekierowanie z /[nazwa_sieci]-gazetki-promocyjne-archiwum,[nr-strony]/ na / (strona główna)
+    RewriteCond %{REQUEST_URI} ^/([a-zA-Z0-9_-]+)-gazetki-promocyjne-archiwum,\d+/?$
+    RewriteRule ^([a-zA-Z0-9_-]+)-gazetki-promocyjne-archiwum,\d+/?$ / [L,R=301]
+
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

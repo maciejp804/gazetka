@@ -23,6 +23,7 @@ class SortOptionsService
                 ['id' => 2, 'name' => 'Kończą się'],
                 ['id' => 3, 'name' => 'Nadchodzące'],
                 ['id' => 4, 'name' => 'Aktualne'],
+
             ])->map(function ($item) {
                 return (object) $item; // Konwertuje każdy element na obiekt
             });

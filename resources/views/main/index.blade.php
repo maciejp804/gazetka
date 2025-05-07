@@ -137,10 +137,20 @@
             <x-about class="1xl:w-265 lg:m-auto" :counter_leaflets="$counter_leaflets" :counter_shops="$counter_shops" :counter_products="$counter_products"/>
         </div>
 
-        <x-description :items="$descriptions"/>
-        @if($descriptions->faq)
-            <x-faq :items="$descriptions"/>
-        @endif
+
+
+        <div class="flex-col mx-4 xl:m-auto">
+            @if($descriptions != null)
+                @if($descriptions->content != null)
+                    <x-description :items="$descriptions"/>
+                @endif
+
+                @if($descriptions->faq != null)
+                    <x-faq :items="$descriptions"/>
+                @endif
+            @endif
+        </div>
+
 
     </x-section>
 

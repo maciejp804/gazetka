@@ -180,15 +180,7 @@ class LeafletController extends Controller
         $ads = $leaflet->leafletAds;
         $products = $leaflet->products->unique('id');
 
-
-        $leaflets = Leaflet::with('shop', 'cover', 'pages')
-            ->where('display_to','>=',now())
-            ->where('shop_id',$shop->id)
-            ->whereHas('cover')
-            ->whereHas('pages')
-            ->get();
-
-        [$leaflets, $counter ] = $this->leafletService->getLeaflets();
+        [$leaflets, $counter ] = $this->leafletService->getLeaflets('all', $shop->id);
 
         // Pobranie identyfikatorów podobnych sklepów
         $similarShopIds = Shop::where('category_id', $shop->category_id)
@@ -198,7 +190,10 @@ class LeafletController extends Controller
         // Paginacja gazetek dla sieci podobnych sklepów
         $similarLeaflets = Leaflet::with('shop')
             ->whereIn('shop_id', $similarShopIds)
-            ->where('valid_to', '>=', now())
+            ->where('display_to', '>=', now())
+            ->whereHas('cover') // dodane: tylko jeśli istnieje cover
+            ->whereHas('pages')
+            ->where('status', 'published')
             ->get();
 
         $averageRating = $shop->averageRating();

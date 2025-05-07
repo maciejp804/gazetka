@@ -3,10 +3,10 @@
     <div class="flex w-full md:w-72 justify-center aspect-square overflow-hidden">
         @if(empty($product->image))
             <picture>
-                <source srcset="{{ $product->category->logo ? Storage::url($product->category->logo.'.avif') : asset('assets/images/categories/default.webp')}}" type="image/avif">
-                <source srcset="{{ $product->category->logo ? Storage::url($product->category->logo.'.webp') : asset('assets/images/categories/default.webp') }}" type="image/webp">
+                <source srcset="{{ $product->category->logo ? asset($product->category->logo) : asset('assets/images/categories/default.webp')}}" type="image/avif">
+                <source srcset="{{ $product->category->logo ? asset($product->category->logo) : asset('assets/images/categories/default.webp') }}" type="image/webp">
                 <img class="flex self-center w-full"
-                     src="{{ $product->category->logo ?  Storage::url($product->category->logo.'.jpg') : asset('assets/images/categories/default.webp')}}"
+                     src="{{ $product->category->logo ?  asset($product->category->logo) : asset('assets/images/categories/default.webp')}}"
                      width="1920" height="1080"
                      alt="{{$product->name}}">
             </picture>

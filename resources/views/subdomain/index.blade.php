@@ -123,6 +123,7 @@
             <x-faq :items="$descriptions"/>
         @endif
     </div>
+
     <x-slot:scripts>
         @vite(['resources/js/rating.js'])
     </x-slot:scripts>

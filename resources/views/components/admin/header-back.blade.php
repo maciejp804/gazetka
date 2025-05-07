@@ -14,7 +14,8 @@
                         <x-dropdown-menu
                             label="Gazetki"
                             :items="[
-                                ['label' => 'Baza gazetek', 'href' => route('admin.leaflets.index')],
+                                ['label' => 'Baza gazetek', 'href' => route('admin.leaflets.index')]
+
                             ]"
                         />
                         <x-nav-link href="{{route('admin.vouchers.index')}}" :active="request()->is('panel/vouchers')">Kupony</x-nav-link>

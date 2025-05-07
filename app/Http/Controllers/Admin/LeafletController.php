@@ -41,8 +41,6 @@ class LeafletController extends Controller
     public function create()
     {
 
-        $leaflets = $this->getLeaflets();
-
         $shops = Shop::where('status', 1)->get();
         $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
@@ -54,7 +52,7 @@ class LeafletController extends Controller
 
 
         return view('admin.leaflet.create', [
-            'leaflets' => $leaflets,
+
             'shops' => $shops,
             'categories' => $categories,
             "breadcrumbs" => $breadcrumbs,

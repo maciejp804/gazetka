@@ -7,13 +7,12 @@ use App\Models\Leaflet;
 
 class LeafletService
 {
-    public function getLeaflets($limit = 'all', $shop_id = null, $order = [['updated_at', 'desc']], $pinned = null)
+    public function getLeaflets($limit = 'all', $shop_id = null, $archive = null, $order = [['updated_at', 'desc']], $pinned = null)
     {
 
         $leaflets = Leaflet::with(['shop', 'cover', 'pages'])
             ->whereHas('cover') // dodane: tylko jeśli istnieje cover
             ->whereHas('pages')
-            ->where('display_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('status', 'published');
 
         if (!is_null($pinned)) {
@@ -22,6 +21,12 @@ class LeafletService
 
         if(!is_null($shop_id)){
             $leaflets = $leaflets->where('shop_id', '=', $shop_id);
+        }
+
+        if(!is_null($archive)){
+            $leaflets = $leaflets->where('display_to', '<', now('Europe/Warsaw')->toDateTime());
+        } else {
+            $leaflets = $leaflets->where('display_to', '>=', now('Europe/Warsaw')->toDateTime());
         }
 
         foreach ($order as $item) {
@@ -44,14 +49,25 @@ class LeafletService
     }
 
 
-    public function getLeafletsSimplePaginate($pages, $category = 'all')
+    public function getLeafletsSimplePaginate($pages, $category = 'all', $limit = 'all', $shop_id = null, $archive = null, $order = [['updated_at', 'desc']])
     {
 
         $leaflets = Leaflet::with('shop', 'cover', 'products.category')
-            ->where('display_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('leaflets.status', '=', 'published')
             ->whereHas('cover')
-            ->whereHas('pages');
+            ->whereHas('pages')
+            ->where('leaflets.status', '=', 'published');
+
+            if(!is_null($archive)){
+                $leaflets->where('display_to', '<', now('Europe/Warsaw')->toDateTime());
+            } else {
+                $leaflets->where('display_to', '>=', now('Europe/Warsaw')->toDateTime());
+            }
+
+
+        if(!is_null($shop_id)){
+            $leaflets = $leaflets->where('shop_id', '=', $shop_id);
+        }
+
 
         if ($category != 'all')
         {
@@ -60,6 +76,17 @@ class LeafletService
                     ->orWhere('parent_id', $category);
             });
         }
+
+        foreach ($order as $item) {
+
+            $leaflets = $leaflets->orderBy($item[0], $item[1]);
+        }
+
+        if ($limit != 'all') {
+            $leaflets = $leaflets->limit($limit);
+        }
+
+
 
         return $leaflets->paginate($pages, ['*']);
     }

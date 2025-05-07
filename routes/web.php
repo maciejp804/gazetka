@@ -81,6 +81,8 @@ Route::prefix('/panel/leaflets')->name('admin.leaflets.')->group(function () {
     Route::get('/{leaflet}/pages', [AdminPageController::class, 'manage'])->name('page.manage');
     Route::get('/{leaflet}/pages/create', [AdminPageController::class, 'create'])->name('page.create');
     Route::put('/{leaflet}/pages/add', [AdminPageController::class, 'add'])->name('page.add');
+    Route::get('/{leaflet}/pages/create-api', [AdminPageController::class, 'createApi'])->name('page.create.api');
+    Route::post('/{leaflet}/pages/add-api', [AdminPageController::class, 'addApi'])->name('page.add.api');
     Route::get('/{leaflet}/pages/edit', [AdminPageController::class, 'edit'])->name('page.edit');
     Route::put('/{leaflet}/pages/update', [AdminPageController::class, 'update'])->name('page.update');
     Route::get('/{leaflet}/pages/order', [AdminPageController::class, 'editOrder'])->name('page.edit.order');
@@ -89,6 +91,8 @@ Route::prefix('/panel/leaflets')->name('admin.leaflets.')->group(function () {
     Route::prefix('{leaflet}/hotspots')->name('hotspots.')->group(function () {
         Route::get('/create', [AdminHotSpotController::class, 'create'])->name('create');
         Route::post('/add', [AdminHotSpotController::class, 'add'])->name('add');
+        Route::post('/import', [AdminHotSpotController::class, 'import'])->name('import');
+        Route::get('/export', [AdminHotSpotController::class, 'export'])->name('export');
         Route::delete('/delete', [AdminHotSpotController::class, 'delete'])->name('delete');
         Route::delete('/{page}/deletePage', [AdminHotSpotController::class, 'deletePage'])->name('deletePage');
         Route::delete('/{hotSpot}/deleteSpot', [AdminHotSpotController::class, 'deleteHotSpot'])->name('deleteHotSpot');

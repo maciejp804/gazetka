@@ -42,14 +42,10 @@ class MainController extends Controller
             $place = Place::find($locationData['id']);
         }
 
-        [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets(40, null, [['pinned', 'desc']]);
+        [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets(40, null, null, [['pinned', 'desc']]);
 
 
-
-
-        [ $leaflets_promo , $counter] = $this->leafletService->getLeaflets(20,  null, [['updated_at', 'desc']], 1);
-
-
+        [ $leaflets_promo , $counter] = $this->leafletService->getLeaflets(20,  null, null, [['updated_at', 'desc']], 1);
 
         $shop_categories = Category::where([
             ['status', 'active'],
@@ -247,6 +243,8 @@ class MainController extends Controller
 
         [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets('all', $shop->id);
 
+        $leaflets_archive = $this->leafletService->getLeafletsSimplePaginate(10, 'all', 10, $shop->id);
+
         $placesAll = Place::all();
 
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
@@ -271,7 +269,7 @@ class MainController extends Controller
         $vouchers = $this->vouchers();
 
         $leaflets_time = SortOptionsService::getSortOptions(false);
-
+//        dd($leaflets_time);
         $leaflets_category = Category::where('status', 'active')
             ->where('type', 'product')
             ->where('parent_id', '=', null)
@@ -317,6 +315,7 @@ class MainController extends Controller
             'leaflets_category' => $leaflets_category, // gazetki
             'leaflets_time' => $leaflets_time,
             'leaflets' => $leaflets,
+            'leaflets_archive' => $leaflets_archive,
             'vouchers' => $vouchers, // kupony
             'shops' => $shops, // sklepy
             'shop' => $shop,
@@ -328,6 +327,102 @@ class MainController extends Controller
         ]);
 
     }
+
+//    public function subdomainIndexArchive($subdomain)
+//    {
+//
+//        $shop = Shop::with('category')->where('slug', $subdomain)->first();
+//
+//        if(!$shop)
+//        {
+//            abort(404);
+//        }
+//
+//        [$shops, $counter_shops] = $this->shops($shop->slug);
+//
+//        [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets('all', $shop->id, 'archive');
+//
+//        $placesAll = Place::all();
+//
+//        $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
+//
+//        $location = Cookie::get('user_location');
+//
+//        if (!$location) {
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+//        }
+//
+//        $averageRating = $shop->averageRating();
+//        $ratingCount = $shop->ratingCount();
+//
+//        $breadcrumbs = [
+//            ['label' => 'Strona główna', 'url' => route('main.index')],
+//            ['label' => 'Gazetki '. $shop->name, 'url' => '']
+//        ];
+//
+//        $vouchers = $this->vouchers();
+//
+//        $leaflets_time = SortOptionsService::getSortOptions(false);
+////        dd($leaflets_time);
+//        $leaflets_category = Category::where('status', 'active')
+//            ->where('type', 'product')
+//            ->where('parent_id', '=', null)
+//            ->orderBy('name', 'asc')
+//            ->get();
+//
+//        $products = $this->productService->getHotSpots('low', null, null, $shop->slug, null);
+//
+//        $blogs = Blog::getAll();
+////        dd($shop);
+//        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id);
+//
+//        $category = $shop->category ? $shop->category->slug : 'default';
+//
+//        $default_descriptions = Description::getDefault(Route::currentRouteName(), null, $shop->name);
+//
+//        return view('subdomain.index', [
+//            //Zmienne globalne
+//            'subdomain' => $subdomain,
+//
+//            // Lokalizacja
+//            'place' => $place,
+//            'places' => $placesLimit40,
+//
+//            // Opisy i dane globalne
+//            'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+//            'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+//            'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+//            'descriptions' => $descriptions,
+//            'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+//
+//            'breadcrumbs' => $breadcrumbs,
+//
+//            // Rating
+//            'averageRating' => $averageRating,
+//            'ratingCount' => $ratingCount,
+//            'model' => "Shop",
+//
+//
+//            // Produkty
+//
+//            'products' => $products,
+//            'leaflets_category' => $leaflets_category, // gazetki
+//            'leaflets_time' => $leaflets_time,
+//            'leaflets' => $leaflets,
+//            'vouchers' => $vouchers, // kupony
+//            'shops' => $shops, // sklepy
+//            'shop' => $shop,
+//
+//            //Blog
+//            'blogs' => $blogs,
+//
+//
+//        ]);
+//
+//    }
 
     public function subdomainIndexGps($subdomain, $community)
     {

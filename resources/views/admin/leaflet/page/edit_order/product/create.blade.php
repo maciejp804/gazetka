@@ -12,9 +12,9 @@
             </ul>
         </div>
     @endif
-    <div class="flex flex-col w-full 1xl:w-356 mx-auto">
+    <div class="flex flex-col w-full 1xl:w-356 mx-auto py-4">
         {{ $pages->links() }}
-        <div class="container flex bg-white p-2 border-gray-300 rounded border">
+        <div class="container flex bg-white p-2 border-gray-300 rounded border mb-2">
             <!-- Lewa część: Wyszukiwarka produktów -->
             <div class="w-1/3 p-4 relative">
                 <ul id="product-list">
@@ -32,6 +32,7 @@
                             </form>
 
                                 <div class="product" id="product-{{ $hotSpot->id }}" draggable="true"
+                                     data-id="{{ $hotSpot->id }}"
                                      data-product-id="{{ $hotSpot->product_id }}"
                                      data-status="{{ $hotSpot->status }}"
                                      data-valid_from="{{ $hotSpot->valid_from }}"
@@ -65,7 +66,7 @@
 
             <!-- Prawa część: Produkty przypisane do strony -->
             <div class="w-1/3 p-4">
-                <div class="filter-box flex mr-2 w-full ">
+                <div class="filter-box flex mr-2 w-full">
                     <x-admin.search class="flex"
                               placeholder="Szukaj produktu np. masło, chleb"
                               input-id="search-input-products-desktop"
@@ -75,9 +76,9 @@
                                     :page_id="$pages[0]->id"
                                     autofocus="true"
                     >
-
                     </x-admin.search>
                 </div>
+
                 <!-- Formularz do edycji danych hotspotu -->
                 <div id="hotspot-form" style="display:none;">
                     <form id="hotspot-form-fields" action="" method="POST">
@@ -117,14 +118,31 @@
                         <input type="number" id="y" name="y" hidden="hidden">
                         <input type="number" id="width" name="width" hidden="hidden">
                         <input type="number" id="height" name="height" hidden="hidden">
-
                         <x-form.submit label="Zapisz"/>
-
                     </form>
                 </div>
+
             </div>
         </div>
+        <div class="flex justify-around bg-white border border-gray-300 p-2">
+            <div>
+                <form action="{{route('admin.leaflets.hotspots.import',['leaflet' => $leaflet])}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                        <x-form.input-file type="file" name="file" id="import" required="required" label="Import"/>
+                    <!-- Przycisk do dodania stron -->
+                    <x-form.submit label="Importuj strony" />
+                </form>
+            </div>
+            <div>
+                <form action="{{route('admin.leaflets.hotspots.export', $leaflet)}}" method="GET" >
+                    @csrf
+                    <!-- Przycisk do dodania stron -->
+                    <x-form.submit label="Exportuj strony" />
+                </form>
+            </div>
         </div>
+    </div>
 
 
 
@@ -250,13 +268,16 @@
             }
 
             // Funkcja do aktywowania prostokąta po kliknięciu na produkt
-            function activateRectangleForProduct(productId) {
-                selectedRect = rectangles.find(rect => rect.product_id === productId);
+            function activateRectangleForProduct(dataId) {
+                selectedRect = rectangles.find(rect => rect.id ==dataId);
                 if (selectedRect) {
+                    rectangles = rectangles.filter(rect => rect !== selectedRect);
+                    rectangles.push(selectedRect);
                     // Zmieniamy status na "visible" i aktualizujemy w bazie
                     selectedRect.status = 'visible';
                     // updateHotspotInDatabase(selectedRect.id, { status: 'visible' });
                     drawRectangles();  // Rysowanie po zmianie statusu
+                    openHotspotForm(selectedRect);  // <- otwieramy formularz!
                 }
             }
 
@@ -275,20 +296,6 @@
                     console.log("Prostokąt usunięty. Nowa tablica:", rectangles); // Logowanie po usunięciu
                     drawRectangles(); // Rysujemy ponownie zaktualizowane prostokąty
                 }
-            }
-            // Funkcja do aktualizacji formularza
-            function updateHotspotForm(rect) {
-                document.getElementById('hotspot-id').value = rect.id;
-                document.getElementById('page_id').value = rect.product ? rect.product.page_id : '';
-                document.getElementById('product_id').value = rect.product ? rect.product.id : '';
-
-                // Wypełnianie formularza danymi
-                document.getElementById('valid_from').value = rect.product && rect.product.valid_from ? rect.product.valid_from : rect.valid_from || '';
-                document.getElementById('valid_to').value = rect.product && rect.product.valid_to ? rect.product.valid_to : rect.valid_to || '';
-                document.getElementById('x').value = rect.product && rect.product.x ? rect.product.x : rect.x || '';
-                document.getElementById('y').value = rect.product && rect.product.y ? rect.product.y : rect.y || '';
-                document.getElementById('width').value = rect.product && rect.product.width ? rect.product.width : rect.width || '';
-                document.getElementById('height').value = rect.product && rect.product.height ? rect.product.height : rect.height || '';
             }
 
             // Funkcja do aktywowania formularza edycji po kliknięciu na prostokąt
@@ -478,6 +485,12 @@
             const productItems = productList.querySelectorAll('.product');
 
             productItems.forEach((item) => {
+
+                item.addEventListener('click', (e) => {
+                    const dataId = item.getAttribute('data-id');
+                    activateRectangleForProduct(dataId);
+                });
+
                 item.addEventListener('dragstart', (e) => {
                     const productId = item.getAttribute('data-product-id');
                     const page_id = item.getAttribute('data-page-id');

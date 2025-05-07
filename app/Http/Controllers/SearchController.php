@@ -295,47 +295,51 @@ class SearchController extends Controller
     public function test($week, $number, $start)
     {
         set_time_limit(3200);
-        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p_i.json')), true);
+        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p_i_s_q_w.json')), true);
         $i = 0;
         $l = 356406;
         foreach ($data['combinations'] as $combination) {
             if ($i >= $start) {
 
-                //$url = 'https://pepco.pl/wp-content/uploads/2024/11/P10_'.$l.'_Leaflet_1.jpg';
-                $url = 'https://gazetki.aldi.pl/2025/kw'.$week.'/25k'.$week.'g'.$number . $combination . '//GetPDF.ashx';
-                //$url = 'https://gazetki.aldi.pl/2024/kw33/24k33g01cdga//GetPDF.ashx';
-                $ch = curl_init($url);
+                if(str_contains($combination, 'q') && str_contains($combination, 'w')) {
+                    //$url = 'https://pepco.pl/wp-content/uploads/2024/11/P10_'.$l.'_Leaflet_1.jpg';
+                    $url = 'https://gazetki.aldi.pl/2025/kw'.$week.'/25k'.$week.'g'.$number . $combination . '//GetPDF.ashx';
+                    //$url = 'https://gazetki.aldi.pl/2024/kw33/24k33g01cdga//GetPDF.ashx';
+                    $ch = curl_init($url);
 
-                // Set cURL options
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    // Set cURL options
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-                curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+                    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
 
-                // Execute the cURL session
-                $response = curl_exec($ch);
+                    // Execute the cURL session
+                    $response = curl_exec($ch);
 
-                // Check for errors
-                if (curl_errno($ch)) {
-                    echo 'Error: ' . curl_error($ch) . PHP_EOL;
-                } else {
-                    // Get the HTTP response status code
-                    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-                    // Process the response based on the status code
-                    if ($http_code == 200) {
-                        echo "<span style='color: green'>$i. Catalog ID $url exists and is accessible.</span>" . '<br/>';
-                        curl_close($ch);
-
-                        break;
-
+                    // Check for errors
+                    if (curl_errno($ch)) {
+                        echo 'Error: ' . curl_error($ch) . PHP_EOL;
                     } else {
-                        echo "<span style='color: red'>$i. Catalog ID $url is not accessible. HTTP Status Code: $http_code </span>" . '<br/>';
+                        // Get the HTTP response status code
+                        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+                        // Process the response based on the status code
+                        if ($http_code == 200) {
+                            echo "<span style='color: green'>$i. Catalog ID $url exists and is accessible.</span>" . '<br/>';
+                            curl_close($ch);
+
+                            break;
+
+                        } else {
+                            echo "<span style='color: red'>$i. Catalog ID $url is not accessible. HTTP Status Code: $http_code </span>" . '<br/>';
+                        }
                     }
+
+                    // Close the cURL session
+                    curl_close($ch);
                 }
 
-                // Close the cURL session
-                curl_close($ch);
+
             }
 
             $i++;

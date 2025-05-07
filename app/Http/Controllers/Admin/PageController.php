@@ -9,6 +9,7 @@ use App\Models\Page;
 use App\Models\Shop;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class PageController extends Controller
 {
@@ -28,8 +29,10 @@ class PageController extends Controller
         $shops = Shop::where('status', 'active')->get();
 
         $manage = [
-            ['label' => 'Dodaj', 'description' => 'dodaj strony do gazetki (pages, leaflet_pages)',
+            ['label' => 'Dodaj ręcznie', 'description' => 'dodaj strony do gazetki (pages, leaflet_pages)',
                 'logo' => 'fa-solid fa-plus','url' => route('admin.leaflets.page.create', $leaflet->id)],
+            ['label' => 'Dodaj z linku', 'description' => 'dodaj strony do gazetki (pages, leaflet_pages)',
+                'logo' => 'fa-solid fa-file-circle-plus','url' => route('admin.leaflets.page.create.api', $leaflet->id)],
             ['label' => 'Edytuj', 'description' => 'edytuj strony w gazetce (pages, leaflet_pages)',
                 'logo' => 'fa-solid fa-pen-to-square','url' => route('admin.leaflets.page.edit', $leaflet->id)],
             ['label' => 'Zmień kolejność', 'description' => 'zarządzanie przypisanymi stronami, kolejność (relacja leaflet_page z sort_order)',
@@ -53,7 +56,7 @@ class PageController extends Controller
             ['label' => 'Gazetki', 'url' => route('admin.leaflets.index')],
             ['label' => $leaflet->shop->name.'-'.$leaflet->title, 'url' => route('admin.leaflets.manage', $leaflet->id)],
             ['label' => 'Strony', 'url' => route('admin.leaflets.page.manage', $leaflet->id)],
-            ['label' => 'Dodaj', 'url' => ''],
+            ['label' => 'Dodaj ręcznie', 'url' => ''],
 
         ];
 
@@ -64,9 +67,28 @@ class PageController extends Controller
         ]);
     }
 
+    public function createApi(Leaflet $leaflet)
+    {
+        $leaflet = Leaflet::with('shop', 'cover', 'pages')->where('id', $leaflet->id)->first();
+
+        $breadcrumbs = [
+            ['label' => 'Panel', 'url' => route('admin.index')],
+            ['label' => 'Gazetki', 'url' => route('admin.leaflets.index')],
+            ['label' => $leaflet->shop->name.'-'.$leaflet->title, 'url' => route('admin.leaflets.manage', $leaflet->id)],
+            ['label' => 'Strony', 'url' => route('admin.leaflets.page.manage', $leaflet->id)],
+            ['label' => 'Dodaj z linku', 'url' => ''],
+
+        ];
+
+        return view('admin.leaflet.page.createApi', [
+            'leaflet' => $leaflet,
+            "breadcrumbs" => $breadcrumbs,
+
+        ]);
+    }
+
     public function add(Request $request, Leaflet $leaflet)
     {
-
 
         $request->validate([
             'files' => 'nullable|array', // Walidacja dla tablicy stron
@@ -106,6 +128,58 @@ class PageController extends Controller
                     $leaflet->pages()->attach($page->id, ['sort_order' => $sort_order]);
                 }
             }
+        }
+
+        return redirect()->route('admin.leaflets.page.manage', $leaflet)->with('success', 'Gazetka została zaktualizowana.');
+
+    }
+
+    public function addApi(Request $request, Leaflet $leaflet)
+    {
+
+
+        $validated = $request->validate([
+            'base' => 'required|string', // Walidacja dla tablicy stron
+            'ext' => 'required|string',
+            'pad' => 'required|numeric|min:0',
+            'pages' => 'required|numeric|min:0',
+        ]);
+
+
+
+        for ($i = 1; $i <= $validated['pages']; $i++) {
+            // formatowanie numeru strony
+            $pageNumber = $validated['pad'] > 0
+                ? str_pad($i, $validated['pad'], '0', STR_PAD_LEFT)
+                : $i;
+
+            $url = $validated['base'] . $pageNumber . $validated['ext'];
+
+
+
+            $path = 'leaflets/pages/' . uniqid();
+            $sort_order = $i;
+            // Użycie serwisu do konwersji i zapisania pliku
+            $result = app(ImageService::class)->convertAndStore(
+                $url, // Przesyłamy zawartość pliku
+                $path
+            );
+
+            // Sprawdzamy, czy konwersja się powiodła
+            if (!empty($result)) {
+                // Utworzenie strony w tabeli 'pages' z zapisaną ścieżką do pliku
+                $page = Page::create([
+                    'page_number' => $sort_order,
+                    'image_path' => $path,
+                    'height' => $result['height'],
+                    'width' => $result['width'],
+                ]);
+
+                // Dodanie strony do gazetki z przypisaną kolejnością (sort_order)
+                $leaflet->pages()->attach($page->id, ['sort_order' => $sort_order]);
+            }
+
+
         }
 
         return redirect()->route('admin.leaflets.page.manage', $leaflet)->with('success', 'Gazetka została zaktualizowana.');
