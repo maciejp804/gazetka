@@ -43,6 +43,7 @@ class Leaflet extends Model
             ->withTimestamps();
     }
 
+
     public function products()
     {
         return $this->hasManyThrough(

@@ -9,6 +9,7 @@ use App\Models\Description;
 use App\Models\Leaflet;
 use App\Models\PageClick;
 use App\Models\Place;
+use App\Models\Product;
 use App\Models\Shop;
 use App\Services\LeafletService;
 use App\Services\ProductService;
@@ -169,7 +170,16 @@ class LeafletController extends Controller
         $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
             ->find($id);
 
-//        dd($leaflet);
+        $productIds = $leaflet->pages
+            ->flatMap(fn ($page) => $page->hotSpots)   // zbierz wszystkie hotspoty
+            ->pluck('product_id')                      // wyciągnij product_id
+            ->unique()                                 // tylko unikalne ID
+            ->filter();                                // usuń null, jeśli jakieś są
+
+        $products = Product::whereIn('id', $productIds)->get();
+
+
+
         if (!$shop || !$leaflet) {
             abort(404);
         }
@@ -178,9 +188,11 @@ class LeafletController extends Controller
 
         $inserts = $leaflet->inserts;
         $ads = $leaflet->leafletAds;
-        $products = $leaflet->products->unique('id');
+
 
         [$leaflets, $counter ] = $this->leafletService->getLeaflets('all', $shop->id);
+
+        $leaflets = $leaflets->whereNotIn('id', $leaflet->id);
 
         // Pobranie identyfikatorów podobnych sklepów
         $similarShopIds = Shop::where('category_id', $shop->category_id)

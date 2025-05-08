@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\HotSpot;
 use App\Models\Leaflet;
 use App\Models\LeafletCover;
 use App\Models\Shop;
@@ -226,6 +227,31 @@ class LeafletController extends Controller
 
     public function destroy(Leaflet $leaflet)
     {
+
+        $leaflet = Leaflet::with('pages.leaflets', 'cover')->find($leaflet->id);
+
+        foreach ($leaflet->pages as $page) {
+            if ($page->leaflets()->count() === 1) {
+                // Strona tylko dla tej gazetki
+
+                if ($page->image_path) {
+                    foreach (['webp', 'avif', 'jpg'] as $ext) {
+                        $file = $page->image_path . '.' . $ext;
+                        if (Storage::disk('public')->exists($file)) {
+                            Storage::disk('public')->delete($file);
+                        }
+                    }
+                }
+
+                $leaflet->pages()->detach($page->id);
+                $page->delete();
+            } else {
+                // Powiązana z inną gazetką – tylko odpinamy
+                $leaflet->pages()->detach($page->id);
+            }
+
+        }
+
         // Jeśli chcesz też usunąć obrazek ze storage
         if ($leaflet->cover && Storage::disk('public')->exists($leaflet->cover->path . '.jpg')) {
             Storage::disk('public')->delete([$leaflet->cover->webp_path . '.webp', $leaflet->cover->avif_path. '.avif', $leaflet->cover->path . '.jpg']);

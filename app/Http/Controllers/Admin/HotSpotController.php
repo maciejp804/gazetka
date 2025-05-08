@@ -53,17 +53,17 @@ class HotSpotController extends Controller
             'page_id' => 'required|exists:leaflets,id',
         ]);
 
-        $leafletProduct = LeafletProduct::where('leaflet_id', $request->leaflet_id)->where('product_id', $request->product_id)->first();
-
-        if (!$leafletProduct) {
-            $leafletProduct =LeafletProduct::create([
-                'leaflet_id' => $validated['leaflet_id'],
-                'product_id' => $validated['product_id'],
-                'status' => 'normal',
-                'price' => $request->input('price', 0),
-                'promo_price' => $request->input('promo_price', 0),
-            ]);
-        }
+//        $leafletProduct = LeafletProduct::where('leaflet_id', $request->leaflet_id)->where('product_id', $request->product_id)->first();
+//
+//        if (!$leafletProduct) {
+//            $leafletProduct = LeafletProduct::create([
+//                'leaflet_id' => $validated['leaflet_id'],
+//                'product_id' => $validated['product_id'],
+//                'status' => 'normal',
+//                'price' => $request->input('price', 0),
+//                'promo_price' => $request->input('promo_price', 0),
+//            ]);
+//        }
 
         // Tworzenie rekordu w tabeli HotSpot
         HotSpot::create([
@@ -75,8 +75,8 @@ class HotSpotController extends Controller
             'valid_to' => $leaflet->valid_to,
             'x' => 10,
             'y' => 10,
-            'width' => 10,
-            'height' => 10,
+            'width' => 50,
+            'height' => 50,
             'price' => $request->input('price', 0),
             'promo_price' => $request->input('promo_price', 0),
         ]);

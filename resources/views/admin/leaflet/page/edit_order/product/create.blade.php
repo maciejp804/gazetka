@@ -238,10 +238,10 @@
                     // Rysowanie uchwytu w prawym dolnym rogu (tylko dla istniejących prostokątów)
                     if (rect === selectedRect) {
                         ctx.fillStyle = 'red';
-                        ctx.fillRect(rect.x + rect.width - 10, rect.y + rect.height - 10, 10, 10);  // Uchwyt w prawym dolnym rogu
+                        ctx.fillRect(rect.x + rect.width , rect.y + rect.height , 15, 15);  // Uchwyt w prawym dolnym rogu
                         ctx.strokeStyle = 'black';
                         ctx.lineWidth = 1;
-                        ctx.strokeRect(rect.x + rect.width - 10, rect.y + rect.height - 10, 10, 10);
+                        ctx.strokeRect(rect.x + rect.width , rect.y + rect.height , 15, 15);
                     }
 
                     // Rysowanie przypisanego produktu (jeśli istnieje)
@@ -273,8 +273,7 @@
                 if (selectedRect) {
                     rectangles = rectangles.filter(rect => rect !== selectedRect);
                     rectangles.push(selectedRect);
-                    // Zmieniamy status na "visible" i aktualizujemy w bazie
-                    selectedRect.status = 'visible';
+
                     // updateHotspotInDatabase(selectedRect.id, { status: 'visible' });
                     drawRectangles();  // Rysowanie po zmianie statusu
                     openHotspotForm(selectedRect);  // <- otwieramy formularz!
