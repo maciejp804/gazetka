@@ -202,7 +202,7 @@ class LeafletController extends Controller
         // Paginacja gazetek dla sieci podobnych sklepów
         $similarLeaflets = Leaflet::with('shop')
             ->whereIn('shop_id', $similarShopIds)
-            ->where('display_to', '>=', now())
+            ->where('display_to', '>=', now('Europe/Warsaw'))
             ->whereHas('cover') // dodane: tylko jeśli istnieje cover
             ->whereHas('pages')
             ->where('status', 'published')

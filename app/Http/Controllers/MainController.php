@@ -694,7 +694,7 @@ class MainController extends Controller
     protected function leaflets($limit = 'all', $shop_id = null)
     {
         $leaflets = Leaflet::with(['shop', 'cover', 'pages'])
-            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
+            ->where('display_to', '>=', now('Europe/Warsaw')->toDateTime())
             ->where('status', 'published')
             ->whereHas('cover') // dodane: tylko jeśli istnieje cover
             ->whereHas('pages');

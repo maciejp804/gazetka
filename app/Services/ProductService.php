@@ -26,7 +26,7 @@ class ProductService
                 $query->withPivot('sort_order');
             }
         ])
-            ->where('valid_from', '<=', $now)
+
             ->where('valid_to', '>=', $now);
 
         //Filtorwanie po priority
