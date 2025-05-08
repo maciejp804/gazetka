@@ -304,7 +304,7 @@ class HotSpotController extends Controller
             $pageId = DB::table('leaflet_page')
                 ->where('leaflet_id', $leaflet->id)
                 ->where('sort_order', $page) // Numer strony
-                ->value('id');
+                ->value('page_id');
 
             foreach ($items as $productOldId) {
                 $product = Product::where('old_id', $productOldId)
@@ -329,10 +329,10 @@ class HotSpotController extends Controller
                         ]
                     );
 
-                    LeafletProduct::firstOrCreate([
-                        'leaflet_id' => $leaflet->id,
-                        'product_id' => $product->id
-                    ]);
+//                    LeafletProduct::firstOrCreate([
+//                        'leaflet_id' => $leaflet->id,
+//                        'product_id' => $product->id
+//                    ]);
                 }
             }
         }
@@ -343,7 +343,7 @@ class HotSpotController extends Controller
         // Format 2 import
         foreach ($data as $item) {
             $pageId = $item['page_id'];
-
+            dd($pageId);
             // Znalezienie produktu na podstawie jego ID
             $product = Product::where('id', $item['product_id'])
                 ->where('status', 1)  // Tylko aktywne produkty
@@ -376,12 +376,12 @@ class HotSpotController extends Controller
                 );
 
                 // Tworzymy lub aktualizujemy LeafletProduct (połączenie produktu z gazetką)
-                LeafletProduct::updateOrCreate(
-                    [
-                        'leaflet_id' => $leaflet->id,
-                        'product_id' => $product->id
-                    ]
-                );
+//                LeafletProduct::updateOrCreate(
+//                    [
+//                        'leaflet_id' => $leaflet->id,
+//                        'product_id' => $product->id
+//                    ]
+//                );
             }
         }
     }
