@@ -15,7 +15,7 @@ class ProductService
      * @param int|null $perPage Ilość produktów na stronę (null = bez paginacji).
      * @return LengthAwarePaginator|Collection
      */
-    public function getHotSpots(string $priority = null, $category = null, $subcategory = null, string $shopSlug = null, int $perPage = null)
+    public function getHotSpots(string $priority = null, $category = null, $subcategory = null, string $shopSlug = null, int $perPage = null, int $limit = null)
     {
         $now = now();
 
@@ -26,13 +26,26 @@ class ProductService
                 $query->withPivot('sort_order');
             }
         ])
-
             ->where('valid_to', '>=', $now);
 
-        //Filtorwanie po priority
-        if(!is_null($priority)) {
-            $query->where('priority', $priority);
+        // Filtrowanie po priorytecie (powyżej zadanego priorytetu)
+        if (!is_null($priority)) {
+            $priorityLevels = ['low', 'medium', 'high'];  // Lista priorytetów w kolejności rosnącej
+
+            // Sprawdzamy, gdzie znajduje się dany priorytet w tablicy
+            $priorityIndex = array_search($priority, $priorityLevels);
+
+            if ($priorityIndex !== false) {
+                // Pobieramy wszystkie wartości od zadanego priorytetu do końca tablicy
+                $higherPriorities = array_slice($priorityLevels, $priorityIndex);
+
+                // Filtrowanie po priorytetach, które są powyżej lub równe zadanemu
+                $query->whereIn('priority', $higherPriorities);
+            }
         }
+
+        // Sortowanie po priorytecie
+        $query->orderByRaw("FIELD(priority, 'high', 'medium', 'low')");
 
         // Filtrowanie po sklepie (slug)
         if (!is_null($shopSlug)) {
@@ -56,9 +69,6 @@ class ProductService
             });
         }
 
-        // Debugging: Sprawdź, jakie zapytanie jest generowane
-
-
         // Paginacja
         if (!is_null($perPage)) {
             $paginatedResults = $query->paginate($perPage);
@@ -73,9 +83,15 @@ class ProductService
             );
         }
 
-        // Jeśli paginacja nie jest ustawiona
+        // Jeśli limit jest ustawiony, stosujemy limit
+        if (!is_null($limit)) {
+            $query->limit($limit);
+        }
+
+        // Jeśli paginacja ani limit nie są ustawione, zwróć wszystkie wyniki
         return $this->transformHotSpots($query->get());
     }
+
 
 
 

@@ -16,7 +16,6 @@ class SearchService
     {
         // Tworzymy bazowe zapytanie
         $products = HotSpot::with('product')
-            ->where('valid_from', '<=', now())
             ->where('valid_to', '>=', now())
             ->whereHas('product', function ($queryName) use ($query) {
                 $queryName->where('name', 'like', $query . '%');

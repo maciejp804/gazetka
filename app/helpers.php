@@ -96,9 +96,10 @@ if (!function_exists('validationDate'))
 {
     function validationDate($endDate, $startDate = NULL, $createDate = NULL)
     {
-        $dataNow = new DateTime('now'); // przykład bieżącej daty
-        $dataEnd = new DateTime($endDate); // przykład końcowej daty
-        $dataStart = new DateTime($startDate);
+        $timezone = new DateTimeZone('Europe/Warsaw');
+        $dataNow = new DateTime('now', $timezone); // przykład bieżącej daty
+        $dataEnd = new DateTime($endDate, $timezone); // przykład końcowej daty
+        $dataStart = new DateTime($startDate, $timezone);
         $diff = $dataEnd->diff($dataNow);
 
         $new = false;

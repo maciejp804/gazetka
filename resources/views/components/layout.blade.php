@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="robots" content="noindex">
+    <meta name="google-site-verification" content="FQIP9C2zoaXYvzpKGwbWQOmnpEX7UDEyNRL7FGTh4KQ" />
     <title>@if($meta_title) {{ $meta_title }} @else Brak tytułu @endif </title>
     <meta name="Description" content="@if($meta_description) {{ $meta_description }} @else Brak tytułu @endif ">
 

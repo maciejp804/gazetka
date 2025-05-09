@@ -32,7 +32,7 @@
             className: "custom-after-border", // Ustawienie klasy CSS dla markerów
             html: '<img class="w-10 h-10 rounded-full border-2 border-blue-550" src="' +
                 '@if(!empty($marker))' +
-                'https://hoian.pl/assets/image/store/{{$marker->shop->slug}}-marker.png' +
+                '{{$marker->shop->image}}' +
                 '@endif" />', // Definicja HTML dla markera
             iconSize: [40, 40], // Rozmiar markera
             iconAnchor: [20, 40] // Punkt zakotwiczenia markera

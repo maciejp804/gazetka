@@ -53,8 +53,9 @@ class MainController extends Controller
         ])->get();
 
 
-        $products = $this->productService->getHotSpots();
-        $counter_products = count($products);
+        $products = $this->productService->getHotSpots('medium', null, null, null, null, 20);
+
+        $counter_products = 1253;
 
         $vouchers = $this->vouchers();
 
@@ -149,21 +150,12 @@ class MainController extends Controller
 
         [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets(40);
 
-        $leaflets_promo = Leaflet::with(['shop', 'cover', 'pages'])
-            ->where('valid_to', '>=', now('Europe/Warsaw')->toDateTime())
-            ->where('status', 'published')
-            ->where('pinned', 1)
-            ->whereHas('cover')
-            ->whereHas('pages')
-            ->orderByDesc('priority')
-            ->orderByDesc('updated_at')
-            ->limit(20)
-            ->get();
+        [ $leaflets_promo , $counter] = $this->leafletService->getLeaflets(20,  null, null, [['updated_at', 'desc']], 1);
 
 
         $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
-        $products = $this->productService->getHotSpots();
+        $products = $this->productService->getHotSpots('medium', null, null, null, null, 20);
         $counter_products = count($products);
         $vouchers = $this->vouchers();
 
@@ -276,7 +268,7 @@ class MainController extends Controller
             ->orderBy('name', 'asc')
             ->get();
 
-        $products = $this->productService->getHotSpots('low', null, null, $shop->slug, null);
+        $products = $this->productService->getHotSpots('low', null, null, $shop->slug, null, 20);
 
         $blogs = Blog::getAll();
 //        dd($shop);
