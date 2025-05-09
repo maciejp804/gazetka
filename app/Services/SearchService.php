@@ -106,7 +106,7 @@ class SearchService
                     'product_id'    => optional($hotSpot->product)->id,
                     'product_name'  => optional($hotSpot->product)->name,
                     'product_slug'  => optional($hotSpot->product)->slug,
-                    'product_image' => optional($hotSpot->product)->image,
+                    'product_image' => optional($hotSpot)->image,
                     'price'         => optional($hotSpot)->price,
                     'promo_price'   => optional($hotSpot)->promo_price,
                     'url'           => optional($hotSpot)->url,

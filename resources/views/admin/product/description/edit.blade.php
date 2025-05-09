@@ -35,7 +35,8 @@
                 :selected="$product->category_id"
             />
 
-            <x-form.textarea type="textarea" name="excerpt" label="Wstęp" placeholder="Krótki wstęp..." :value="$product->descriptions->excerpt"  maxlength="600"/>
+            <x-form.textarea type="textarea" name="excerpt" label="Wstęp" placeholder="Krótki wstęp..." :value="
+            $product->descriptions?->excerpt"  maxlength="600"/>
             <x-form.select
                 name="status"
                 label="Status"
@@ -47,10 +48,10 @@
     ]"
                 :selected="$product->status"
             />
-            <x-form.input name="h1_title" label="H1" :value="$product->descriptions->h1_title"/>
-            <x-form.input name="meta_title" label="Meta Title" :value="$product->descriptions->meta_title"/>
-            <x-form.input name="meta_description" label="Meta Description" :value="$product->descriptions->meta_description"/>
-            <x-form.input name="meta_keywords" label="Meta Keywords" :value="$product->descriptions->meta_keywords"/>
+            <x-form.input name="h1_title" label="H1" :value="$product->descriptions?->h1_title"/>
+            <x-form.input name="meta_title" label="Meta Title" :value="$product->descriptions?->meta_title"/>
+            <x-form.input name="meta_description" label="Meta Description" :value="$product->descriptions?->meta_description"/>
+            <x-form.input name="meta_keywords" label="Meta Keywords" :value="$product->descriptions?->meta_keywords"/>
             <x-form.input name="manufacturer" label="Producent" :value="$product->manufacturer"/>
             <x-form.input name="sku" label="Kod" :value="$product->sku"/>
             <x-form.submit label="Edytuj"/>

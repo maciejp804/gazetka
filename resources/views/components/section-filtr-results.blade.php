@@ -101,7 +101,8 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
                 @foreach($items as $item)
-{{--                                        @dd($item)--}}
+
+
                     <x-product
                         :valid_from="$item['valid_from']"
                         :valid_to="$item['valid_to']"

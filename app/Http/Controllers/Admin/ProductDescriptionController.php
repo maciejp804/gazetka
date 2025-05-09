@@ -65,12 +65,12 @@ class ProductDescriptionController extends Controller
             'sku' => $validated['sku'],
         ]);
 
-        $product->globalDescription->update([
-           'excerpt' => $validated['excerpt'],
-           'h1_title' => $validated['h1_title'],
-           'meta_title' => $validated['meta_title'],
-           'meta_description' => $validated['meta_description'],
-           'meta_keywords' => $validated['meta_keywords'],
+        $product->descriptions()->updateOrCreate([
+           'excerpt' => $validated['excerpt'] ?? null,
+           'h1_title' => $validated['h1_title'] ?? null,
+           'meta_title' => $validated['meta_title'] ?? null,
+           'meta_description' => $validated['meta_description'] ?? null,
+           'meta_keywords' => $validated['meta_keywords'] ?? null,
         ]);
 
         return redirect()->route('admin.products.manage', $product)->with('update', 'Dane podstawowe zaktualizowane.');

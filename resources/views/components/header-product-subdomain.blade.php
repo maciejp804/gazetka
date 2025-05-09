@@ -25,7 +25,7 @@
     <div class="flex w-full">
          <span class="text-sm font-normal p-2">
             @if(!empty($item->excerpt))
-                 {{$item->excerpt}}
+                 {!! $item->excerpt !!}
             @endif
          </span>
     </div>

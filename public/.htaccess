@@ -9,18 +9,16 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Przekierowanie wielkich liter na małe w URL (case-insensitive URLs)
-#    RewriteMap lc int:tolower
-#    RewriteCond %{REQUEST_URI} [A-Z]
-#    RewriteRule ^(.*)$ ${lc:$1} [L,R=301]
+    # Przekierowanie z leroymerlin.gazetkapromocyjna.com.pl na leroy-merlin.gazetkapromocyjna.com.pl
+    RewriteCond %{HTTP_HOST} ^leroymerlin\.gazetkapromocyjna\.com\.pl$ [NC]
+    RewriteRule ^(.*)$ http://leroy-merlin.gazetkapromocyjna.com.pl/$1 [L,R=301]
 
-    # Przekierowanie z /politryka-prywatnosci.php na /politryka-prywatnosci
+    # Przekierowanie z /politryka-prywatnosci.php na /polityka-prywatnosci
     RewriteRule ^politykacookies\.php$ /polityka-cookies [R=301,L]
     RewriteRule ^regulamin\.php$ /regulamin [R=301,L]
     RewriteRule ^onas\.php$ /onas [R=301,L]
     RewriteRule ^donas\.php$ /kontakt [R=301,L]
     RewriteRule ^kontakt\.php$ /kontakt [R=301,L]
-
 
     # Przekierowanie z /abc-zakupowicza,2/ na /abc-zakupowicza (gdzie 'abc-zakupowicza' to stała część)
     RewriteCond %{REQUEST_URI} ^/abc-zakupowicza,\d+/$
@@ -33,7 +31,6 @@
     # Przekierowanie z /[nazwa_sieci]-gazetki-promocyjne-archiwum,[nr-strony]/ na / (strona główna)
     RewriteCond %{REQUEST_URI} ^/([a-zA-Z0-9_-]+)-gazetki-promocyjne-archiwum,\d+/?$
     RewriteRule ^([a-zA-Z0-9_-]+)-gazetki-promocyjne-archiwum,\d+/?$ / [L,R=301]
-
 
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
