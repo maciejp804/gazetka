@@ -7,7 +7,7 @@ import {
     initSwiperBlog,
     initSwiperLeafletSingle,
     initSwiperCategoryBlog, initSwiperVoucherPromo, initShopsSwiper, initProductSwiper, initSwiperLeafletSingleOther
-} from "./swiper/instances";
+} from "./swiper/instances.min.js";
 
 import {debounce, restoreInputStyle} from "./filter/helpers";
 import {

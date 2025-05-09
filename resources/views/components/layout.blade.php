@@ -29,10 +29,10 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <!-- GPT loader -->
-    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
-    <script>
-        window.googletag = window.googletag || {cmd: []};
-    </script>
+{{--    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>--}}
+{{--    <script>--}}
+{{--        window.googletag = window.googletag || {cmd: []};--}}
+{{--    </script>--}}
 
 
 

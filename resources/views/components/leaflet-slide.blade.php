@@ -1,13 +1,11 @@
-@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image_path','webp_path', 'avif_path', 'valid_to', 'valid_from','updated_at', 'name', 'slug'])
+@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image_path','webp_path', 'avif_path', 'valid_to', 'valid_from','updated_at', 'name', 'slug', 'width', 'height'])
 @php
 
     $toEnd = validationDate($valid_to, $valid_from, $updated_at);
 
 @endphp
 
-    @push('preload')
-        <link rel="preload" as="image" href="{{ Storage::url($webp_path.'.webp') }}" type="image/webp">
-    @endpush
+
 
 {{--@dd($item)--}}
 <div {{$attributes->merge(['class' => 'border border-gray-200 rounded p-2 mb-5'])}}>
@@ -15,15 +13,16 @@
         @if($toEnd['new'] === true)
             <span class="absolute top-[6%] -right-14 w-40 rotate-45 flex justify-center items-center h-6 bg-green-600 text-sm text-white text-center z-20">Nowość</span>
         @endif
+
         <div class="w-full">
             <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,'id' =>$id])}}#{{$page}}">
                 <picture>
-
+                    <source srcset="{{ Storage::url($avif_path.'.avif') }}" type="image/avif">
                     <source srcset="{{ Storage::url($webp_path.'.webp') }}" type="image/webp">
                     <img class="rounded object-cover object-top w-full h-40 2xs:h-52 xs:h-52 sm:h-60 md:h-56 2lg:h-60"
                          src="{{ Storage::url($image_path.'.jpg') }}"
-                         width="250" height="335"
-                         alt="pro-img5">
+                         width="{{ $width }}" height="{{ $height }}"
+                         alt="Okładka gazetki">
                 </picture>
 
             </a>

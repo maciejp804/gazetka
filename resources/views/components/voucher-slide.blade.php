@@ -16,7 +16,7 @@ $offer_image = $item->image ? $item->image : 'images/vouchers/default/voucher';
                     <source srcset="{{ Storage::url($offer_image.'.webp') }}" type="image/webp">
                     <img src="{{ Storage::url($offer_image.'.jpg') }}"
                          width="120" height="120"
-                         alt="{{$item->voucherStore->name}}">
+                         alt="{{$item->voucherStore->name}}" loading="lazy">
                 </picture>
             </div>
         </div>

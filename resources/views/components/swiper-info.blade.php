@@ -18,7 +18,7 @@
                     <div class="w-full bg-gray-100 rounded relative">
                         <div class="flex flex-col gap-y-2 text-center aspect-square justify-center">
                             <div>
-                                <img src="{{ $item->url }}" class="flex !w-14 m-auto " alt="image">
+                                <img src="{{ $item->url }}" class="flex !w-14 m-auto " alt="image" loading="lazy">
                             </div>
                             <div>
                                 <span class="font-semibold text-sm lg:text-base text-gray-700">{!! $item->title !!}</span>

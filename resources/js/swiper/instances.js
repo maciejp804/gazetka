@@ -67,7 +67,7 @@ export function initLeafletPromoSwiper() {
                     },
                     pagination: {el: ".swiper-pagination", dynamicBullets: true, clickable: true},
                 }, ".button-prev-leafletPromo", ".button-next-leafletPromo");
-            }, 1000);
+            }, 150);
         });
 }
 

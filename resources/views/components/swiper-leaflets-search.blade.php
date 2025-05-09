@@ -23,6 +23,8 @@
                         :image_path="$leaflet->cover->path ?? null"
                         :webp_path="$leaflet->cover->webp_path ?? null"
                         :avif_path="$leaflet->cover->avif_path ?? null"
+                        :width="$leaflet->cover->width ?? 250"
+                        :height="$leaflet->cover->height ?? 335"
 
                     />
                 @else
@@ -41,6 +43,8 @@
                             :image_path="$item['page_image'] ?? null"
                             :avif_path="$item['page_image'] ?? null"
                             :webp_path="$item['page_image'] ?? null"
+                            :width="250"
+                            :height="335"
                         />
                     @endforeach
                 @endif
