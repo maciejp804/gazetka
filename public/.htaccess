@@ -10,8 +10,8 @@
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
     # Przekierowanie z leroymerlin.gazetkapromocyjna.com.pl na leroy-merlin.gazetkapromocyjna.com.pl
-    RewriteCond %{HTTP_HOST} ^leroymerlin\.gazetkapromocyjna\.com\.pl$ [NC]
-    RewriteRule ^(.*)$ http://leroy-merlin.gazetkapromocyjna.com.pl/$1 [L,R=301]
+    RewriteCond %{HTTP_HOST} ^leroymerlin\.w-promocji\.pl$ [NC]
+    RewriteRule ^(.*)$ https://leroy-merlin.w-promocji.pl/$1 [L,R=301]
 
     # Przekierowanie z /politryka-prywatnosci.php na /polityka-prywatnosci
     RewriteRule ^politykacookies\.php$ /polityka-cookies [R=301,L]
