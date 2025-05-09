@@ -21,7 +21,7 @@
 
 
     @stack('head')
-
+    @stack('preload')
     <script>
         const mainDomain = " {{ config('app.main_domain') }}";
     </script>
