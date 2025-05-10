@@ -28,7 +28,7 @@ use App\Http\Controllers\Admin\HotSpotController as AdminHotSpotController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 
 
-$mainDomain = env('MAIN_DOMAIN', 'gazetkapromocyjna.local');
+$mainDomain = config('app.main_domain');
 
 //START SEARCH
 Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
