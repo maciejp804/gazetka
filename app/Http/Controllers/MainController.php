@@ -80,7 +80,7 @@ class MainController extends Controller
 
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
         $default_descriptions =  Description::getDefault(Route::currentRouteName());
-
+//        dd($leaflets);
 
         return view('main.index', [
 

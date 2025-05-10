@@ -10,8 +10,8 @@
     </x-slot:meta_description>
 
     @push('preload')
-        @foreach($leaflets_promo as $leaflet)
-            <link rel="preload" as="image" href="{{ Storage::url($leaflet->cover->image.'.webp') }}" type="image/webp">
+        @foreach($leaflets_promo->take(5) as $leaflet)
+            <link rel="preload" as="image" href="{{ Storage::url($leaflet->cover->webp_path.'.webp') }}" type="image/webp">
         @endforeach
     @endpush
 
