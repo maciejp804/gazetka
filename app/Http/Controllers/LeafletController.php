@@ -54,7 +54,7 @@ class LeafletController extends Controller
             ->orderBy('name')
             ->get();
 
-        $products = $this->productService->getHotSpots();
+        $products = $this->productService->getHotSpots('medium', null, null, null, null, 20);
 
         $leaflet_sort = SortOptionsService::getSortOptions();
 
