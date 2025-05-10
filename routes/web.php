@@ -171,15 +171,9 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
         ->name('subdomain.products.show');
 
 
-
     Route::get('/gazetka-promocyjna/{id}', [LeafletController::class, 'subdomainLeaflet'])
         ->name('subdomain.leaflet');
 
-
-
-    Route::get('/w-gazetce/{slug},{id}/', [RedirectController::class, 'productRedirect'])
-        ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
-        ->name('productRedirect');
 
     Route::get('/godziny-otwarcia/{city}-{address},{id}/', [RedirectController::class, 'addressRedirect'])
         ->where(['city' => '[a-z-]+', 'address' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
@@ -203,7 +197,7 @@ Route::domain($mainDomain)->group(function () {
     //Leaflets
     Route::get('/gazetki-promocyjne-{slug},{id}/{place}/', [RedirectController::class, 'placeRedirect'])
         ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+', 'place' => '[a-zA-Z0-9-]+'])  // Doprecyzowanie wzorców
-        ->name('main.place.redirect');
+        ->name('main.place.redirect.leaflet');
 
     Route::get('/gazetki-promocyjne-{slug},{id}', [RedirectController::class, 'leafletsRedirect'])
         ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców dla slug i id
@@ -223,11 +217,11 @@ Route::domain($mainDomain)->group(function () {
     //Shops
     Route::get('/sieci-handlowe-{slug},{id}/{place}/', [RedirectController::class, 'placeRedirect'])
         ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+', 'place' => '[a-zA-Z0-9-]+'])  // Doprecyzowanie wzorców
-        ->name('main.place.redirect');
+        ->name('main.place.redirect.shop');
 
     Route::get('/sieci-handlowe-{slug},{id}/', [RedirectController::class, 'shopRedirect'])
         ->where(['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców dla slug i id
-        ->name('main.leaflets.redirect');
+        ->name('main.shops.redirect');
 
     Route::get('/sieci-handlowe/{category}', [ShopController::class,'indexCategory'])->name('main.retailers.category');
     Route::get('/sieci-handlowe',[ShopController::class,'index'])->name('main.retailers');

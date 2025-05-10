@@ -49,7 +49,7 @@
         <x-loupe-button href="#"/>
     </x-search>
 </x-section>
-    <main class="flex flex-col lg:mx-5">
+    <main class="flex flex-col lg:mx-2">
         {{ $slot }}
     </main>
 <x-footer/>
