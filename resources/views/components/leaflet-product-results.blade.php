@@ -24,6 +24,8 @@
                                 :image_path="$item['page_image']"
                                 :avif_path="$item['page_image']"
                                 :webp_path="$item['page_image']"
+                                :width="250"
+                                height="335"
                             />
 
 

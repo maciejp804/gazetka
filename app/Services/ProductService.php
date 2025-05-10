@@ -26,7 +26,10 @@ class ProductService
                 $query->withPivot('sort_order');
             }
         ])
-            ->where('valid_to', '>=', $now);
+            ->where('valid_to', '>=', $now)
+            ->whereHas('product', function ($query) {
+            $query->where('status', 1);
+        });
 
         // Filtrowanie po priorytecie (powyżej zadanego priorytetu)
         if (!is_null($priority)) {

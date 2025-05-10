@@ -21,6 +21,8 @@
                             :image_path="$item->cover->path"
                             :webp_path="$item->cover->webp_path"
                             :avif_path="$item->cover->avif_path"
+                            :width="$item->cover->width"
+                            :height="$item->cover->height"
                         />
                     </div>
                     @if($adsStatus === true)
