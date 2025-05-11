@@ -18,7 +18,7 @@
     <x-ad-1 class="my-5"/>
 {{--    <x-admanager class="my-5 justify-center w-full md:min-h-25 lg:min-h-75" slot-name="homepage_header" :overrides="['page' => 'main.index']"/>--}}
 
-    <div class="flex mx-auto">
+    <div class="flex">
 
         {{-- Reklama pionowa po lewej stronie --}}
         <x-ad-3-vertical site="justify-end"/>
