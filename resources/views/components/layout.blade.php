@@ -39,14 +39,9 @@
 
 
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
-{{--    <script>--}}
-{{--        window.googletag = window.googletag || {cmd: []};--}}
-{{--        // googletag.cmd.push(function() {--}}
-{{--        //     googletag.defineSlot('/7894359647/baner_750X200-2', [[750, 300], [750, 250], [750, 200]], 'div-gpt-ad-1746940419645-0').addService(googletag.pubads());--}}
-{{--        //     googletag.pubads().enableSingleRequest();--}}
-{{--        //     googletag.enableServices();--}}
-{{--        // });--}}
-{{--    </script>--}}
+    <script>
+        window.googletag = window.googletag || { cmd: [] };
+    </script>
 
 
 
