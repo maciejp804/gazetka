@@ -22,7 +22,7 @@
 
         {{-- Reklama pionowa po lewej stronie --}}
 {{--        <x-ad-3-vertical site="justify-end"/>--}}
-        <x-admanager class="my-5 justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_left" :overrides="['page' => 'main.index']"/>
+        <x-admanager class="justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_left" :overrides="['page' => 'main.index']"/>
         <x-div-1060>
 
             <x-section>
@@ -94,8 +94,8 @@
                     :items="$vouchers"
                     main-route="main.vouchers"/>
             </x-section>
-
-            <x-admanager class="my-5 justify-center w-full md:min-h-25 lg:min-h-75" slot-name="homepage_header" :overrides="['page' => 'main.index']"/>
+                <x-ad-1 class="my-5"/>
+{{--            <x-admanager class="my-5 justify-center w-full md:min-h-25 lg:min-h-75" slot-name="homepage_header" :overrides="['page' => 'main.index']"/>--}}
 
             <x-section>
                 <x-h2-title class="flex " main-route="main.leaflets">Przeglądaj gazetki i katalogi</x-h2-title>
@@ -133,8 +133,8 @@
 
             <x-ad-1 class="mb-5"/>
         </x-div-1060>
-
-        <x-admanager class="my-5 justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_right" :overrides="['page' => 'main.index']"/>
+        <x-ad-3-vertical site="justify-start"/>
+{{--        <x-admanager class="justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_right" :overrides="['page' => 'main.index']"/>--}}
 
     </div>
 
