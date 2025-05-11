@@ -13,7 +13,7 @@
                     <img class="w-full rounded h-20 2xs:h-32 object-cover"
                          src="{{ Storage::url($product_image.'.jpg') }}"
                          width="300" height="300"
-                         alt="{{$product_name}}">
+                         alt="{{$product_name}}" loading="lazy">
                 </picture>
             </div>
 {{--            <x-heart-button class="border" iClass="text-gray-300 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}

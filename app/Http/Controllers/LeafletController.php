@@ -37,15 +37,13 @@ class LeafletController extends Controller
 
         $leaflets = $this->leafletService->getLeafletsSimplePaginate(10);
 
-        $placesAll = Place::all();
-
         $location = Cookie::get('user_location');
 
         if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
+            $place = Place::where('id', '=', 1172)->first();
         } else {
             $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+            $place = Place::where('id', '=', $locationData['id'])->first();
         }
 
         $product_categories = Category::where('status', "active")
@@ -53,6 +51,7 @@ class LeafletController extends Controller
             ->where('parent_id', '=', null)
             ->orderBy('name')
             ->get();
+
 
         $products = $this->productService->getHotSpots('medium', null, null, null, null, 20);
 
@@ -115,15 +114,13 @@ class LeafletController extends Controller
 //        dd($products);
         $leaflets = $this->leafletService->getLeafletsSimplePaginate(10, $category->id);
 
-        $placesAll = Place::all();
-
         $location = Cookie::get('user_location');
 
         if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
+            $place = Place::where('id', '=', 1172)->first();
         } else {
             $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+            $place = Place::where('id', '=', $locationData['id'])->first();
         }
 
 
@@ -259,10 +256,8 @@ class LeafletController extends Controller
                 }
             }
         } else {
-            $products_excerpt = 'Nie czekaj! Sprawdź, co jeszcze ma do zaoferowania Aldi w miesiącu kwiecień!';
+            $products_excerpt = 'Nie czekaj! Sprawdź, co jeszcze '. $shop->name .' ma do zaoferowania w ' .(monthReplace(date("Y-m-d"),'full_loc', 'm')).'!';
         }
-
-
 
         return view('subdomain.leaflet', data:
             [

@@ -12,6 +12,11 @@
     <title>@if($meta_title) {{ $meta_title }} @else Brak tytułu @endif </title>
     <meta name="Description" content="@if($meta_description) {{ $meta_description }} @else Brak tytułu @endif ">
 
+    {{-- Preconnect --}}
+    <link rel="preconnect" href="https://securepubads.g.doubleclick.net">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('icons/android-chrome-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="512x512" href="{{ asset('icons/android-chrome-512x512.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('icons/favicon-32x32.png') }}">
@@ -33,6 +38,11 @@
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
         window.googletag = window.googletag || {cmd: []};
+        // googletag.cmd.push(function() {
+        //     googletag.defineSlot('/7894359647/baner_750X200-2', [[750, 300], [750, 250], [750, 200]], 'div-gpt-ad-1746940419645-0').addService(googletag.pubads());
+        //     googletag.pubads().enableSingleRequest();
+        //     googletag.enableServices();
+        // });
     </script>
 
 
