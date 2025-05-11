@@ -15,14 +15,14 @@
         @endforeach
     @endpush
 
-{{--    <x-ad-1 class="my-5"/>--}}
-    <x-admanager class="my-5 justify-center w-full md:min-h-25 lg:min-h-75" slot-name="homepage_header" :overrides="['page' => 'main.index']"/>
+    <x-ad-1 class="my-5"/>
+{{--    <x-admanager class="my-5 justify-center w-full md:min-h-25 lg:min-h-75" slot-name="homepage_header" :overrides="['page' => 'main.index']"/>--}}
 
     <div class="flex mx-auto">
 
         {{-- Reklama pionowa po lewej stronie --}}
-{{--        <x-ad-3-vertical site="justify-end"/>--}}
-        <x-admanager class="justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_left" :overrides="['page' => 'main.index']"/>
+        <x-ad-3-vertical site="justify-end"/>
+{{--        <x-admanager class="justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_left" :overrides="['page' => 'main.index']"/>--}}
         <x-div-1060>
 
             <x-section>
