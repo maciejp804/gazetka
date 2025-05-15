@@ -66,7 +66,7 @@
 
                     @if($productsInLeaflets->isNotEmpty())
                         <span class="text-center font-bold text-1xl">od {{$productsInLeaflets[0]['promo_price']}}zł</span>
-                        <a href="{{route('subdomain.leaflet',['subdomain'=> $productsInLeaflets[0]['shop_slug'], 'id' => $productsInLeaflets[0]['leaflet_id']])}}#{{$productsInLeaflets[0]['page_number']}}" class="flex self-center bg-orange-500 rounded-3xl px-4 py-2 text-white font-semibold text-sm">Przejdź do gazetki</a>
+                        <a href="{{route('subdomain.leaflet',['subdomain'=> $productsInLeaflets[0]['shop_slug'], 'data' => $productsInLeaflets[0]['leaflet_valid_from'],'id' => $productsInLeaflets[0]['leaflet_id']])}}#{{$productsInLeaflets[0]['page_number']}}" class="flex self-center bg-orange-500 rounded-3xl px-4 py-2 text-white font-semibold text-sm">Przejdź do gazetki</a>
                     @else
                         <span class="text-center font-bold text-1xl">Brak ofert</span>
                     @endif

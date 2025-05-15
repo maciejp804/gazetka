@@ -10,7 +10,6 @@
     </x-slot:meta_description>
 
     <div class="flex flex-col gap-y-4">
-
         {{-- Reklama pionowa po lewej stronie --}}
 {{--        <x-ad-3-vertical site="justify-end"/>--}}
         <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
@@ -53,6 +52,46 @@
                     <x-body-blog :body="$blog->body"/>
                 </x-section>
             </div>
+            <script type="application/ld+json">
+                {!! json_encode([
+                    '@context' => 'https://schema.org/',
+                    '@type' => 'NewsArticle',
+                    'headline' => $h1_title,
+                    'image' => [
+                        '@type' => 'ImageObject',
+                        'url' => Storage::url($blog->image . '.webp'),
+                        'height' => $height,
+                        'width' => $width,
+                    ],
+                    'mainEntityOfPage' => [
+                        '@type' => 'WebPage',
+                        '@id' => route('main.blogs.article', ['category' => $blogCategory->slug, 'article' => $blog->slug]),
+                    ],
+                    'keywords' => '',
+                    'description' => $excerpt,
+                    'articleBody' => strip_tags($blog->body),
+                    'datePublished' => $blog->created_at->format('c'),
+                    'dateModified' => $blog->updated_at->format('c'),
+                    'author' => [
+                        '@type' => 'Person',
+                        'name' => $blog->user->name,
+                        'image' => '',
+                        'url' => '',
+                        'description' => '',
+                    ],
+                    'publisher' => [
+                        '@type' => 'Organization',
+                        'name' => 'GazetkaPromocyjna',
+                        'logo' => [
+                            '@type' => 'ImageObject',
+                            'url' => 'https://hoian.pl/assets/image/Logo.png',
+                            'width' => 230,
+                            'height' => 131,
+                        ],
+                    ],
+                ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+            </script>
+
             <div class="hidden 2lg:flex flex-col w-1/5 gap-y-4">
                 <span class="font-semibold text-gray-700 text-base">Poleceane w kategorii</span>
                 @foreach($blogs as $article)

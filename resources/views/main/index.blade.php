@@ -15,14 +15,29 @@
         @endforeach
     @endpush
 
-    <x-ad-1 class="my-5"/>
-{{--    <x-admanager class="my-5 justify-center w-full md:min-h-25 lg:min-h-75" slot-name="homepage_header" :overrides="['page' => 'main.index']"/>--}}
+    {{-- Reklama pozioma pod header --}}
+    <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-75">
+        <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+        <x-admanager
+            slot-name="homepage_header"
+            :overrides="['page' => 'main.index']"
+        />
+    </div>
 
-    <div class="flex">
+
+
+    <div class="flex justify-center">
 
         {{-- Reklama pionowa po lewej stronie --}}
-        <x-ad-3-vertical site="justify-end"/>
-{{--        <x-admanager class="justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_left" :overrides="['page' => 'main.index']"/>--}}
+        <div class="hidden mt-5 justify-end xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_left"
+                :overrides="['page' => 'main.index']"
+            />
+        </div>
+
+
         <x-div-1060>
 
             <x-section>
@@ -51,6 +66,16 @@
                     main-route="main.retailers"
                 />
             </x-section>
+
+            {{-- Reklama pozioma - 1--}}
+
+            <div class="hidden 3xs:flex min-h-150 my-5 mx-auto justify-center md:min-h-25 3xl:hidden">
+                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                <x-admanager
+                    slot-name="homepage_middle_1"
+                    :overrides="['page' => 'main.index']"
+                />
+            </div>
 
             <x-section>
                 <x-swiper-products
@@ -94,8 +119,15 @@
                     :items="$vouchers"
                     main-route="main.vouchers"/>
             </x-section>
-                <x-ad-1 class="my-5"/>
-{{--            <x-admanager class="my-5 justify-center w-full md:min-h-25 lg:min-h-75" slot-name="homepage_header" :overrides="['page' => 'main.index']"/>--}}
+
+            {{-- Reklama pozioma - 2 --}}
+{{--            <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-25">--}}
+{{--                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>--}}
+{{--                <x-admanager--}}
+{{--                    slot-name="homepage_middle_2"--}}
+{{--                    :overrides="['page' => 'main.index']"--}}
+{{--                />--}}
+{{--            </div>--}}
 
             <x-section>
                 <x-h2-title class="flex " main-route="main.leaflets">Przeglądaj gazetki i katalogi</x-h2-title>
@@ -131,14 +163,32 @@
                 />
             </x-section>
 
-            <x-ad-1 class="mb-5"/>
+
         </x-div-1060>
-        <x-ad-3-vertical site="justify-start"/>
-{{--        <x-admanager class="justify-end md:min-h-25 lg:min-h-75" slot-name="homepage_sidebar_right" :overrides="['page' => 'main.index']"/>--}}
+
+        {{-- Reklama pionowa po prawej stronie --}}
+        <div class="hidden mt-5 justify-start xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_right"
+                :overrides="['page' => 'main.index']"
+            />
+        </div>
+
+
 
     </div>
 
     <x-section class="flex-col mx-4 xl:m-auto">
+
+        {{-- Reklama pozioma nad footer --}}
+        <div class="hidden 3xs:flex min-h-25 my-5 mx-auto justify-center md:min-h-75 xl:min-h-96">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_footer"
+                :overrides="['page' => 'main.index']"
+            />
+        </div>
         <div class="bg-gray-200 rounded py-4 mb-5 sm:py-20 ">
             <x-about class="1xl:w-265 lg:m-auto" :counter_leaflets="$counter_leaflets" :counter_shops="$counter_shops" :counter_products="$counter_products"/>
         </div>

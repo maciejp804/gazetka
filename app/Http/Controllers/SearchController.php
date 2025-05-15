@@ -96,7 +96,7 @@ class SearchController extends Controller
             $leaflets = $this->leafletsGetOrderBy($time, $leaflets);
 
             $results = $leaflets->get();
-
+//            dd($results);
 
         }
 
@@ -301,7 +301,7 @@ class SearchController extends Controller
         foreach ($data['combinations'] as $combination) {
             if ($i >= $start) {
 
-                if(str_contains($combination, 'q') && str_contains($combination, 'w')) {
+                if(str_contains($combination, 'a') || str_contains($combination, '') ) {
                     //$url = 'https://pepco.pl/wp-content/uploads/2024/11/P10_'.$l.'_Leaflet_1.jpg';
                     $url = 'https://gazetki.aldi.pl/2025/kw'.$week.'/25k'.$week.'g'.$number . $combination . '//GetPDF.ashx';
                     //$url = 'https://gazetki.aldi.pl/2024/kw33/24k33g01cdga//GetPDF.ashx';

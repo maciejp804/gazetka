@@ -17,6 +17,7 @@ use App\Services\ProductService;
 use App\Services\SortOptionsService;
 use App\Services\StaticDescriptions;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 class MainController extends Controller
@@ -223,7 +224,7 @@ class MainController extends Controller
 
     public function subdomainIndex($subdomain)
     {
-
+        Log::info('Current Route:', [Route::currentRouteName()]);
         $shop = Shop::with('category')->where('slug', $subdomain)->first();
 
         if(!$shop)
@@ -255,7 +256,7 @@ class MainController extends Controller
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
-            ['label' => 'Gazetki '. $shop->name, 'url' => '']
+            ['label' => $shop->name, 'url' => '']
         ];
 
         $vouchers = $this->vouchers();

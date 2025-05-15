@@ -9,6 +9,23 @@
               @foreach($items->faq as $item)
                   <x-faq-item :loop="$loop->index" :question="$item['question']" :answer="$item['answer']"/>
               @endforeach
+                  <script type="application/ld+json">
+                      {
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                      @foreach($items->faq as $item)
+                          {"@type": "Question",
+                         "name": "{{$item['question']}}",
+                         "acceptedAnswer": {
+                           "@type": "Answer",
+                           "text": "<p>{{$item['answer']}}</p>"
+                         }
+                       }@if(!$loop->last),@endif
+                      @endforeach
+                        ]
+                      }
+                  </script>
           </div>
           <div class="bg-gray-100 p-4 max-h-60 mx-7 mb-7">
               <div class="flex flex-col text-center gap-y-6">

@@ -38,6 +38,7 @@
                         :shop_slug="$item['shop_slug']"
                         :page_number="$item['page_number']"
                         :leaflet_id="$item['leaflet_id']"
+                        :leaflet_valid_from="$item['leaflet_valid_from']"
                         :url="$item['url']"
                     />
                 @endforeach

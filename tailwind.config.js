@@ -64,6 +64,7 @@ export default {
             }
             ,
             fontSize: {
+                '2xs' : '0.525rem',
                 '1xs' : '0.625rem',
                 '1xl' : '1.375rem',
                 'extreme' : ['4rem', '3rem']
@@ -102,6 +103,8 @@ export default {
 
             },
             minWidth: {
+                '25' : '6.25rem', /* 100px */
+                '75' : '18.75rem', /* 300px */
                 '265' : '66.25rem', /* 1060px */
                 '280' : '70rem', /* 1120px */
             },
@@ -140,6 +143,7 @@ export default {
                 '140' : '35rem',
                 '144' : '36rem',
                 '148' : '37rem',
+                '150' : '37.5rem',
                 '152' : '38rem',
                 '153' : '38.25rem',
                 '154' : '38.5rem',
@@ -161,7 +165,9 @@ export default {
             },
             minHeight: {
                 '25' : '6.25rem', /* 100px */
+                '70' : '17.5rem',
                 '75' : '18.75rem', /* 300px */
+                '150' : '37.5rem',
             },
             screens: {
                 '3xs' : '320px',

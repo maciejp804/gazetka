@@ -16,7 +16,7 @@
                 <span>{{$item['promo_price']}} zł</span>
             </div>
             <div class="col-span-1">
-                <a class="pb-2 text-blue-550 text-[13px] font-bold py-1 lg:p-0" href="{{route('subdomain.leaflet',['subdomain'=> $item['shop_slug'], 'id' => $item['leaflet_id']])}}#{{$item['page_number']}}">Zobacz</a>
+                <a class="pb-2 text-blue-550 text-[13px] font-bold py-1 lg:p-0" href="{{route('subdomain.leaflet',['subdomain'=> $item['shop_slug'],'data' => $item['leaflet_valid_from'], 'id' => $item['leaflet_id']])}}#{{$item['page_number']}}">Zobacz</a>
             </div>
         </div>
 

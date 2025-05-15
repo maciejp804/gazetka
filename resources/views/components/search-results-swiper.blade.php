@@ -16,6 +16,8 @@
             :image_path="$item->path"
             :webp_path="$item->webp_path"
             :avif_path="$item->avif_path"
+            :width="$item->width"
+            :height="$item->height"
         />
     @endforeach
 @endif

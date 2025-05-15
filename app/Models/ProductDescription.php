@@ -53,7 +53,7 @@ class ProductDescription extends Model
 
 
         return new self([
-            'meta_title' => str_replace(['{product}', '{shop}'], [mb_ucfirst($product->name), $shop_name], $defaults['meta_title']),
+            'meta_title' => str_replace(['{product}', '{shop}', '{data}'], [mb_ucfirst($product->name), $shop_name, monthReplace(date('d-m-Y'), 'full', 'm-Y')], $defaults['meta_title']),
             'meta_description' => str_replace(['{product}', '{shop}'], [$product->name, $shop_name], $defaults['meta_description']),
             'meta_keywords' => str_replace(['{product}', '{shop}'], [$product->name, $shop_name], $defaults['meta_keywords']),
             'h1_title' => str_replace(['{product}', '{shop}'], [mb_ucfirst($product->name), $shop_name], $defaults['h1_title']),

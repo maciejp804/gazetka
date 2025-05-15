@@ -7,7 +7,8 @@
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
                 @foreach($items as $item)
-                    <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-52 xl:w-56 1xl:w-50">
+
+                    <div class="flex m-auto w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-44 2lg:w-50">
                         <x-leaflet-slide
                             class="relative w-full"
                             :valid_from="$item->valid_from"
@@ -28,20 +29,62 @@
                     @if($adsStatus === true)
                         @switch($loop->iteration)
                             @case(5)
-                                <x-ad-1 class="hidden lg:grid lg:col-span-5 lg:my-5"/>
+                                {{-- Reklama pozioma - 1--}}
+                                <div class="hidden lg:grid lg:col-span-5 lg:my-5 lg:min-h-75 mx-auto">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_desktop_2"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
                                 @break
-
                             @case(3)
-                                <x-ad-1 class="hidden sm:grid sm:col-span-3 sm:my-5 lg:hidden"/>
+                                {{-- Reklama pozioma - 1--}}
+                                <div class="hidden sm:grid sm:col-span-3 sm:my-5 sm:min-h-75 mx-auto lg:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_desktop_1"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
                                 @break
                             @case(2)
+                                {{-- Reklama pozioma mobile- 1--}}
+                                <div class="col-span-2 my-5 min-h-70 mx-auto sm:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_mobile_1"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
+                                @break
                             @case(6)
-                            @case(12)
-                                <x-ad-1 class="col-span-2 my-5 sm:hidden"/>
+                                {{-- Reklama pozioma mobile- 2--}}
+                                <div class="col-span-2 my-5 min-h-70 mx-auto sm:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_mobile_2"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
                                 @break
                         @endswitch
                     @endif
+
+{{--                    @if($loop->last && $adsStatus && !in_array($loop->iteration, [2, 3, 5, 12]))--}}
+{{--                        --}}{{-- Reklama pozioma - 2--}}
+
+{{--                        <div class="hidden lg:grid lg:col-span-5 lg:my-5 min-h-150 mx-auto md:min-h-25 3xl:hidden">--}}
+{{--                            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>--}}
+{{--                            <x-admanager--}}
+{{--                                slot-name="homepage_middle_2"--}}
+{{--                                :overrides="['page' => 'main.index']"--}}
+{{--                            />--}}
+{{--                        </div>--}}
+{{--                    @endif--}}
+
                 @endforeach
+
             @else
                 <p class="col-span-2 sm:col-span-3 lg:col-span-5 flex justify-center w-full p-4 text-gray-500 text-sm">Brak aktualnych ofert</p>
             @endif
@@ -116,6 +159,7 @@
                         :shop_slug="$item['shop_slug']"
                         :page_number="$item['page_number']"
                         :leaflet_id="$item['leaflet_id']"
+                        :leaflet_valid_from="$item['leaflet_valid_from']"
                         :url="$item['url']"
 
                     />

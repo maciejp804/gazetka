@@ -8,13 +8,34 @@
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
+    @push('preload')
+        @foreach($leaflets_promo->take(5) as $leaflet)
+            <link rel="preload" as="image" href="{{ Storage::url($leaflet->cover->webp_path.'.webp') }}" type="image/webp">
+        @endforeach
+    @endpush
 
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
-    <x-ad-1 class="my-5"/>
-    <div class="flex">
+
+
+    {{-- Reklama pozioma pod header --}}
+    <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-75">
+        <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+        <x-admanager
+            slot-name="homepage_header"
+            :overrides="['page' => 'main.index_gps']"
+        />
+    </div>
+
+    <div class="flex justify-center">
 
         {{-- Reklama pionowa po lewej stronie --}}
-        <x-ad-3-vertical site="justify-end"/>
+        <div class="hidden mt-5 justify-end xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_left"
+                :overrides="['page' => 'main.index_gps']"
+            />
+        </div>
 
         <x-div-1060>
             <x-section>
@@ -44,6 +65,16 @@
                     main-route="main.retailers"
                 />
             </x-section>
+
+            {{-- Reklama pozioma - 1--}}
+
+            <div class="hidden 3xs:flex min-h-150 my-5 mx-auto justify-center md:min-h-25 3xl:hidden">
+                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                <x-admanager
+                    slot-name="homepage_middle_1"
+                    :overrides="['page' => 'main.index_gps']"
+                />
+            </div>
 
             <x-section>
                 <x-swiper-products
@@ -118,7 +149,6 @@
                     main-route="main.vouchers"/>
             </x-section>
 
-            <x-ad-1 class="my-5"/>
 
             <x-section>
                 <x-h2-title class="flex " main-route="main.leaflets">Przeglądaj gazetki i katalogi</x-h2-title>
@@ -155,15 +185,30 @@
                 />
             </x-section>
 
-            <x-ad-1 class="my-5"/>
         </x-div-1060>
 
         {{-- Reklama pionowa po prawej stronie --}}
-        <x-ad-3-vertical site="justify-start"/>
+        <div class="hidden mt-5 justify-start xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_right"
+                :overrides="['page' => 'main.index_gps']"
+            />
+        </div>
 
     </div>
 
-    <x-section class="flex-col mx-4 xl:m-auto w-full">
+    <x-section class="flex-col px-4 xl:m-auto w-full">
+
+        {{-- Reklama pozioma nad footer --}}
+        <div class="hidden 3xs:flex 3xs:w-full min-h-25 my-5 mx-auto justify-center md:min-h-75 xl:min-h-96">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_footer"
+                :overrides="['page' => 'main.index_gps']"
+            />
+        </div>
+
         <div class="bg-gray-200 rounded py-4 mb-5 sm:py-20 ">
             <x-about class="1xl:w-265 lg:m-auto" :counter_leaflets="$counter_leaflets" :counter_shops="$counter_shops" :counter_products="$counter_products"/>
         </div>

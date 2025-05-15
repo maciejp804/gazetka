@@ -31,7 +31,7 @@
 
 
     <x-ad-1 class="my-5"/>
-    <div class="flex mb-2">
+    <div class="flex justify-center mb-2">
 
         <x-div-1060>
             <x-section class="flex flex-col">

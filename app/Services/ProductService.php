@@ -116,6 +116,7 @@ class ProductService
                     'page_image'     => $hotSpot->page->image_path,
                     'page_number'    => optional($leaflet->pivot)->sort_order,
                     'leaflet_id'     => $leaflet->id,
+                    'leaflet_valid_from' => date('Y-m-d', strtotime($leaflet->valid_from)),
                     'shop_image'     => optional($leaflet->shop)->image,
                     'shop_name'      => optional($leaflet->shop)->name,
                     'shop_slug'      => optional($leaflet->shop)->slug,
@@ -151,6 +152,7 @@ class ProductService
                 return [
                     'leaflet_id'    => $leaflet?->id,
                     'leaflet_title' => $leaflet?->title,
+                    'leaflet_valid_from' => date('Y-m-d', strtotime($leaflet->valid_from)),
                     'shop_name'     => $leaflet?->shop?->name,
                     'shop_slug'     => $leaflet?->shop?->slug,
                     'shop_image'    => $leaflet?->shop?->image,
@@ -178,6 +180,7 @@ class ProductService
                 $leaflet = $item->page->leaflets->first();
                 return [
                     'leaflet_id' => $leaflet->id ?? null,
+                    'leaflet_valid_from' => date('Y-m-d', strtotime($leaflet->valid_from)),
                     'name' => $leaflet->shop->name ?? 'Brak sklepu',
                     'slug' => $leaflet->shop->slug ?? 'Brak sklepu',
                     'shop_image' => $leaflet->shop->image ?? 'Brak sklepu',

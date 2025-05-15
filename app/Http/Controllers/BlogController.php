@@ -9,18 +9,23 @@ use App\Models\Description;
 use App\Models\Leaflet;
 use App\Models\Place;
 use App\Models\Voucher;
+use App\Services\ImageService;
 use App\Services\LeafletService;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Laravel\Facades\Image;
 
 class BlogController extends Controller
 {
 
     protected LeafletService $leafletService;
+    protected ImageService $imageService;
 
-    public function __construct(LeafletService $leafletService)
+    public function __construct(LeafletService $leafletService, ImageService $imageService)
     {
         $this->leafletService = $leafletService;
+        $this->imageService = $imageService;
     }
 
     public function index()
@@ -176,7 +181,15 @@ class BlogController extends Controller
             abort(404);
         }
 
-        $blogs = $blogs
+        $path = $blog->image . '.webp';
+
+    if (Storage::disk('public')->exists($path)) {
+        $image = Image::read(Storage::disk('public')->get($path));
+        $width = $image->width();
+        $height = $image->height();
+    }
+
+    $blogs = $blogs
             ->where('slug', '!=', $article)->take(10);
 
         $placesAll = Place::all();
@@ -212,6 +225,8 @@ class BlogController extends Controller
                 'blogCategory' => $blogCategory,
                 'blog' => $blog,
                 'blogs' => $blogs,
+                'width' => $width,
+                'height' => $height,
                 'breadcrumbs' => $breadcrumbs
             ]);
     }

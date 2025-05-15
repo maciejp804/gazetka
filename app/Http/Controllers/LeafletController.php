@@ -7,7 +7,6 @@ use App\Models\Blog;
 use App\Models\Category;
 use App\Models\Description;
 use App\Models\Leaflet;
-use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\Shop;
@@ -160,12 +159,16 @@ class LeafletController extends Controller
                 'category' => $category,
             ]);
     }
-    public function subdomainLeaflet($subdomain, $id)
+    public function subdomainLeaflet($subdomain, $data, $id)
     {
+        Log::info('Current Route:', [Route::currentRouteName()]);
         $shop = Shop::where('slug', $subdomain)->first();
 
         $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
             ->find($id);
+
+
+
 
         $productIds = $leaflet->pages
             ->flatMap(fn ($page) => $page->hotSpots)   // zbierz wszystkie hotspoty
@@ -268,10 +271,10 @@ class LeafletController extends Controller
 
                 // Opisy i dane globalne
                 'h1_title' => $descriptions->h1_title ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
-                        [$leaflet->title,$shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to,'full_gen')],
+                        [$leaflet->title,$shop->name, date('d.m.Y', strtotime($leaflet->valid_from)), monthReplace($leaflet->valid_to,'full_gen')],
                         $default_descriptions->h1_title) ?? "DoMyślny",
                 'meta_title'=> $descriptions->meta_title ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}'],
-                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to,'full_gen', 'd-m')],
+                        [$leaflet->title, $shop->name, date('d.m', strtotime($leaflet->valid_from)), date('d.m.Y', strtotime($leaflet->valid_to))],
                         $default_descriptions->meta_title) ?? "DoMyślny",
                 'meta_description' => $descriptions->meta_description ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}'],
                         [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to,'full_gen', 'd-m')],

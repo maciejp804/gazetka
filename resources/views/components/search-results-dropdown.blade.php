@@ -6,9 +6,14 @@
         @endif
         @foreach($products as $product)
             @if($searchType !== 'admin-products')
-                <a href="{{route('main.product', ['slug' => $product->slug])}}" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
-                    @if($product->image)
+                <a href="{{route('main.product', ['slug' => $product->slug])}}" class="flex px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
+                    @if($product->image && Storage::disk('public')->exists($product->image.'.webp'))
                         <img src="{{ Storage::url($product->image.'.webp') }}" alt="{{ $product->name }}" class="inline-block w-6 h-6 mr-2">
+                    @else
+                        <div class="inline-block w-6 h-6 mr-2">
+                            <x-header.svg svg="search" class="fill-gray-400" size=' h-5 w-5'/>
+                        </div>
+
                     @endif
                     {{ $product->name }}
                 </a>

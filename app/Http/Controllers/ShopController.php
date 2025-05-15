@@ -207,7 +207,7 @@ class ShopController extends Controller
 
 
                 'h1_title'=> $shop->name.' '.$place->name.', '.$placeAddress->address,
-                'meta_title'=> 'Gazetki promocyjne, nowe i nadchodzące promocje | GazetkaPromocyjna.com.pl',
+                'meta_title'=>$shop->name.' '.$place->name.', '.$placeAddress->address .' 🔥 godziny otwarcia',
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
                 'excerpt' => $excerpt,
                 'breadcrumbs' => $breadcrumbs,

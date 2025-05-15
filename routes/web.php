@@ -170,8 +170,18 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
     Route::get('/w-gazetce/{slug}', [ProductController::class, 'showSubdomain'])
         ->name('subdomain.products.show');
 
+    Route::get('/{slug}-gazetka-promocyjna-{combined}/', [RedirectController::class, 'leafletRedirect'])
+        ->where([
+            'slug' => '[a-zA-Z0-9-]+',
+            'combined' => '[0-9]{4}-[0-9]{2}-[0-9]{2},[0-9]+'
+        ])
+        ->name('leafletRedirect');
 
-    Route::get('/gazetka-promocyjna/{id}', [LeafletController::class, 'subdomainLeaflet'])
+    Route::get('/gazetka-promocyjna-{data}/{id}', [LeafletController::class, 'subdomainLeaflet'])
+        ->where([
+            'data' => '[0-9]{4}-[0-9]{2}-[0-9]{2}',
+            'id' => '[0-9]+'
+        ])
         ->name('subdomain.leaflet');
 
 
@@ -179,9 +189,13 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
         ->where(['city' => '[a-z-]+', 'address' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
         ->name('addressRedirect');
 
-    Route::get('/{slug}-gazetka-promocyjna-{data},{id}/', [RedirectController::class, 'leafletRedirect'])
-        ->where(['slug' => '[a-zA-Z0-9-]+', 'data' => '[0-9-]+', 'id' => '[0-9]+'])  // Doprecyzowanie wzorców
+    Route::get('/{slug}-gazetka-promocyjna-{combined}', [RedirectController::class, 'leafletRedirect'])
+        ->where([
+            'slug' => '[a-zA-Z0-9-]+',
+            'combined' => '[0-9]{4}-[0-9]{2}-[0-9]{2},[0-9]+'
+        ])
         ->name('leafletRedirect');
+
 
     Route::get('/{community}/{address}', [ShopController::class, 'subdomainShowAddress'])
         ->name('subdomain.shop_address');

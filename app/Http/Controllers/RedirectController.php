@@ -364,17 +364,18 @@ class RedirectController extends Controller
             'address' => $marker->slug], 301);
     }
 
-    public function leafletRedirect($subdomain, $shop, $data, $id)
+    public function leafletRedirect($subdomain, $shop, $combined)
     {
         Log::info('Current Route:', [Route::currentRouteName()]);
 
+        [$data, $id] = explode(',', $combined);
         $leaflet = Leaflet::with('shop', 'pages', 'cover')
             ->where('number', $id)
             ->whereHas('shop', function ($query) use ($subdomain) {
                 $query->where('slug', $subdomain);
             })
-            ->whereHas('cover')
-            ->whereHas('pages')
+//            ->whereHas('cover')
+//            ->whereHas('pages')
             ->first();
 
 
@@ -384,8 +385,18 @@ class RedirectController extends Controller
             abort(404);
         }
 
+        $hasCover = $leaflet->cover;
+        $hasPages = $leaflet->pages;
+
+        if(!$hasCover || !$hasPages)
+        {
+            return redirect()->route('subdomain.index', [
+                'subdomain' => $leaflet->shop->slug], 301)->with('error', 'Gazetka przeniesiona do archiwum');
+        }
+
         return redirect()->route('subdomain.leaflet', [
             'subdomain' => $leaflet->shop->slug,
+            'data' => date('Y-m-d',strtotime($leaflet->valid_from)),
             'id' => $leaflet->id], 301);
     }
 

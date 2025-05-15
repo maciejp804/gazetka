@@ -9,6 +9,8 @@ use Symfony\Component\DomCrawler\Crawler;
 if (!function_exists('monthReplace')) {
     function monthReplace ($date, $type, $format = 'd-m-Y', $separator = ' ')
     {
+        $date = is_string($date) ? $date : (string) $date;
+
         $month_array = array(
             1 => ['excerpt' => 'sty', 'full' => 'styczeń', 'full_gen' => 'stycznia', 'full_loc' => 'styczniu'],
             2 => ['excerpt' => 'lut', 'full' => 'luty', 'full_gen' => 'lutego', 'full_loc' => 'lutym'],

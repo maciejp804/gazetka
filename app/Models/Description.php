@@ -41,10 +41,10 @@ class Description extends Model
         }
 
         return new self([
-            'meta_title' => str_replace(['{city}', '{shop}'], [$name_locative, $shop], $defaults['meta_title']),
+            'meta_title' => str_replace(['{city}', '{shop}', '{data}'], [$name, $shop, date('d.m.Y')], $defaults['meta_title']),
             'meta_description' => str_replace(['{city}', '{shop}'], [$name_locative, $shop], $defaults['meta_description']),
             'meta_keywords' => str_replace(['{city}', '{shop}'], [$name, $shop], $defaults['meta_keywords']),
-            'h1_title' => str_replace(['{city}', '{shop}'], [$name_locative, $shop], $defaults['h1_title']),
+            'h1_title' => str_replace(['{city}', '{shop}', '{data}'], [$name, $shop, date('d.m.Y')], $defaults['h1_title']),
             'excerpt' => str_replace(['{city}', '{shop}'], [$name_locative, $shop], $defaults['excerpt']),
         ]);
     }

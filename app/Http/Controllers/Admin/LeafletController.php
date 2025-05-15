@@ -277,7 +277,7 @@ class LeafletController extends Controller
 
     protected function getLeaflets($query = null)
     {
-        $queryBuilder = Leaflet::with('shop', 'cover')
+        $queryBuilder = Leaflet::with('shop')
             ->join('leaflet_covers', 'leaflets.id', '=', 'leaflet_covers.leaflet_id')
             ->select('leaflets.*'); // Dodaj to, aby uniknąć konfliktu kolumn z join
 

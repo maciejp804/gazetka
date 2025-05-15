@@ -1,4 +1,4 @@
-@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image_path','webp_path', 'avif_path', 'valid_to', 'valid_from','updated_at', 'name', 'slug', 'width', 'height'])
+@props(['item', 'ok' => false, 'shop', 'logo', 'id', 'page' => 1, 'image_path','webp_path', 'avif_path', 'valid_to', 'valid_from','updated_at', 'name', 'slug', 'width', 'height', 'slug_title'])
 @php
 
     $toEnd = validationDate($valid_to, $valid_from, $updated_at);
@@ -15,7 +15,7 @@
         @endif
 
         <div class="w-full">
-            <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,'id' =>$id])}}#{{$page}}">
+            <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,  'data' => date("Y-m-d", strtotime($valid_from)),'id' =>$id])}}#{{$page}}">
                 <picture>
                     <source srcset="{{ Storage::url($avif_path.'.avif') }}" type="image/avif">
                     <source srcset="{{ Storage::url($webp_path.'.webp') }}" type="image/webp">
@@ -27,14 +27,14 @@
 
             </a>
         </div>
-        <a href="{{route('subdomain.leaflet', ['subdomain' => $slug, 'id' =>$id])}}#{{$page}}" class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">
+        <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,  'data' => date("Y-m-d", strtotime($valid_from)),'id' =>$id])}}#{{$page}}" class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">
             <div class="hidden text-white group-hover:flex self-center justify-center font-bold text-xs w-24 h-8 bg-blue-550 rounded duration-300">
                 <span class="flex self-center">Zobacz więcej</span>
             </div>
         </a>
     </div>
     <div class="py-2 text-center hover:bg-white hover:opacity-20">
-        <a href="{{route('subdomain.leaflet', ['subdomain' => $slug, 'id' =>$id])}}#{{$page}}">
+        <a href="{{route('subdomain.leaflet', ['subdomain' => $slug,  'data' => date("Y-m-d", strtotime($valid_from)),'id' =>$id])}}#{{$page}}">
             <img class="max-w-8 block m-auto" src="{{$logo}}" alt="pro-img1">
             <h3 class="text-white text-xs font-bold p-1 rounded my-1 truncate {{$toEnd['classes']}}">{{$toEnd['end']}}</h3>
             <div class="flex justify-center font-light mb-1 text-xs">
