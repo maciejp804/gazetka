@@ -19,13 +19,13 @@
                     ],
                 ],
                 'enabled' => true, // ← wyłącza slot
-                'priority' => 'gam', // gam lub adsense
+                'priority' => 'adsense', // gam lub adsense
                 'targeting' => [
                     'page' => 'home',  // ← dynamiczne pole, może być nadpisane
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
-                    'slot'   => '7982319809',
+                    'slot'   => '9092204614',
                     'format' => 'auto',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
