@@ -32,7 +32,7 @@ return [
         ],
         'main_product' => [
             'default' => [
-                'meta_title' => "{product} 🔥 Promocje i okazje",
+                'meta_title' => "{product} 🔥 promocje, aktualna cena w sklepach",
                 'meta_description' => "Promocje na {product} – aktualne ceny i okazje w gazetkach 🔥 Odkryj więcej na GazetkaPromocyjna.com.pl!",
                 'meta_keywords' => "{product}, gazetki, katalogi, promocje, sieci handlowe",
                 'h1_title' => "<strong>{product}</strong> - promocje w sklepach",
