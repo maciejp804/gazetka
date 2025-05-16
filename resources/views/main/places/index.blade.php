@@ -10,7 +10,7 @@
     </x-slot:meta_description>
 
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
-    <x-ad-1 class="my-5"/>
+{{--    <x-ad-1 class="my-5"/>--}}
     <div class="flex flex-col px-2 xs:px-4">
 
             <x-section class="flex h-full">

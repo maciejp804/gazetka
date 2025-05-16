@@ -59,7 +59,7 @@ export function handleTripleSearch(query, searchType, categorySelect, timeSelect
         `&searchType=${searchType}` +
         `&page=${currentPage}` +
         `&subcategory=${subcategory}` +
-        `&limit=10`;
+        `&limit=15`;
 
     const results = document.getElementById(containerId);
     const answer = searchType === 'leaflets'  ? 'Nie znaleziono gazetek.' : 'Nie znaleziono żadnej sieci handlowej.';

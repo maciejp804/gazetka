@@ -279,6 +279,8 @@ class MainController extends Controller
 
         $default_descriptions = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
 
+
+
         return view('subdomain.index', [
             //Zmienne globalne
             'subdomain' => $subdomain,
@@ -528,7 +530,21 @@ class MainController extends Controller
             ['label' => 'O GazetkaPromocyjna', 'url' => ''],
         ];
 
-        $descriptions = Description::getByRouteAndPlace(Route::currentRouteName()) ?? Description::getDefault(Route::currentRouteName());
+        $descriptions = [
+            'content' => [
+                    ['image' => 'assets/images/statics/1.png',
+                        'h2_title' => 'Historia',
+                        'h3_title' => '',
+                        'body' => "<p>Strona gazetkapromocyjna.com.pl powstała w 2012 roku i jest własnością firmy Gazetka Promocyjna, która swoją siedzibę ma w Poznaniu.</p>
+                            <p>Głównym celem serwisu jest gromadzenie i prezentowanie aktualnej oferty najpopularniejszych sieci handlowych w postaci - gazetek. W swojej bazie posiadamy promocje z różnych gałęzi handlu takich jak: artykuły spożywcze, artykuły gospodarstwa domowego, artykuły rtv i agd oraz wiele innych. Zasięgiem obejmujemy całą Polskę. Użytkownicy serwisu mogą przeglądać oferty wielu sieci i sklepów bez wychodzenia z domu. Sieci handlowe mają możliwość promowania swojej oferty na stronach naszego serwisu co pozwala trafić do domów przyszłych Klientów. Oferujemy możliwość wyświetlania reklamy na stronach oraz aktywne promowanie gazetki promocyjnej poprzez umieszczanie i eksponowanie jej w popularnych i często odwiedzanych miejscach naszej strony.</p>
+                            <p>Sieci handlowe mają możliwość promowania swojej oferty na stronach naszego serwisu co pozwala trafić do domów przyszłych Klientów. Oferujemy możliwość wyświetlania reklamy na stronach oraz aktywne promowanie gazetki promocyjnej poprzez umieszczanie i eksponowanie jej w popularnych i często odwiedzanych miejscach naszej strony.</p>
+                            <p>Strona gazetkapromocyjna.com.pl skierowana jest również do innych portali internetowych, które chcą aktywnie się promować w Internecie za pomocą naszego serwisu.</p>
+                            <p>GazetkaPromocyjna.com.pl</p>",
+
+                    ]
+                ]
+        ];
+
 
         return view('main.about',[
                 'place' => $place,
@@ -561,19 +577,6 @@ class MainController extends Controller
             ['label' => 'Polityka prywatności', 'url' => ''],
         ];
 
-        $descriptions = [
-            ['img' => 'assets/images/statics/1.png',
-                'h2Title' => 'Historia',
-                'h3Title' => '',
-                'p' => ['Strona gazetkapromocyjna.com.pl powstała w 2012 roku i jest własnością firmy Gazetka Promocyjna, która swoją siedzibę ma w Poznaniu.',
-                    'Głównym celem serwisu jest gromadzenie i prezentowanie aktualnej oferty najpopularniejszych sieci handlowych w postaci - gazetek. W swojej bazie posiadamy promocje z różnych gałęzi handlu takich jak: artykuły spożywcze, artykuły gospodarstwa domowego, artykuły rtv i agd oraz wiele innych. Zasięgiem obejmujemy całą Polskę. Użytkownicy serwisu mogą przeglądać oferty wielu sieci i sklepów bez wychodzenia z domu. Sieci handlowe mają możliwość promowania swojej oferty na stronach naszego serwisu co pozwala trafić do domów przyszłych Klientów. Oferujemy możliwość wyświetlania reklamy na stronach oraz aktywne promowanie gazetki promocyjnej poprzez umieszczanie i eksponowanie jej w popularnych i często odwiedzanych miejscach naszej strony.',
-                    'Sieci handlowe mają możliwość promowania swojej oferty na stronach naszego serwisu co pozwala trafić do domów przyszłych Klientów. Oferujemy możliwość wyświetlania reklamy na stronach oraz aktywne promowanie gazetki promocyjnej poprzez umieszczanie i eksponowanie jej w popularnych i często odwiedzanych miejscach naszej strony.',
-                    'Strona gazetkapromocyjna.com.pl skierowana jest również do innych portali internetowych, które chcą aktywnie się promować w Internecie za pomocą naszego serwisu.',
-                    'GazetkaPromocyjna.com.pl'
-                ],
-            ]
-        ];
-
         return view('main.privacy-policy',[
                 'place' => $place,
 
@@ -583,7 +586,7 @@ class MainController extends Controller
                 'meta_description' => 'Gazetki promocyjne sieci handlowych pozwolą Ci zaoszczędzić czas i pieniądze. Dzięki nowym ulotkom poznasz aktualną ofertę sklepów.',
 
                 'breadcrumbs' => $breadcrumbs,
-                'descriptions' => $descriptions,
+
             ]
         );
     }

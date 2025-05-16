@@ -29,8 +29,10 @@ class Description extends Model
     {
         // Zamiana kropek na podkreślenia (zgodnie z config/descriptions.php)
         $routeKey = str_replace('.', '_', $routeName);
+        $categoryKey = str_replace('-', '_', $category);
         // Pobranie domyślnych wartości dla danej trasy lub użycie "default"
-        $defaults = config("descriptions.defaults.{$routeKey}.{$category}", config('descriptions.defaults.default'));
+
+        $defaults = config("descriptions.defaults.{$routeKey}.{$categoryKey}", config('descriptions.defaults.default'));
 
         if ($place == null) {
             $name_locative = null;
@@ -58,8 +60,9 @@ class Description extends Model
 
         $category_slug = $category->slug ?? $category;
         $category_name = $category->name ?? $category;
+        $categoryKey = str_replace('-', '_', $category_slug);
 
-        $defaults = config("descriptionsLeaflets.defaults.{$routeKey}.{$category_slug}", config("descriptionsLeaflets.defaults.{$routeKey}.default"));
+        $defaults = config("descriptionsLeaflets.defaults.{$routeKey}.{$categoryKey}", config("descriptionsLeaflets.defaults.{$routeKey}.default"));
 
         return new self([
             'meta_title' => str_replace(['{category}'], [$category_name], $defaults['meta_title']),
@@ -79,8 +82,9 @@ class Description extends Model
 
         $category_slug = $category->slug ?? $category;
         $category_name = $category->name ?? $category;
+        $categoryKey = str_replace('-', '_', $category_slug);
 
-        $defaults = config("descriptionsShops.defaults.{$routeKey}.{$category_slug}", config("descriptionsShops.defaults.{$routeKey}.default"));
+        $defaults = config("descriptionsShops.defaults.{$routeKey}.{$categoryKey}", config("descriptionsShops.defaults.{$routeKey}.default"));
 
         return new self([
             'meta_title' => str_replace(['{category}'], [$category_name], $defaults['meta_title']),
@@ -100,9 +104,12 @@ class Description extends Model
 
         $category_slug = $category->slug ?? $category;
         $category_name = $category->name ?? $category;
-        $subcategory_name = $subcategory->name ?? $subcategory;
+        $categoryKey = str_replace('-', '_', $category_slug);
 
-        $defaults = config("descriptionsProducts.defaults.{$routeKey}.{$category_slug}", config("descriptionsProducts.defaults.{$routeKey}.default"));
+        $subcategory_name = $subcategory->name ?? $subcategory;
+        $subCategoryKey = str_replace('-', '_', $subcategory_name);
+
+        $defaults = config("descriptionsProducts.defaults.{$routeKey}.{$categoryKey}", config("descriptionsProducts.defaults.{$routeKey}.default"));
 
         return new self([
             'meta_title' => str_replace(['{category}', '{subcategory}'], [$category_name, $subcategory_name], $defaults['meta_title']),
@@ -122,8 +129,9 @@ class Description extends Model
 
         $category_slug = $category->slug ?? $category;
         $category_name = $category->name ?? $category;
+        $categoryKey = str_replace('-', '_', $category_slug);
 
-        $defaults = config("descriptionsVouchers.defaults.{$routeKey}.{$category_slug}", config("descriptionsVouchers.defaults.{$routeKey}.default"));
+        $defaults = config("descriptionsVouchers.defaults.{$routeKey}.{$categoryKey}", config("descriptionsVouchers.defaults.{$routeKey}.default"));
 
         return new self([
             'meta_title' => str_replace(['{category}', '{date}'], [$category_name,
@@ -148,8 +156,9 @@ class Description extends Model
 
         $category_slug = $category->slug ?? $category;
         $category_name = $category->name ?? $category;
+        $categoryKey = str_replace('-', '_', $category_slug);
 
-        $defaults = config("descriptionsBlogs.defaults.{$routeKey}.{$category_slug}", config("descriptionsBlogs.defaults.{$routeKey}.default"));
+        $defaults = config("descriptionsBlogs.defaults.{$routeKey}.{$categoryKey}", config("descriptionsBlogs.defaults.{$routeKey}.default"));
 
         return new self([
             'meta_title' => str_replace(['{category}', '{date}'], [mb_ucfirst($category_name),

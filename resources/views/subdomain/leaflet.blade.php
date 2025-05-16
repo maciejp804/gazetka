@@ -30,7 +30,14 @@
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
 
 
-    <x-ad-1 class="my-5"/>
+    {{-- Reklama pozioma pod header --}}
+    <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-75">
+        <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+        <x-admanager
+            slot-name="homepage_header"
+            :overrides="['page' => 'main.leaflet']"
+        />
+    </div>
     <div class="flex justify-center mb-2">
 
         <x-div-1060>
@@ -51,7 +58,14 @@
 
     </div>
     <div class="flex mb-5">
-        <x-ad-2 justify="justify-end mt-10"/>
+        {{-- Reklama pionowa po lewej stronie --}}
+        <div class="hidden mt-5 justify-end xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_left"
+                :overrides="['page' => 'subdomain.leaflet']"
+            />
+        </div>
         <x-div-1060-leaftet>
             <x-section class="relative">
                 <x-skeleton.leaflet-subdomain-skeleton :is-mobile="$isMobile" swiperClass="swiper-container"/>
@@ -136,12 +150,16 @@
                 />
             </x-section>
 
-
-            <x-ad-1/>
-
         </x-div-1060-leaftet>
 
-        <x-ad-2 justify="justify-star mt-10"/>
+        {{-- Reklama pionowa po prawej stronie --}}
+        <div class="hidden mt-5 justify-start xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_right"
+                :overrides="['page' => 'subdomain.leaflet']"
+            />
+        </div>
 
     </div>
 
@@ -152,6 +170,14 @@
             @endif
         @endif
 
+    </div>
+    {{-- Reklama pozioma nad footer --}}
+    <div class="hidden 3xs:flex min-h-25 my-5 mx-auto justify-center md:min-h-75 xl:min-h-96">
+        <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+        <x-admanager
+            slot-name="homepage_footer"
+            :overrides="['page' => 'main.index']"
+        />
     </div>
     <x-slot:scripts>
         @vite(['resources/js/rating.js', 'resources/js/leaflet-swiper.js'])

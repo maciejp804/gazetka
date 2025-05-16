@@ -51,7 +51,7 @@ class ShopController extends Controller
             $query->where('valid_to', '>=',now('Europe/Warsaw')->toDateTime())
                 ->where('status', '=', 'published')
                 ->where('valid_from', '<=', now('Europe/Warsaw')->toDateTime());
-        }])->where('status', 'active')->paginate(10);
+        }])->where('status', 'active')->paginate(15);
         $retailers_time = SortOptionsService::getSortPopularity();
 
         [$leaflets, $count_leflets] = $this->leafletService->getLeaflets(20);
@@ -170,7 +170,7 @@ class ShopController extends Controller
         $averageRating = $placeAddress->averageRating();
         $ratingCount = $placeAddress->ratingCount();
 
-        [$leaflets, $count_leflets] = $this->leafletService->getLeaflets(20);
+        [$leaflets, $count_leaflets] = $this->leafletService->getLeaflets(20, $shop->id);
 
 
         $breadcrumbs = [

@@ -12,11 +12,24 @@
 
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
 
-    <x-ad-1 class="my-5"/>
-    <div class="flex">
+    {{-- Reklama pozioma pod header --}}
+    <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-75">
+        <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+        <x-admanager
+            slot-name="homepage_header"
+            :overrides="['page' => 'subdomain.shop']"
+        />
+    </div>
+    <div class="flex justify-center">
 
         {{-- Reklama pionowa po lewej stronie --}}
-        <x-ad-3-vertical site="justify-end"/>
+        <div class="hidden mt-5 justify-end xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_left"
+                :overrides="['page' => 'main.shops']"
+            />
+        </div>
 
         <x-div-1060>
 
@@ -64,19 +77,22 @@
                     main-route="main.vouchers"/>
             </x-section>
 
-            <x-section>
-                <x-h2-title class="flex" :see-more-status="false">Sklepy {{$placeAddress->shop->name}} w pobliżu Twojej lokalizacji</x-h2-title>
-                <x-shop-list/>
-            </x-section>
+{{--            <x-section>--}}
+{{--                <x-h2-title class="flex" :see-more-status="false">Sklepy {{$placeAddress->shop->name}} w pobliżu Twojej lokalizacji</x-h2-title>--}}
+{{--                <x-shop-list/>--}}
+{{--            </x-section>--}}
 
-
-
-            <x-ad-1/>
 
         </x-div-1060>
 
         {{-- Reklama pionowa po prawej stronie --}}
-        <x-ad-3-vertical site="justify-start"/>
+        <div class="hidden mt-5 justify-start xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+            <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+            <x-admanager
+                slot-name="homepage_sidebar_right"
+                :overrides="['page' => 'subdomain.shop']"
+            />
+        </div>
 
     </div>
 

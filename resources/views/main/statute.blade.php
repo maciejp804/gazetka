@@ -12,7 +12,7 @@
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
 
 
-    <x-section class="flex-col mx-4 mt-4">
+    <x-section class="flex justify-center mx-4 mt-4">
         <x-div-1060 class="text-lg">
             <x-h1-title class="font-bold" :h1-title="$h1_title" />
                 <p class="mt-2 pl-4">

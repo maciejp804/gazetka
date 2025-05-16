@@ -34,7 +34,7 @@ class LeafletController extends Controller
     {
         Log::info('Current Route:', [Route::currentRouteName()]);
 
-        $leaflets = $this->leafletService->getLeafletsSimplePaginate(10);
+        $leaflets = $this->leafletService->getLeafletsSimplePaginate(15);
 
         $location = Cookie::get('user_location');
 

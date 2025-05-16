@@ -2,7 +2,6 @@
 
 @if($type == 'leaflets')
 
-
     <div {{$attributes->merge(['class' => 'w-full'])}} id="{{$dataContainerId}}">
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
             @if(count($items) > 0)
@@ -28,7 +27,7 @@
                     </div>
                     @if($adsStatus === true)
                         @switch($loop->iteration)
-                            @case(5)
+                            @case(10)
                                 {{-- Reklama pozioma - 1--}}
                                 <div class="hidden lg:grid lg:col-span-5 lg:my-5 lg:min-h-75 mx-auto">
                                     <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
@@ -118,17 +117,45 @@
                     </div>
                     @if($adsStatus === true)
                         @switch($loop->iteration)
-                            @case(5)
-                                <x-ad-1 class="hidden lg:grid lg:col-span-5 lg:my-3"/>
+                            @case(10)
+                                {{-- Reklama pozioma - 1--}}
+                                <div class="hidden lg:grid lg:col-span-5 lg:my-5 lg:min-h-75 mx-auto">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_desktop_2"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
                                 @break
-
                             @case(3)
-                                <x-ad-1 class="hidden sm:grid sm:col-span-3 sm:my-3 lg:hidden"/>
+                                {{-- Reklama pozioma - 1--}}
+                                <div class="hidden sm:grid sm:col-span-3 sm:my-5 sm:min-h-75 mx-auto lg:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_desktop_1"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
                                 @break
                             @case(2)
+                                {{-- Reklama pozioma mobile- 1--}}
+                                <div class="col-span-2 my-5 min-h-70 mx-auto sm:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_mobile_1"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
+                                @break
                             @case(6)
-                            @case(12)
-                                <x-ad-1 class="col-span-2 my-3 sm:hidden"/>
+                                {{-- Reklama pozioma mobile- 2--}}
+                                <div class="col-span-2 my-5 min-h-70 mx-auto sm:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_mobile_2"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
                                 @break
                         @endswitch
                     @endif
@@ -163,23 +190,51 @@
                         :url="$item['url']"
 
                     />
-                @if($adsStatus === true)
-                    @switch($loop->iteration)
-                        @case(5)
-                            <x-ad-1 class="hidden lg:grid lg:col-span-5 lg:my-5"/>
-                            @break
-
-                        @case(3)
-                            <x-ad-1 class="hidden sm:grid sm:col-span-3 sm:my-5 lg:hidden"/>
-                            @break
-                        @case(2)
-                        @case(6)
-                        @case(12)
-                            <x-ad-1 class="col-span-2 my-5 sm:hidden"/>
-                            @break
-                    @endswitch
-                @endif
-            @endforeach
+                    @if($adsStatus === true)
+                        @switch($loop->iteration)
+                            @case(10)
+                                {{-- Reklama pozioma - 1--}}
+                                <div class="hidden lg:grid lg:col-span-5 lg:my-5 lg:min-h-75 mx-auto">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_desktop_2"
+                                        :overrides="['page' => 'main.products']"
+                                    />
+                                </div>
+                                @break
+                            @case(3)
+                                {{-- Reklama pozioma - 1--}}
+                                <div class="hidden sm:grid sm:col-span-3 sm:my-5 sm:min-h-75 mx-auto lg:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_desktop_1"
+                                        :overrides="['page' => 'main.products']"
+                                    />
+                                </div>
+                                @break
+                            @case(2)
+                                {{-- Reklama pozioma mobile- 1--}}
+                                <div class="col-span-2 my-5 min-h-70 mx-auto sm:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_mobile_1"
+                                        :overrides="['page' => 'main.products']"
+                                    />
+                                </div>
+                                @break
+                            @case(6)
+                                {{-- Reklama pozioma mobile- 2--}}
+                                <div class="col-span-2 my-5 min-h-70 mx-auto sm:hidden">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_mobile_2"
+                                        :overrides="['page' => 'main.products']"
+                                    />
+                                </div>
+                                @break
+                        @endswitch
+                    @endif
+                @endforeach
                 @else
                     <p class="flex justify-center col-span-2 sm:col-span-3 lg:col-span-5 w-full p-4 text-gray-500 text-sm">Brak aktualnych ofert</p>
                 @endif
@@ -200,16 +255,36 @@
                 @if($adsStatus === true)
                     @switch($loop->iteration)
                         @case(6)
-                            <x-ad-1 class="hidden lg:grid lg:col-span-3 lg:my-5"/>
+                            {{-- Reklama pozioma - 1--}}
+                            <div class="hidden lg:grid lg:col-span-3 lg:my-5 lg:min-h-75 mx-auto">
+                                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                <x-admanager
+                                    slot-name="subdomain_middle_desktop_2"
+                                    :overrides="['page' => 'main.products']"
+                                />
+                            </div>
                             @break
 
-                        @case(3)
-                            <x-ad-1 class="hidden"/>
-                            @break
                         @case(2)
+                            {{-- Reklama pozioma mobile- 1--}}
+                            <div class="col-span-1 my-5 min-h-70 mx-auto sm:hidden">
+                                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                <x-admanager
+                                    slot-name="subdomain_middle_mobile_1"
+                                    :overrides="['page' => 'main.products']"
+                                />
+                            </div>
+                            @break
+
                         @case(6)
-                        @case(12)
-                            <x-ad-1 class="col-span-1 my-5 sm:col-span-2 lg:hidden"/>
+                            {{-- Reklama pozioma mobile- 2--}}
+                            <div class="col-span-1 my-5 min-h-70 mx-auto sm:hidden">
+                                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                <x-admanager
+                                    slot-name="subdomain_middle_mobile_2"
+                                    :overrides="['page' => 'main.products']"
+                                />
+                            </div>
                             @break
                     @endswitch
                 @endif

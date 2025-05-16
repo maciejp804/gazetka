@@ -12,6 +12,7 @@ use App\Models\Product;
 use App\Models\ProductDescription;
 use App\Models\Shop;
 use App\Models\Voucher;
+use App\Services\LeafletService;
 use App\Services\ProductService;
 use App\Services\SortOptionsService;
 use Illuminate\Support\Facades\Cookie;
@@ -20,10 +21,12 @@ use Illuminate\Support\Facades\Route;
 class ProductController extends Controller
 {
     protected ProductService $productService;
+    protected LeafletService $leafletService;
 
-    public function __construct(ProductService $productService)
+    public function __construct(ProductService $productService, LeafletService $leafletService)
     {
         $this->productService = $productService;
+        $this->leafletService = $leafletService;
     }
     public function index()
     {
@@ -41,18 +44,12 @@ class ProductController extends Controller
             ->where('type', 'product')
             ->where('parent_id', null)->get();
 
-        $products = $this->productService->getHotSpots(null, null, null,null,10);
+        $products = $this->productService->getHotSpots(null, null, null,null,15);
 
         $product_sort = SortOptionsService::getSortOptionsProducts();
 
+        [$leaflets, $count_leaflets] = $this->leafletService->getLeaflets(20);
 
-        $leaflets = Leaflet::with('shop', 'cover', 'pages')
-            ->where('valid_to','>=',now())
-            ->whereHas('cover')
-            ->whereHas('pages')
-            ->orderBy('created_at', 'desc')
-            ->limit(40)
-            ->get();
 
 
         $breadcrumbs = [
@@ -113,11 +110,10 @@ class ProductController extends Controller
         }
 
 
-        $products = $this->productService->getHotSpots(null, $category->id, null,null,10);
+        $products = $this->productService->getHotSpots(null, $category->id, null,null,15);
 
 
-        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+        [$leaflets, $count_leaflets] = $this->leafletService->getLeaflets(20);
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -185,8 +181,7 @@ class ProductController extends Controller
 
         $products = $this->productService->getHotSpots(null,null, $subcategory->id, null,10);
 
-        $leaflets = Leaflet::with('shop')->where('valid_to','>=',now())->get();
-        $leaflets = $leaflets->sortByDesc('created_at')->take(40);
+        [$leaflets, $count_leaflets] = $this->leafletService->getLeaflets(20);
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],

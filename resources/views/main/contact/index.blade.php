@@ -12,7 +12,7 @@
 
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
 
-    <div class="flex">
+    <div class="flex justify-center">
 
         {{-- Reklama pionowa po lewej stronie --}}
 {{--        <x-ad-3-vertical site="justify-end"/>--}}

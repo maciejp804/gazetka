@@ -29,7 +29,7 @@
             <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
             <x-admanager
                 slot-name="homepage_sidebar_left"
-                :overrides="['page' => 'main.index']"
+                :overrides="['page' => 'subdomain.index']"
             />
         </div>
 
@@ -126,7 +126,7 @@
             <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
             <x-admanager
                 slot-name="homepage_sidebar_right"
-                :overrides="['page' => 'main.index']"
+                :overrides="['page' => 'subdomain.index']"
             />
         </div>
 

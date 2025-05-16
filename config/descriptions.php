@@ -20,14 +20,14 @@ return [
                 'excerpt' => '']
         ],
         'subdomain_index' => [
-            'drogerie-i-apteki' => [
+            'drogerie_i_apteki' => [
                 'meta_title' => "{shop} gazetka aktualna, ulotka od jutra 🔥 promocje, oferta {data}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
                 'h1_title' => "{shop} - <strong>gazetka promocyjna {data}, aktualne promocje</strong>",
                 'excerpt' => 'Planujesz zakupy w {shop}? Sprawdź aktualną gazetkę i odkryj promocje na kosmetyki, produkty higieniczne, środki czystości i suplementy. {shop} oferuje szeroki wybór artykułów do pielęgnacji, zdrowia i urody. Oszczędzaj na sprawdzonych markach i znajdź wszystko, czego potrzebujesz, w jednym miejscu. Zaglądaj regularnie, by nie przegapić najlepszych okazji!',
             ],
-            'dom-i-ogrod' => [
+            'dom_i_ogrod' => [
                 'meta_title' => "{shop} gazetka aktualna, ulotka od jutra 🔥 promocje, oferta {data}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
@@ -69,7 +69,7 @@ return [
                 'h1_title' => "{shop} - <strong>gazetka promocyjna {data}, aktualne promocje</strong>",
                 'excerpt' => 'Gazetka {shop} to najlepsze okazje na sprzęt sportowy, odzież, obuwie i akcesoria dla aktywnych. Bez względu na to, czy uprawiasz sport amatorsko, czy profesjonalnie – w {shop} znajdziesz produkty, które Cię zmotywują. Sprawdź aktualne promocje i zadbaj o formę w korzystnej cenie!'
             ],
-            'sklepy-spozywcze' => [
+            'sklepy_spozywcze' => [
                 'meta_title' => "{shop} gazetka aktualna, ulotka od jutra 🔥 promocje, oferta {data}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
@@ -97,7 +97,7 @@ return [
                 'h1_title' => "{shop} - <strong>gazetka promocyjna {data}, aktualne promocje</strong>",
                 'excerpt' => 'Planujesz remont lub modernizację? W gazetce {shop} czekają promocje na materiały budowlane, farby, narzędzia, armaturę i akcesoria instalacyjne. {shop} to idealny wybór dla majsterkowiczów i profesjonalistów. Sprawdź, co kupisz taniej i ruszaj z pracami!'
             ],
-            'agd-rtv' => [
+            'agd_rtv' => [
                 'meta_title' => "{shop} gazetka aktualna, ulotka od jutra 🔥 promocje, oferta {data}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
@@ -125,7 +125,7 @@ return [
                 'h1_title' => "{shop} - <strong>gazetka promocyjna {data}, aktualne promocje</strong>",
                 'excerpt' => 'W gazetce {shop} znajdziesz wszystko, czego potrzebujesz dla swojego pupila – karmy, przysmaki, zabawki, akcesoria i środki pielęgnacyjne. {shop} oferuje szeroki wybór produktów dla psów, kotów, gryzoni i innych domowych zwierząt. Sprawdź aktualne promocje i zadbaj o zdrowie oraz radość swojego zwierzaka, nie przepłacając!'
             ],
-            'kultura-rozrywka' => [
+            'kultura_rozrywka' => [
                 'meta_title' => "{shop} gazetka aktualna, ulotka od jutra 🔥 promocje, oferta {data}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
@@ -167,14 +167,14 @@ return [
 //                'excerpt' => '']
 //        ],
         'subdomain_shop_address' => [
-            'drogerie-i-apteki' => [
+            'drogerie_i_apteki' => [
                 'meta_title' => "Gazetki promocyjne {shop}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
                 'h1_title' => "Gazetki promocyjne",
                 'excerpt' => 'Sklep {shop} przy {address} oferuje szeroki wybór produktów do codziennej pielęgnacji, higieny oraz podstawowego zaopatrzenia aptecznego. Znajdziesz tu kosmetyki, środki czystości, suplementy i inne artykuły niezbędne w domu. Atrakcyjne promocje i dobrze zaopatrzone półki sprawiają, że zakupy w {shop} są szybkie i wygodne.',
             ],
-            'dom-i-ogrod' => [
+            'dom_i_ogrod' => [
                 'meta_title' => "Gazetki promocyjne {shop}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
@@ -216,7 +216,7 @@ return [
                 'h1_title' => "Gazetki promocyjne",
                 'excerpt' => '{shop} przy {address} to sklep stacjonarny z ofertą dla osób aktywnych – znajdziesz tu odzież sportową, obuwie, sprzęt i akcesoria treningowe. Asortyment dopasowany do różnych dyscyplin i poziomu zaawansowania sprawia, że każdy znajdzie coś dla siebie. Zakupy w {shop} to wygoda i specjalistyczna oferta w jednym miejscu.'
             ],
-            'sklepy-spozywcze' => [
+            'sklepy_spozywcze' => [
                 'meta_title' => "Gazetki promocyjne {shop}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
@@ -272,7 +272,7 @@ return [
                 'h1_title' => "Gazetki promocyjne",
                 'excerpt' => '{shop} przy {address} to sklep stacjonarny z ofertą dla miłośników zwierząt. Znajdziesz tu karmy, akcesoria, zabawki i środki pielęgnacyjne dla psów, kotów, gryzoni i innych pupili. Dobrze zaopatrzony asortyment oraz pomocna obsługa sprawiają, że zakupy w {shop} są szybkie i wygodne – wszystko, czego potrzebujesz dla swojego zwierzaka, w jednym miejscu.'
             ],
-            'kultura-rozrywka' => [
+            'kultura_rozrywka' => [
                 'meta_title' => "Gazetki promocyjne {shop}",
                 'meta_description' => "Aktualne promocje {shop}. Sprawdź, co warto kupić!",
                 'meta_keywords' => "{shop}, gazetki",
