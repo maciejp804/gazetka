@@ -19,19 +19,29 @@
                 @php
                     $imagePath = $voucher->image ? $voucher->image . '.webp' : null;
                     $imageStorePath = $voucher->voucherStore->image ?  $voucher->voucherStore->image . '.webp' : null;
+                    $exists = $imagePath && Storage::disk('public')->exists($imagePath);
+                    $existsLogo = $imageStorePath && Storage::disk('public')->exists($imageStorePath);
                 @endphp
                 <div class="bg-white shadow rounded-lg p-4 flex flex-col justify-between hover:shadow-md transition">
-                    <div class="grid grid-cols-3">
-                        <div class="col-span-2">
-                            @if($imagePath && Storage::disk('public')->exists($imagePath))
-                                <picture>
-                                    <source srcset="{{ Storage::url($voucher->image.'.avif') }}" type="image/avif">
-                                    <source srcset="{{ Storage::url($voucher->image.'.webp') }}" type="image/webp">
-                                    <img src="{{ Storage::url($voucher->image.'.jpg') }}"
-                                         class="w-20 h-20 rounded-full object-cover"
+                    <div class="grid grid-cols-4">
+                        <div class="col-span-2 relative flex justify-center">
+                            @if($exists)
+                                    <img src="{{ Storage::url($voucher->image.'.webp') }}"
+                                         class="w-full h-full object-cover"
                                          width="120" height="120"
                                          alt="{{$voucher->name}}">
-                                </picture>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <form action="{{ route('admin.vouchers.upload.image', $voucher) }}" method="POST" enctype="multipart/form-data" class="flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 bg-opacity-50 border border-dashed border-gray-300 relative group overflow-hidden">
+                                            @csrf
+                                            <label for="upload-offer-{{ $voucher->id }}" class="cursor-pointer flex flex-col items-center justify-center text-gray-500 text-1xs group-hover:text-blue-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                                </svg>
+                                                Edytuj zdjęcie
+                                            </label>
+                                            <input id="upload-offer-{{ $voucher->id }}" type="file" name="image" class="hidden" onchange="this.form.submit()">
+                                        </form>
+                                    </div>
                             @else
                                 {{-- Przycisk "Dodaj grafikę" --}}
                                 <form action="{{ route('admin.vouchers.upload.image', $voucher) }}" method="POST" enctype="multipart/form-data" class="flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 border border-dashed border-gray-300 relative group overflow-hidden">
@@ -46,24 +56,27 @@
                                 </form>
                             @endif
                         </div>
-                        <div class="col-span-1">
-                            @if($imageStorePath && Storage::disk('public')->exists($imageStorePath))
-                                <img src="{{ asset('storage/' . $voucher->voucherStore->image.'.webp') }}" alt="Miniatura" class="h-20 object-contain rounded-full  mx-auto">
-                            @else
-                                {{-- Przycisk "Dodaj grafikę" --}}
-                                <form action="{{ route('admin.vouchers.upload.logo', $voucher) }}" method="POST" enctype="multipart/form-data" class="flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 border border-dashed border-gray-300 relative group overflow-hidden">
+                        <div class="col-span-2 relative flex justify-center">
+                            <img src="{{ Storage::url($voucher->voucherStore->image.'.webp') }}"
+                                 class="w-full h-20 object-cover"
+                                 alt="{{ $voucher->voucherStore->name }}">
+
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <form action="{{ route('admin.vouchers.upload.logo', $voucher) }}" method="POST" enctype="multipart/form-data"
+                                      class="flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 bg-opacity-50 border border-dashed border-gray-300 relative group overflow-hidden">
                                     @csrf
-                                    <label for="upload-logo-{{ $voucher->id }}" class="cursor-pointer flex flex-col items-center justify-center text-gray-500 text-sm group-hover:text-blue-600">
+                                    <label for="upload-logo-{{ $voucher->id }}"
+                                           class="cursor-pointer flex flex-col items-center justify-center text-gray-500 text-1xs group-hover:text-blue-600">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                                         </svg>
-                                        Logo
+                                        {{ $existsLogo ? 'Edytuj zdjęcie' : 'Logo' }}
                                     </label>
-                                    <input id="upload-logo-{{ $voucher->id }}" type="file" name="imageLogo" class="hidden" onchange="this.form.submit()">
+                                    <input id="upload-logo-{{ $voucher->id }}" type="file" name="image" class="hidden" onchange="this.form.submit()">
                                 </form>
-                            @endif
-
+                            </div>
                         </div>
+
 
                     </div>
                     <div class="text-center">

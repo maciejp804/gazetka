@@ -182,19 +182,30 @@ class VoucherController extends Controller
     public function uploadLogo(Request $request, Voucher $voucher)
     {
         $request->validate([
-            'imageLogo' => 'required|image|max:2048',
+            'image' => 'required|image|max:2048',
         ]);
+        $voucher = Voucher::with('voucherStore')->find($voucher->id);
 
         $pathWithoutExtension = 'images/vouchers/logo/logo_' . uniqid();
 
         $result = app(ImageService::class)->convertAndStore(
-            $request->file('imageLogo')->getContent(),
+            $request->file('image')->getContent(),
             $pathWithoutExtension,
             120,
-            44
+            120
         );
 
+
+
         if (!empty($result)) {
+
+            if($voucher->voucherStore->image)
+            {
+                Storage::disk('public')->delete([
+                    $voucher->voucherStore->image . '.webp', $voucher->voucherStore->image . '.jpg', $voucher->voucherStore->image . '.avif'
+                ]);
+            }
+
             // zapisujemy tylko path bez rozszerzenia
             $voucher->voucherStore->update([
                 'image' => $pathWithoutExtension
@@ -285,6 +296,8 @@ class VoucherController extends Controller
             'voucherStore_w_bazie' => Voucher::count(),
         ]);
 
+        Voucher::where('valid_to', '<', now())->delete();
+
         return !empty($logos)
             ? response()->json(['logos' => $logos])
             : response()->json(['error' => 'Brak wyników lub błąd pobierania'], 500);
@@ -369,6 +382,8 @@ class VoucherController extends Controller
             'wszystkie_programy' => count($results),
             'voucherStore_w_bazie' => Voucher::count(),
         ]);
+
+        Voucher::where('valid_to', '<', now())->delete();
 
         return !empty($logos)
             ? response()->json(['logos' => $logos])
