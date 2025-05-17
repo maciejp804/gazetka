@@ -64,9 +64,7 @@ class ImageService
      */
     public function convertAndStore($source, $pathWithoutExtension, int $width = 1040, int $height = 1500): array
     {
-
         try {
-
             // 1. Rozpoznanie, czy źródło to URL
             if (Str::startsWith($source, ['http://', 'https://'])) {
                 $response = Http::get($source);
@@ -83,36 +81,42 @@ class ImageService
             }
 
             [$newWidth, $newHeight] = $this->calculateDimensions($image, $width, $height);
-
             $image->resize($newWidth, $newHeight);
 
+            // JPG
             $jpgPath = $pathWithoutExtension . '.jpg';
             $jpgImage = $image->encode(new JpegEncoder(quality: 65));
             Storage::disk('public')->put($jpgPath, (string) $jpgImage);
-
 
             // WebP
             $webpPath = $pathWithoutExtension . '.webp';
             $webpImage = $image->encode(new WebpEncoder(quality: 80));
             Storage::disk('public')->put($webpPath, (string) $webpImage);
 
-            // AVIF
-            $avifPath = $pathWithoutExtension . '.avif';
-            $avifImage = $image->encode(new AvifEncoder(quality: 80));
-            Storage::disk('public')->put($avifPath, (string) $avifImage);
+            // AVIF tylko poza "blogs"
+            if (!str_contains($pathWithoutExtension, 'blogs')) {
+                $avifPath = $pathWithoutExtension . '.avif';
+                $avifImage = $image->encode(new AvifEncoder(quality: 80));
+                Storage::disk('public')->put($avifPath, (string) $avifImage);
+            }
 
             return [
                 'width' => $newWidth,
                 'height' => $newHeight,
                 'jpg_path' => $jpgPath,
                 'webp_path' => $webpPath,
-                'avif_path' => $avifPath,
+                'avif_path' => $avifPath ?? null,
             ];
+
         } catch (\Throwable $e) {
-            Log::warning('❌ Nie udało się pobrać obrazu', ['url' => $imageUrl]);
+            Log::warning('❌ Nie udało się przetworzyć obrazu', [
+                'source' => $source,
+                'error' => $e->getMessage(),
+            ]);
             return [];
         }
     }
+
 
     public function cropAndStore($source, $pathWithoutExtension, int $x, int $y, int $width, int $height, int $imageWidth, int $imageHeight): array
     {
