@@ -31,7 +31,7 @@ class DescriptionController extends Controller
 
     }
 
-    public function updateContent(Request $request, Product $product)
+    public function updateContent(Request $request, Shop $shop)
     {
         $validated = $request->validate([
             'content' => 'required|array',
@@ -55,7 +55,7 @@ class DescriptionController extends Controller
             $blocks[] = $data;
         }
 
-        $product->descriptions->update([
+        $shop->description->update([
             'content' => $blocks,
         ]);
 
