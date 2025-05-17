@@ -197,8 +197,8 @@ class BlogController extends Controller
             $result = app(ImageService::class)->convertAndStore(
                 $request->file('image')->getContent(),
                 $pathWithoutExtension.'-100x100',
-                100,
-                100
+                250,
+                250
             );
 
             if (!empty($result)) {
