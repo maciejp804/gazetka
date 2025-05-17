@@ -205,7 +205,15 @@ class BlogController extends Controller
                 // zapisujemy tylko path bez rozszerzenia
 
                 if ($blog->image && Storage::disk('public')->exists($blog->image . '.webp')) {
-                        Storage::disk('public')->delete([$blog->image . '.webp', $blog->image . '.avif', $blog->image . '.jpg']);
+                        Storage::disk('public')->delete(
+                            [
+                                $blog->image . '.webp',
+                                $blog->image . '.avif',
+                                $blog->image . '.jpg',
+                                $blog->image . '-100x100.webp',
+                                $blog->image . '-100x100.avif',
+                                $blog->image . '-100x100.jpg',
+                                ]);
                 }
 
                 $blog->update([
@@ -215,8 +223,8 @@ class BlogController extends Controller
 
             return back()->with('success', 'Grafika została zapisana.');
         } catch (\Throwable $e) {
-            Log::error('Błąd podczas aktualizacji zdjęcia produktu', [
-                'product_id' => $blog->id,
+            Log::error('Błąd podczas aktualizacji zdjęcia na blogu', [
+                'blog_id' => $blog->id,
                 'message' => $e->getMessage()
             ]);
             return back()->with('error', 'Wystąpił błąd przy zapisie grafiki.');
