@@ -64,7 +64,7 @@ class BlogController extends Controller
             'published_at' => 'nullable|date',
             'status' => 'required|in:published,archive,draft',
             'excerpt' => 'nullable|string|max:1200',
-            'body' => 'nullable|string|max:20000',
+            'body' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
             'user_id' => 'nullable|exists:users,id',
         ]);
