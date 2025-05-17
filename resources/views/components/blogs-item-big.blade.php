@@ -7,11 +7,11 @@
 
                 <picture>
                     <source srcset="{{ Storage::url($item->image.'.webp') }}" type="image/webp">
-                    <source srcset="{{ Storage::url($item->image.'jpg')}}" type="image/jpeg">
+                    <source srcset="{{ Storage::url($item->image.'.jpg')}}" type="image/jpeg">
                     <img
                         fetchpriority="high"
                         decoding="async"
-                        src="{{ Storage::url($item->image.'jpg') }}"
+                        src="{{ Storage::url($item->image.'.jpg') }}"
                         alt="{{$item->title}}"
                         class="object-cover h-full w-full">
                 </picture>

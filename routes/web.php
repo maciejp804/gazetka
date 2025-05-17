@@ -26,6 +26,7 @@ use App\Http\Controllers\Admin\ProductDescriptionController as AdminProductDescr
 use App\Http\Controllers\Admin\PageController as AdminPageController; ;
 use App\Http\Controllers\Admin\HotSpotController as AdminHotSpotController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionController;
 
 
 $mainDomain = config('app.main_domain');
@@ -59,12 +60,24 @@ Route::get('voucher/store/update/tradedoubler',[AdminVoucherStoreController::cla
 Route::get('voucher/store/update/tradetracker',[AdminVoucherStoreController::class,'updateTradetracker'])->name('admin.vouchers.stores.update.tradetracker');
 
 //SHOPS
-Route::get('/panel/shops', [AdminShopController::class, 'index'])->name('admin.shops.index');
-Route::get('/panel/shops/create', [AdminShopController::class, 'create'])->name('admin.shops.create');
-Route::post('/panel/shops/add', [AdminShopController::class, 'add'])->name('admin.shops.add');
-Route::delete('/panel/shops/{shop}/delete', [AdminShopController::class, 'destroy'])->name('admin.shops.destroy');
-Route::get('/panel/shops/{shop}/edit', [AdminShopController::class, 'edit'])->name('admin.shops.edit');
-Route::put('/panel/shops/{shop}/update', [AdminShopController::class, 'update'])->name('admin.shops.update');
+Route::prefix('/panel/shops')->name('admin.shops.')->group(function () {
+    Route::get('/', [AdminShopController::class, 'index'])->name('index');
+    Route::get('/create', [AdminShopController::class, 'create'])->name('create');
+    Route::post('/add', [AdminShopController::class, 'add'])->name('add');
+    Route::prefix('/{shop:slug}/description')->name('description.')->group(function () {
+        Route::get('/faq/edit', [AdminDescriptionController::class, 'editFaq'])->name('faq.edit'); //Edit - FAQ
+        Route::put('/faq/update', [AdminDescriptionController::class, 'updateFaq'])->name('faq.update');
+        Route::get('/content/edit', [AdminDescriptionController::class, 'editContent'])->name('content.edit'); //Edit - Główny opis
+        Route::put('/content/update', [AdminDescriptionController::class, 'updateContent'])->name('content.update');
+        Route::put('/image/{index}', [AdminDescriptionController::class, 'updateContentImage']) // Dodawanie, edycja zdjęcia we wpisie głownym
+        ->name('content.update.image');
+    });
+    Route::get('/{shop:slug}', [AdminShopController::class, 'manage'])->name('manage');
+    Route::delete('/{shop:slug}/delete', [AdminShopController::class, 'destroy'])->name('destroy');
+    Route::get('/{shop:slug}/edit', [AdminShopController::class, 'edit'])->name('edit');
+    Route::put('/{shop:slug}/update', [AdminShopController::class, 'update'])->name('update');
+});
+
 
 //LEAFLETS
 Route::prefix('/panel/leaflets')->name('admin.leaflets.')->group(function () {

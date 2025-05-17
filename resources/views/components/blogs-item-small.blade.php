@@ -5,10 +5,10 @@
         <a href="{{route('main.blogs.article', ['category' => $item->category->slug, 'article' => $item->slug])}}">
             <picture>
                 <source srcset="{{ Storage::url($item->image.'.webp') }}" type="image/webp">
-                <source srcset="{{ Storage::url($item->image.'jpg')}}" type="image/jpeg">
+                <source srcset="{{ Storage::url($item->image.'.jpg')}}" type="image/jpeg">
                 <img
                     decoding="async"
-                    src="{{ Storage::url($item->image.'jpg') }}"
+                    src="{{ Storage::url($item->image.'.jpg') }}"
                     alt="{{$item->title}}"
                     loading="lazy"
                     class="rounded-t object-cover object-top w-full max-h-48">

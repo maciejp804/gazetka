@@ -40,11 +40,11 @@
                     <div class="flex justify-center">
                         <picture>
                             <source srcset="{{ Storage::url($blog->image.'.webp') }}" type="image/webp">
-                            <source srcset="{{ Storage::url($blog->image)}}" type="image/jpeg">
-                            <img src="{{ Storage::url($blog->image) }}"
+                            <source srcset="{{ Storage::url($blog->image.'.jpg')}}" type="image/jpeg">
+                            <img src="{{ Storage::url($blog->image.'.jpg') }}"
                                  alt="Opis obrazu"
                                  loading="lazy"
-                                 class="rounded  object-cover">
+                                 class="rounded object-cover">
                         </picture>
                     </div>
                 </x-section>

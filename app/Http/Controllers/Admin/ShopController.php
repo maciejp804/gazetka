@@ -29,6 +29,38 @@ class ShopController extends Controller
         ]);
     }
 
+    public function manage(Shop $shop)
+    {
+        $shop = Shop::with('category', 'description')->where('id', $shop->id)->first();
+
+        $breadcrumbs = [
+            ['label' => 'Panel', 'url' => route('admin.index')],
+            ['label' => 'Sieci handlowe', 'url' => route('admin.shops.index')],
+            ['label' => mb_ucfirst($shop->name), 'url' => '']
+        ];
+
+
+        $manage = [
+            ['label' => 'Dane podstawowe', 'description' => 'nazwa, slug, meat_data (shop, descriptions)',
+                'logo' => 'fa-solid fa-pen-to-square','url' => route('admin.shops.edit', $shop)],
+//            ['label' => 'Parametry', 'description' => 'dodawanie, edycja i usuwanie parametrów (product_descriptions)',
+//                'logo' => 'fa-solid fa-file-lines','url' => route('admin.products.description.parameters.edit', $product)],
+            ['label' => 'Content', 'description' => 'dodawanie, edycja i usuwanie kontentu (descriptions)',
+                'logo' => 'fa-solid fa-file-lines','url' => route('admin.shops.description.content.edit', $shop)],
+            ['label' => 'FAQ', 'description' => 'dodawanie, edycja i usuwanie FAQ (descriptions)',
+                'logo' => 'fa-solid fa-circle-question','url' => route('admin.shops.description.faq.edit', $shop)],
+//            ['label' => 'Opisy dla miejscowości', 'description' => 'dane podstawowe, faq,  (product_descriptions)',
+//                'logo' => 'fa-solid fa-arrow-pointer','url' => route('admin.shops.description.shop.indexShop', $shop)]
+        ];
+
+        return view('admin.shop.manage', [
+            'shop' => $shop,
+            'breadcrumbs' => $breadcrumbs,
+
+            'manage' => $manage,
+        ]);
+    }
+
     public function create()
     {
         $categories = Category::where('status', 'active')
@@ -137,7 +169,7 @@ class ShopController extends Controller
 
         $shop->update($validated);
 
-        return redirect()->route('admin.shops.index')->with('update', 'Sieć została zaktualizowany.');
+        return redirect()->route('admin.shops.manage', $shop)->with('update', 'Sieć została zaktualizowany.');
 
     }
 

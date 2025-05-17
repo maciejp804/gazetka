@@ -37,4 +37,9 @@ class Shop extends Model
         return $this->ratings()->count();
     }
 
+    public function description()
+    {
+        return$this->hasOne(Description::class);
+    }
+
 }

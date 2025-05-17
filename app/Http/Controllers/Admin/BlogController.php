@@ -68,14 +68,22 @@ class BlogController extends Controller
             'image' => 'nullable|image|max:2048',
             'user_id' => 'nullable|exists:users,id',
         ]);
+        $path = 'images/blogs/images/photo_' . uniqid();
 
         if ($request->hasFile('image')) {
-            $path = 'images/blogs/images/photo_' . uniqid();
+
             $result = app(ImageService::class)->convertAndStore(
                 $request->file('image')->getContent(),
                 $path,
                 800,
                 500
+            );
+
+            $result = app(ImageService::class)->convertAndStore(
+                $request->file('image')->getContent(),
+                $path.'-100x100',
+                100,
+                100
             );
             if (!empty($result)) {
                 $validated['image'] = $path;
@@ -184,6 +192,13 @@ class BlogController extends Controller
                 $pathWithoutExtension,
                 800,
                 500
+            );
+
+            $result = app(ImageService::class)->convertAndStore(
+                $request->file('image')->getContent(),
+                $pathWithoutExtension.'-100x100',
+                100,
+                100
             );
 
             if (!empty($result)) {

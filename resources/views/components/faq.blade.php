@@ -16,10 +16,10 @@
                         "mainEntity": [
                       @foreach($items->faq as $item)
                           {"@type": "Question",
-                         "name": "{{$item['question']}}",
+                         "name": "{{strip_tags($item['question'])}}",
                          "acceptedAnswer": {
                            "@type": "Answer",
-                           "text": "<p>{{$item['answer']}}</p>"
+                           "text": "{{strip_tags($item['answer'])}}"
                          }
                        }@if(!$loop->last),@endif
                       @endforeach

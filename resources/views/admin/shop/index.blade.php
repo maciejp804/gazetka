@@ -42,7 +42,7 @@
                     <h2 class="font-semibold text-lg">{{ $shop->name }}</h2>
                 </div>
                 <div class="mt-4 text-center">
-                    <x-buttons.primary-a :url="route('admin.shops.edit', $shop)">Zarządzaj</x-buttons.primary-a>
+                    <x-buttons.primary-a :url="route('admin.shops.manage', $shop)">Zarządzaj</x-buttons.primary-a>
                 </div>
             </div>
         @endforeach
