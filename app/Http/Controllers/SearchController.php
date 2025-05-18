@@ -228,7 +228,7 @@ class SearchController extends Controller
 
         // Parametry paginacji (domyślnie page=1, limit=10)
         $page  = $request->input('page', 1);
-        $limit = $request->input('limit', 10);
+        $limit = $request->input('limit', 9);
 
         if ($searchType === 'vouchers') {
 

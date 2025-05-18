@@ -122,7 +122,7 @@ export function handleQuadrupleSearch(query, searchType, categorySelect, typeSel
         `&time=${encodeURIComponent(timeSelect)}` +
         `&searchType=${searchType}` +
         `&page=${currentPage}` +
-        `&limit=10`;
+        `&limit=9`;
 
     const results = document.getElementById(containerId);
     const answer = searchType === 'vouchers'  ? 'Brak ofert z danej kategorii, zmień parametry wyszukiwania.' : 'Zmień parametry wyszukiwania.';

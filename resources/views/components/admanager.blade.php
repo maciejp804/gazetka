@@ -9,13 +9,37 @@
     $enabled = $ad['enabled'] ?? false;
     $divId = $ad['div_id'] ?? 'div-' . md5($slotName);
     $priority = $ad['priority'] ?? 'gam';
-    $defaultSize = $ad['default_size'] ?? [300, 250];
     $isDebug = config('admanager.debug');
     $targeting = array_merge($ad['targeting'] ?? [], $overrides);
 @endphp
 
 @if($ad && $enabled)
-    <div {{ $attributes->merge(['id' => $divId]) }} style="min-height: {{ $defaultSize[1] ?? 250 }}px;"></div>
+    <div {{ $attributes->merge(['id' => $divId]) }}></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mapping = @json($ad['mapping'] ?? []);
+            const div = document.getElementById('{{ $divId }}');
+            const vw = window.innerWidth;
+
+            let matchedHeight = 0;
+
+            for (let i = 0; i < mapping.length; i++) {
+                const vp = mapping[i].viewport;
+                if (vw >= vp[0]) {
+                    const size = mapping[i].sizes[0];
+                    if (Array.isArray(size)) {
+                        matchedHeight = size[1];
+                    }
+                    break;
+                }
+            }
+
+            if (div && matchedHeight > 0) {
+                div.style.minHeight = matchedHeight + 'px';
+            }
+        });
+    </script>
 
     @if($isDebug)
         <script>
@@ -25,7 +49,7 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        <ins id="{{ $divId }}-adsense" class="adsbygoogle invisible opacity-0"
+        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0"
              style="display:block"
              data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
              data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
@@ -35,54 +59,33 @@
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
 
         <script>
-                function fallbackToGAM(divId) {
-                console.warn('[AdManager] ➡️ Fallback do GAM dla:', divId);
+            function fallbackToGAM(divId) {
+                console.warn('[AdManager] ➞ Fallback do GAM dla:', divId);
 
-                // Ukryj lub usuń <ins> AdSense
                 const adsenseIns = document.getElementById(divId + '-adsense');
-                if (adsenseIns) {
-                adsenseIns.remove();
-            }
+                if (adsenseIns) adsenseIns.remove();
 
-                // Wyczyszczenie kontenera
-                let wrapper = document.getElementById(divId);
-                if (!wrapper) {
-                wrapper = document.createElement('div');
-                wrapper.id = divId;
-                wrapper.style.minHeight = '{{ $defaultSize[1] ?? 250 }}px';
-                document.body.appendChild(wrapper);
-            } else {
-                wrapper.innerHTML = '';
-            }
+                const wrapper = document.getElementById(divId);
+                if (wrapper) wrapper.innerHTML = '';
 
                 googletag = window.googletag || {cmd: []};
                 googletag.cmd.push(function () {
+                    const mapping = googletag.sizeMapping()
+                    @foreach($ad['mapping'] as $map)
+                        .addSize([{{ $map['viewport'][0] }}, {{ $map['viewport'][1] }}], {!! json_encode($map['sizes']) !!})
+                        @endforeach
+                        .build();
 
-                // Buduj sizeMapping z configu
-                const mapping = googletag.sizeMapping()
-                @foreach($ad['mapping'] as $map)
-                .addSize([{{ $map['viewport'][0] }}, {{ $map['viewport'][1] }}], {!! json_encode($map['sizes']) !!})
-                @endforeach
-                .build();
+                    const slot = googletag.defineSlot('{{ $ad['slot'] }}', [], divId)
+                        .defineSizeMapping(mapping)
+                        .addService(googletag.pubads());
 
-                // Tworzymy slot dynamiczny, ale z mappingiem
-                const slot = googletag.defineSlot('{{ $ad['slot'] }}', [], divId)
-                .defineSizeMapping(mapping)
-                .addService(googletag.pubads());
+                    @foreach($targeting as $key => $value)
+                    slot.setTargeting('{{ $key }}', '{{ $value }}');
+                    @endforeach
 
-                // Dodaj targeting z configu i override
-                @foreach($targeting as $key => $value)
-                slot.setTargeting('{{ $key }}', '{{ $value }}');
-                @endforeach
-
-                googletag.pubads().addEventListener('slotRenderEnded', function (event) {
-                if (event.slot.getSlotElementId() === divId) {
-                console.info('[AdManager] GAM slotRenderEnded →', event.slot.getSlotElementId(), '| isEmpty:', event.isEmpty);
-            }
-            });
-
-                googletag.enableServices();
-                googletag.display(divId);
+                    googletag.enableServices();
+                    googletag.display(divId);
 
                     @if($refreshInterval)
                     const refreshMs = {{ $refreshInterval * 1000 }};
@@ -94,11 +97,9 @@
                                 hasRefreshed = true;
                                 setInterval(() => {
                                     googletag.pubads().refresh([slot]);
-                                    console.info('[AdManager] 🔄 Refreshed fallback GAM slot:', divId);
                                 }, refreshMs);
                             }
                         };
-
                         const observer = new IntersectionObserver((entries) => {
                             entries.forEach(entry => {
                                 if (entry.isIntersecting) {
@@ -107,22 +108,15 @@
                                 }
                             });
                         }, { threshold: 0.5 });
-
                         observer.observe(refreshEl);
                     }
                     @endif
-
                 });
             }
 
-
-
-        function tryLoadAdsense() {
+            function tryLoadAdsense() {
                 const ins = document.getElementById('{{ $divId }}-adsense');
-                if (!ins) {
-                    console.warn('[AdManager] ⚠️ Nie znaleziono ins elementu → fallback do GAM');
-                    return fallbackToGAM('{{ $divId }}');
-                }
+                if (!ins) return fallbackToGAM('{{ $divId }}');
 
                 const mapping = @json($ad['mapping'] ?? []);
                 const vw = window.innerWidth;
@@ -137,52 +131,31 @@
                 }
 
                 if (!matchedSize || matchedSize[0] === 0 || matchedSize[1] === 0) {
-                    console.warn('[AdManager] ❌ Size mapping zwrócił [0,0] lub brak dopasowania → fallback do GAM');
                     return fallbackToGAM('{{ $divId }}');
                 }
 
                 ins.style.width = matchedSize[0] + 'px';
                 ins.style.height = matchedSize[1] + 'px';
-                console.info('[AdManager] ✅ Size mapping:', matchedSize);
 
                 const observer = new IntersectionObserver((entries, obs) => {
                     entries.forEach(entry => {
                         if (!entry.isIntersecting) return;
                         obs.unobserve(ins);
 
-                        console.info('[AdManager] 👁️ Element widoczny → próbuję AdSense');
-
-                        let fallbackTimer = setTimeout(() => {
-                            const iframe = ins.querySelector('iframe');
-                            const iframeBlank =
-                                !iframe ||
-                                iframe.offsetHeight === 0 ||
-                                iframe.srcdoc === "" ||
-                                (iframe.src && iframe.src.includes('about:blank')) ||
-                                ins.getAttribute('data-ad-status') === 'unfilled';
-
-                            if (iframeBlank) {
-                                console.warn('[AdManager] ⏱️ Timeout: iframe pusty, niewidoczny lub unfilled → fallback');
-                                fallbackToGAM('{{ $divId }}');
-                            } else {
-                                console.info('[AdManager] 🎯 AdSense iframe znaleziony i aktywny');
-                            }
-                        }, 1200);
+                        let fallbackTimer = setTimeout(() => fallbackToGAM('{{ $divId }}'), 1200);
 
                         try {
                             const result = (adsbygoogle = window.adsbygoogle || []).push({});
-                            console.info('[AdManager] 📤 push() do adsbygoogle wykonany');
+                            ins.classList.remove('opacity-0');
 
                             if (result && typeof result.then === 'function') {
                                 result.catch(() => {
                                     clearTimeout(fallbackTimer);
-                                    console.warn('[AdManager] ❌ push() zwrócił błąd → fallback');
                                     fallbackToGAM('{{ $divId }}');
                                 });
                             }
                         } catch (e) {
                             clearTimeout(fallbackTimer);
-                            console.error('[AdManager] ❗️ push() rzucił wyjątek:', e);
                             fallbackToGAM('{{ $divId }}');
                         }
                     });
@@ -211,10 +184,7 @@
                 }
 
                 if (Array.isArray(matchedSize) && (matchedSize[0] === 0 || matchedSize[1] === 0)) {
-                    @if($isDebug)
-                    console.warn('[AdManager] Slot "{{ $divId }}" not defined — mapping returned [0,0]');
-                    @endif
-                        return;
+                    return;
                 }
 
                 const mapping = googletag.sizeMapping()
@@ -223,7 +193,7 @@
                     @endforeach
                     .build();
 
-                const slot = googletag.defineSlot('{{ $ad['slot'] }}', {{ json_encode($defaultSize) }}, '{{ $divId }}')
+                const slot = googletag.defineSlot('{{ $ad['slot'] }}', [], '{{ $divId }}')
                     .defineSizeMapping(mapping)
                     .addService(googletag.pubads());
 
@@ -258,7 +228,6 @@
                             }, refreshMs);
                         }
                     };
-
                     const observerRefresh = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
@@ -267,21 +236,11 @@
                             }
                         });
                     }, { threshold: 0.5 });
-
                     observerRefresh.observe(el);
                 }
                 @endif
             });
         </script>
-
-        @if(isset($ad['adsense_fallback']))
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
-            <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const el = document.getElementById('{{ $divId }}');
-                    if (el) el.dataset.adsense = "1";
-                });
-            </script>
-        @endif
     @endif
 @endif
+
