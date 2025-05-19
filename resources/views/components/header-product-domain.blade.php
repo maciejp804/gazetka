@@ -10,7 +10,7 @@
 <div class="flex flex-col w-full lg:flex-row gap-x-2">
     <div class="flex flex-col w-full lg:w-1/6">
         <div class="flex w-full mb-5">
-            <div class="w-full rounded lg:aspect-square ">
+            <div class="w-full rounded lg:aspect-square overflow-hidden">
                 <div class="flex justify-center w-full h-full">
                     @if(empty($product->image))
                         <picture>

@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 typeSubCategory = subcategorySelect ? subcategorySelect : 'all';
             }
 
-
+            console.log(typeCategory);
             clearButton.classList.toggle('hidden', query.length === 0);
 
             const  minLength = searchType === 'leaflets' ? 1 : 2;

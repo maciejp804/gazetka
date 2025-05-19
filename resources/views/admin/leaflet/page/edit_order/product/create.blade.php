@@ -51,7 +51,7 @@
                 <form action="{{route('admin.leaflets.hotspots.deletePage',['leaflet' => $leaflet, 'page' => $pages[0]])}}" method="POST" onsubmit="return confirm('Na pewno chcesz usunąć?')" class="absolute bottom-0 right-1">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="text-sm rounded-full border border-gray-300 p-2 text-red-600 hover:underline">Skasuj wszystko</button>
+                    <button type="submit" class="text-sm rounded-full border border-gray-300 p-2 text-red-600 hover:underline">Skasuj produkty</button>
                 </form>
             </div>
 
@@ -134,13 +134,19 @@
                     <x-form.submit label="Importuj strony" />
                 </form>
             </div>
-            <div>
-                <form action="{{route('admin.leaflets.hotspots.export', $leaflet)}}" method="GET" >
+            <div class="flex flex-col justify-between">
+                <form action="{{route('admin.leaflets.hotspots.export', $leaflet)}}" method="GET" class="flex">
                     @csrf
                     <!-- Przycisk do dodania stron -->
                     <x-form.submit label="Exportuj strony" />
                 </form>
+                <form action="{{route('admin.leaflets.hotspots.delete', $leaflet)}}" method="POST" onsubmit="return confirm('Na pewno chcesz usunąć?')" class="flex">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-sm rounded-full border border-gray-300 p-2 text-red-600 hover:underline">Skasuj wszystko</button>
+                </form>
             </div>
+
         </div>
     </div>
 

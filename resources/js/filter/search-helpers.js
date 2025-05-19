@@ -132,7 +132,7 @@ export function handleQuadrupleSearch(query, searchType, categorySelect, typeSel
         .then(response => response.json())
         .then(data => {
             const cleanedHtml = data.html.replace(/\s/g, '');
-            console.log(cleanedHtml);
+
             if (cleanedHtml === '<div></div>' || cleanedHtml === '') {
 
                 data.html = '<p class="flex justify-center w-full p-4 text-gray-500 text-sm">' + answer + '</p>';
@@ -163,12 +163,13 @@ export function handleQuadrupleSearch(query, searchType, categorySelect, typeSel
 
             // Obsługa paginacji
             if (data.pagination) {
+
                 renderPagination(
                     containerId,
                     data.pagination,
                     query, searchType,
                     categorySelect, timeSelect,
-                    resultsBox, input, typeSelect
+                    resultsBox, input, null, typeSelect
                 );
             }
 

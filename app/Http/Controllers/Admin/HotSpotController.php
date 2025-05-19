@@ -244,23 +244,21 @@ class HotSpotController extends Controller
     public function deleteHotSpot(Leaflet $leaflet, HotSpot $hotSpot)
     {
 
+        $hotSpot = HotSpot::with('product')->where('id', $hotSpot->id)->first();
+        // Usuwamy rekord HotSpot (łączy produkt ze stroną)
+
+        if ($hotSpot->image)
+        {
+            $image_count = Product::where('image', $hotSpot->image)->count();
+
+            if ( Storage::disk('public')->exists($hotSpot->image . '.webp') && $image_count == 0)
+            {
+                Storage::disk('public')->delete([$hotSpot->image . '.webp', $hotSpot->image . '.avif', $hotSpot->image . '.jpg']);
+            }
+        }
+
         // Usuwamy rekord HotSpot (łączy produkt ze stroną)
         $hotSpot->delete();
-
-        // Sprawdzamy, czy produkt nie jest już przypisany do tej strony
-        $hotSpotInPage = HotSpot::where('page_id', $hotSpot->page_id)
-            ->where('product_id', $hotSpot->product_id)
-            ->first();  // Pobieramy pierwszy rekord (jeśli istnieje)
-
-        // Sprawdzamy, czy produkt nie jest już przypisany do żadnej strony
-        $leaflet_product = LeafletProduct::where('leaflet_id', $leaflet->id)
-            ->where('product_id', $hotSpot->product_id)
-            ->first();  // Pobieramy pierwszy rekord (jeśli istnieje)
-
-        // Jeśli nie ma żadnych innych HotSpotów dla tej strony i produktu, usuwamy rekord w `leaflet_product`
-        if (empty($hotSpotInPage) && !empty($leaflet_product)) {
-            $leaflet_product->delete(); // Usuwamy powiązanie z gazetką
-        }
 
         return redirect()->back()->with('success', 'Produkt został usunięty ze strony.');
     }
@@ -274,28 +272,55 @@ class HotSpotController extends Controller
 
         foreach ($hotSpots as $hotSpot) {
 
+            if ($hotSpot->image)
+            {
+                $image_count = Product::where('image', $hotSpot->image)->count();
+
+                if ( Storage::disk('public')->exists($hotSpot->image . '.webp') && $image_count == 0)
+                {
+                    Storage::disk('public')->delete([$hotSpot->image . '.webp', $hotSpot->image . '.avif', $hotSpot->image . '.jpg']);
+                }
+            }
+
             // Usuwamy rekord HotSpot (łączy produkt ze stroną)
             $hotSpot->delete();
 
-            // Sprawdzamy, czy produkt nie jest już przypisany do tej strony
-            $hotSpotInPage = HotSpot::where('page_id', $hotSpot->page_id)
-                ->where('product_id', $hotSpot->product_id)
-                ->first();  // Pobieramy pierwszy rekord (jeśli istnieje)
+        }
 
-            // Sprawdzamy, czy produkt nie jest już przypisany do żadnej strony
-            $leaflet_product = LeafletProduct::where('leaflet_id', $leaflet->id)
-                ->where('product_id', $hotSpot->product_id)
-                ->first();  // Pobieramy pierwszy rekord (jeśli istnieje)
+        return redirect()->back()->with('success', 'Produkty zostały usunięte ze strony.');
+    }
 
-            // Jeśli nie ma żadnych innych HotSpotów dla tej strony i produktu, usuwamy rekord w `leaflet_product`
-            if (empty($hotSpotInPage) && !empty($leaflet_product)) {
-                $leaflet_product->delete(); // Usuwamy powiązanie z gazetką
+
+
+    public function delete(Leaflet $leaflet)
+    {
+
+        $hotSpots = HotSpot::with('product', 'page', 'page.leaflets')
+            ->whereHas('page.leaflets', function ($query) use ($leaflet) {
+                $query->where('leaflets.id', $leaflet->id);
+            })->get();
+
+
+        foreach ($hotSpots as $hotSpot) {
+
+            if ($hotSpot->image)
+            {
+                $image_count = Product::where('image', $hotSpot->image)->count();
+
+                if ( Storage::disk('public')->exists($hotSpot->image . '.webp') && $image_count == 0)
+                {
+                    Storage::disk('public')->delete([$hotSpot->image . '.webp', $hotSpot->image . '.avif', $hotSpot->image . '.jpg']);
+                }
             }
+
+            // Usuwamy rekord HotSpot (łączy produkt ze stroną)
+            $hotSpot->delete();
 
         }
 
-        return redirect()->back()->with('success', 'Produkt został usunięty ze strony.');
+        return redirect()->back()->with('success', 'Produkty zostały usunięte ze strony.');
     }
+
     protected function importFormatOne(array $data, Leaflet $leaflet)
     {
         // Format 1 import
