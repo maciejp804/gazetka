@@ -22,6 +22,7 @@
         <div id="leaflet-results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           <x-admin.leaflet-item :items="$leaflets"/>
         </div>
+        {{$leaflets->links()}}
     </div>
     <script>
         document.getElementById('search-leaflets').addEventListener('input', function () {

@@ -84,9 +84,12 @@
                         <p class="text-gray-500 text-sm">{{ $voucher->description}}</p>
                     </div>
 
-                    <div class="mt-4 text-center">
+                    <div class="mt-4 text-center justify-around flex">
                         <a href="{{ route('admin.vouchers.edit', ['voucher' => $voucher]) }}" class="inline-block text-sm px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                             Edytuj
+                        </a>
+                        <a href="{{$voucher->url}}" class="inline-block text-sm px-4 py-2 bg-orange-400 text-white rounded hover:bg-orange-300 transition" target="_blank">
+                            Link do oferty
                         </a>
                     </div>
                 </div>

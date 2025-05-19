@@ -7,9 +7,11 @@ use App\Models\Category;
 use App\Models\HotSpot;
 use App\Models\Leaflet;
 use App\Models\LeafletCover;
+use App\Models\Product;
 use App\Models\Shop;
 use App\Services\ImageService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class LeafletController extends Controller
@@ -24,6 +26,7 @@ class LeafletController extends Controller
     {
 
         $leaflets = $this->getLeaflets();
+
 
         $breadcrumbs = [
             ['label' => 'Panel', 'url' => route('admin.index')],
@@ -156,8 +159,6 @@ class LeafletController extends Controller
         $shops = Shop::where('status', 'active')->get();
 
         $manage = [
-            ['label' => 'Edytuj', 'description' => 'dane podstawowe (tytuł, opis, status, powiązany sklep, daty)',
-              'logo' => 'fa-solid fa-pen-to-square','url' => route('admin.leaflets.edit', $leaflet->id)],
             ['label' => 'Opisz', 'description' => 'przypisanie produktów do gazetki (leaflet_products)',
                 'logo' => 'fa-solid fa-keyboard','url' => route('admin.leaflets.hotspots.create', $leaflet->id)],
             ['label' => 'Strony', 'description' => 'zarządzanie stronami, dodawanie, usuwanie, kolejność (relacja leaflet_page z sort_order)',
@@ -169,6 +170,14 @@ class LeafletController extends Controller
             ['label' => 'Pierwsza strona', 'description' => 'możliwość zmiany grafiki okładki (relacja leaflet_cover)',
                 'logo' => 'fa-solid fa-book','url' => route('admin.leaflets.edit', $leaflet->id)]
         ];
+
+        if ($leaflet->cover !== null) {
+           $array =  ['label' => 'Edytuj', 'description' => 'dane podstawowe (tytuł, opis, status, powiązany sklep, daty)',
+                'logo' => 'fa-solid fa-pen-to-square','url' => route('admin.leaflets.edit', $leaflet->id)];
+
+            array_unshift( $manage, $array);
+
+            }
 
         return view('admin.leaflet.manage', [
             'leaflet' => $leaflet,
@@ -275,11 +284,90 @@ class LeafletController extends Controller
         ]);
     }
 
+    public function uploadImage(Request $request, Leaflet $leaflet)
+    {
+        try {
+            // Walidacja pliku
+            $request->validate([
+                'image' => 'required|image|max:10000',
+            ]);
+
+            // Ścieżka do zapisania obrazu
+            $path = 'leaflets/covers/' . uniqid();
+
+            // Ładowanie istniejącego leaflet z powiązanym cover i shop
+            $leaflet = Leaflet::with('cover', 'shop')->find($leaflet->id);
+
+            // Upewnij się, że leaflet istnieje
+            if (!$leaflet) {
+                return back()->with('error', 'Nie znaleziono gazetki.');
+            }
+
+            // Przetwarzanie obrazu
+            $result = app(ImageService::class)->convertAndStore(
+                $request->file('image')->getContent(),
+                $path,
+                250,
+                335
+            );
+
+            // Jeśli konwersja obrazu zakończyła się sukcesem
+            if (!empty($result)) {
+                // Sprawdzanie, czy istnieje powiązany cover i czy ma poprawną ścieżkę
+                if ($leaflet->cover && $leaflet->cover->path && Storage::disk('public')->exists($leaflet->cover->path . '.webp')) {
+                    // Usuwamy stare pliki, jeśli istnieją
+                    Storage::disk('public')->delete([
+                        $leaflet->cover->path . '.webp',
+                        $leaflet->cover->path . '.avif',
+                        $leaflet->cover->path . '.jpg'
+                    ]);
+                }
+
+                // Uaktualniamy ścieżkę do nowego obrazu
+                if ($leaflet->cover) {
+                    $leaflet->cover->update([
+                        'path' => $path,
+                        'avif_path' => $path,
+                        'webp_path' => $path
+                    ]);
+                } else {
+                    // Jeśli brak cover, tworzymy nowy
+                    LeafletCover::create([
+                        'leaflet_id' => $leaflet->id,
+                        'original_name' => '',
+                        'path' => $path,
+                        'avif_path' => $path,
+                        'webp_path' => $path,
+                        'width' => $result['width'],
+                        'height' => $result['height'],
+                        'alt_text' =>
+                            $leaflet->shop->name .' gazetka promocyjna '. $leaflet->title .' | Oferta ważna  ' . monthReplace($leaflet->valid_from, 'excerpt') . ' - ' . monthReplace($leaflet->valid_to, 'excerpt'),
+                    ]);
+                }
+            }
+
+            // Zwracamy komunikat o sukcesie
+            return back()->with('success', 'Grafika została zapisana.');
+        } catch (\Throwable $e) {
+            // Logowanie błędu
+            Log::error('Błąd podczas aktualizacji zdjęcia produktu', [
+                'product_id' => $leaflet->id,
+                'message' => $e->getMessage()
+            ]);
+
+            // Zwracamy komunikat o błędzie
+            return back()->with('error', 'Wystąpił błąd przy zapisie grafiki.');
+        }
+    }
+
+
+
+
+
+
     protected function getLeaflets($query = null)
     {
-        $queryBuilder = Leaflet::with('shop')
-            ->join('leaflet_covers', 'leaflets.id', '=', 'leaflet_covers.leaflet_id')
-            ->select('leaflets.*'); // Dodaj to, aby uniknąć konfliktu kolumn z join
+        $queryBuilder = Leaflet::with('shop');
 
         if ($query !== null) {
             $queryBuilder->where(function ($q) use ($query) {
@@ -288,16 +376,9 @@ class LeafletController extends Controller
             });
         }
 
-        $queryBuilder->orderBy('leaflets.created_at', 'desc');
+        $queryBuilder->orderBy('created_at', 'desc');
 
-        $leaflets = $queryBuilder->get()->map(fn($leaflet) => [
-            'id' => $leaflet->id,
-            'title' => $leaflet->title,
-            'cover' => optional($leaflet->cover)->webp_path,
-            'valid_from' => $leaflet->valid_from,
-            'valid_to' => $leaflet->valid_to,
-            'shop_name' => optional($leaflet->shop)->name,
-        ]);
+        $leaflets = $queryBuilder->paginate(32);
 
         return $leaflets;
     }

@@ -1,29 +1,47 @@
 @props(['items'])
 @foreach($items as $item)
     @php
-        $coverExists = $item['cover'] && Storage::disk('public')->exists($item['cover'] . '.webp');
+        $coverExists = $item->cover && $item->cover->path && Storage::disk('public')->exists($item->cover->path . '.webp');
+        if($item->id == 45){
+           dd(Storage::disk('public')->exists($item->cover->path . '.webp'));
+    }
+
         @endphp
 
     <div class="bg-white shadow rounded-lg overflow-hidden">
-        <div class="aspect-[12/12] bg-gray-100 flex items-center justify-center group relative">
-            @if($coverExists)
-                <img src="{{ Storage::url($item['cover'] . '.webp') }}" alt="Okładka" class="w-full h-full object-cover">
-            @else
-                <span class="text-gray-400">Brak okładki</span>
-            @endif
-
-            <a href="{{ route('admin.leaflets.manage', $item['id']) }}"
-               class="hidden invisible absolute w-full h-full rounded justify-center 2xs:flex group-hover:bg-black group-hover:bg-opacity-50 group-hover:visible duration-300 ease-in">
-                <div class="hidden text-white group-hover:flex self-center justify-center font-bold text-xs w-24 h-8 bg-blue-550 rounded duration-300">
-                    <span class="flex self-center">Zarządzaj</span>
-                </div>
-            </a>
+        <div class="aspect-[12/12] bg-gray-100 flex items-center justify-center relative">
+           @if ($coverExists)
+                    <img src="{{ Storage::url($item->cover->path . '.webp') }}" alt="Okładka" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <form action="{{ route('admin.leaflets.upload.image', $item->id) }}" method="POST" enctype="multipart/form-data" class="flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 bg-opacity-50 border border-dashed border-gray-300 relative group overflow-hidden">
+                            @csrf
+                            <label for="upload-offer-{{ $item->id }}" class="cursor-pointer flex flex-col items-center justify-center text-gray-500 text-1xs group-hover:text-blue-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                Edytuj zdjęcie
+                            </label>
+                            <input id="upload-offer-{{ $item->id }}" type="file" name="image" class="hidden" onchange="this.form.submit()">
+                        </form>
+                    </div>
+                @else
+                    <form action="{{ route('admin.leaflets.upload.image', $item->id) }}" method="POST" enctype="multipart/form-data" class="flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 border border-dashed border-gray-300 relative group overflow-hidden">
+                        @csrf
+                        <label for="upload-offer-{{ $item->id }}" class="cursor-pointer flex flex-col items-center justify-center text-gray-500 text-1xs group-hover:text-blue-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                            </svg>
+                            Dodaj zdjęcie
+                        </label>
+                        <input id="upload-offer-{{ $item->id }}" type="file" name="image" class="hidden" onchange="this.form.submit()">
+                    </form>
+                @endif
         </div>
 
         <div class="p-4 space-y-2">
             <h3 class="font-semibold text-lg">{{ $item['title'] }}</h3>
             <p class="text-sm text-gray-500">
-                {{ $item['shop_name'] }}<br>
+                {{ $item['name'] }}<br>
                 {{ $item['valid_from'] }} – {{ $item['valid_to'] }}
             </p>
             <div class="flex justify-center items-center mt-2">

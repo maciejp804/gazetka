@@ -89,6 +89,7 @@ Route::prefix('/panel')->name('admin.')->group(function () {
         Route::post('/hotspot/create', [AdminHotSpotController::class, 'createHotSpot'])->name('hotspot.create');
         Route::put('/hotspot/update', [AdminHotSpotController::class, 'updateHotSpot'])->name('hotspot.update');
         Route::get('/{leaflet}', [AdminLeafletController::class, 'manage'])->name('manage');
+        Route::post('/{leaflet}/upload-image', [AdminLeafletController::class, 'uploadImage'])->name('upload.image'); //Dodawanie, zmiana grafiki
         Route::delete('/{leaflet}/delete', [AdminLeafletController::class, 'destroy'])->name('destroy');
         Route::get('/{leaflet}/edit', [AdminLeafletController::class, 'edit'])->name('edit');
         Route::put('/{leaflet}/update', [AdminLeafletController::class, 'update'])->name('update');
