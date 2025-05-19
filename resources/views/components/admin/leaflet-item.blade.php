@@ -3,7 +3,7 @@
     @php
         $coverExists = $item->cover && $item->cover->path && Storage::disk('public')->exists($item->cover->path . '.webp');
         if($item->id == 45){
-           dd(Storage::disk('public')->exists($item->cover->path . '.webp'));
+
     }
 
         @endphp
