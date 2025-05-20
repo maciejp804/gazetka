@@ -24,5 +24,11 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('custom-paginator');
 
         Paginator::defaultSimpleView('custom-paginator');
+
+        if (app()->environment('production') && file_exists(config_path('admanager.production.php'))) {
+            config(['admanager' => require config_path('admanager.production.php')]);
+        }
+
+
     }
 }

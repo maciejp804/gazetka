@@ -276,10 +276,7 @@ class MainController extends Controller
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName(), $shop->id);
 
         $category = $shop->category ? $shop->category->slug : 'default';
-
         $default_descriptions = Description::getDefault(Route::currentRouteName(), $place, $shop->name, $category);
-
-
 
         return view('subdomain.index', [
             //Zmienne globalne
