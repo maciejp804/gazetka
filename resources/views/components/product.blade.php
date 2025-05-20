@@ -46,7 +46,7 @@
         </a>
         <div class="absolute bottom-[4%] right-[4%] group">
             @if(isset($url) && $url != NULL && ((str_contains($url, 'https:')) || (str_contains($url, 'https:'))))
-                <x-header.link href="{{$url}}" svg='basket' size-li="w-10 h-10" />
+                <x-header.link href="{{$url}}" target="_blank" rel="nofollow" svg='basket' size-li="w-10 h-10" />
             @endif
         </div>
     </div>

@@ -19,7 +19,7 @@
         />
     </div>
 
-    <div class="flex">
+    <div class="flex justify-center">
 
         {{-- Reklama pionowa po lewej stronie --}}
         <div class="hidden mt-5 justify-end xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">

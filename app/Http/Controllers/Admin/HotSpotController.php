@@ -32,7 +32,8 @@ class HotSpotController extends Controller
         $breadcrumbs = [
             ['label' => 'Panel', 'url' => route('admin.index')],
             ['label' => 'Gazetki', 'url' => route('admin.leaflets.index')],
-            ['label' => $leaflet->shop->name.'-'.$leaflet->title, 'url' => '']
+            ['label' => $leaflet->shop->name.'-'.$leaflet->title, 'url' => route('admin.leaflets.manage', $leaflet->id)],
+            ['label' => 'Opisz', 'url' => '']
 
         ];
         return view('admin.leaflet.page.edit_order.product.create',[
