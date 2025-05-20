@@ -179,7 +179,7 @@ class ProductController extends Controller
             $place = (object)$locationData;
         }
 
-        $products = $this->productService->getHotSpots(null,null, $subcategory->id, null,10);
+        $products = $this->productService->getHotSpots(null,null, $subcategory->id, null,15);
 
         [$leaflets, $count_leaflets] = $this->leafletService->getLeaflets(20);
 
