@@ -80,7 +80,7 @@ class LeafletController extends Controller
                 'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
                 'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
-
+                'meta_robots' => 'noindex, follow',
                 'breadcrumbs' => $breadcrumbs,
 
                 'place' => $place->name,
@@ -149,6 +149,7 @@ class LeafletController extends Controller
                 'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
                 'descriptions' => $descriptions,
                 'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+                'meta_robots' => 'noindex, follow',
 
                 'breadcrumbs' => $breadcrumbs,
                 'leaflets' => $leaflets,

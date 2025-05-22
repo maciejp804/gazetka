@@ -292,16 +292,16 @@ class SearchController extends Controller
         ]);
     }
 
-    public function test($week, $number, $start)
+    public function aldiCron($week, $number, $start, $letter)
     {
         set_time_limit(3200);
-        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p_i_s_q_w.json')), true);
+        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p_i_s_q_w_z.json')), true);
         $i = 0;
         $l = 356406;
         foreach ($data['combinations'] as $combination) {
             if ($i >= $start) {
 
-                if(str_contains($combination, 'a') || str_contains($combination, '') ) {
+                if(str_contains($combination, $letter)) {
                     //$url = 'https://pepco.pl/wp-content/uploads/2024/11/P10_'.$l.'_Leaflet_1.jpg';
                     $url = 'https://gazetki.aldi.pl/2025/kw'.$week.'/25k'.$week.'g'.$number . $combination . '//GetPDF.ashx';
                     //$url = 'https://gazetki.aldi.pl/2024/kw33/24k33g01cdga//GetPDF.ashx';

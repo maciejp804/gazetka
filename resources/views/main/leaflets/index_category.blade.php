@@ -8,6 +8,9 @@
     <x-slot:meta_description>
         {{  $meta_description }}
     </x-slot:meta_description>
+    <x-slot:meta_robots>
+        {{  $meta_robots }}
+    </x-slot:meta_robots>
 
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
 

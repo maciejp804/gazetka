@@ -32,10 +32,10 @@
                 :options="$shops->pluck('name', 'id')"
                 :selected="old('shop_id')"
             />
-            <x-form.input type="datetime-local" name="valid_from" label="Ważny od" />
-            <x-form.input type="datetime-local" name="valid_to" label="Ważny do" />
-            <x-form.input type="datetime-local" name="display_from" label="Wyświetlaj od" />
-            <x-form.input type="datetime-local" name="display_to" label="Wyświetlaj do" />
+            <x-form.input type="datetime-local" name="valid_from" label="Ważny od" :value="old('valid_from', now()->format('Y-m-d\T00:00'))"/>
+            <x-form.input type="datetime-local" name="valid_to" label="Ważny do" :value="old('valid_from', now()->format('Y-m-d\T23:59'))"/>
+            <x-form.input type="datetime-local" name="display_from" label="Wyświetlaj od" :value="old('valid_from', now()->format('Y-m-d\T00:00'))"/>
+            <x-form.input type="datetime-local" name="display_to" label="Wyświetlaj do" :value="old('valid_from', now()->format('Y-m-d\T23:59'))"/>
             <div class="my-4">
                 <x-form.input type="file" name="image" label="Okładka" />
             </div>
@@ -77,5 +77,26 @@
             <x-form.submit label="Dodaj gazetkę"/>
         </form>
     </div>
+    <script>
+        function toSlug(text) {
+            return text
+                .toLowerCase()
+                .trim()
+                .replace(/[ąćęłńóśźż]/g, c => ({
+                    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l',
+                    'ń': 'n', 'ó': 'o', 'ś': 's', 'ź': 'z', 'ż': 'z'
+                }[c]))
+                .replace(/[^a-z0-9\s-]/g, '')  // usuń niedozwolone znaki
+                .replace(/\s+/g, '-')          // zamień spacje na "-"
+                .replace(/-+/g, '-');          // usuń wielokrotne "-"
+        }
+
+        document.getElementById('title').addEventListener('input', function () {
+            const title = this.value;
+            const slug = toSlug(title);
+            document.getElementById('slug').value = slug;
+        });
+
+    </script>
 
 </x-layout-panel>

@@ -16,6 +16,7 @@ use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\Admin\VoucherStoreController as AdminVoucherStoreController;
@@ -31,12 +32,56 @@ use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionControll
 
 $mainDomain = config('app.main_domain');
 
+//START ROBOTS
+Route::get('/robots.txt', function () use ($mainDomain){
+    $host = request()->getHost();
+    $isMain = $host === $mainDomain || $host === 'www.' . $mainDomain;
+
+    // Domyślna ścieżka sitemap
+    if ($isMain) {
+        $sitemapUrl = url('/sitemaps/sitemap-main.xml');
+    } else {
+        $subdomain = explode('.', $host)[0];
+        $sitemapUrl = url("/sitemaps/sitemap-{$subdomain}.xml");
+    }
+
+    // Środowisko
+    $env = App::environment();
+
+    if ($env !== 'production') {
+        // Blokujemy wszystko w środowiskach dev/test/staging
+        $robots = <<<TXT
+User-agent: *
+Disallow: /
+Sitemap: {$sitemapUrl}
+TXT;
+    } else {
+        // Produkcja – wszystko dozwolone
+        $robots = <<<TXT
+User-agent: *
+Disallow:
+
+Sitemap: {$sitemapUrl}
+TXT;
+    }
+
+    return response($robots, 200)
+        ->header('Content-Type', 'text/plain');
+});
+
+
+
+
 //START SEARCH
 Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
 Route::get('/search/triple/swiper',[SearchController::class,'tripleSwiper'])->name('search.triple.swiper');
 Route::get('/search/triple/',[SearchController::class,'triple'])->name('search.triple');
 Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('search.quadruple');
 //END SEARCH
+
+
+Route::get('/cron/aldi/{week}/{number}/{start}/{letter}', [SearchController::class, 'aldiCron'])->name('cron.aldi');
+
 
 //ZAPLECZE
 Route::prefix('/panel')->name('admin.')->group(function () {
@@ -296,7 +341,7 @@ Route::domain($mainDomain)->group(function () {
     Route::post('/ratings', [RatingController::class, 'store'])->middleware('auth')->name('ratings.store');
     Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
     Route::get('/convert', [LeafletCoverController::class, 'storePage']);
-    Route::get('/test-test/{week}/{number}/{start}', [SearchController::class, 'test']);
+
     Route::get('/combination', [SearchController::class, 'combination'])
         ->middleware('auth')
         ->name('combination');

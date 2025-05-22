@@ -1,15 +1,51 @@
-<!doctype html>
+@php
+
+    $host = request()->getHost(); // np. aldi.gazetkapromocyjna.com.pl
+    $mainDomain = config('app.main_domain', 'gazetkapromocyjna.com.pl');
+
+    $isMainDomain = $host === $mainDomain || $host === 'www.' . $mainDomain;
+
+    if (!$isMainDomain) {
+
+        // Wyciągnięcie subdomeny (np. "aldi")
+        $subdomain = explode('.', $host);
+        $sitemapPath = "/sitemaps/sitemap-{$subdomain[0]}.xml";
+    } else {
+        $sitemapPath = "/sitemaps/sitemap-main.xml";
+    }
+
+    $sitemapUrl = url($sitemapPath);
+
+    $env = config('app.env');
+
+    if ($env == 'local')
+    {
+        $follow = 'noindex, nofollow';
+    } else {
+        $follow = $meta_robots ?? 'index, follow';
+    }
+
+
+@endphp
+
+    <!doctype html>
 <html lang="pl">
 <head>
     <x-tag-manager-head/>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="robots" content="noindex">
-    <meta name="google-site-verification" content="FQIP9C2zoaXYvzpKGwbWQOmnpEX7UDEyNRL7FGTh4KQ" />
-    <title>@if($meta_title) {{ $meta_title }} @else Brak tytułu @endif </title>
+    <meta name="robots" content="{{ $follow }}">
+    <meta name="google-adsense-account" content="ca-pub-0504184268109752">
+    <meta name="google-site-verification" content="FQIP9C2zoaXYvzpKGwbWQOmnpEX7UDEyNRL7FGTh4KQ"/>
+    <title>@if($meta_title)
+            {{ $meta_title }}
+        @else
+            Brak tytułu
+        @endif </title>
     <meta name="Description" content="@if($meta_description) {{ $meta_description }} @else Brak tytułu @endif ">
 
     {{-- Preconnect --}}
@@ -25,7 +61,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ asset('icons/site.webmanifest') }}">
     <meta name="theme-color" content="#1967d2">
-
+    <link rel="sitemap" type="application/xml" href="{{ $sitemapUrl }}">
     @stack('preload')
 
     <script>
@@ -37,9 +73,8 @@
     <!-- GPT loader -->
     <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
     <script>
-        window.googletag = window.googletag || { cmd: [] };
+        window.googletag = window.googletag || {cmd: []};
     </script>
-
 
 
 </head>
@@ -54,9 +89,9 @@
         <x-loupe-button href="#"/>
     </x-search>
 </x-section>
-    <main class="flex flex-col lg:mx-2">
-        {{ $slot }}
-    </main>
+<main class="flex flex-col lg:mx-2">
+    {{ $slot }}
+</main>
 <x-footer/>
 @isset($scripts)
     {{ $scripts }}
