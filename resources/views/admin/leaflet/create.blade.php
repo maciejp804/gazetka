@@ -72,7 +72,7 @@
 
             <x-form.textarea type="textarea" name="description_short" label="Zajawka" :value="old('description_short')" maxlength="600"/>
             <x-form.textarea type="textarea" name="description_long" label="Opis" :value="old('description_long')"  maxlength="1000"/>
-
+            <x-form.input name="number" label="Numer starej gazetki" />
 
             <x-form.submit label="Dodaj gazetkę"/>
         </form>

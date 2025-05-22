@@ -80,6 +80,7 @@ class LeafletController extends Controller
             'for_all_stores' => 'nullable|in:0,1',
             'pinned' => 'nullable|in:0,1',
             'priority' => 'nullable|in:0,1,2,3,4,5',
+            'number' => 'nullable|integer',
 
         ]);
 
@@ -224,6 +225,7 @@ class LeafletController extends Controller
             'for_all_stores' => 'in:0,1',
             'description_short' => 'nullable|string',
             'description_long' => 'nullable|string',
+            'number' => 'nullable|numeric',
         ]);
 
 

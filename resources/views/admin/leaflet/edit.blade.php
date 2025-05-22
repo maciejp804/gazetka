@@ -77,9 +77,9 @@
 
             <x-form.textarea type="textarea" name="description_short" label="Zajawka" :value="$leaflet->description_short" maxlength="600"/>
             <x-form.textarea type="textarea" name="description_long" label="Opis" :value="$leaflet->description_long"  maxlength="1000"/>
+            <x-form.input name="number" label="Numer starej gazetki" :value="$leaflet->number"/>
 
-
-            <x-form.submit label="Edytuj sieć handlową"/>
+            <x-form.submit label="Edytuj"/>
         </form>
         <form action="{{ route('admin.leaflets.destroy', $leaflet) }}" method="POST" onsubmit="return confirm('Na pewno chcesz usunąć?')" class="flex justify-end">
             @csrf
