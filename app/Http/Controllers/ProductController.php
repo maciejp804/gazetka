@@ -31,14 +31,16 @@ class ProductController extends Controller
     public function index()
     {
 
-        $location = Cookie::get('user_location');
-        if (!$location) {
-            $placesAll = Place::all();
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = (object)$locationData;
-        }
+
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $product_categories = Category::where('status', 'active')
             ->where('type', 'product')
@@ -100,14 +102,15 @@ class ProductController extends Controller
 
         $subcategories = $category->children;
 
-        $location = Cookie::get('user_location');
-        if (!$location) {
-            $placesAll = Place::all();
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = (object)$locationData;
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
 
         $products = $this->productService->getHotSpots(null, $category->id, null,null,15);
@@ -170,14 +173,15 @@ class ProductController extends Controller
         }
         $sucategories = $category->children;
 
-        $location = Cookie::get('user_location');
-        if (!$location) {
-            $placesAll = Place::all();
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = (object)$locationData;
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $products = $this->productService->getHotSpots(null,null, $subcategory->id, null,15);
 
@@ -242,14 +246,15 @@ class ProductController extends Controller
         $averageRating = $product->averageRating();
         $ratingCount = $product->ratingCount();
 
-        $location = Cookie::get('user_location');
-        if (!$location) {
-            $placesAll = Place::all();
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = (object)$locationData;
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $products = $this->productService->getHotSpots(null,null, $product->category_id, null,null);
 
@@ -320,14 +325,15 @@ class ProductController extends Controller
         });
 
 
-        $location = Cookie::get('user_location');
-        if (!$location) {
-            $placesAll = Place::all();
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = (object)$locationData;
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
 
         $breadcrumbs = [
