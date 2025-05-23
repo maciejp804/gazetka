@@ -5,7 +5,7 @@ return [
     'defaults' => [
         'main_products' => [
             'default' => [
-                'meta_title' => "Produkty",
+                'meta_title' => "Produkty w promocji 🔥 aktualne oferty z gazetek",
                 'meta_description' => "Szukasz okazji? Przeglądaj produkty i korzystaj z aktualnych promocji 🔥 Oszczędzaj więcej z GazetkaPromocyjna.com.pl",
                 'meta_keywords' => "produkty, gazetki, katalogi, promocje, sieci handlowe",
                 'h1_title' => "<strong>Produkty</strong> w gazetkach promocyjnych",
@@ -14,7 +14,7 @@ return [
         ],
         'main_products_category' => [
             'default' => [
-                'meta_title' => "Produkty 🔥 {category}",
+                'meta_title' => "Produkty {category} 🔥 sprawdź produkty z gazetek",
                 'meta_description' => "Szukasz okazji w kategorii {category}? Przeglądaj produkty i korzystaj z aktualnych promocji 🔥 Oszczędzaj więcej z GazetkaPromocyjna.com.pl!",
                 'meta_keywords' => "{category}, gazetki, katalogi, promocje, sieci handlowe",
                 'h1_title' => "<strong>Produkty</strong> w gazetkach promocyjnych • <strong>{category}</strong>",
@@ -23,7 +23,7 @@ return [
         ],
         'main_products_subcategory' => [
             'default' => [
-                'meta_title' => "Produkty 🔥 {category} - {subcategory}",
+                'meta_title' => "Produkty {subcategory} 🔥 sprawdź produkty z gazetek",
                 'meta_description' => "Szukasz okazji w kategorii {subcategory}? Przeglądaj produkty i korzystaj z aktualnych promocji 🔥 Oszczędzaj więcej z GazetkaPromocyjna.com.pl!",
                 'meta_keywords' => "{subcategory}, {category}, gazetki, katalogi, promocje, sieci handlowe",
                 'h1_title' => "<strong>Produkty</strong> w gazetkach promocyjnych • <strong>{subcategory}</strong> - {category}",

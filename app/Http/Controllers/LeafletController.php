@@ -112,7 +112,7 @@ class LeafletController extends Controller
         $products = $this->productService->getHotSpots();
 
 //        dd($products);
-        $leaflets = $this->leafletService->getLeafletsSimplePaginate(10, $category->id);
+        $leaflets = $this->leafletService->getLeafletsSimplePaginate(15, $category->id);
 
         $place = Place::where('id', '=', 1172)->first();
 //        $location = Cookie::get('user_location');
