@@ -3,7 +3,7 @@
         'slots' => [
             'homepage_header' => [
                 'slot' => '/7894359647/gp_homepage_top_gam',
-                'div_id' => 'div-gpt-ad-1747054874411-0',
+                'div_id' => 'homepage_header',
                 'mapping' => [
                     [
                         'viewport' => [750, 0],
@@ -19,20 +19,20 @@
                     ],
                 ],
                 'enabled' => true, // ← wyłącza slot
-                'priority' => 'adsense', // gam lub adsense
+                'priority' => 'gam', // gam lub adsense
                 'targeting' => [
                     'page' => 'home',  // ← dynamiczne pole, może być nadpisane
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
                     'slot'   => '9092204614',
-                    'format' => 'auto',
+                    'format' => 'rectangle',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
             'homepage_middle_1' => [
                 'slot' => '/7894359647/baner_750X200-2',
-                'div_id' => 'div-gpt-ad-1747130587982-0',
+                'div_id' => 'homepage_middle_1',
                 'mapping' => [
                     [
                         'viewport' => [1440, 0],
@@ -58,14 +58,14 @@
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
-                    'slot'   => '1234567890',
-                    'format' => 'auto',
+                    'slot'   => '1234567890', //??
+                    'format' => 'rectangle',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
             'homepage_middle_2' => [
                 'slot' => '/7894359647/baner_750x250',
-                'div_id' => 'div-gpt-ad-1747132131771-0',
+                'div_id' => 'homepage_middle_2',
                 'mapping' => [
                     [
                         'viewport' => [782, 0],
@@ -87,14 +87,14 @@
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
-                    'slot'   => '1234567890',
-                    'format' => 'auto',
+                    'slot'   => '1234567899', //??
+                    'format' => 'rectangle',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
             'homepage_sidebar_left' => [
                 'slot' => '/7894359647/baner_300X600',
-                'div_id' => 'article-vertical-ad-left',
+                'div_id' => 'homepage_sidebar_left',
                 'mapping' => [
                     [
                         'viewport' => [1500, 0],
@@ -120,14 +120,14 @@
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
-                    'slot'   => '1234567890',
-                    'format' => 'auto',
+                    'slot'   => '1234567898', //??
+                    'format' => 'rectangle',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
             'homepage_sidebar_right' => [
                 'slot' => '/7894359647/sidebar_right',
-                'div_id' => 'div-gpt-ad-1747136708783-0',
+                'div_id' => 'homepage_sidebar_right',
                 'mapping' => [
                     [
                         'viewport' => [1500, 0],
@@ -153,14 +153,14 @@
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
-                    'slot'   => '1234567890',
-                    'format' => 'auto',
+                    'slot'   => '1234567896', //??
+                    'format' => 'rectangle',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
             'homepage_footer' => [
                 'slot' => '/7894359647/gp_homepage_footer_gam',
-                'div_id' => 'div-gpt-ad-1747110541641-0',
+                'div_id' => 'homepage_footer',
                 'mapping' => [
                     [
                         'viewport' => [1300, 0],
@@ -187,7 +187,7 @@
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
                     'slot'   => '7982319809',
-                    'format' => 'auto',
+                    'format' => 'rectangle',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],

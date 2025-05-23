@@ -11,35 +11,15 @@
     $priority = $ad['priority'] ?? 'gam';
     $isDebug = config('admanager.debug');
     $targeting = array_merge($ad['targeting'] ?? [], $overrides);
+
+    $mappingFiltered = collect($ad['mapping'] ?? [])->filter(function ($m) {
+        $s = $m['sizes'][0] ?? [0, 0];
+        return $s[0] > 0 && $s[1] > 0;
+    })->values()->all();
 @endphp
 
-@if($ad && $enabled)
+@if($ad && $enabled && count($mappingFiltered) > 0)
     <div {{ $attributes->merge(['id' => $divId]) }}></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mapping = @json($ad['mapping'] ?? []);
-            const div = document.getElementById('{{ $divId }}');
-            const vw = window.innerWidth;
-
-            let matchedHeight = 0;
-
-            for (let i = 0; i < mapping.length; i++) {
-                const vp = mapping[i].viewport;
-                if (vw >= vp[0]) {
-                    const size = mapping[i].sizes[0];
-                    if (Array.isArray(size)) {
-                        matchedHeight = size[1];
-                    }
-                    break;
-                }
-            }
-
-            if (div && matchedHeight > 0) {
-                div.style.minHeight = matchedHeight + 'px';
-            }
-        });
-    </script>
 
     @if($isDebug)
         <script>
@@ -49,8 +29,7 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0 3xs:h-25 2xs:h-70"
-             style="display:block"
+        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0" style="display:block"
              data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
              data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
              data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"
@@ -60,8 +39,6 @@
 
         <script>
             function fallbackToGAM(divId) {
-                console.warn('[AdManager] ➞ Fallback do GAM dla:', divId);
-
                 const adsenseIns = document.getElementById(divId + '-adsense');
                 if (adsenseIns) adsenseIns.remove();
 
@@ -70,8 +47,13 @@
 
                 googletag = window.googletag || {cmd: []};
                 googletag.cmd.push(function () {
+                    if (!{{ count($mappingFiltered) }}) {
+                        console.warn('[AdManager] 🛑 Pominięto slot z pustym mappingFiltered: {{ $slotName }}');
+                        return;
+                    }
+
                     const mapping = googletag.sizeMapping()
-                    @foreach($ad['mapping'] as $map)
+                    @foreach($mappingFiltered as $map)
                         .addSize([{{ $map['viewport'][0] }}, {{ $map['viewport'][1] }}], {!! json_encode($map['sizes']) !!})
                         @endforeach
                         .build();
@@ -89,26 +71,20 @@
 
                     @if($refreshInterval)
                     const refreshMs = {{ $refreshInterval * 1000 }};
-                    const refreshEl = document.getElementById(divId);
-                    if (refreshEl) {
+                    const el = document.getElementById(divId);
+                    if (el) {
                         let hasRefreshed = false;
-                        const startRefreshing = () => {
-                            if (!hasRefreshed) {
-                                hasRefreshed = true;
-                                setInterval(() => {
-                                    googletag.pubads().refresh([slot]);
-                                }, refreshMs);
-                            }
-                        };
                         const observer = new IntersectionObserver((entries) => {
                             entries.forEach(entry => {
-                                if (entry.isIntersecting) {
-                                    startRefreshing();
-                                    observer.unobserve(refreshEl);
+                                if (entry.isIntersecting && !hasRefreshed) {
+                                    hasRefreshed = true;
+                                    setInterval(() => {
+                                        googletag.pubads().refresh([slot]);
+                                    }, refreshMs);
                                 }
                             });
                         }, { threshold: 0.5 });
-                        observer.observe(refreshEl);
+                        observer.observe(el);
                     }
                     @endif
                 });
@@ -118,20 +94,21 @@
                 const ins = document.getElementById('{{ $divId }}-adsense');
                 if (!ins) return fallbackToGAM('{{ $divId }}');
 
-                const mapping = @json($ad['mapping'] ?? []);
+                const mapping = @json($mappingFiltered);
                 const vw = window.innerWidth;
                 let matchedSize = null;
 
                 for (let i = 0; i < mapping.length; i++) {
-                    const vp = mapping[i].viewport;
-                    if (vw >= vp[0]) {
+                    if (vw >= mapping[i].viewport[0]) {
                         matchedSize = mapping[i].sizes[0];
                         break;
                     }
                 }
 
                 if (!matchedSize || matchedSize[0] === 0 || matchedSize[1] === 0) {
-                    return fallbackToGAM('{{ $divId }}');
+                    const div = document.getElementById('{{ $divId }}');
+                    if (div) div.style.display = 'none';
+                    return;
                 }
 
                 ins.style.width = matchedSize[0] + 'px';
@@ -171,24 +148,25 @@
         <script>
             googletag = window.googletag || {cmd: []};
             googletag.cmd.push(function () {
-                const mappingData = @json($ad['mapping'] ?? []);
-                const viewportWidth = window.innerWidth;
-                let matchedSize = null;
+                const vw = window.innerWidth;
+                const raw = @json($mappingFiltered);
 
-                for (let i = 0; i < mappingData.length; i++) {
-                    const vp = mappingData[i].viewport;
-                    if (viewportWidth >= vp[0]) {
-                        matchedSize = mappingData[i].sizes[0];
+                let matchedSize = null;
+                for (let i = 0; i < raw.length; i++) {
+                    if (vw >= raw[i].viewport[0]) {
+                        matchedSize = raw[i].sizes[0];
                         break;
                     }
                 }
 
-                if (Array.isArray(matchedSize) && (matchedSize[0] === 0 || matchedSize[1] === 0)) {
+                if (!matchedSize || matchedSize[0] === 0 || matchedSize[1] === 0) {
+                    const el = document.getElementById('{{ $divId }}');
+                    if (el) el.style.display = 'none';
                     return;
                 }
 
                 const mapping = googletag.sizeMapping()
-                @foreach($ad['mapping'] as $map)
+                @foreach($mappingFiltered as $map)
                     .addSize([{{ $map['viewport'][0] }}, {{ $map['viewport'][1] }}], {!! json_encode($map['sizes']) !!})
                     @endforeach
                     .build();
@@ -204,7 +182,6 @@
                 googletag.enableServices();
 
                 const el = document.getElementById('{{ $divId }}');
-
                 const observer = new IntersectionObserver((entries, obs) => {
                     entries.forEach(entry => {
                         if (entry.isIntersecting) {
@@ -220,19 +197,13 @@
                 const refreshMs = {{ $refreshInterval * 1000 }};
                 if (el) {
                     let hasRefreshed = false;
-                    const startRefreshing = () => {
-                        if (!hasRefreshed) {
-                            hasRefreshed = true;
-                            setInterval(() => {
-                                googletag.pubads().refresh([slot]);
-                            }, refreshMs);
-                        }
-                    };
                     const observerRefresh = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                startRefreshing();
-                                observerRefresh.unobserve(el);
+                            if (entry.isIntersecting && !hasRefreshed) {
+                                hasRefreshed = true;
+                                setInterval(() => {
+                                    googletag.pubads().refresh([slot]);
+                                }, refreshMs);
                             }
                         });
                     }, { threshold: 0.5 });
@@ -243,4 +214,3 @@
         </script>
     @endif
 @endif
-

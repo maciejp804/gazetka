@@ -21,31 +21,54 @@
         </div>
     @endif
     <div class="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-        <h2 class="mt-6">Aktualne strony w gazetce</h2>
-        <form action="{{route('admin.leaflets.page.update.order', $leaflet)}}" method="POST">
+        <h2 class="mt-6 text-xl font-semibold">Aktualne strony w gazetce</h2>
+        <div class="mt-4">
+            <label class="flex items-center gap-2 text-sm">
+                <input type="checkbox" id="select-all">
+                <span>Zaznacz wszystko</span>
+            </label>
+        </div>
+        {{-- Formularz sortowania + masowego usuwania --}}
+        <form action="{{ route('admin.leaflets.page.update.order', $leaflet) }}" method="POST" id="bulk-delete-form">
             @csrf
             @method('PUT')
 
-            <!-- Wyświetlanie przypisanych stron z możliwością przeciągania -->
-            <ul id="sortable-pages" class="space-y-4">
+            {{-- Lista stron --}}
+            <ul id="sortable-pages" class="space-y-4 mt-4">
                 @foreach($leaflet->pages as $page)
-                    <li data-id="{{ $page->id }}" class="flex justify-between items-center p-2 border rounded shadow cursor-pointer">
-                        <span>{{ $page->title }}</span>
-                        <img src="{{Storage::url($page->image_path.'.webp')}}" class="w-1/4" alt="sd">
+                    <li data-id="{{ $page->id }}" class="flex justify-between items-center p-2 border rounded shadow cursor-pointer gap-4">
+                        <div class="flex items-center gap-3 flex-1">
+                            <input type="checkbox" name="selected_pages[]" value="{{ $page->id }}" class="bulk-checkbox">
+                            <img src="{{ Storage::url($page->image_path . '.webp') }}" class="w-24 rounded shadow" alt="">
+                            <span class="text-sm">{{ $page->title ?? 'Strona ' . ($loop->iteration) }}</span>
+                        </div>
+
                         <input type="hidden" name="pages[]" value="{{ $page->id }}">
                         <input type="hidden" name="sort_order[]" value="{{ $loop->index }}">
                     </li>
                 @endforeach
             </ul>
-            <x-form.submit label="Zapisz kolejność" />
+
+            {{-- Akcje --}}
+            <div class="flex justify-between items-center mt-6">
+                <div>
+                    <x-form.submit label="💾 Zapisz" onclick="return confirm('Na pewno zmienić zaznaczone strony?')"/>
+                </div>
+
+            </div>
         </form>
+
+        {{-- Zaznacz wszystko --}}
+
     </div>
+
 
     @vite(['resources/js/sort/sortOrder.js'])
 
     <script>
-
-
+        document.getElementById('select-all').addEventListener('change', function () {
+            document.querySelectorAll('.bulk-checkbox').forEach(cb => cb.checked = this.checked);
+        });
     </script>
 
 

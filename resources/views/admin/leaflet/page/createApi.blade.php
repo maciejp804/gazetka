@@ -32,9 +32,10 @@
 
             <!-- Dodawanie nowych stron -->
 
-            <x-form.input name="base" label="Link bazowy (bez numeru strony):" :required="true" placeholder="https://leclerc.pl/wp-content/uploads/2025/05/calosc_S02_Strona_"/>
+            <x-form.input name="base" label="Link bazowy (bez numeru strony):" :required="true" placeholder="link do strony"/>
             <x-form.input name="ext" label="Rozszerzenie pliku (np. .jpg, -scaled.jpg):" :required="true" placeholder=".jpg"/>
-            <x-form.input type="number" name="pad" label="Liczba cyfr w numerze strony (np. 2 dla 01, 1 dla 1):" :required="true" value="2"/>
+            <x-form.input type="number" name="pad" label="Liczba cyfr w numerze strony (np. 2 dla 01, 1 dla 1):" :required="true"/>
+            <x-form.input type="number" name="start" label="liczba początkowa" :required="true" value="1"/>
             <x-form.input type="number" name="pages" label="Liczba stron:" :required="true" />
 
             <x-form.submit label="Rozpocznij pobieranie" />

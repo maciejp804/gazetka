@@ -145,6 +145,7 @@ Route::prefix('/panel')->name('admin.')->group(function () {
         Route::post('/{leaflet}/pages/add-api', [AdminPageController::class, 'addApi'])->name('page.add.api');
         Route::get('/{leaflet}/pages/edit', [AdminPageController::class, 'edit'])->name('page.edit');
         Route::put('/{leaflet}/pages/update', [AdminPageController::class, 'update'])->name('page.update');
+        Route::get('/{leaflet}/pages/import', [AdminPageController::class, 'import'])->name('page.import');
         Route::get('/{leaflet}/pages/order', [AdminPageController::class, 'editOrder'])->name('page.edit.order');
         Route::put('/{leaflet}/pages/updateOrder', [AdminPageController::class, 'updateOrder'])->name('page.update.order');
 

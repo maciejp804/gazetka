@@ -59,7 +59,7 @@
     </div>
     <div class="flex mb-5">
         {{-- Reklama pionowa po lewej stronie --}}
-        <div class="hidden mt-5 justify-end xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+        <div class="hidden mt-5 justify-end 1xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
             <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
             <x-admanager
                 slot-name="homepage_sidebar_left"
@@ -153,7 +153,7 @@
         </x-div-1060-leaftet>
 
         {{-- Reklama pionowa po prawej stronie --}}
-        <div class="hidden mt-5 justify-start xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
+        <div class="hidden mt-5 justify-start 1xl:flex xl:min-w-40 2xl:min-w-75 h-full sticky top-10">
             <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
             <x-admanager
                 slot-name="homepage_sidebar_right"

@@ -75,7 +75,7 @@
     <script>
         window.googletag = window.googletag || {cmd: []};
     </script>
-
+    <x-auto-ad/>
 
 </head>
 <body class="font-ubuntu" id="app">
