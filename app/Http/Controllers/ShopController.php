@@ -34,16 +34,15 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $placesAll = Place::all();
-
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $categories = Category::where('status', 'active')->where('type', 'shop')->get();
 
@@ -96,16 +95,15 @@ class ShopController extends Controller
             abort(404);
         }
 
-        $placesAll = Place::all();
-
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $retailers_time = SortOptionsService::getSortPopularity();
 

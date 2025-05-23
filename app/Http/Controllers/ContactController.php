@@ -14,14 +14,15 @@ class ContactController extends Controller
 {
     public function index()
     {
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = Place::where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],

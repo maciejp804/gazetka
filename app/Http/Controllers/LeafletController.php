@@ -36,14 +36,15 @@ class LeafletController extends Controller
 
         $leaflets = $this->leafletService->getLeafletsSimplePaginate(15);
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = Place::where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $product_categories = Category::where('status', "active")
             ->where('type', 'product')
@@ -113,14 +114,15 @@ class LeafletController extends Controller
 //        dd($products);
         $leaflets = $this->leafletService->getLeafletsSimplePaginate(10, $category->id);
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = Place::where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
 
         $leaflet_sort = SortOptionsService::getSortOptions();
@@ -216,14 +218,15 @@ class LeafletController extends Controller
 
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $agent = new Agent();
         $isMobile = $agent->isMobile(); // Zwraca true, jeśli to urządzenie mobilne

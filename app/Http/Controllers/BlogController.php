@@ -34,14 +34,15 @@ class BlogController extends Controller
 
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         [$leaflets, $counter] = $this->leafletService->getLeaflets(20);
 
@@ -196,14 +197,15 @@ class BlogController extends Controller
 
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],

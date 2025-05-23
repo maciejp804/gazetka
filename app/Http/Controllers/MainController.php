@@ -35,13 +35,15 @@ class MainController extends Controller
     {
         $placesLimit40 = Place::orderByDesc('population')->limit(40)->get();
 
-        $location = Cookie::get('user_location');
-        if (!$location) {
-            $place = Place::find(1172); // Szybsze niż `where('id', '=', 1172)->first();`
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::find($locationData['id']);
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         [$leaflets, $counter_leaflets] = $this->leafletService->getLeaflets(40, null, null, [['pinned', 'desc']]);
 
@@ -242,14 +244,15 @@ class MainController extends Controller
 
         $placesLimit40 = $placesAll->sortByDesc('population')->take(40);
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $averageRating = $shop->averageRating();
         $ratingCount = $shop->ratingCount();
@@ -513,14 +516,15 @@ class MainController extends Controller
     public function about()
     {
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = Place::where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -560,14 +564,15 @@ class MainController extends Controller
     public function privacy()
     {
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = Place::where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -591,14 +596,15 @@ class MainController extends Controller
     public function cookies()
     {
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = Place::where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -622,14 +628,15 @@ class MainController extends Controller
     public function statute()
     {
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = Place::where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = Place::where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],

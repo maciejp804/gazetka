@@ -28,16 +28,15 @@ class VoucherController extends Controller
     }
     public function index()
     {
-        $placesAll = Place::all();
-
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $shops = $this->shops(32);
 
@@ -95,16 +94,15 @@ class VoucherController extends Controller
             abort(404);
         }
 
-        $placesAll = Place::all();
-
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $model = new Voucher(); // Przykład: szukamy tagów dla kuponów
         $tags = Tag::whereJsonContains('applies_to', class_basename($model))->get();

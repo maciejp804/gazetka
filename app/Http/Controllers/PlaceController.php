@@ -24,14 +24,15 @@ class PlaceController extends Controller
 
         $placesAll = Place::with('voivodeship')->orderBy('name')->get();
 
-        $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
 
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
@@ -64,13 +65,21 @@ class PlaceController extends Controller
         $placesVoivodeship = $placesAll->where('voivodeship_id', $voivodeship->id) ->sortBy('name');
 
         $location = Cookie::get('user_location');
-
-        if (!$location) {
-            $place = $placesAll->where('id', '=', 1172)->first();
-        } else {
-            $locationData = json_decode($location, true);
-            $place = $placesAll->where('id', '=', $locationData['id'])->first();
-        }
+        $place = Place::where('id', '=', 1172)->first();
+//        $location = Cookie::get('user_location');
+//        if (!$location) {
+//            $placesAll = Place::all();
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = (object)$locationData;
+//        }
+//        if (!$location) {
+//            $place = $placesAll->where('id', '=', 1172)->first();
+//        } else {
+//            $locationData = json_decode($location, true);
+//            $place = $placesAll->where('id', '=', $locationData['id'])->first();
+//        }
 
 
         $categories = Category::where('status', 'active')->where('type', 'shop')->get();
