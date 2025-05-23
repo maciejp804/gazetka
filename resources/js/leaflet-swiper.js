@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (swiper9.isEnd) {
             console.log('Osiągnięto ostatni slajd, rozpoczynam odliczanie do przekierowania.');
-            startRedirectCountdown();
+            // startRedirectCountdown();
         }
 
         const slides = swiper9.slides;
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     swiper9.on('reachEnd', function () {
         console.log('Reach End');
-        startRedirectCountdown();
+        // startRedirectCountdown();
     });
 
     function startRedirectCountdown() {
