@@ -79,16 +79,16 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        @if($divId == 'div-gpt-ad-1747054874411-0')
-            <ins class="adsbygoogle"
-                 style="display:inline-block;width:750px;height:300px"
-                 data-ad-client="ca-pub-0504184268109752"
-                 data-ad-slot="9092204614"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+{{--        @if($divId == 'div-gpt-ad-1747054874411-0')--}}
+{{--            <ins class="adsbygoogle"--}}
+{{--                 style="display:inline-block;width:750px;height:300px"--}}
+{{--                 data-ad-client="ca-pub-0504184268109752"--}}
+{{--                 data-ad-slot="9092204614"></ins>--}}
+{{--            <script>--}}
+{{--                (adsbygoogle = window.adsbygoogle || []).push({});--}}
+{{--            </script>--}}
 
-        @endif
+{{--        @endif--}}
 
         <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0"
              style="{{ $ad['adsense_fallback']['style'] }}"
