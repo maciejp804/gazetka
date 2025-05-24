@@ -290,7 +290,32 @@
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
-                    'slot'   => '7982319809',
+                    'slot'   => '7886934153',
+                    'format' => 'auto',
+                ],
+                'refresh_interval' => 30, // sekundy nie mniej niż 30s.
+            ],
+            'subdomain_middle_desktop_3' => [
+                'slot' => '/7894359647/gp_subdomain_page_middle_desktop_3_gam',
+                'div_id' => 'subdomain_middle_desktop_2',
+                'mapping' => [
+                    [
+                        'viewport' => [768, 0],
+                        'sizes' => [[750, 300]],
+                    ],
+                    [
+                        'viewport' => [640, 0],
+                        'sizes' => [[0, 0]],
+                    ],
+                ],
+                'enabled' => true, // ← wyłącza slot
+                'priority' => 'gam', // gam lub adsense
+                'targeting' => [
+                    'page' => 'home',  // ← dynamiczne pole, może być nadpisane
+                ],
+                'adsense_fallback' => [
+                    'client' => 'ca-pub-0504184268109752',
+                    'slot'   => '7886934153',
                     'format' => 'auto',
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.

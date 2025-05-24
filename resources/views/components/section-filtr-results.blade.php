@@ -27,6 +27,16 @@
                     </div>
                     @if($adsStatus === true)
                         @switch($loop->iteration)
+                            @case(5)
+                                {{-- Reklama pozioma - 1--}}
+                                <div class="hidden lg:grid lg:col-span-5 lg:my-5 lg:min-h-75 mx-auto">
+                                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                                    <x-admanager
+                                        slot-name="subdomain_middle_desktop_3"
+                                        :overrides="['page' => 'subdomain.index']"
+                                    />
+                                </div>
+                                @break
                             @case(10)
                                 {{-- Reklama pozioma - 1--}}
                                 <div class="hidden lg:grid lg:col-span-5 lg:my-5 lg:min-h-75 mx-auto">
