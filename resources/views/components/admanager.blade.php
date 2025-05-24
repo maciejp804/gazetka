@@ -29,7 +29,7 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        <div {{ $attributes->merge(['id' => $divId]) }}></div>
+
         <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0"
              style="{{ $ad['adsense_fallback']['style'] }}"
              data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
