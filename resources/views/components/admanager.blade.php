@@ -19,7 +19,7 @@
 @endphp
 
 @if($ad && $enabled && count($mappingFiltered) > 0)
-    <div {{ $attributes->merge(['id' => $divId]) }}></div>
+
 
     @if($isDebug)
         <script>
@@ -145,6 +145,7 @@
         </script>
 
     @elseif($priority === 'gam')
+        <div {{ $attributes->merge(['id' => $divId]) }}></div>
         <script>
             googletag = window.googletag || {cmd: []};
             googletag.cmd.push(function () {
