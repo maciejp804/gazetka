@@ -7,6 +7,7 @@
 
 @php
     $ad = config("admanager.slots.$slotName");
+    dd($ad);
     $enabled = $ad['enabled'] ?? false;
     $divId = $ad['div_id'] ?? 'div-' . md5($slotName);
     $basePriority = $ad['priority'] ?? 'gam';
@@ -29,11 +30,17 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0" style="display:block"
+        <ins id="{{ $divId }}-adsense" class="adsbygoogle"
+             style="{{ $ad['adsense_fallback']['style'] }}"
              data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
              data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
-             data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"
-             data-full-width-responsive="true"></ins>
+             @if($ad['adsense_fallback']['format'] != null)
+                 data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"
+             @endif
+             @if(!$ad['adsense_fallback']['responsive'])
+                 data-full-width-responsive="true"
+             @endif
+        ></ins>
 
         @if (! defined('__ADSENSE_SCRIPT_INCLUDED__'))
             @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))
