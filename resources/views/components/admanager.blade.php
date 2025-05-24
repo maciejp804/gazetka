@@ -2,13 +2,15 @@
     'slotName',
     'overrides' => [],
     'refreshInterval' => config("admanager.slots.$slotName.refresh_interval"),
+    'abTestGroup' => null, // 'a' or 'b'
 ])
 
 @php
     $ad = config("admanager.slots.$slotName");
     $enabled = $ad['enabled'] ?? false;
     $divId = $ad['div_id'] ?? 'div-' . md5($slotName);
-    $priority = $ad['priority'] ?? 'gam';
+    $basePriority = $ad['priority'] ?? 'gam';
+    $priority = $abTestGroup === 'b' ? 'adsense' : $basePriority;
     $isDebug = config('admanager.debug');
     $targeting = array_merge($ad['targeting'] ?? [], $overrides);
 
@@ -19,8 +21,6 @@
 @endphp
 
 @if($ad && $enabled && count($mappingFiltered) > 0)
-
-
     @if($isDebug)
         <script>
             console.info('[AdManager] Slot: {{ $slotName }} (divId: {{ $divId }})');
@@ -35,7 +35,10 @@
              data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"
              data-full-width-responsive="true"></ins>
 
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
+        @if (! defined('__ADSENSE_SCRIPT_INCLUDED__'))
+            @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
+        @endif
 
         <script>
             function fallbackToGAM(divId) {
@@ -114,9 +117,12 @@
                 ins.style.width = matchedSize[0] + 'px';
                 ins.style.height = matchedSize[1] + 'px';
 
+                let hasLoaded = false;
+
                 const observer = new IntersectionObserver((entries, obs) => {
                     entries.forEach(entry => {
-                        if (!entry.isIntersecting) return;
+                        if (!entry.isIntersecting || hasLoaded) return;
+                        hasLoaded = true;
                         obs.unobserve(ins);
 
                         let fallbackTimer = setTimeout(() => fallbackToGAM('{{ $divId }}'), 1200);
@@ -146,6 +152,7 @@
 
     @elseif($priority === 'gam')
         <div {{ $attributes->merge(['id' => $divId]) }}></div>
+
         <script>
             googletag = window.googletag || {cmd: []};
             googletag.cmd.push(function () {
