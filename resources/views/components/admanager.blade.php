@@ -29,7 +29,7 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        <ins id="{{ $divId }}-adsense" class="adsbygoogle"
+        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0"
              style="{{ $ad['adsense_fallback']['style'] }}"
              data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
              data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
@@ -134,7 +134,11 @@
                         let fallbackTimer = setTimeout(() => fallbackToGAM('{{ $divId }}'), 1200);
 
                         try {
-                            const result = (adsbygoogle = window.adsbygoogle || []).push({});
+                            if (!window.__adsenseManualInit) {
+                                window.__adsenseManualInit = true;
+                                const result = (adsbygoogle = window.adsbygoogle || []).push({});
+                            }
+
                             ins.classList.remove('opacity-0');
 
                             if (result && typeof result.then === 'function') {
