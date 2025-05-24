@@ -66,7 +66,22 @@
                 <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
 
             </x-section>
+            <div class="hidden lg:flex lg:justify-center lg:my-5 lg:min-h-75 mx-auto">
+                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                <x-admanager
+                    slot-name="subdomain_middle_desktop_3"
+                    :overrides="['page' => 'subdomain.index']"
+                />
+            </div>
 
+            {{-- Reklama pozioma mobile- 2--}}
+            <div class="flex justify-center my-5 min-h-70 mx-auto sm:hidden">
+                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                <x-admanager
+                    slot-name="subdomain_middle_mobile_2"
+                    :overrides="['page' => 'subdomain.index']"
+                />
+            </div>
             @if($products->isNotEmpty())
                 <x-section>
                     <x-swiper-products
