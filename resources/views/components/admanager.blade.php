@@ -7,7 +7,6 @@
 
 @php
     $ad = config("admanager.slots.$slotName");
-    dd($ad);
     $enabled = $ad['enabled'] ?? false;
     $divId = $ad['div_id'] ?? 'div-' . md5($slotName);
     $basePriority = $ad['priority'] ?? 'gam';
