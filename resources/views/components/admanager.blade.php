@@ -21,7 +21,35 @@
 @endphp
 
 
-{{--@if($enabled)--}}
+@if($ad && $enabled && count($mappingFiltered) > 0)
+    @if($isDebug)
+        <script>
+            console.info('[AdManager] Slot: {{ $slotName }} (divId: {{ $divId }})');
+            console.info('[AdManager] Priority: {{ $priority }}');
+        </script>
+    @endif
+
+    @if($priority === 'adsense' && isset($ad['adsense_fallback']))
+        @if (! defined('__ADSENSE_SCRIPT_INCLUDED__'))
+            @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
+        @endif
+            <ins id="{{ $divId }}-adsense" class="adsbygoogle"
+                 style="{{ $ad['adsense_fallback']['style'] }}"
+                 data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
+                 data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
+                 @if($ad['adsense_fallback']['format'] != null)
+                     data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"
+                 @endif
+                 @if(!$ad['adsense_fallback']['responsive'])
+                     data-full-width-responsive="true"
+                @endif
+            ></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
+        {{--@if($enabled)--}}
 {{--    <ins id="{{ $divId }}" class="adsbygoogle"--}}
 {{--         style="{{ $ad['adsense_fallback']['style'] }}"--}}
 {{--         data-ad-client="{{ $ad['adsense_fallback']['client'] }}"--}}
@@ -70,15 +98,15 @@
 
 
 
-@if($ad && $enabled && count($mappingFiltered) > 0)
-    @if($isDebug)
-        <script>
-            console.info('[AdManager] Slot: {{ $slotName }} (divId: {{ $divId }})');
-            console.info('[AdManager] Priority: {{ $priority }}');
-        </script>
-    @endif
+{{--@if($ad && $enabled && count($mappingFiltered) > 0)--}}
+{{--    @if($isDebug)--}}
+{{--        <script>--}}
+{{--            console.info('[AdManager] Slot: {{ $slotName }} (divId: {{ $divId }})');--}}
+{{--            console.info('[AdManager] Priority: {{ $priority }}');--}}
+{{--        </script>--}}
+{{--    @endif--}}
 
-    @if($priority === 'adsense' && isset($ad['adsense_fallback']))
+{{--    @if($priority === 'adsense' && isset($ad['adsense_fallback']))--}}
 {{--        @if($divId == 'div-gpt-ad-1747054874411-0')--}}
 {{--            <ins class="adsbygoogle"--}}
 {{--                 style="display:inline-block;width:750px;height:300px"--}}
@@ -90,136 +118,136 @@
 
 {{--        @endif--}}
 
-        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0"
-             style="{{ $ad['adsense_fallback']['style'] }}"
-             data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
-             data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
-             @if($ad['adsense_fallback']['format'] != null)
-                 data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"
-             @endif
-             @if(!$ad['adsense_fallback']['responsive'])
-                 data-full-width-responsive="true"
-             @endif
-        ></ins>
+{{--        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0"--}}
+{{--             style="{{ $ad['adsense_fallback']['style'] }}"--}}
+{{--             data-ad-client="{{ $ad['adsense_fallback']['client'] }}"--}}
+{{--             data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"--}}
+{{--             @if($ad['adsense_fallback']['format'] != null)--}}
+{{--                 data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"--}}
+{{--             @endif--}}
+{{--             @if(!$ad['adsense_fallback']['responsive'])--}}
+{{--                 data-full-width-responsive="true"--}}
+{{--             @endif--}}
+{{--        ></ins>--}}
 
-        @if (! defined('__ADSENSE_SCRIPT_INCLUDED__'))
-            @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
-        @endif
+{{--        @if (! defined('__ADSENSE_SCRIPT_INCLUDED__'))--}}
+{{--            @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))--}}
+{{--            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>--}}
+{{--        @endif--}}
 
-        <script>
-            function fallbackToGAM(divId) {
-                const adsenseIns = document.getElementById(divId + '-adsense');
-                if (adsenseIns) adsenseIns.remove();
+{{--        <script>--}}
+{{--            function fallbackToGAM(divId) {--}}
+{{--                const adsenseIns = document.getElementById(divId + '-adsense');--}}
+{{--                if (adsenseIns) adsenseIns.remove();--}}
 
-                const wrapper = document.getElementById(divId);
-                if (wrapper) wrapper.innerHTML = '';
+{{--                const wrapper = document.getElementById(divId);--}}
+{{--                if (wrapper) wrapper.innerHTML = '';--}}
 
-                googletag = window.googletag || {cmd: []};
-                googletag.cmd.push(function () {
-                    if (!{{ count($mappingFiltered) }}) {
-                        console.warn('[AdManager] 🛑 Pominięto slot z pustym mappingFiltered: {{ $slotName }}');
-                        return;
-                    }
+{{--                googletag = window.googletag || {cmd: []};--}}
+{{--                googletag.cmd.push(function () {--}}
+{{--                    if (!{{ count($mappingFiltered) }}) {--}}
+{{--                        console.warn('[AdManager] 🛑 Pominięto slot z pustym mappingFiltered: {{ $slotName }}');--}}
+{{--                        return;--}}
+{{--                    }--}}
 
-                    const mapping = googletag.sizeMapping()
-                    @foreach($mappingFiltered as $map)
-                        .addSize([{{ $map['viewport'][0] }}, {{ $map['viewport'][1] }}], {!! json_encode($map['sizes']) !!})
-                        @endforeach
-                        .build();
+{{--                    const mapping = googletag.sizeMapping()--}}
+{{--                    @foreach($mappingFiltered as $map)--}}
+{{--                        .addSize([{{ $map['viewport'][0] }}, {{ $map['viewport'][1] }}], {!! json_encode($map['sizes']) !!})--}}
+{{--                        @endforeach--}}
+{{--                        .build();--}}
 
-                    const slot = googletag.defineSlot('{{ $ad['slot'] }}', [], divId)
-                        .defineSizeMapping(mapping)
-                        .addService(googletag.pubads());
+{{--                    const slot = googletag.defineSlot('{{ $ad['slot'] }}', [], divId)--}}
+{{--                        .defineSizeMapping(mapping)--}}
+{{--                        .addService(googletag.pubads());--}}
 
-                    @foreach($targeting as $key => $value)
-                    slot.setTargeting('{{ $key }}', '{{ $value }}');
-                    @endforeach
+{{--                    @foreach($targeting as $key => $value)--}}
+{{--                    slot.setTargeting('{{ $key }}', '{{ $value }}');--}}
+{{--                    @endforeach--}}
 
-                    googletag.enableServices();
-                    googletag.display(divId);
+{{--                    googletag.enableServices();--}}
+{{--                    googletag.display(divId);--}}
 
-                    @if($refreshInterval)
-                    const refreshMs = {{ $refreshInterval * 1000 }};
-                    const el = document.getElementById(divId);
-                    if (el) {
-                        let hasRefreshed = false;
-                        const observer = new IntersectionObserver((entries) => {
-                            entries.forEach(entry => {
-                                if (entry.isIntersecting && !hasRefreshed) {
-                                    hasRefreshed = true;
-                                    setInterval(() => {
-                                        googletag.pubads().refresh([slot]);
-                                    }, refreshMs);
-                                }
-                            });
-                        }, { threshold: 0.5 });
-                        observer.observe(el);
-                    }
-                    @endif
-                });
-            }
+{{--                    @if($refreshInterval)--}}
+{{--                    const refreshMs = {{ $refreshInterval * 1000 }};--}}
+{{--                    const el = document.getElementById(divId);--}}
+{{--                    if (el) {--}}
+{{--                        let hasRefreshed = false;--}}
+{{--                        const observer = new IntersectionObserver((entries) => {--}}
+{{--                            entries.forEach(entry => {--}}
+{{--                                if (entry.isIntersecting && !hasRefreshed) {--}}
+{{--                                    hasRefreshed = true;--}}
+{{--                                    setInterval(() => {--}}
+{{--                                        googletag.pubads().refresh([slot]);--}}
+{{--                                    }, refreshMs);--}}
+{{--                                }--}}
+{{--                            });--}}
+{{--                        }, { threshold: 0.5 });--}}
+{{--                        observer.observe(el);--}}
+{{--                    }--}}
+{{--                    @endif--}}
+{{--                });--}}
+{{--            }--}}
 
-            function tryLoadAdsense() {
-                const ins = document.getElementById('{{ $divId }}-adsense');
-                if (!ins) return fallbackToGAM('{{ $divId }}');
+{{--            function tryLoadAdsense() {--}}
+{{--                const ins = document.getElementById('{{ $divId }}-adsense');--}}
+{{--                if (!ins) return fallbackToGAM('{{ $divId }}');--}}
 
-                const mapping = @json($mappingFiltered);
-                const vw = window.innerWidth;
-                let matchedSize = null;
+{{--                const mapping = @json($mappingFiltered);--}}
+{{--                const vw = window.innerWidth;--}}
+{{--                let matchedSize = null;--}}
 
-                for (let i = 0; i < mapping.length; i++) {
-                    if (vw >= mapping[i].viewport[0]) {
-                        matchedSize = mapping[i].sizes[0];
-                        break;
-                    }
-                }
+{{--                for (let i = 0; i < mapping.length; i++) {--}}
+{{--                    if (vw >= mapping[i].viewport[0]) {--}}
+{{--                        matchedSize = mapping[i].sizes[0];--}}
+{{--                        break;--}}
+{{--                    }--}}
+{{--                }--}}
 
-                if (!matchedSize || matchedSize[0] === 0 || matchedSize[1] === 0) {
-                    const div = document.getElementById('{{ $divId }}');
-                    if (div) div.style.display = 'none';
-                    return;
-                }
+{{--                if (!matchedSize || matchedSize[0] === 0 || matchedSize[1] === 0) {--}}
+{{--                    const div = document.getElementById('{{ $divId }}');--}}
+{{--                    if (div) div.style.display = 'none';--}}
+{{--                    return;--}}
+{{--                }--}}
 
-                ins.style.width = matchedSize[0] + 'px';
-                ins.style.height = matchedSize[1] + 'px';
+{{--                ins.style.width = matchedSize[0] + 'px';--}}
+{{--                ins.style.height = matchedSize[1] + 'px';--}}
 
-                let hasLoaded = false;
+{{--                let hasLoaded = false;--}}
 
-                const observer = new IntersectionObserver((entries, obs) => {
-                    entries.forEach(entry => {
-                        if (!entry.isIntersecting || hasLoaded) return;
-                        hasLoaded = true;
-                        obs.unobserve(ins);
+{{--                const observer = new IntersectionObserver((entries, obs) => {--}}
+{{--                    entries.forEach(entry => {--}}
+{{--                        if (!entry.isIntersecting || hasLoaded) return;--}}
+{{--                        hasLoaded = true;--}}
+{{--                        obs.unobserve(ins);--}}
 
-                        let fallbackTimer = setTimeout(() => fallbackToGAM('{{ $divId }}'), 1200);
+{{--                        let fallbackTimer = setTimeout(() => fallbackToGAM('{{ $divId }}'), 1200);--}}
 
-                        try {
-                            if (!window.__adsenseManualInit) {
-                                window.__adsenseManualInit = true;
-                                const result = (adsbygoogle = window.adsbygoogle || []).push({});
-                            }
+{{--                        try {--}}
+{{--                            if (!window.__adsenseManualInit) {--}}
+{{--                                window.__adsenseManualInit = true;--}}
+{{--                                const result = (adsbygoogle = window.adsbygoogle || []).push({});--}}
+{{--                            }--}}
 
-                            ins.classList.remove('opacity-0');
+{{--                            ins.classList.remove('opacity-0');--}}
 
-                            if (result && typeof result.then === 'function') {
-                                result.catch(() => {
-                                    clearTimeout(fallbackTimer);
-                                    fallbackToGAM('{{ $divId }}');
-                                });
-                            }
-                        } catch (e) {
-                            clearTimeout(fallbackTimer);
-                            fallbackToGAM('{{ $divId }}');
-                        }
-                    });
-                }, { threshold: 0.5 });
+{{--                            if (result && typeof result.then === 'function') {--}}
+{{--                                result.catch(() => {--}}
+{{--                                    clearTimeout(fallbackTimer);--}}
+{{--                                    fallbackToGAM('{{ $divId }}');--}}
+{{--                                });--}}
+{{--                            }--}}
+{{--                        } catch (e) {--}}
+{{--                            clearTimeout(fallbackTimer);--}}
+{{--                            fallbackToGAM('{{ $divId }}');--}}
+{{--                        }--}}
+{{--                    });--}}
+{{--                }, { threshold: 0.5 });--}}
 
-                observer.observe(ins);
-            }
+{{--                observer.observe(ins);--}}
+{{--            }--}}
 
-            document.addEventListener('DOMContentLoaded', tryLoadAdsense);
-        </script>
+{{--            document.addEventListener('DOMContentLoaded', tryLoadAdsense);--}}
+{{--        </script>--}}
 
     @elseif($priority === 'gam')
         <div {{ $attributes->merge(['id' => $divId]) }}></div>

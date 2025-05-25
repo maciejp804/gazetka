@@ -69,7 +69,7 @@
 
             {{-- Reklama pozioma - 1--}}
 
-            <div class="hidden 3xs:flex min-h-150 my-5 mx-auto justify-center md:min-h-25 3xl:hidden">
+            <div class="hidden 3xs:flex min-h-150 my-5 mx-auto justify-center md:min-h-25">
                 <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
                 <x-admanager
                     slot-name="homepage_middle_1"

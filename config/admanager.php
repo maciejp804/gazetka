@@ -19,14 +19,16 @@
                     ],
                 ],
                 'enabled' => true, // ← wyłącza slot
-                'priority' => 'gam', // gam lub adsense
+                'priority' => 'adsense', // gam lub adsense
                 'targeting' => [
                     'page' => 'home',  // ← dynamiczne pole, może być nadpisane
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
                     'slot'   => '9092204614',
-                    'format' => 'rectangle',
+                    'style'  => 'display:inline-block;width:750px;height:300px',
+                    'format' => 'null',
+                    'responsive'=> false
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
@@ -58,8 +60,10 @@
                 ],
                 'adsense_fallback' => [
                     'client' => 'ca-pub-0504184268109752',
-                    'slot'   => '1234567890', //??
-                    'format' => 'rectangle',
+                    'slot'   => '9092204614',
+                    'style'  => 'display:inline-block;width:750px;height:300px',
+                    'format' => 'null',
+                    'responsive'=> false
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
