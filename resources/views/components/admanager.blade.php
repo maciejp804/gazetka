@@ -31,7 +31,7 @@
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
 
-            <ins id="{{ $divId }}" class="adsbygoogle"
+            <ins id="{{ $divId }}" class="adsbygoogle z-0"
                  style="{{ $ad['adsense_fallback']['style'] }}"
                  data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
                  data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
