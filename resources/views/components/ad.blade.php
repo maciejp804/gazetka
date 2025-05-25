@@ -74,7 +74,7 @@
              data-ad-slot="{{ $mobile['slot'] }}"
              @if(isset($mobile['format']))  data-ad-format="{{ $mobile['format'] }}"  @endif
              @if(isset($mobile['w']))       style="width:{{ $mobile['w'] }}px;height:{{ $mobile['h'] }}px" @endif
-             data-full-width-responsive="true"></ins>
+             ></ins>
     </div>
 @endif
 
