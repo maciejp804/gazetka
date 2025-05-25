@@ -20,8 +20,8 @@ $config = [
             'sizes' => [[750,300], [750,250]],
         ],
         'gam_mobile' => [
-            'slot'  => '/7894359647/gp_homepage_top_gam_mobile',
-            'sizes' => [[300,250], [320,100]],
+           'slot'  => '/7894359647/gp_homepage_top_gam',
+            'sizes' => [[750,300], [750,250]],
         ],
     ],
 ];
