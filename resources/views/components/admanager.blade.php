@@ -30,22 +30,8 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        @if($slotName != 'homepage_middle_1')
-            <ins id="{{ $divId }}" class="adsbygoogle z-0"
-                 style="{{ $ad['adsense_fallback']['style'] }}"
-                 data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
-                 data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
-                 @if($ad['adsense_fallback']['format'] != null)
-                     data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"
-                 @endif
-                 @if(!$ad['adsense_fallback']['responsive'])
-                     data-full-width-responsive="true"
-                @endif
-            ></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        @else
+        @switch($slotName)
+            @case('homepage_middle_1')
                 <ins class="adsbygoogle"
                      style="display:inline-block;width:750px;height:200px"
                      data-ad-client="ca-pub-0504184268109752"
@@ -53,7 +39,42 @@
                 <script>
                     (adsbygoogle = window.adsbygoogle || []).push({});
                 </script>
-            @endif
+            @break
+            @case('homepage_header')
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:750px;height:300px"
+                     data-ad-client="ca-pub-0504184268109752"
+                     data-ad-slot="9092204614"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+                @break
+        @endswitch
+
+{{--        @if($slotName != 'homepage_middle_1')--}}
+{{--            <ins id="{{ $divId }}" class="adsbygoogle z-0"--}}
+{{--                 style="{{ $ad['adsense_fallback']['style'] }}"--}}
+{{--                 data-ad-client="{{ $ad['adsense_fallback']['client'] }}"--}}
+{{--                 data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"--}}
+{{--                 @if($ad['adsense_fallback']['format'] != null)--}}
+{{--                     data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"--}}
+{{--                 @endif--}}
+{{--                 @if(!$ad['adsense_fallback']['responsive'])--}}
+{{--                     data-full-width-responsive="true"--}}
+{{--                @endif--}}
+{{--            ></ins>--}}
+{{--            <script>--}}
+{{--                (adsbygoogle = window.adsbygoogle || []).push({});--}}
+{{--            </script>--}}
+{{--        @else--}}
+{{--                <ins class="adsbygoogle"--}}
+{{--                     style="display:inline-block;width:750px;height:200px"--}}
+{{--                     data-ad-client="ca-pub-0504184268109752"--}}
+{{--                     data-ad-slot="8461649229"></ins>--}}
+{{--                <script>--}}
+{{--                    (adsbygoogle = window.adsbygoogle || []).push({});--}}
+{{--                </script>--}}
+{{--            @endif--}}
 
         {{--@if($enabled)--}}
 {{--    <ins id="{{ $divId }}" class="adsbygoogle"--}}
