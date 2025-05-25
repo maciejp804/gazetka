@@ -42,19 +42,10 @@
                      data-full-width-responsive="true"
                 @endif
             ></ins>
-        <script>
-            // Prosty sposób: poczekaj aż DOM się ułoży
-            window.addEventListener('load', function () {
-            setTimeout(function () {
-            const el = document.getElementById({{ $divId }});
-            if (el && el.offsetWidth > 0) {
-            (adsbygoogle = window.adsbygoogle || []).push({});
-            } else {
-            console.warn('AdSense width is 0, retrying...');
-            }
-            }, 500);
-            });
-        </script>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+
 
         {{--@if($enabled)--}}
 {{--    <ins id="{{ $divId }}" class="adsbygoogle"--}}
