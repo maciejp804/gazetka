@@ -16,7 +16,7 @@ $config = [
             'mobile'  => ['slot' => '2004052081', 'w' => 300, 'h' => 250],
         ],
         'gam_desktop' => [
-            'slot'  => '/7894359647/gp_homepage_top_gam_desktop',
+            'slot'  => '/7894359647/gp_homepage_top_gam',
             'sizes' => [[750,300], [750,250]],
         ],
         'gam_mobile' => [
