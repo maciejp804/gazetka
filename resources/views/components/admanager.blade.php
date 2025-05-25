@@ -2,21 +2,6 @@
     'slotName',
     'overrides' => [],
     'refreshInterval' => config("admanager.slots.$slotName.refresh_interval"),
-])
-
-@php
-    $ad = config("admanager.slots.$slotName");
-    $enabled = $ad['enabled'] ?? false;
-    $divId = $ad['div_id'] ?? 'div-' . md5($slotName);
-    $priority = $ad['priority'] ?? 'adsense';
-    $isDebug = config('admanager.debug');
-    $targeting = array_merge($ad['targeting'] ?? [], $overrides);
-    $mappingFiltered = collect($ad['mapping'] ?? [])->filter(fn($m) => ($m['sizes'][0][0] ?? 0) > 0 && ($m['sizes'][0][1] ?? 0) > 0)->values()->all();
-    $adsense = $ad['adsense_fallback'] ?? null;
-@props([
-    'slotName',
-    'overrides' => [],
-    'refreshInterval' => config("admanager.slots.$slotName.refresh_interval"),
     'abTestGroup' => null, // 'a' or 'b'
 ])
 
