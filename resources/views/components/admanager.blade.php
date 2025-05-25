@@ -45,7 +45,15 @@
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
-
+            @if($slotName == 'homepage_middle_1')
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:750px;height:200px"
+                     data-ad-client="ca-pub-0504184268109752"
+                     data-ad-slot="8461649229"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            @endif
 
         {{--@if($enabled)--}}
 {{--    <ins id="{{ $divId }}" class="adsbygoogle"--}}
