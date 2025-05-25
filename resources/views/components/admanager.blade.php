@@ -30,10 +30,7 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-        @if (! defined('__ADSENSE_SCRIPT_INCLUDED__'))
-            @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
-        @endif
+
             <ins id="{{ $divId }}" class="adsbygoogle"
                  style="{{ $ad['adsense_fallback']['style'] }}"
                  data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
