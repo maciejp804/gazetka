@@ -414,3 +414,51 @@
         </script>
     @endif
 @endif
+@case('homepage_middle_1')
+    <div {{$attributes->merge(['class' => ''])}}id="ads-1-container-2">
+        <ins id="adsense-ad-2 hidden lg:flex" class="adsbygoogle"
+             style="display:inline-block;width:750px;height:200px"
+             data-ad-client="ca-pub-0504184268109752"
+             data-ad-slot="8461649229"></ins>
+
+        <ins id="adsense-ad-2" class="adsbygoogle"
+             style="display:inline-block;width:300px;height:600px"
+             data-ad-client="ca-pub-0504184268109752"
+             data-ad-slot="8461649229"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <script>
+        googletag.cmd.push(function () {
+            googletag.pubads().enableSingleRequest();
+            googletag.enableServices();
+        });
+
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                const ad = document.getElementById('adsense-ad-2');
+                if (ad && ad.getAttribute('data-ad-status') === 'unfilled') {
+                    console.log('AdSense-2 unfilled – fallback to GAM');
+
+                    ad.style.display = 'none';
+
+                    const fallback = document.createElement('div');
+                    fallback.id = 'gam-fallback-2';
+                    fallback.style.width = '750px';
+                    fallback.style.height = '300px';
+                    document.querySelector('#ads-1-container-2').appendChild(fallback);
+
+                    googletag.cmd.push(function () {
+                        googletag.defineSlot('/7894359647/baner_750x250', [[750, 300], [750, 250], [750, 200]], 'gam-fallback-2')
+                            .addService(googletag.pubads());
+                        googletag.display('gam-fallback-2');
+                        console.log('Ad loaded');
+                    });
+                }
+            }, 1500);
+        });
+    </script>
+
+    @break

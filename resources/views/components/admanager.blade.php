@@ -31,51 +31,9 @@
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
         @switch($slotName)
-            @case('homepage_middle_1')
-                <div id="ads-1-container-2">
-                    <ins id="adsense-ad-2" class="adsbygoogle"
-                         style="display:inline-block;width:750px;height:200px"
-                         data-ad-client="ca-pub-0504184268109752"
-                         data-ad-slot="8461649229"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                </div>
-                <script>
-                    googletag.cmd.push(function () {
-                        googletag.pubads().enableSingleRequest();
-                        googletag.enableServices();
-                    });
-
-                    window.addEventListener('load', function () {
-                        setTimeout(function () {
-                            const ad = document.getElementById('adsense-ad-2');
-                            if (ad && ad.getAttribute('data-ad-status') === 'unfilled') {
-                                console.log('AdSense-2 unfilled – fallback to GAM');
-
-                                ad.style.display = 'none';
-
-                                const fallback = document.createElement('div');
-                                fallback.id = 'gam-fallback-2';
-                                fallback.style.width = '750px';
-                                fallback.style.height = '300px';
-                                document.querySelector('#ads-1-container-2').appendChild(fallback);
-
-                                googletag.cmd.push(function () {
-                                    googletag.defineSlot('/7894359647/baner_750x250', [[750, 300], [750, 250], [750, 200]], 'gam-fallback-2')
-                                        .addService(googletag.pubads());
-                                    googletag.display('gam-fallback-2');
-                                    console.log('Ad loaded');
-                                });
-                            }
-                        }, 1500);
-                    });
-                </script>
-
-                @break
             @case('homepage_header')
-                <div id="ads-1-container-1">
-                    <ins id="adsense-ad-1" class="adsbygoogle"
+                <div id="{{$divId}}" class="hidden md:flex">
+                    <ins id="{{$divId}}-adsense-1" class="adsbygoogle"
                          style="display:inline-block;width:750px;height:300px"
                          data-ad-client="ca-pub-0504184268109752"
                          data-ad-slot="9092204614"></ins>
@@ -84,6 +42,18 @@
                     </script>
                 </div>
 
+                <div id="{{$divId}}" class="flex md:hidden">
+                    <ins id="{{$divId}}-adsense-1" class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-0504184268109752"
+                         data-ad-slot="2004052081"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+
                 <script>
                     googletag.cmd.push(function () {
                         googletag.pubads().enableSingleRequest();
@@ -92,7 +62,7 @@
 
                     window.addEventListener('load', function () {
                         setTimeout(function () {
-                            const ad = document.getElementById('adsense-ad-1');
+                            const ad = document.getElementById('{{$divId}}-adsense-1');
                             if (ad && ad.getAttribute('data-ad-status') === 'unfilled') {
                                 console.log('AdSense-2 unfilled – fallback to GAM');
 
@@ -102,7 +72,7 @@
                                 fallback.id = 'gam-fallback-2';
                                 fallback.style.width = '750px';
                                 fallback.style.height = '300px';
-                                document.querySelector('#ads-1-container-1').appendChild(fallback);
+                                document.querySelector('#{{$divId}}').appendChild(fallback);
 
                                 googletag.cmd.push(function () {
                                     googletag.defineSlot('/7894359647/baner_750x250', [[750, 300], [750, 250], [750, 200]], 'gam-fallback-2')
@@ -114,80 +84,10 @@
                         }, 1500);
                     });
                 </script>
+
                 @break
         @endswitch
 
-        {{--        @if($slotName != 'homepage_middle_1')--}}
-        {{--            <ins id="{{ $divId }}" class="adsbygoogle z-0"--}}
-        {{--                 style="{{ $ad['adsense_fallback']['style'] }}"--}}
-        {{--                 data-ad-client="{{ $ad['adsense_fallback']['client'] }}"--}}
-        {{--                 data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"--}}
-        {{--                 @if($ad['adsense_fallback']['format'] != null)--}}
-        {{--                     data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"--}}
-        {{--                 @endif--}}
-        {{--                 @if(!$ad['adsense_fallback']['responsive'])--}}
-        {{--                     data-full-width-responsive="true"--}}
-        {{--                @endif--}}
-        {{--            ></ins>--}}
-        {{--            <script>--}}
-        {{--                (adsbygoogle = window.adsbygoogle || []).push({});--}}
-        {{--            </script>--}}
-        {{--        @else--}}
-        {{--                <ins class="adsbygoogle"--}}
-        {{--                     style="display:inline-block;width:750px;height:200px"--}}
-        {{--                     data-ad-client="ca-pub-0504184268109752"--}}
-        {{--                     data-ad-slot="8461649229"></ins>--}}
-        {{--                <script>--}}
-        {{--                    (adsbygoogle = window.adsbygoogle || []).push({});--}}
-        {{--                </script>--}}
-        {{--            @endif--}}
-
-        {{--@if($enabled)--}}
-        {{--    <ins id="{{ $divId }}" class="adsbygoogle"--}}
-        {{--         style="{{ $ad['adsense_fallback']['style'] }}"--}}
-        {{--         data-ad-client="{{ $ad['adsense_fallback']['client'] }}"--}}
-        {{--         data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"--}}
-        {{--         @if($ad['adsense_fallback']['format'] != null)--}}
-        {{--             data-ad-format="{{ $ad['adsense_fallback']['format'] ?? 'auto' }}"--}}
-        {{--         @endif--}}
-        {{--         @if(!$ad['adsense_fallback']['responsive'])--}}
-        {{--             data-full-width-responsive="true"--}}
-        {{--        @endif--}}
-        {{--    ></ins>--}}
-
-        {{--    @if (! defined('__ADSENSE_SCRIPT_INCLUDED__'))--}}
-        {{--        @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))--}}
-        {{--        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $client }}" crossorigin="anonymous"></script>--}}
-        {{--    @endif--}}
-
-        {{--    <script>--}}
-        {{--        document.addEventListener('DOMContentLoaded', function () {--}}
-        {{--            const el = document.getElementById("{{ $divId }}");--}}
-        {{--            if (!el) return;--}}
-
-        {{--            let hasLoaded = false;--}}
-
-        {{--            const observer = new IntersectionObserver((entries, obs) => {--}}
-        {{--                entries.forEach(entry => {--}}
-        {{--                    if (!entry.isIntersecting || hasLoaded) return;--}}
-        {{--                    hasLoaded = true;--}}
-        {{--                    obs.unobserve(el);--}}
-
-        {{--                    try {--}}
-        {{--                        if (!window.__adsenseManualInit) {--}}
-        {{--                            window.__adsenseManualInit = true;--}}
-        {{--                            (adsbygoogle = window.adsbygoogle || []).push({});--}}
-        {{--                        }--}}
-        {{--                    } catch (e) {--}}
-        {{--                        console.warn('AdSense error:', e);--}}
-        {{--                    }--}}
-        {{--                });--}}
-        {{--            }, { threshold: 0.5 });--}}
-
-        {{--            observer.observe(el);--}}
-        {{--        });--}}
-        {{--    </script>--}}
-        {{--@endif--}}
 
 
 
@@ -200,16 +100,7 @@
         {{--    @endif--}}
 
         {{--    @if($priority === 'adsense' && isset($ad['adsense_fallback']))--}}
-        {{--        @if($divId == 'div-gpt-ad-1747054874411-0')--}}
-        {{--            <ins class="adsbygoogle"--}}
-        {{--                 style="display:inline-block;width:750px;height:300px"--}}
-        {{--                 data-ad-client="ca-pub-0504184268109752"--}}
-        {{--                 data-ad-slot="9092204614"></ins>--}}
-        {{--            <script>--}}
-        {{--                (adsbygoogle = window.adsbygoogle || []).push({});--}}
-        {{--            </script>--}}
 
-        {{--        @endif--}}
 
         {{--        <ins id="{{ $divId }}-adsense" class="adsbygoogle opacity-0"--}}
         {{--             style="{{ $ad['adsense_fallback']['style'] }}"--}}
