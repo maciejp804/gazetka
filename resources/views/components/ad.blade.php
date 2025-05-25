@@ -9,31 +9,23 @@
     /* ----------------------------------------------------------
      | 1. Konfiguracja wszystkich miejsc w jednym miejscu
      | ----------------------------------------------------------*/
-    $config = [
-        'homepage_header' => [
-            'adsense' => [
-                'desktop' => ['slot' => '9092204614', 'w' => 750, 'h' => 300],
-                'mobile'  => ['slot' => '2004052081', 'w' => 300, 'h' => 250],     // auto = pełna responsywność
-            ],
-            'gam' => [
-                'slot'  => '/7894359647/gp_homepage_top_gam',
-                'sizes' => [[750,300],[750,250],[750,200]],
-            ],
+$config = [
+    'homepage_header' => [
+        'adsense' => [
+            'desktop' => ['slot' => '9092204614', 'w' => 750, 'h' => 300],
+            'mobile'  => ['slot' => '2004052081', 'w' => 300, 'h' => 250],
         ],
-
-        'sidebar_left' => [
-            'adsense' => [
-                'desktop' => ['slot' => '1234567890', 'w' => 300, 'h' => 600],
-                'mobile'  => ['slot' => '1234567891', 'w' => 300, 'h' => 250],
-            ],
-            'gam' => [
-                'slot'  => '/7894359647/gp_sidebar_left',
-                'sizes' => [[300,600],[300,250]],
-            ],
+        'gam_desktop' => [
+            'slot'  => '/7894359647/gp_homepage_top_gam_desktop',
+            'sizes' => [[750,300], [750,250]],
         ],
+        'gam_mobile' => [
+            'slot'  => '/7894359647/gp_homepage_top_gam_mobile',
+            'sizes' => [[300,250], [320,100]],
+        ],
+    ],
+];
 
-        // …dodaj kolejne pozycje
-    ];
 
     if (! isset($config[$position])) {
         echo "<!-- ⚠️ Brak konfiguracji slotu {$position} -->";
@@ -86,46 +78,63 @@
 
 {{-- =====================  Fallback do GAM (jedno wspólne JS) ============ --}}
 <script>
-    /* global googletag */
     (function(){
-        const adIds   = ['{{ $deskId }}', '{{ $mobId }}'];   // sprawdzamy oba
-        const gamSlot = @json($gamConf['slot']);
-        const gamSizes= @json($gamConf['sizes']);
-        const gamId   = '{{ $gamId }}';
+        const deskId = '{{ $deskId }}';
+        const mobId  = '{{ $mobId }}';
 
-        function tryFallback() {
-            const filled = adIds.some(id => {
-                const el = document.getElementById(id);
-                return el && el.getAttribute('data-ad-status') !== 'unfilled';
-            });
-            if (filled) return;   // któryś wariant ma reklamę – kończymy
+        const gamDesktop = {
+            id: '{{ $deskId }}-gam',
+            slot: @json($slotConf['gam_desktop']['slot']),
+            sizes: @json($slotConf['gam_desktop']['sizes']),
+            parentId: '{{ $deskId }}-wrap',
+        };
 
-            // 1. Ukryj oba warianty AdSense
-            adIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.style.display = 'none';
-            });
+        const gamMobile = {
+            id: '{{ $mobId }}-gam',
+            slot: @json($slotConf['gam_mobile']['slot']),
+            sizes: @json($slotConf['gam_mobile']['sizes']),
+            parentId: '{{ $mobId }}-wrap',
+        };
 
-            // 2. Wstaw kontener GAM
-            const parent = document.getElementById('{{ $deskId }}-wrap') || document.getElementById('{{ $mobId }}-wrap');
-            if (!parent) return;
+        function isUnfilled(adId) {
+            const el = document.getElementById(adId);
+            return !el || el.offsetHeight < 50;
+        }
+
+        function loadGAM({id, slot, sizes, parentId}) {
+            const container = document.getElementById(parentId);
+            if (!container) return;
 
             const fallback = document.createElement('div');
-            fallback.id    = gamId;
-            parent.appendChild(fallback);
+            fallback.id = id;
+            fallback.style.width = '100%';
+            container.appendChild(fallback);
 
-            // 3. Załaduj slot GAM
             googletag.cmd.push(function () {
-                googletag.defineSlot(gamSlot, gamSizes, gamId).addService(googletag.pubads());
+                googletag.defineSlot(slot, sizes, id).addService(googletag.pubads());
                 googletag.pubads().enableSingleRequest();
                 googletag.enableServices();
-                googletag.display(gamId);
-                console.log('[AD] AdSense unfilled → GAM fallback (' + gamSlot + ')');
+                googletag.display(id);
+                console.log('[AD] GAM fallback → ' + slot);
             });
         }
 
-        /* Czekamy na załadowanie strony + krótki timeout, bo data-ad-status
-           pojawia się chwilę po załadowaniu skryptu AdSense. */
-        window.addEventListener('load', () => setTimeout(tryFallback, 2500));
+        window.addEventListener('load', function () {
+            setTimeout(function () {
+                if (isUnfilled(deskId)) {
+                    console.log('AdSense desktop unfilled');
+                    const el = document.getElementById(deskId);
+                    if (el) el.style.display = 'none';
+                    loadGAM(gamDesktop);
+                }
+
+                if (isUnfilled(mobId)) {
+                    console.log('AdSense mobile unfilled');
+                    const el = document.getElementById(mobId);
+                    if (el) el.style.display = 'none';
+                    loadGAM(gamMobile);
+                }
+            }, 2500);
+        });
     })();
 </script>
