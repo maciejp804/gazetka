@@ -8,8 +8,8 @@
     </script>
 </div>
 
-<div  class="flex md:hidden">
-    <ins  class="adsbygoogle"
+<div class="flex md:hidden">
+    <ins class="adsbygoogle"
          style="display:block"
          data-ad-client="ca-pub-0504184268109752"
          data-ad-slot="2004052081"
