@@ -1,6 +1,6 @@
-<div class="hidden md:flex" id="">
+<div class="hidden md:flex" id="ad1">
     <div class="max-w-7xl">
-        <ins class="adsbygoogle" id="ad1"
+        <ins class="adsbygoogle"
              style="display:inline-block;width:750px;height:300px"
              data-ad-client="ca-pub-0504184268109752"
              data-ad-slot="9092204614"></ins>
