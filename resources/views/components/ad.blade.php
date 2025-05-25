@@ -67,7 +67,7 @@
 
 {{-- =====================  MOBILE (widoczny tylko < md)  ================= --}}
 @if($mobile)
-    <div id="{{ $mobId }}-wrap" class="flex md:hidden justify-center">
+    <div id="{{ $mobId }}-wrap" class="flex md:hidden justify-center w-full">
         <ins id="{{ $mobId }}" class="adsbygoogle"
              style="display:block"
              data-ad-client="{{ $client }}"
