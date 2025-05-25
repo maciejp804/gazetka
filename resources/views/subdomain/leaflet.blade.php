@@ -33,13 +33,13 @@
     {{-- Reklama pozioma pod header --}}
     <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-75">
         <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
-{{--         Banner 750×300/auto – header strony--}}
-{{--        <x-ad position="homepage_header" />--}}
+         Banner 750×300/auto – header strony
+        <x-ad position="homepage_header" />
 
-        <x-admanager
-            slot-name="homepage_header"
-            :overrides="['page' => 'main.leaflet']"
-        />
+{{--        <x-admanager--}}
+{{--            slot-name="homepage_header"--}}
+{{--            :overrides="['page' => 'main.leaflet']"--}}
+{{--        />--}}
     </div>
     <div class="flex justify-center mb-2">
 
