@@ -63,23 +63,24 @@
              data-ad-client="{{ $client }}"
              data-ad-slot="{{ $desktop['slot'] }}"></ins>
     </div>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 @endif
 
 {{-- =====================  MOBILE (widoczny tylko < md)  ================= --}}
 @if($mobile)
     <div id="{{ $mobId }}-wrap" class="flex md:hidden justify-center w-full">
         <ins id="{{ $mobId }}" class="adsbygoogle"
-             style="display:block;  @if(isset($mobile['w'])) width:{{ $mobile['w'] }}px;height:{{ $mobile['h'] }}px" @endif"
+             style="display:block;@if(isset($mobile['w']))width:{{ $mobile['w'] }}px;height:{{ $mobile['h'] }}px @endif"
              data-ad-client="{{ $client }}"
              data-ad-slot="{{ $mobile['slot'] }}"
              @if(isset($mobile['format']))  data-ad-format="{{ $mobile['format'] }}"  @endif
-
-             ></ins>
+        ></ins>
     </div>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 @endif
 
 {{-- =====================  Wywołanie AdSense dla obu <ins>  ============== --}}
-<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+{{--<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>--}}
 
 
 
