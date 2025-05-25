@@ -30,7 +30,7 @@
     @endif
 
     @if($priority === 'adsense' && isset($ad['adsense_fallback']))
-
+        @if($slotName != 'homepage_middle_1')
             <ins id="{{ $divId }}" class="adsbygoogle z-0"
                  style="{{ $ad['adsense_fallback']['style'] }}"
                  data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
@@ -45,7 +45,7 @@
             <script>
                 (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
-            @if($slotName == 'homepage_middle_1')
+        @else
                 <ins class="adsbygoogle"
                      style="display:inline-block;width:750px;height:200px"
                      data-ad-client="ca-pub-0504184268109752"
