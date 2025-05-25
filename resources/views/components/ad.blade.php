@@ -69,11 +69,11 @@
 @if($mobile)
     <div id="{{ $mobId }}-wrap" class="flex md:hidden justify-center w-full">
         <ins id="{{ $mobId }}" class="adsbygoogle"
-             style="display:block"
+             style="display:block;  @if(isset($mobile['w'])) width:{{ $mobile['w'] }}px;height:{{ $mobile['h'] }}px" @endif"
              data-ad-client="{{ $client }}"
              data-ad-slot="{{ $mobile['slot'] }}"
              @if(isset($mobile['format']))  data-ad-format="{{ $mobile['format'] }}"  @endif
-             @if(isset($mobile['w']))       style="width:{{ $mobile['w'] }}px;height:{{ $mobile['h'] }}px" @endif
+
              ></ins>
     </div>
 @endif
