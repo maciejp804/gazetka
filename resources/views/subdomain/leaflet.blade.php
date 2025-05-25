@@ -35,7 +35,7 @@
         <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
         {{-- Banner 750×300/auto – header strony  --}}
         <x-ad position="homepage_header" />
-
+{{--        --}}
 {{--        <x-admanager--}}
 {{--            slot-name="homepage_header"--}}
 {{--            :overrides="['page' => 'main.leaflet']"--}}

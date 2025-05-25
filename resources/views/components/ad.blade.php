@@ -13,7 +13,7 @@
         'homepage_header' => [
             'adsense' => [
                 'desktop' => ['slot' => '9092204614', 'w' => 750, 'h' => 300],
-                'mobile'  => ['slot' => '2004052081', 'format' => 'auto'],     // auto = pełna responsywność
+                'mobile'  => ['slot' => '2004052081', 'w' => 300, 'h' => 250],     // auto = pełna responsywność
             ],
             'gam' => [
                 'slot'  => '/7894359647/gp_homepage_top_gam',
