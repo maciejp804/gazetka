@@ -34,7 +34,7 @@
             @php(define('__ADSENSE_SCRIPT_INCLUDED__', true))
             <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ $ad['adsense_fallback']['client'] }}" crossorigin="anonymous"></script>
         @endif
-            <ins id="{{ $divId }}-adsense" class="adsbygoogle"
+            <ins id="{{ $divId }}" class="adsbygoogle"
                  style="{{ $ad['adsense_fallback']['style'] }}"
                  data-ad-client="{{ $ad['adsense_fallback']['client'] }}"
                  data-ad-slot="{{ $ad['adsense_fallback']['slot'] }}"
@@ -45,9 +45,19 @@
                      data-full-width-responsive="true"
                 @endif
             ></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+        <script>
+            // Prosty sposób: poczekaj aż DOM się ułoży
+            window.addEventListener('load', function () {
+            setTimeout(function () {
+            const el = document.getElementById({{ $divId }});
+            if (el && el.offsetWidth > 0) {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            } else {
+            console.warn('AdSense width is 0, retrying...');
+            }
+            }, 500);
+            });
+        </script>
 
         {{--@if($enabled)--}}
 {{--    <ins id="{{ $divId }}" class="adsbygoogle"--}}
