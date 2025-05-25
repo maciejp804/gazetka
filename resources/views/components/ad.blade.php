@@ -35,7 +35,7 @@ $config = [
     $slotConf   = $config[$position];
     $desktop    = $slotConf['adsense']['desktop'] ?? null;
     $mobile     = $slotConf['adsense']['mobile']  ?? null;
-    $gamConf    = $slotConf['gam'];
+
 
     /* ----------------------------------------------------------
      | 2. Generujemy unikalną bazę ID, żeby nigdy nie dublować
