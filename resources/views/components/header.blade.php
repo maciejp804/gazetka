@@ -66,7 +66,7 @@
 
 
                 {{-- Mobile Menu--}}
-                <div class="flex w-3/5 justify-end lg:hidden z-30">
+                <div class="flex w-3/5 justify-end lg:hidden z-50">
                     <ul x-data="{ mobileMenuIsOpen: false }" @click.away="mobileMenuIsOpen = false" class="flex gap-2">
 
                             @auth
