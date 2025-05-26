@@ -1,0 +1,16 @@
+Sitemap: https://gazetkapromocyjna.com.pl/sitemaps/sitemap-index.xml
+
+User-agent: *
+Disallow: /panel
+Disallow: /*?page=
+Disallow: /*?*utm_
+Disallow: /*?*fb_
+
+User-agent: Yandex
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
