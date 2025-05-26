@@ -33,40 +33,21 @@ use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionControll
 $mainDomain = config('app.main_domain');
 
 //START ROBOTS
-Route::get('/robots.txt', function () use ($mainDomain){
+Route::middleware([])->get('/robots.txt', function ()  use ($mainDomain) {
     $host = request()->getHost();
+
+
     $isMain = $host === $mainDomain || $host === 'www.' . $mainDomain;
 
-    // Domyślna ścieżka sitemap
-    if ($isMain) {
-        $sitemapUrl = url('/sitemaps/sitemap-main.xml');
-    } else {
-        $subdomain = explode('.', $host)[0];
-        $sitemapUrl = url("/sitemaps/sitemap-{$subdomain}.xml");
-    }
+    $sitemapUrl = $isMain
+        ? url('/sitemaps/sitemap-main.xml')
+        : url('/sitemaps/sitemap-' . explode('.', $host)[0] . '.xml');
 
-    // Środowisko
-    $env = App::environment();
+    $robots = App::environment('production')
+        ? "User-agent: *\nDisallow:\n\nSitemap: {$sitemapUrl}"
+        : "User-agent: *\nDisallow: /\n\nSitemap: {$sitemapUrl}";
 
-    if ($env !== 'production') {
-        // Blokujemy wszystko w środowiskach dev/test/staging
-        $robots = <<<TXT
-User-agent: *
-Disallow: /
-Sitemap: {$sitemapUrl}
-TXT;
-    } else {
-        // Produkcja – wszystko dozwolone
-        $robots = <<<TXT
-User-agent: *
-Disallow:
-
-Sitemap: {$sitemapUrl}
-TXT;
-    }
-
-    return response($robots, 200)
-        ->header('Content-Type', 'text/plain');
+    return response($robots, 200)->header('Content-Type', 'text/plain');
 });
 
 
