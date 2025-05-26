@@ -29,9 +29,26 @@ use App\Http\Controllers\Admin\HotSpotController as AdminHotSpotController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionController;
 
+Route::middleware([])->get('/robots.txt', function () {
+    $host = request()->getHost();
+    $mainDomain = 'gazetkapromocyjna.com.pl';
+
+    $isMain = $host === $mainDomain || $host === 'www.' . $mainDomain;
+
+    $sitemapUrl = $isMain
+        ? secure_url('/sitemaps/sitemap-main.xml')
+        : secure_url('/sitemaps/sitemap-' . explode('.', $host)[0] . '.xml');
+
+    $robots = app()->environment('production')
+        ? "User-agent: *\nDisallow:\n\nSitemap: {$sitemapUrl}"
+        : "User-agent: *\nDisallow: /\n\nSitemap: {$sitemapUrl}";
+
+    return response($robots, 200)
+        ->header('Content-Type', 'text/plain');
+});
 
 $mainDomain = config('app.main_domain');
-require __DIR__.'/api.php';
+
 //START SEARCH
 Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
 Route::get('/search/triple/swiper',[SearchController::class,'tripleSwiper'])->name('search.triple.swiper');
@@ -344,5 +361,5 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
+require __DIR__.'/api.php';
 
