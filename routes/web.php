@@ -31,7 +31,7 @@ use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionControll
 
 
 $mainDomain = config('app.main_domain');
-
+require __DIR__.'/api.php';
 //START SEARCH
 Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
 Route::get('/search/triple/swiper',[SearchController::class,'tripleSwiper'])->name('search.triple.swiper');
@@ -345,4 +345,4 @@ Route::middleware('auth')->group(function () {
 
 
 
-require __DIR__.'/api.php';
+

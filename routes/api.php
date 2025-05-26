@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 $mainDomain = config('app.main_domain');
 
-Route::get('/robots.txt', function ()  use ($mainDomain) {
+Route::middleware([])->get('/robots.txt', function ()  use ($mainDomain) {
     $host = request()->getHost();
 
     $isMain = $host === $mainDomain || $host === 'www.' . $mainDomain;
