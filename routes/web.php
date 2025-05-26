@@ -16,10 +16,6 @@ use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
-use App\Http\Middleware\EncryptCookies;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
@@ -33,25 +29,23 @@ use App\Http\Controllers\Admin\HotSpotController as AdminHotSpotController;
 use App\Http\Controllers\Admin\BlogController as AdminBlogController;
 use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionController;
 
-Route::get('/robots.txt', function () {
-    $host       = request()->getHost();
-    $main       = 'gazetkapromocyjna.com.pl';
-    $isMain     = $host === $main || $host === "www.$main";
-    $sitemap    = $isMain
+Route::middleware([])->get('/robots.txt', function () {
+    $host = request()->getHost();
+    $mainDomain = 'gazetkapromocyjna.com.pl';
+
+    $isMain = $host === $mainDomain || $host === 'www.' . $mainDomain;
+
+    $sitemapUrl = $isMain
         ? secure_url('/sitemaps/sitemap-main.xml')
-        : secure_url('/sitemaps/sitemap-'.explode('.', $host)[0].'.xml');
+        : secure_url('/sitemaps/sitemap-' . explode('.', $host)[0] . '.xml');
 
-    $body = App::environment('production')
-        ? "User-agent: *\nDisallow:\n\nSitemap: $sitemap"
-        : "User-agent: *\nDisallow: /\n\nSitemap: $sitemap";
+    $robots = app()->environment('production')
+        ? "User-agent: *\nDisallow:\n\nSitemap: {$sitemapUrl}"
+        : "User-agent: *\nDisallow: /\n\nSitemap: {$sitemapUrl}";
 
-    return response($body, 200)
-        ->header('Content-Type', 'text/plain');                     // Laravel 11 helper
-})->withoutMiddleware([
-    StartSession::class,
-    EncryptCookies::class,
-    AddQueuedCookiesToResponse::class,
-]);
+    return response($robots, 200)
+        ->header('Content-Type', 'text/plain');
+});
 
 $mainDomain = config('app.main_domain');
 
