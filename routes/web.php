@@ -46,8 +46,7 @@ Route::get('/robots.txt', function () {
         : "User-agent: *\nDisallow: /\n\nSitemap: $sitemap";
 
     return response($body, 200)
-        ->header('Content-Type', 'text/plain')
-        ->withoutCookies();                     // Laravel 11 helper
+        ->header('Content-Type', 'text/plain');                     // Laravel 11 helper
 })->withoutMiddleware([
     StartSession::class,
     EncryptCookies::class,
