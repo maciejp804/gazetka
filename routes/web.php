@@ -18,6 +18,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Middleware\EncryptCookies;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
