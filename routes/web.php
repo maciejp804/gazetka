@@ -32,27 +32,6 @@ use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionControll
 
 $mainDomain = config('app.main_domain');
 
-//START ROBOTS
-Route::middleware([])->get('/robots.txt', function ()  use ($mainDomain) {
-    $host = request()->getHost();
-
-
-    $isMain = $host === $mainDomain || $host === 'www.' . $mainDomain;
-
-    $sitemapUrl = $isMain
-        ? url('/sitemaps/sitemap-main.xml')
-        : url('/sitemaps/sitemap-' . explode('.', $host)[0] . '.xml');
-
-    $robots = App::environment('production')
-        ? "User-agent: *\nDisallow:\n\nSitemap: {$sitemapUrl}"
-        : "User-agent: *\nDisallow: /\n\nSitemap: {$sitemapUrl}";
-
-    return response($robots, 200)->header('Content-Type', 'text/plain');
-});
-
-
-
-
 //START SEARCH
 Route::get('/search/single/dropdown',[SearchController::class,'single'])->name('search.single');
 Route::get('/search/triple/swiper',[SearchController::class,'tripleSwiper'])->name('search.triple.swiper');
