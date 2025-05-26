@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\LocationController;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 $mainDomain = config('app.main_domain');
