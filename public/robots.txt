@@ -1,4 +1,18 @@
-User-agent: *
-Disallow:
+# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
 
 Sitemap: https://gazetkapromocyjna.com.pl/sitemaps/sitemap-main.xml
+
+User-Agent: *
+Disallow: /panel
+Disallow: /panel/
+Disallow: /*?*page=
+Disallow: /*?*utm_
+Disallow: /*?*fb_
+
+User-agent: Yandex
+Disallow: /
+
+User-agent: LCC
+Disallow: /
+
+
