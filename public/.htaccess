@@ -3,6 +3,12 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    # public/.htaccess  – na samą górę, nad RewriteEngine On
+    <Files "robots.txt">
+      Header set Content-Type "text/plain"
+    </Files>
+    RewriteRule ^robots\.txt$ - [L]
+
     RewriteEngine On
 
     # Handle Authorization Header
