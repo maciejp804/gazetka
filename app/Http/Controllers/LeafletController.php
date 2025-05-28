@@ -109,7 +109,7 @@ class LeafletController extends Controller
             abort(404);
         }
 
-        $products = $this->productService->getHotSpots();
+        $products = $this->productService->getHotSpots(null, null, null, null, null, 20);
 
 //        dd($products);
         $leaflets = $this->leafletService->getLeafletsSimplePaginate(15, $category->id);
