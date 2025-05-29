@@ -170,14 +170,16 @@ class LeafletController extends Controller
     {
         if (app()->environment('local')) {
     Log::info('Current Route:', [Route::currentRouteName()]);
-}
+    }
         $shop = Shop::where('slug', $subdomain)->first();
 
         $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
             ->find($id);
 
-
-
+        if (!$leaflet) {
+            // np. przekierowanie lub błąd 404
+            abort(404, 'Gazetka nie została znaleziona');
+        }
 
         $productIds = $leaflet->pages
             ->flatMap(fn ($page) => $page->hotSpots)   // zbierz wszystkie hotspoty

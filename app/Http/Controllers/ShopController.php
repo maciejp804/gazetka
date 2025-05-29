@@ -149,7 +149,13 @@ class ShopController extends Controller
 
         $shop = Shop::with('category')->where('slug', $subdomain)->first();
 
-        $placeAddress = Marker::with(['shop', 'place', 'hours'])->where('slug', '=', $address)
+        if (!$shop || !$place) {
+            abort(404, 'Nie znaleziono sklepu lub lokalizacji.');
+        }
+
+
+        $placeAddress = Marker::with(['shop', 'place', 'hours'])
+            ->where('slug', '=', $address)
             ->where('place_id', $place->id)
             ->where('shop_id', $shop->id)
             ->first();
