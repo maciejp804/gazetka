@@ -223,7 +223,9 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
     Route::get('/{community}/{address}', [ShopController::class, 'subdomainShowAddress'])
         ->name('subdomain.shop_address');
 
-    Route::get('/{community}', [MainController::class, 'subdomainIndexGps'])->name('subdomain.index_gps');
+    Route::get('/{community}', [MainController::class, 'subdomainIndexGps'])
+        ->where('community', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
+        ->name('subdomain.index_gps');
     Route::get('/', [MainController::class, 'subdomainIndex'])->name('subdomain.index');
 
 });
