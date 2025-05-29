@@ -227,7 +227,10 @@ class MainController extends Controller
     public function subdomainIndex($subdomain)
     {
         Log::info('Current Route:', [Route::currentRouteName()]);
-        $shop = Shop::with('category')->where('slug', $subdomain)->first();
+        $shop = Shop::with('category')
+            ->where('slug', $subdomain)
+            ->where('status', 'active')
+            ->first();
 
         if(!$shop)
         {
@@ -424,7 +427,10 @@ class MainController extends Controller
         $placesAll = Place::all();
         $place = $placesAll->where('slug', $community)->first();
 
-        $shop = Shop::where('slug', $subdomain)->first();
+        $shop = Shop::with('category')
+            ->where('slug', $subdomain)
+            ->where('status', 'active')
+            ->first();
 
         if(!$place || !$shop)
         {
