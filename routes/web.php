@@ -229,15 +229,15 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
         ->where('address', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
         ->name('subdomain.shop_address');
 
-    Route::get('/robots.txt', function () {
-        $content = file_get_contents(public_path('robots.real.txt'));
-        Log::info('robots.txt accessed', [
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'content' => $content,
-        ]);
-        return response($content, 200)->header('Content-Type', 'text/plain');
-    });
+//    Route::get('/robots.txt', function () {
+//        $content = file_get_contents(public_path('robots.real.txt'));
+//        Log::info('robots.txt accessed', [
+//            'ip' => request()->ip(),
+//            'user_agent' => request()->userAgent(),
+//            'content' => $content,
+//        ]);
+//        return response($content, 200)->header('Content-Type', 'text/plain');
+//    });
 
     Route::get('/{community}', [MainController::class, 'subdomainIndexGps'])
         ->where('community', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
@@ -328,15 +328,15 @@ Route::domain($mainDomain)->group(function () {
     require __DIR__.'/auth.php';
 
 
-    Route::get('/robots.txt', function () {
-        $content = file_get_contents(public_path('robots.real.txt'));
-        Log::info('robots.txt accessed', [
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'content' => $content,
-        ]);
-        return response($content, 200)->header('Content-Type', 'text/plain');
-    });
+//    Route::get('/robots.txt', function () {
+//        $content = file_get_contents(public_path('robots.real.txt'));
+//        Log::info('robots.txt accessed', [
+//            'ip' => request()->ip(),
+//            'user_agent' => request()->userAgent(),
+//            'content' => $content,
+//        ]);
+//        return response($content, 200)->header('Content-Type', 'text/plain');
+//    });
 
 
    //Main
