@@ -17,6 +17,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\Admin\VoucherStoreController as AdminVoucherStoreController;
@@ -41,6 +42,17 @@ Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('sear
 
 
 Route::get('/cron/aldi/{week}/{number}/{start}/{letter}', [SearchController::class, 'aldiCron'])->name('cron.aldi');
+
+Route::get('/robots.txt', function () {
+    $content = file_get_contents(public_path('robots.real.txt'));
+    Log::info('robots.txt accessed', [
+        'ip' => request()->ip(),
+        'user_agent' => request()->userAgent(),
+        'content' => $content,
+    ]);
+    return response($content, 200)->header('Content-Type', 'text/plain');
+});
+
 
 
 //ZAPLECZE
