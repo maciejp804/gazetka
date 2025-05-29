@@ -141,11 +141,16 @@
                 :overrides="['page' => 'main.index']"
             />
         </div>
+        @if($descriptions != null)
+            @if($descriptions->content != null)
+                <x-description :items="$descriptions"/>
+            @endif
 
-        <x-description :items="$descriptions"/>
-        @if($descriptions->faq)
-            <x-faq :items="$descriptions"/>
+            @if($descriptions->faq != null)
+                <x-faq :items="$descriptions"/>
+            @endif
         @endif
+
     </div>
 
     <x-slot:scripts>
