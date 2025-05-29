@@ -4,7 +4,7 @@
             <div class="flex justify-between items-center w-full">
                 <div class="flex w-2/5">
                     <a href="{{route('main.index')}}" class="lg:w-1/3">
-                        <img src="https://hoian.pl/assets/image/Logo.png" alt="logo-image" class="w-28">
+                        <img src="{{asset('assets/images/logo.png')}}" alt="logo-image" class="w-28">
                     </a>
                     <div class="hidden lg:flex w-full">
                         <ul class="flex justify-around self-center w-full ">
