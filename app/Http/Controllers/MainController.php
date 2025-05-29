@@ -439,7 +439,7 @@ class MainController extends Controller
             })
             ->where('shop_id', $shop->id)
             ->where('place_id', $place->id)
-            ->whereNotNull('slug')
+            ->where('slug', '!=', '')
             ->get();
 
 
