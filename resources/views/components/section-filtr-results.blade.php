@@ -119,10 +119,15 @@
                              $offer = $item->leaflets_count. ' ofert';
                         }
 
+                      $image = (
+                            $item->image &&
+                            (str_starts_with($item->image, 'http://') || str_starts_with($item->image, 'https://'))
+                            ) ? $item->image : Storage::url($item->image . '.webp');
+
                     @endphp
 
                     <div class="w-36 2xs:w-44 1xs:w-48 xs:w-52 sm:w-48 md:w-60 lg:w-46 2lg:w-50">
-                        <x-base-slide :item="$item" :type="$type" :image="$item->image" :name="$item->name" :offer="$offer" :uri="$item->logo" :hover-desc="$item->name"/>
+                        <x-base-slide :item="$item" :type="$type" :image="$image" :name="$item->name" :offer="$offer" :uri="$item->logo" :hover-desc="$item->name"/>
 
                     </div>
                     @if($adsStatus === true)
