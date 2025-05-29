@@ -43,15 +43,15 @@ Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('sear
 
 Route::get('/cron/aldi/{week}/{number}/{start}/{letter}', [SearchController::class, 'aldiCron'])->name('cron.aldi');
 
-Route::get('/robots.txt', function () {
-    $content = file_get_contents(public_path('robots.real.txt'));
-    Log::info('robots.txt accessed', [
-        'ip' => request()->ip(),
-        'user_agent' => request()->userAgent(),
-        'content' => $content,
-    ]);
-    return response($content, 200)->header('Content-Type', 'text/plain');
-});
+//Route::get('/robots.txt', function () {
+//    $content = file_get_contents(public_path('robots.real.txt'));
+//    Log::info('robots.txt accessed', [
+//        'ip' => request()->ip(),
+//        'user_agent' => request()->userAgent(),
+//        'content' => $content,
+//    ]);
+//    return response($content, 200)->header('Content-Type', 'text/plain');
+//});
 
 
 
