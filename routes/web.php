@@ -221,6 +221,8 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
 
 
     Route::get('/{community}/{address}', [ShopController::class, 'subdomainShowAddress'])
+        ->where('community', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
+        ->where('address', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
         ->name('subdomain.shop_address');
 
     Route::get('/{community}', [MainController::class, 'subdomainIndexGps'])
