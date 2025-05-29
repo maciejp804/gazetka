@@ -142,7 +142,9 @@ class ShopController extends Controller
 
     public function subdomainShowAddress($subdomain, $community, $address)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
         $place = Place::where('slug', '=', $community)->first();
 
         $shop = Shop::with('category')->where('slug', $subdomain)->first();

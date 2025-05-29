@@ -15,7 +15,9 @@ class RedirectController extends Controller
 {
     public function leafletsRedirect($old_slug, $id)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
 
         if ($id != 0) {
 
@@ -92,7 +94,9 @@ class RedirectController extends Controller
 
     public function shopRedirect($old_slug, $id)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
 
         if ($id != 0) {
 
@@ -169,7 +173,9 @@ class RedirectController extends Controller
 
     public function vouchersRedirect($old_slug, $id)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
 
         if ($id != 0) {
 
@@ -344,7 +350,9 @@ class RedirectController extends Controller
     public function addressRedirect($subdomain, $city, $address, $id)
     {
 
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
 
         $marker = Marker::with('place', 'shop')
             ->where('old_id', $id)
@@ -366,7 +374,9 @@ class RedirectController extends Controller
 
     public function leafletRedirect($subdomain, $shop, $combined)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
 
         [$data, $id] = explode(',', $combined);
         $leaflet = Leaflet::with('shop', 'pages', 'cover')
@@ -403,7 +413,9 @@ class RedirectController extends Controller
 
     public function placeRedirect($slug, $id, $place)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
 
             // Pobierz miejscowość na podstawie slugu
             $place = Place::where('slug', $place)->first();

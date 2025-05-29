@@ -32,7 +32,9 @@ class LeafletController extends Controller
 
     public function index()
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
 
         $leaflets = $this->leafletService->getLeafletsSimplePaginate(15);
 
@@ -96,7 +98,9 @@ class LeafletController extends Controller
 
     public function indexCategory($category)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
         $product_categories = Category::where('status', 'active')
             ->where('type', 'product')
             ->where('parent_id', '=', null)
@@ -164,7 +168,9 @@ class LeafletController extends Controller
     }
     public function subdomainLeaflet($subdomain, $data, $id)
     {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+        if (app()->environment('local')) {
+    Log::info('Current Route:', [Route::currentRouteName()]);
+}
         $shop = Shop::where('slug', $subdomain)->first();
 
         $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
