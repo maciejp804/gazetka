@@ -227,8 +227,8 @@ class MainController extends Controller
     public function subdomainIndex($subdomain)
     {
         if (app()->environment('local')) {
-    Log::info('Current Route:', [Route::currentRouteName()]);
-}
+            Log::info('Current Route:', [Route::currentRouteName()]);
+        }
         $shop = Shop::with('category')
             ->where('slug', $subdomain)
             ->where('status', 'active')

@@ -221,6 +221,7 @@ class LeafletController extends Controller
             ->whereHas('cover') // dodane: tylko jeśli istnieje cover
             ->whereHas('pages')
             ->where('status', 'published')
+            ->limit(20)
             ->get();
 
         $averageRating = $shop->averageRating();
