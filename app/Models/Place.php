@@ -16,6 +16,11 @@ class Place extends Model
         return $this->belongsTo(Voivodeship::class);
     }
 
+    public function markers()
+    {
+        return $this->hasMany(Marker::class);
+    }
+
     public function ratings()
     {
         return $this->morphMany(Rating::class, 'rateable');

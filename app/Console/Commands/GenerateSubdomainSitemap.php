@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\HotSpot;
 use App\Models\Leaflet;
 use App\Models\Marker;
 use App\Models\Place;
@@ -32,7 +33,9 @@ class GenerateSubdomainSitemap extends Command
      */
     public function handle()
     {
-        Shop::where('status', 'active')->each(function ($shop) {
+        Shop::where('status', 'active')
+            ->where('slug', 'biedronka')
+            ->each(function ($shop) {
 
             $sitemap = Sitemap::create();
 
@@ -45,32 +48,51 @@ class GenerateSubdomainSitemap extends Command
             );
 
             // Lokalizacje (community = place)
-            Place::query()->chunk(1000, function ($places) use ($sitemap, $shop) {
-                foreach ($places as $place) {
-                    $sitemap->add(
-                        Url::create(route('subdomain.index_gps', [
-                            'subdomain' => $shop->slug,
-                            'community' => $place->slug,
-                        ]))
-                            ->setPriority(0.9)
-                            ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                            ->setLastModificationDate(now())
-                    );
-                }
-            });
+                Place::whereHas('markers', function ($query) use ($shop) {
+                    $query->where('shop_id', $shop->id);
+                })
+                    ->chunk(1000, function ($places) use ($sitemap, $shop) {
+                        foreach ($places as $place) {
+                            $sitemap->add(
+                                Url::create(route('subdomain.index_gps', [
+                                    'subdomain' => $shop->slug,
+                                    'community' => $place->slug,
+                                ]))
+                                    ->setPriority(0.9)
+                                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                                    ->setLastModificationDate(now())
+                            );
+                        }
+                    });
 
-            Product::where('status', '=', 1)->chunk(1000, function ($products) use ($sitemap, $shop) {
-                foreach ($products as $product) {
-                    $sitemap->add(
-                        Url::create(route('subdomain.products.show', ['subdomain' => $shop->slug, 'slug' => $product->slug]))
-                            ->setPriority(0.5)
-                            ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
-                            ->setLastModificationDate($product->updated_at ?? now())
-                    );
-                }
-            });
 
-            Leaflet::where('status', 'published')->chunk(1000, function ($leaflets) use ($sitemap, $shop) {
+                $productIds = HotSpot::whereHas('page.leaflets', function ($query) use ($shop) {
+                    $query->where('shop_id', $shop->id);
+                })
+                    ->pluck('product_id')
+                    ->filter()
+                    ->unique();
+
+                Product::whereIn('id', $productIds)
+                    ->where('status', 1)
+                    ->chunk(1000, function ($products) use ($sitemap, $shop) {
+                        foreach ($products as $product) {
+                            $sitemap->add(
+                                Url::create(route('subdomain.products.show', [
+                                    'subdomain' => $shop->slug,
+                                    'slug' => $product->slug
+                                ]))
+                                    ->setPriority(0.5)
+                                    ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+                                    ->setLastModificationDate($product->updated_at ?? now())
+                            );
+                        }
+                    });
+
+
+                Leaflet::where('status', 'published')
+                ->where('shop_id', $shop->id)
+                ->chunk(1000, function ($leaflets) use ($sitemap, $shop) {
                 foreach ($leaflets as $leaflet) {
                     $sitemap->add(
                         Url::create(route('subdomain.leaflet', [
@@ -83,7 +105,9 @@ class GenerateSubdomainSitemap extends Command
                 }
             });
 
-            Marker::with('place', 'shop')->chunk(1000, function ($markers) use ($sitemap, $shop) {
+            Marker::with('place', 'shop')
+                ->where('shop_id', $shop->id)
+                ->chunk(1000, function ($markers) use ($sitemap, $shop) {
                 foreach ($markers as $marker) {
                     if (!$marker->place || !$marker->slug) continue;
 
