@@ -169,8 +169,10 @@ class LeafletController extends Controller
     public function subdomainLeaflet($subdomain, $data, $id)
     {
         if (app()->environment('local')) {
-    Log::info('Current Route:', [Route::currentRouteName()]);
-    }
+        Log::info('Current Route:', [Route::currentRouteName()]);
+        }
+
+
         $shop = Shop::where('slug', $subdomain)->first();
 
         $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
