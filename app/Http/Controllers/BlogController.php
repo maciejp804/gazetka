@@ -64,7 +64,9 @@ class BlogController extends Controller
         }
 
         $blogs = Category::with(['blogs' => function($query) {
-            $query->with('user.profile')->orderBy('created_at', 'desc')->take(4);
+            $query->with('user.profile')
+                ->where('status', 'published')
+                ->orderBy('created_at', 'desc')->take(4);
         }])->where('status','active')->where('type', 'blog')->get();
 
         $blogsNewtest = Blog::getAll(4);
@@ -123,6 +125,7 @@ class BlogController extends Controller
 
         $blogs = Blog::with(['user.profile', 'category'])
             ->where('category_id', '=', $blogCategory->id)
+            ->where('status', 'published')
             ->orderBy('created_at', 'desc')->paginate(7);
 
         $vouchers = Voucher::with('voucherStore')->get();
@@ -172,6 +175,7 @@ class BlogController extends Controller
         }
 
         $blogs = Blog::with(['user.profile', 'category'])
+            ->where('status', 'published')
             ->orderBy('created_at', 'desc')->get();
 
         $blog = $blogs
