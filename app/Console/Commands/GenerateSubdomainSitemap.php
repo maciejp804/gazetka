@@ -34,7 +34,6 @@ class GenerateSubdomainSitemap extends Command
     public function handle()
     {
         Shop::where('status', 'active')
-            ->where('slug', 'biedronka')
             ->each(function ($shop) {
 
             $sitemap = Sitemap::create();
