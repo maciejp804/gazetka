@@ -178,8 +178,7 @@ class LeafletController extends Controller
         $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
             ->where('shop_id', $shop->id)
             ->find($id);
-
-        dd($leaflet);
+        
 
         if (!$leaflet) {
             // np. przekierowanie lub błąd 404
