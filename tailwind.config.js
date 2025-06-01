@@ -30,6 +30,8 @@ export default {
         'bg-green-500',
         'bg-blue-500',
         'duration-3000',
+        'shadow-amber-700',
+        'shadow-gray-300'
     ],
 
 
