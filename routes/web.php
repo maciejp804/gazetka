@@ -232,11 +232,11 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
     Route::get('/robots.txt', function ($subdomain) {
         $domain = "$subdomain." . config('app.main_domain');
         $sitemap = "https://$domain/sitemaps/sitemap-$subdomain.xml";
-        Log::info('robots.txt accessed', [
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'subdomain' => $sitemap,
-        ]);
+//        Log::info('robots.txt accessed', [
+//            'ip' => request()->ip(),
+//            'user_agent' => request()->userAgent(),
+//            'subdomain' => $sitemap,
+//        ]);
         return response("User-agent: *\nDisallow:\n\nSitemap: $sitemap", 200)
             ->header('Content-Type', 'text/plain');
     });
@@ -331,11 +331,11 @@ Route::domain($mainDomain)->group(function () {
 
     Route::get('/robots.txt', function () {
         $content = file_get_contents(public_path('robots.real.txt'));
-        Log::info('robots.txt accessed', [
-            'ip' => request()->ip(),
-            'user_agent' => request()->userAgent(),
-            'content' => $content,
-        ]);
+//        Log::info('robots.txt accessed', [
+//            'ip' => request()->ip(),
+//            'user_agent' => request()->userAgent(),
+//            'content' => $content,
+//        ]);
         return response($content, 200)->header('Content-Type', 'text/plain');
     });
 
