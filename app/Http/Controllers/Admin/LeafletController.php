@@ -27,7 +27,6 @@ class LeafletController extends Controller
 
         $leaflets = $this->getLeaflets();
 
-
         $breadcrumbs = [
             ['label' => 'Panel', 'url' => route('admin.index')],
             ['label' => 'Gazetki', 'url' => '']
@@ -368,7 +367,7 @@ class LeafletController extends Controller
 
     protected function getLeaflets($query = null)
     {
-        $queryBuilder = Leaflet::with('shop');
+        $queryBuilder = Leaflet::with('shop', 'pages.hotSpots');
 
         if ($query !== null) {
             $queryBuilder->where(function ($q) use ($query) {

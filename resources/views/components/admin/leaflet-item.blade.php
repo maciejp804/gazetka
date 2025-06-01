@@ -2,9 +2,18 @@
 @foreach($items as $item)
     @php
         $coverExists = $item->cover && $item->cover->path && Storage::disk('public')->exists($item->cover->path . '.webp');
+         $hasHotSpots = $item->pages->contains(fn($page) => $page->hotSpots->isNotEmpty());
+
+         if($hasHotSpots)
+             {
+                 $shadowColor = 'shadow-gray-300';
+             } else {
+                $shadowColor = 'shadow-amber-700';
+             }
+
     @endphp
 
-    <div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="bg-white shadow {{$shadowColor}} rounded-lg overflow-hidden">
         <div class="aspect-[12/12] bg-gray-100 flex items-center justify-center relative">
            @if ($coverExists)
                     <img src="{{ Storage::url($item->cover->path . '.webp') }}" alt="Okładka" class="w-full h-full object-cover">
@@ -37,8 +46,9 @@
         <div class="p-4 space-y-2">
             <h3 class="font-semibold text-lg">{{ $item['title'] }}</h3>
             <p class="text-sm text-gray-500">
-                {{ $item->shop->name }}<br>
-                {{ $item['valid_from'] }} – {{ $item['valid_to'] }}
+                {{ $item->shop->name }}<br/>
+                {{ date('Y-m-d H:i',strtotime($item['valid_from'])) }} – {{ date('Y-m-d H:i',strtotime($item['valid_to'])) }}<br/>
+                <span class="font-semibold">{{mb_ucfirst($item->status) }}</span><br/>
             </p>
             <div class="flex justify-center items-center mt-2">
                 <x-buttons.primary-a :url="route('admin.leaflets.manage', $item['id'])">Zarządzaj</x-buttons.primary-a>
