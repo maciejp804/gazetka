@@ -310,10 +310,27 @@
                 const methodContainer = document.getElementById('method-container');
                 const formId = document.getElementById('hotspot-id');
 
+                const rectUrl = rect.url || ''; // pełny link afiliacyjny
+                let finalUrl = rectUrl;
+
+                try {
+                    const parsed = new URL(rectUrl);
+                    const targetUrl = parsed.searchParams.get('url');
+                    if (targetUrl) {
+                        finalUrl = decodeURIComponent(targetUrl);
+                    }
+                } catch (e) {
+                    console.warn('Nieprawidłowy URL:', rectUrl);
+                }
+
+
+
+
+
                 // Sprawdzamy, czy prostokąt ma przypisane ID
                 if (rect.id) {
                     // Jeśli ID istnieje, to ustawiamy metodę PUT (aktualizacja)
-                    form.action = '{{route('admin.leaflets.hotspot.update')}}';
+                    form.action = '{{route('admin.leaflets.hotspots.update', ['leaflet' => $leaflet->id])}}';
                     form.method = 'POST';
                     methodContainer.innerHTML = `<input type="hidden" name="_method" value="PUT">`;
                     // Ustawiamy ID w formularzu
@@ -340,7 +357,8 @@
                 document.getElementById('priority').value = rect.priority || 'low';
                 document.getElementById('price').value = rect.price || '';
                 document.getElementById('promo_price').value = rect.promo_price || '';
-                document.getElementById('url').value = rect.url || '';
+                document.getElementById('url').value = finalUrl;
+
                 // Wypełnianie formularza danymi
                 document.getElementById('valid_from').value = rect.product && rect.product.valid_from ? rect.product.valid_from : rect.valid_from || '';
                 document.getElementById('valid_to').value = rect.product && rect.product.valid_to ? rect.product.valid_to : rect.valid_to || '';

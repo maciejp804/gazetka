@@ -96,7 +96,7 @@ Route::prefix('/panel')->name('admin.')->group(function () {
         Route::post('/add', [AdminLeafletController::class, 'add'])->name('add');
         Route::get('/search', [AdminLeafletController::class, 'search'])->name('search');
         Route::post('/hotspot/create', [AdminHotSpotController::class, 'createHotSpot'])->name('hotspot.create');
-        Route::put('/hotspot/update', [AdminHotSpotController::class, 'updateHotSpot'])->name('hotspot.update');
+
         Route::get('/{leaflet}', [AdminLeafletController::class, 'manage'])->name('manage');
         Route::post('/{leaflet}/upload-image', [AdminLeafletController::class, 'uploadImage'])->name('upload.image'); //Dodawanie, zmiana grafiki
         Route::delete('/{leaflet}/delete', [AdminLeafletController::class, 'destroy'])->name('destroy');
@@ -119,6 +119,7 @@ Route::prefix('/panel')->name('admin.')->group(function () {
             Route::post('/import', [AdminHotSpotController::class, 'import'])->name('import');
             Route::get('/export', [AdminHotSpotController::class, 'export'])->name('export');
             Route::delete('/delete', [AdminHotSpotController::class, 'delete'])->name('delete');
+            Route::put('/update', [AdminHotSpotController::class, 'updateHotSpot'])->name('update');
             Route::delete('/{page}/deletePage', [AdminHotSpotController::class, 'deletePage'])->name('deletePage');
             Route::delete('/{hotSpot}/deleteSpot', [AdminHotSpotController::class, 'deleteHotSpot'])->name('deleteHotSpot');
         });

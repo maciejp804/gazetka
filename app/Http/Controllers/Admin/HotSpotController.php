@@ -54,17 +54,6 @@ class HotSpotController extends Controller
             'page_id' => 'required|exists:leaflets,id',
         ]);
 
-//        $leafletProduct = LeafletProduct::where('leaflet_id', $request->leaflet_id)->where('product_id', $request->product_id)->first();
-//
-//        if (!$leafletProduct) {
-//            $leafletProduct = LeafletProduct::create([
-//                'leaflet_id' => $validated['leaflet_id'],
-//                'product_id' => $validated['product_id'],
-//                'status' => 'normal',
-//                'price' => $request->input('price', 0),
-//                'promo_price' => $request->input('promo_price', 0),
-//            ]);
-//        }
 
         // Tworzenie rekordu w tabeli HotSpot
         HotSpot::create([
@@ -153,7 +142,7 @@ class HotSpotController extends Controller
         return response()->json($hotspots);
     }
 
-    public function updateHotspot(Request $request)
+    public function updateHotspot(Request $request, Leaflet $leaflet)
     {
 
         $validated = $request->validate([
@@ -175,6 +164,13 @@ class HotSpotController extends Controller
             'image_height' => 'nullable|numeric',
             'image' => 'nullable|string'
         ]);
+
+        $baseUrl = 'https://clk.tradedoubler.com/click?p=298327&a=2387415&url=';
+
+        if (!empty($validated['url']) && $leaflet->shop_id == 4 && !str_starts_with($validated['url'], $baseUrl)) {
+            $validated['url'] = $baseUrl . urlencode($validated['url']);
+        }
+
 
         $validated['price'] = $validated['price'] ?: 0;
         $validated['promo_price'] = $validated['promo_price'] ?: 0;
