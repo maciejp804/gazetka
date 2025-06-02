@@ -243,7 +243,7 @@ class PageController extends Controller
             $pagesToDelete = $leaflet->pages()->whereIn('pages.id', $toDelete)->get();
 
             foreach ($pagesToDelete as $page) {
-                Storage::disk('public')->delete($page->image_path . '.webp');
+                Storage::disk('public')->delete([$page->image_path . '.webp', $page->image_path . '.jpg', $page->image_path . '.avif']);
                 $leaflet->pages()->detach($page->id);
                 $page->delete();
             }
