@@ -324,6 +324,41 @@
                 ],
                 'refresh_interval' => 30, // sekundy nie mniej niż 30s.
             ],
+            'gp_desktop_subdomain_index_middle_1_gam' => [
+                'slot' => '/7894359647/gp_desktop_subdomain_index_middle_1_gam',
+                'div_id' => 'gp_desktop_subdomain_index_middle_1_gam',
+                'mapping' => [
+                    [
+                        'viewport' => [1152, 0],
+                        'sizes' => [[750, 300]],
+                    ],
+                    [
+                        'viewport' => [750, 0],
+                        'sizes' => [[750, 100]],
+                    ],
+                    [
+                        'viewport' => [375, 0],
+                        'sizes' => [[336, 280]],
+                    ],
+                    [
+                        'viewport' => [320, 0],
+                        'sizes' => [[320, 100]],
+                    ],
+                ],
+                'enabled' => true, // ← wyłącza slot
+                'priority' => 'gam', // gam lub adsense
+                'targeting' => [
+                    'page' => 'home',  // ← dynamiczne pole, może być nadpisane
+                ],
+                'adsense_fallback' => [
+                    'client' => 'ca-pub-0504184268109752',
+                    'slot'   => '9092204614',
+                    'style'  => 'display:inline-block;width:750px;height:300px',
+                    'format' => 'null',
+                    'responsive'=> false
+                ],
+                'refresh_interval' => 30, // sekundy nie mniej niż 30s.
+            ]
         ],
         'debug' => env('ADMANAGER_DEBUG', false),
     ];

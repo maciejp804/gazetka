@@ -47,22 +47,31 @@
 
 
             <x-section>
-                <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
-                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row lg:h-12">
-                    <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>
-                    <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>
-                    <x-search placeholder="Wpisz nazwę sieci... " :border="true" class="hidden"
-                              input-id="search-input-leaflet"
-                              result-id="results-box-leaflet"
-                              data-search-type="leaflets"
-                              data-container-id="leaflet-container"
-                              value="{{$subdomain}}"
-
-                    >
-                        <x-loupe-button href="#"/>
-                    </x-search>
-
+                {{-- Reklama pozioma nad gazetkami --}}
+                <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-25 2lg:min-h-75">
+                    <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                    <x-admanager
+                        slot-name="gp_desktop_subdomain_index_middle_1_gam"
+                        :overrides="['page' => 'subdomain.index']"
+                    />
                 </div>
+                <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
+{{--                <div class="filter-box flex flex-col gap-4 mb-4 lg:flex-row lg:h-12">--}}
+{{--                    <x-select id="category-select" :items="$leaflets_category" placeholder="Kategoria" type="leaflets"/>--}}
+{{--                    <x-select id="time-select" :items="$leaflets_time" placeholder="Sortuj..."/>--}}
+{{--                    <x-search placeholder="Wpisz nazwę sieci... " :border="true" class="hidden"--}}
+{{--                              input-id="search-input-leaflet"--}}
+{{--                              result-id="results-box-leaflet"--}}
+{{--                              data-search-type="leaflets"--}}
+{{--                              data-container-id="leaflet-container"--}}
+{{--                              value="{{$subdomain}}"--}}
+
+{{--                    >--}}
+{{--                        <x-loupe-button href="#"/>--}}
+{{--                    </x-search>--}}
+
+{{--                </div>--}}
+
                 <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
 
             </x-section>

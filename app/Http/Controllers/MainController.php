@@ -229,6 +229,7 @@ class MainController extends Controller
         if (app()->environment('local')) {
             Log::info('Current Route:', [Route::currentRouteName()]);
         }
+
         $shop = Shop::with('category')
             ->where('slug', $subdomain)
             ->where('status', 'active')
