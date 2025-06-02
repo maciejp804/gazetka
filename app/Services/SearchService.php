@@ -100,7 +100,7 @@ class SearchService
                     'page_image'    => $hotSpot->page->image_path,
                     'page_number'   => optional($leaflet->pivot)->sort_order,
                     'leaflet_id'    => $leaflet->id,
-                    'leaflet_valid_from' => $leaflet->valid_from,
+                    'leaflet_valid_from' => date('Y-m-d', strtotime($leaflet->valid_from)),
                     'shop_image'    => optional($leaflet->shop)->image,
                     'shop_name'     => optional($leaflet->shop)->name,
                     'shop_slug'     => optional($leaflet->shop)->slug,
