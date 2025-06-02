@@ -167,7 +167,7 @@ class HotSpotController extends Controller
 
         $baseUrl = 'https://clk.tradedoubler.com/click?p=298327&a=2387415&url=';
 
-        if (!empty($validated['url']) && $leaflet->shop_id == 4 && !str_starts_with($validated['url'], $baseUrl)) {
+        if (!empty($validated['url']) && $leaflet->shop_id == 2 && !str_starts_with($validated['url'], $baseUrl)) {
             $validated['url'] = $baseUrl . urlencode($validated['url']);
         }
 
