@@ -165,9 +165,9 @@ class HotSpotController extends Controller
             'image' => 'nullable|string'
         ]);
 
-        $baseUrl = config('affmanager.production.programms.'.$leaflet->shop->id.'.link');
+        $baseUrl = config('affmanager.production.programms.'.$leaflet->shop_id.'.link');
 
-        if (!empty($validated['url']) && $leaflet->shop_id == 2 && !str_starts_with($validated['url'], $baseUrl)) {
+        if (!empty($validated['url']) && !str_starts_with($validated['url'], $baseUrl)) {
             $validated['url'] = $baseUrl . urlencode($validated['url']);
         }
 
