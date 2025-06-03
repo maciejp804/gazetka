@@ -19,5 +19,6 @@ yarn-error.log
 /.idea
 /.vscode
 /config/admanager.production.php
+/config/affmanager.production.php
 /public/.htaccess
 /public/robots.txt

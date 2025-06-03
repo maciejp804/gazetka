@@ -165,7 +165,7 @@ class HotSpotController extends Controller
             'image' => 'nullable|string'
         ]);
 
-        $baseUrl = 'https://clk.tradedoubler.com/click?p=298327&a=2387415&url=';
+        $baseUrl = config('affmanager.production.programms.'.$leaflet->shop->id.'.link');
 
         if (!empty($validated['url']) && $leaflet->shop_id == 2 && !str_starts_with($validated['url'], $baseUrl)) {
             $validated['url'] = $baseUrl . urlencode($validated['url']);
