@@ -1,7 +1,7 @@
 <section class="mt-20">
     <x-newsletter class="absolute left-0 right-0 -mt-24 mx-4 lg:-mt-14"/>
     <div class="bg-gray-200 w-full">
-        <div class="pt-32 lg:pt-24">
+        <div class="pt-52 lg:pt-40">
             <div x-data="{ expanded: null}" class=" mb-5 mx-5 lg:hidden">
                 <div>
                     <a @click="expanded = expanded == 0 ? null : 0 " class="flex justify-between w-full font-semibold cursor-pointer pb-2 border-b">

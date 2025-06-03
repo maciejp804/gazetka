@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 class NewsletterController extends Controller
 {
@@ -12,7 +13,8 @@ class NewsletterController extends Controller
         // Walidacja adresu e-mail
         $request->validate([
             'email' => 'required|email',
-            'terms' => 'accepted'
+            'terms' => 'accepted',
+            'g-recaptcha-response'  => 'required', // Pole wygenerowane przez widget reCAPTCHA
         ]);
 
         $email  = $request->input('email');
@@ -48,7 +50,7 @@ class NewsletterController extends Controller
             }
 
         } catch (\Exception $e) {
-            \Log::error("MailerLite subscribe error: " . $e->getMessage());
+            Log::error("MailerLite subscribe error: " . $e->getMessage());
             return redirect()->back()->with('error', 'Wystąpił problem przy zapisie, spróbuj ponownie.');
         }
     }

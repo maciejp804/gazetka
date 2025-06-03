@@ -76,7 +76,7 @@
         window.googletag = window.googletag || {cmd: []};
     </script>
     <x-auto-ad/>
-
+    <script src="{{asset('js/google/recaptcha/api.js')}}" async defer></script>
 </head>
 <body class="font-ubuntu" id="app">
 <x-tag-manager-body/>
