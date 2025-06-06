@@ -168,6 +168,8 @@ class BlogController extends Controller
         $body = str_replace('<p>', '<p class="my-2 pl-2 leading-7 text-gray-700">', $validated['body']);
         $body = str_replace('<h2>', '<h2 class="font-bold my-4 text-1xl">', $body);
         $body = str_replace('<h3>', '<h3 class="font-semibold my-4 pl-2 text-lg text-gray-800">', $body);
+        $body = str_replace('www.', '', $body);
+        $body = str_replace('http://', 'https://', $body);
         $validated['body'] = $body;
 
         $blog->update($validated);
