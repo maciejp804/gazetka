@@ -18,7 +18,6 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
 use App\Http\Controllers\Admin\VoucherStoreController as AdminVoucherStoreController;
@@ -340,12 +339,11 @@ Route::domain($mainDomain)->group(function () {
     Route::get('/robots.txt', function () {
         $content = file_get_contents(public_path('robots.real.txt'));
 
-        return Response::make($content, 200, [
-            'Content-Type' => 'text/plain; charset=UTF-8',
-            'Cache-Control' => 'public, max-age=3600',
-            'Set-Cookie' => '',
-            'Set-Cookie2' => '',
-        ]);
+        return response($content, 200)
+            ->header('Content-Type', 'text/plain; charset=UTF-8')
+            ->header('Cache-Control', 'public, max-age=3600')
+            ->withoutCookie('laravel_session')
+            ->withoutCookie('XSRF-TOKEN');
     });
 
 
