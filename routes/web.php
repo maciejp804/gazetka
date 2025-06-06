@@ -120,6 +120,9 @@ Route::prefix('/panel')->name('admin.')->group(function () {
             Route::get('/export', [AdminHotSpotController::class, 'export'])->name('export');
             Route::delete('/delete', [AdminHotSpotController::class, 'delete'])->name('delete');
             Route::put('/update', [AdminHotSpotController::class, 'updateHotSpot'])->name('update');
+            Route::post('/fetch-data', [AdminHotSpotController::class, 'fetchProductData'])
+                ->name('fetch.data');
+
             Route::delete('/{page}/deletePage', [AdminHotSpotController::class, 'deletePage'])->name('deletePage');
             Route::delete('/{hotSpot}/deleteSpot', [AdminHotSpotController::class, 'deleteHotSpot'])->name('deleteHotSpot');
         });
@@ -230,17 +233,20 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
         ->where('address', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
         ->name('subdomain.shop_address');
 
-    Route::get('/robots.txt', function ($subdomain) {
+    Route::get('/robots.txt', function () {
+        $subdomain = request()->route('subdomain');
         $domain = "$subdomain." . config('app.main_domain');
         $sitemap = "https://$domain/sitemaps/sitemap-$subdomain.xml";
-//        Log::info('robots.txt accessed', [
-//            'ip' => request()->ip(),
-//            'user_agent' => request()->userAgent(),
-//            'subdomain' => $sitemap,
-//        ]);
+
         return response("User-agent: *\nDisallow:\n\nSitemap: $sitemap", 200)
-            ->header('Content-Type', 'text/plain');
+            ->header('Content-Type', 'text/plain; charset=UTF-8')
+            ->header('Cache-Control', 'public, max-age=3600') // lub no-cache jeśli musisz
+            ->header('X-Robots-Tag', 'none') // opcjonalnie usuń, jeśli nie chcesz blokować
+            ->withoutCookie('laravel_session')
+            ->withoutCookie('XSRF-TOKEN');
     });
+
+
 
     Route::get('/{community}', [MainController::class, 'subdomainIndexGps'])
         ->where('community', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
@@ -332,16 +338,17 @@ Route::domain($mainDomain)->group(function () {
 
     Route::get('/robots.txt', function () {
         $content = file_get_contents(public_path('robots.real.txt'));
-//        Log::info('robots.txt accessed', [
-//            'ip' => request()->ip(),
-//            'user_agent' => request()->userAgent(),
-//            'content' => $content,
-//        ]);
-        return response($content, 200)->header('Content-Type', 'text/plain');
+
+        return response($content, 200)
+            ->header('Content-Type', 'text/plain; charset=UTF-8')
+            ->header('Cache-Control', 'public, max-age=3600')
+            ->withoutCookie('laravel_session')
+            ->withoutCookie('XSRF-TOKEN');
     });
 
 
-   //Main
+
+    //Main
     Route::get('/{community}',[MainController::class,'indexGps'])->name('main.index.gps');
     Route::get('/',[MainController::class,'index'])->name('main.index');
 
