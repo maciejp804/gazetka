@@ -36,10 +36,10 @@
 
                     </a>
                     <ul x-show="expanded == 1" x-collapse.duration.500ms class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
-                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom-i-ogrod'])">Dom i ogród -  kupony</x-footer.li>
-                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'agd-rtv'])">AGD / RTV -  kupony</x-footer.li>
-                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'dzieci'])">Dzieci -  kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.vouchers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.vouchers.category', ['category' => 'dom-i-ogrod'])">Dom i ogród -  kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.vouchers.category', ['category' => 'agd-rtv'])">AGD / RTV -  kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.vouchers.category', ['category' => 'dzieci'])">Dzieci -  kupony</x-footer.li>
                     </ul>
                 </div>
                 <div>
@@ -83,10 +83,10 @@
                     Kupony rabatowe
                 </span>
                 <ul  class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
-                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom-i-ogrod'])">Dom i ogród -  kupony</x-footer.li>
-                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'agd-rtv'])">AGD / RTV -  kupony</x-footer.li>
-                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'dzieci'])">Dzieci -  kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'dom-i-ogrod'])">Dom i ogród -  kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'agd-rtv'])">AGD / RTV -  kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'dzieci'])">Dzieci -  kupony</x-footer.li>
 
                 </ul>
             </div>
