@@ -25,7 +25,12 @@
             @else
                 @foreach($items as $item)
                     <!-- Slides -->
-
+                    @php
+                        $image = (
+                        $item['shop_image'] &&
+                        (str_starts_with($item['shop_image'], 'http://') || str_starts_with($item['shop_image'], 'https://'))
+                        ) ? $item['shop_image'] : Storage::url($item['shop_image'] . '.webp');
+                    @endphp
                     <x-product
                         class="swiper-slide"
                         :valid_from="$item['valid_from']"
@@ -34,7 +39,7 @@
                         :product_name="$item['product_name']"
                         :product_slug="$item['product_slug']"
                         :promo_price="$item['promo_price'] ?: null"
-                        :shop_image="$item['shop_image']"
+                        :shop_image="$image"
                         :shop_slug="$item['shop_slug']"
                         :page_number="$item['page_number']"
                         :leaflet_id="$item['leaflet_id']"

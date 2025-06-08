@@ -3,6 +3,12 @@
 
     $toEnd = validationDate($valid_to, $valid_from, $updated_at);
 
+     $logo = (
+         $logo &&
+         (str_starts_with($logo, 'http://') || str_starts_with($logo, 'https://'))
+         ) ? $logo : Storage::url($logo . '.webp');
+
+
 @endphp
 
 

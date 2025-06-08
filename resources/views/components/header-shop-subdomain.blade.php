@@ -1,5 +1,14 @@
 @props(['placeAddress', 'excerpt','rateableId', 'averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
 
+@php
+    $image = (
+        $placeAddress->shop->imagee &&
+        (str_starts_with($placeAddress->shop->image, 'http://') || str_starts_with($placeAddress->shop->image, 'https://'))
+        ) ? $placeAddress->shop->image : Storage::url($placeAddress->shop->image . '.webp');
+
+ @endphp
+
+
 <x-rating-form :rateableId="$rateableId"
                :averageRating="$averageRating"
                :city="$city"
@@ -14,7 +23,7 @@
             <div class="w-full rounded lg:aspect-square ">
                 <a class="flex justify-center w-full h-full"
                    href="{{route('subdomain.index_gps', ['subdomain' => $placeAddress->shop->slug, 'community' => $placeAddress->place->slug])}}">
-                   <img class="flex self-center w-3/5" src="{{$placeAddress->shop->image}}" alt="logo">
+                   <img class="flex self-center w-3/5" src="{{$image}}" alt="{{$placeAddress->shop->name}}">
                 </a>
             </div>
         </div>

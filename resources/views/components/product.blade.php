@@ -1,6 +1,13 @@
 @props(['valid_to', 'valid_from', 'product_image', 'product_slug', 'product_name', 'promo_price', 'shop_image', 'page_number', 'shop_slug', 'leaflet_id', 'leaflet_valid_from', 'url'])
 @php
     $toEnd = validationDate($valid_to, $valid_from);
+
+
+                        $shop_image = (
+                        $shop_image &&
+                        (str_starts_with($shop_image, 'http://') || str_starts_with($shop_image, 'https://'))
+                        ) ? $shop_image : Storage::url($shop_image . '.webp');
+
 @endphp
 
 <div {{ $attributes->merge(['class' => 'swiper-slide relative w-36 2xs:w-42 1xs:w-48 xs:w-52 sm:w-48 md:w-58 lg:w-44 2lg:w-50 xl:w-48']) }}>

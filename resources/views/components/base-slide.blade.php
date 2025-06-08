@@ -7,6 +7,11 @@
         $route = route($urlData->routeNameSubdoamin, ['subdomain' => $item->slug]);
     }
 
+      $image = (
+         $image &&
+         (str_starts_with($image, 'http://') || str_starts_with($image, 'https://'))
+         ) ? $image : Storage::url($image . '.webp');
+
 @endphp
 
 <div class="swiper-slide group">

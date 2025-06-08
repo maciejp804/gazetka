@@ -1,6 +1,12 @@
 @props(['shop', 'excerpt','averageRating', 'ratingCount', 'city' => '', 'subdomain' => '','model', 'id' => ''])
 
+@php
+    $image = (
+        $shop->image &&
+        (str_starts_with($shop->image, 'http://') || str_starts_with($shop->image, 'https://'))
+        ) ? $shop->image : Storage::url($shop->image . '.webp');
 
+@endphp
 
 <x-rating-form :rateableId="$shop->id"
                :averageRating="$averageRating"
@@ -29,7 +35,7 @@
 <div class="flex flex-col md:flex-row mt-4 gap-x-3">
     <div class="flex w-full md:w-50 justify-center">
         <a href="{{route('subdomain.index', ['subdomain' => $shop->slug])}}">
-            <img class="flex self-center" src="{{$shop->image}}" alt="logo" />
+            <img class="flex self-center" src="{{$image}}" alt="logo" />
         </a>
     </div>
     <div class="flex w-full">
