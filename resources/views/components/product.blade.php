@@ -2,12 +2,6 @@
 @php
     $toEnd = validationDate($valid_to, $valid_from);
 
-
-                        $shop_image = (
-                        $shop_image &&
-                        (str_starts_with($shop_image, 'http://') || str_starts_with($shop_image, 'https://'))
-                        ) ? $shop_image : Storage::url($shop_image . '.webp');
-
 @endphp
 
 <div {{ $attributes->merge(['class' => 'swiper-slide relative w-36 2xs:w-42 1xs:w-48 xs:w-52 sm:w-48 md:w-58 lg:w-44 2lg:w-50 xl:w-48']) }}>
@@ -35,7 +29,7 @@
 {{--                            <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}
             </a>
             <div class="absolute top-[4%] left-[4%]">
-                <img class="flex self-end max-w-8" src="{{ Storage::url($shop_image.'.webp') }}" type="image/webp" alt="">
+                <img class="flex self-end max-w-8" src="{{ Storage::url($shop_image).'.webp' }}" type="image/webp" alt="">
             </div>
 
         </div>
