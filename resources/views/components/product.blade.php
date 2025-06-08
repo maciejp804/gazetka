@@ -35,7 +35,7 @@
 {{--                            <x-heart-button class="border" iClass="text-blue-550 self-center hover:text-orange-500 transition duration-300 ease-in"/>--}}
             </a>
             <div class="absolute top-[4%] left-[4%]">
-                <img class="flex self-end max-w-8" src="{{$shop_image}}" alt="">
+                <img class="flex self-end max-w-8" src="{{ Storage::url($shop_image.'.webp') }}" type="image/webp" alt="">
             </div>
 
         </div>
