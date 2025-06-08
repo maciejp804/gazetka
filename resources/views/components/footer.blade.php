@@ -37,10 +37,9 @@
                     </a>
                     <ul x-show="expanded == 1" x-collapse.duration.500ms class="flex flex-col gap-y-2 my-2 ml-2 border-b">
                         <x-footer.li :ref="route('main.retailers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
-                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom'])">Dom -  kupony</x-footer.li>
-                        {{--                    <x-footer.li >Kebab King kupony</x-footer.li>--}}
-                        {{--                    <x-footer.li >Salad story kupony</x-footer.li>--}}
-                        {{--                    <x-footer.li >Starbucks kupony</x-footer.li>--}}
+                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom-i-ogrod'])">Dom i ogród -  kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'agd-rtv'])">AGD / RTV -  kupony</x-footer.li>
+                        <x-footer.li :ref="route('main.retailers.category', ['category' => 'dzieci'])">Dzieci -  kupony</x-footer.li>
                     </ul>
                 </div>
                 <div>
@@ -84,11 +83,10 @@
                     Kupony rabatowe
                 </span>
                 <ul  class="flex flex-col gap-y-2 my-2 ml-2 border-b">
-                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
-                    <x-footer.li :ref="route('main.vouchers.category', ['category' => 'dom'])">Dom -  kupony</x-footer.li>
-{{--                    <x-footer.li >Kebab King kupony</x-footer.li>--}}
-{{--                    <x-footer.li >Salad story kupony</x-footer.li>--}}
-{{--                    <x-footer.li >Starbucks kupony</x-footer.li>--}}
+                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'moda'])">Moda - kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'dom-i-ogrod'])">Dom i ogród -  kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'agd-rtv'])">AGD / RTV -  kupony</x-footer.li>
+                    <x-footer.li :ref="route('main.retailers.category', ['category' => 'dzieci'])">Dzieci -  kupony</x-footer.li>
 
                 </ul>
             </div>
@@ -120,9 +118,9 @@
 {{--                </x-footer.li-image>--}}
 {{--            </ul>--}}
             <ul class="flex justify-center gap-x-6 border-b">
-                <x-header.link href="#" svg='facebook' />
-                <x-header.link href="#" svg='instagram' />
-                <x-header.link href="#" svg='pinterest' />
+                <x-header.link href="https://www.facebook.com/GazetkaPromocyjna/" svg='facebook' />
+{{--                <x-header.link href="#" svg='instagram' />--}}
+{{--                <x-header.link href="#" svg='pinterest' />--}}
             </ul>
             <ul class="my-5 mx-auto text-center gap-3 flex flex-col font-semibold border-b lg:flex-row lg:justify-center">
                 <x-footer.li :ref="route('main.about')">O GazetkaPromocyjna</x-footer.li>
