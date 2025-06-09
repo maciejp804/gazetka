@@ -10,7 +10,7 @@
 
         <div class="grid grid-cols-6 px-2 odd:bg-gray-100 even:bg-white py-2">
             <div class="col-span-3">
-                <img class="self-center flex h-6" src="{{ url($item['shop_image']) }}" alt="logo"/>
+                <img class="self-center flex h-6" src="{{ Storage::url($item['shop_image']).'.webp' }}" alt="logo"/>
             </div>
             <div class="col-span-2">
                 <span>{{$item['promo_price']}} zł</span>

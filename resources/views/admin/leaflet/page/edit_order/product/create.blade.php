@@ -93,15 +93,17 @@
                         <input type="number" id="product_id" name="product_id" hidden="hidden" required>
                         <input type="number" id="page_id" name="page_id" hidden="hidden" required>
 
-                        <div class="grid grid-cols-12 justify-between gap-2">
+                        <div class="grid grid-cols-12 gap-2 items-center">
                             <div class="col-span-11">
                                 <x-form.input label="URL" name="url" type="text"/>
                             </div>
-
-                            <button type="button" id="fetch-product" class="flex text-xl text-blue-500 hover:text-red-700 items-center justify-end" title="Pobierz dane">
-                                <i class="fa-solid fa-rotate"></i>
-                            </button>
+                            <div class="col-span-1 flex justify-end items-center">
+                                <button type="button" id="fetch-product" class="text-xl text-blue-500 hover:text-red-700" title="Pobierz dane">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </button>
+                            </div>
                         </div>
+
                         <x-form.input label="Cena" name="price" type="text"/>
                         <x-form.input label="Cena promocyjna" name="promo_price" type="text"/>
                         <x-form.select label="Status" name="status"
