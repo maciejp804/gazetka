@@ -88,7 +88,14 @@
                     />
                 </x-section>
             @endif
-
+            {{--             Reklama pozioma - 2 --}}
+            <div class="hidden 3xs:flex 3xs:w-full 3xs:min-h-25 2xs:min-h-70 my-5 mx-auto justify-center md:min-h-25">
+                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                <x-admanager
+                    slot-name="homepage_middle_2"
+                    :overrides="['page' => 'subdomain.index']"
+                />
+            </div>
 
             <x-section>
                 <x-swiper-vouchers
