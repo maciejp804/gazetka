@@ -396,7 +396,7 @@ class HotSpotController extends Controller
 
                 $pageId = DB::table('leaflet_page')
                     ->where('leaflet_id', $leaflet->id)
-                    ->where('sort_order', 1) // odpowiada "page": 1
+                    ->where('sort_order', $item['page']) // odpowiada "page": 1
                     ->value('page_id');
 
 
