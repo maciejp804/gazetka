@@ -376,10 +376,6 @@ class HotSpotController extends Controller
                         ]
                     );
 
-//                    LeafletProduct::firstOrCreate([
-//                        'leaflet_id' => $leaflet->id,
-//                        'product_id' => $product->id
-//                    ]);
                 }
             }
         }
@@ -428,15 +424,8 @@ class HotSpotController extends Controller
                     ]
                 );
 
-                // Tworzymy lub aktualizujemy LeafletProduct (połączenie produktu z gazetką)
-//                LeafletProduct::updateOrCreate(
-//                    [
-//                        'leaflet_id' => $leaflet->id,
-//                        'product_id' => $product->id
-//                    ]
-//                );
             }
-            dd('done');
+
         }
     }
 

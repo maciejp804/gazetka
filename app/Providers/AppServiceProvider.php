@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\Scrapers\LidlScraper;
+use App\Services\Scrapers\MediaMarktScraper;
+use App\Services\ScraperService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -13,8 +16,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(ScraperService::class, function () {
+            return new ScraperService([
+                new LidlScraper(),
+                new MediaMarktScraper()
+                // Dodaj inne scraper strategie tutaj
+            ]);
+        });
     }
+
 
     /**
      * Bootstrap any application services.
