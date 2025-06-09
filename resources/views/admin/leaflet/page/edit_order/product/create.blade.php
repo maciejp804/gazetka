@@ -93,7 +93,15 @@
                         <input type="number" id="product_id" name="product_id" hidden="hidden" required>
                         <input type="number" id="page_id" name="page_id" hidden="hidden" required>
 
-                        <x-form.input label="URL" name="url" type="text"/>
+                        <div class="grid grid-cols-12 justify-between gap-2">
+                            <div class="col-span-11">
+                                <x-form.input label="URL" name="url" type="text"/>
+                            </div>
+
+                            <button type="button" id="fetch-product" class="flex text-xl text-blue-500 hover:text-red-700 items-center justify-end" title="Pobierz dane">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
+                        </div>
                         <x-form.input label="Cena" name="price" type="text"/>
                         <x-form.input label="Cena promocyjna" name="promo_price" type="text"/>
                         <x-form.select label="Status" name="status"
@@ -208,6 +216,7 @@
             let rectangles = @json($pages[0]->hotSpots);
             let image_path = "{{$pages[0]->image_path}}";
 
+            console.log(rectangles);
             // Funkcja do konwersji współrzędnych
             function convertCoordinates(x, y, width, height, originalWidth, originalHeight, toPercentage = true) {
                 if (toPercentage) {
@@ -229,62 +238,101 @@
 
 
             // Funkcja rysująca wszystkie prostokąty
+            // Zamiast dotychczasowego drawRectangles(), użyj poniższego:
             function drawRectangles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);  // Czyści canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+                // 1) Najpierw narysuj wszystkie prostokąty, które NIE są zaznaczone:
                 rectangles.forEach(rect => {
+                    if (rect === selectedRect) return; // pomiń, to narysujemy później
+                    const px = convertCoordinates(
+                        rect.x, rect.y, rect.width, rect.height,
+                         image.width,
+                         image.height,
+                        false
+                    );
+                    rect._px = px;
 
-                    // Podświetlamy zaznaczony prostokąt
-                    ctx.fillStyle = rect === selectedRect ? 'rgba(144, 238, 144, 0.7)' : 'rgba(135, 206, 250, 0.5)';
-                    ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
-                    ctx.strokeStyle = 'black'; // Kolor obramowania
+                    ctx.fillStyle = 'rgba(135, 206, 250, 0.5)';   // nieaktywne: niebieskie tło
+                    ctx.fillRect(px.pixelX, px.pixelY, px.pixelWidth, px.pixelHeight);
+                    ctx.strokeStyle = 'black';
                     ctx.lineWidth = 1;
-                    ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+                    ctx.strokeRect(px.pixelX, px.pixelY, px.pixelWidth, px.pixelHeight);
 
-                    // Rysowanie uchwytu w prawym dolnym rogu (tylko dla istniejących prostokątów)
-                    if (rect === selectedRect) {
-                        ctx.fillStyle = 'red';
-                        ctx.fillRect(rect.x + rect.width , rect.y + rect.height , 15, 15);  // Uchwyt w prawym dolnym rogu
-                        ctx.strokeStyle = 'black';
-                        ctx.lineWidth = 1;
-                        ctx.strokeRect(rect.x + rect.width , rect.y + rect.height , 15, 15);
-                    }
-
-                    // Rysowanie przypisanego produktu (jeśli istnieje)
                     if (rect.product) {
                         ctx.fillStyle = 'black';
                         ctx.font = "14px Arial";
-                        ctx.fillText(rect.product.name, rect.x + 5, rect.y + 15); // Wyświetlanie nazwy produktu
+                        ctx.fillText(rect.product.name, px.pixelX + 5, px.pixelY + 15);
                     }
                 });
 
-                console.log("Tablica prostokątów po rysowaniu:", rectangles); // Logowanie po każdym rysowaniu
+                // 2) Jeśli jest zaznaczony prostokąt, narysuj go TERAZ (ostatnim):
+                if (selectedRect) {
+                    const rect = selectedRect;
+                    const px = convertCoordinates(
+                        rect.x, rect.y, rect.width, rect.height,
+                        image.width,
+                        image.height,
+                        false
+                    );
+                    rect._px = px;
+
+                    ctx.fillStyle = 'rgba(144, 238, 144, 0.7)';   // zaznaczony: zielonkawe tło
+                    ctx.fillRect(px.pixelX, px.pixelY, px.pixelWidth, px.pixelHeight);
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(px.pixelX, px.pixelY, px.pixelWidth, px.pixelHeight);
+
+                    // uchwyt w prawym dolnym rogu dla zaznaczonego
+                    ctx.fillStyle = 'red';
+                    ctx.fillRect(px.pixelX + px.pixelWidth, px.pixelY + px.pixelHeight, 15, 15);
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(px.pixelX + px.pixelWidth, px.pixelY + px.pixelHeight, 15, 15);
+
+                    if (rect.product) {
+                        ctx.fillStyle = 'black';
+                        ctx.font = "14px Arial";
+                        ctx.fillText(rect.product.name, px.pixelX + 15, px.pixelY + 15);
+                    }
+                }
+
+                console.log("Tablica prostokątów po rysowaniu:", rectangles);
             }
+
 
             // Funkcja do sprawdzania, czy kliknięto na prostokąt
             function isMouseOnRectangle(x, y, rect) {
-                return x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
+                const px = rect._px;
+                return x >= px.pixelX && x <= px.pixelX + px.pixelWidth && y >= px.pixelY && y <= px.pixelY + px.pixelHeight;
             }
 
             // Funkcja do sprawdzania, czy kliknięto w uchwyt
             function isMouseOnResizeHandle(x, y, rect) {
                 const handleSize = 10;
-                return x >= rect.x + rect.width - handleSize && x <= rect.x + rect.width + handleSize &&
-                    y >= rect.y + rect.height - handleSize && y <= rect.y + rect.height + handleSize;
+                const px = rect._px;
+                return x >= px.pixelX + px.pixelWidth - handleSize && x <= px.pixelX + px.pixelWidth + handleSize &&
+                    y >= px.pixelY + px.pixelHeight - handleSize && y <= px.pixelY + px.pixelHeight + handleSize;
             }
 
-            // Funkcja do aktywowania prostokąta po kliknięciu na produkt
             function activateRectangleForProduct(dataId) {
-                selectedRect = rectangles.find(rect => rect.id ==dataId);
-                if (selectedRect) {
-                    rectangles = rectangles.filter(rect => rect !== selectedRect);
+                // Znajdź indeks prostokąta po id (porównując typy luźno)
+                const index = rectangles.findIndex(r => r.id == dataId);
+                if (index !== -1) {
+                    selectedRect = rectangles[index];
+                    // Usuń go z tablicy za pomocą splice i dodaj na koniec
+                    rectangles.splice(index, 1);
                     rectangles.push(selectedRect);
-
-                    // updateHotspotInDatabase(selectedRect.id, { status: 'visible' });
-                    drawRectangles();  // Rysowanie po zmianie statusu
-                    openHotspotForm(selectedRect);  // <- otwieramy formularz!
+                    drawRectangles();
+                    openHotspotForm(selectedRect);
+                } else {
+                    console.warn('Nie znaleziono prostokąta dla produktu ID:', dataId);
                 }
             }
+
+
+
+
 
             // Funkcja do dodawania produktu do prostokąta
             function addProductToRectangle(product, rect) {
@@ -309,7 +357,6 @@
                 const form = document.getElementById('hotspot-form-fields');
                 const methodContainer = document.getElementById('method-container');
                 const formId = document.getElementById('hotspot-id');
-
                 const rectUrl = rect.url || ''; // pełny link afiliacyjny
                 let finalUrl = rectUrl;
 
@@ -322,10 +369,6 @@
                 } catch (e) {
                     console.warn('Nieprawidłowy URL:', rectUrl);
                 }
-
-
-
-
 
                 // Sprawdzamy, czy prostokąt ma przypisane ID
                 if (rect.id) {
@@ -344,7 +387,6 @@
 
                     formId.value = '';  // Brak ID dla nowego prostokąta
                 }
-
 
                 // Wypełniamy formularz danymi przypisanymi do prostokąta
                 document.getElementById('hotspot-id').value = rect.id;
@@ -371,208 +413,255 @@
                 document.getElementById('hotspot-form').style.display = 'block';
             }
 
-            // Słuchacz do mousedown, aby otworzyć formularz lub podświetlić prostokąt
+            // ... (początek Twojego pliku, bez zmian) ...
+
             canvas.addEventListener('mousedown', (e) => {
-                const rect = canvas.getBoundingClientRect();
-                const clickX = e.clientX - rect.left;
-                const clickY = e.clientY - rect.top;
+                const rectBounds = canvas.getBoundingClientRect();
+                const clickX = e.clientX - rectBounds.left;
+                const clickY = e.clientY - rectBounds.top;
 
-                let clickedOnRectangle = false;  // Zmienna do śledzenia, czy kliknięto na prostokąt
+                // 1) Jeśli Shift+klikamy, usuwamy hotspot i od razu zwracamy:
+                if (e.shiftKey) {
+                    deleteRectangle(clickX, clickY);
+                    selectedRect = null;
+                    return;
+                }
 
-                // Sprawdzamy, czy kliknięto na prostokąt
+                // 2) Sprawdzamy, czy kliknięto w istniejący prostokąt → otwieramy formularz
                 for (let i = rectangles.length - 1; i >= 0; i--) {
-                    const rectItem = rectangles[i];
-                    if (isMouseOnRectangle(clickX, clickY, rectItem)) {
-                        selectedRect = rectItem;  // Zaznaczamy prostokąt
-                        openHotspotForm(selectedRect);  // Otwórz formularz z danymi prostokąta
-                        clickedOnRectangle = true;  // Ustawiamy flagę, że kliknięto na prostokąt
-                        drawRectangles();  // Rysujemy wszystkie prostokąty bez podświetlenia
-
-                        break;
+                    const r = rectangles[i];
+                    if (isMouseOnRectangle(clickX, clickY, r)) {
+                        selectedRect = r;
+                        // przenosimy ten rect na wierzch, żeby rysować go ostatnim:
+                        rectangles = rectangles.filter(r2 => r2 !== r);
+                        rectangles.push(r);
+                        drawRectangles();
+                        openHotspotForm(r);
+                        // *** UWAGA: nie zwracamy od razu, bo chcemy też sprawdzić drag/resize ***
+                        //    jednak w tym momencie setujemy, że będzie to kliknięcie w hotspot,
+                        //    więc nie chcemy przejść dalej do rysowania nowego prostokąta.
+                    break;
                     }
                 }
 
-                // Jeśli kliknięto poza prostokąt, ukryj formularz i resetuj zaznaczenie
-                if (!clickedOnRectangle) {
-                    document.getElementById('hotspot-form').style.display = 'none';
-                    selectedRect = null;  // Resetujemy zaznaczenie
-                    drawRectangles();  // Rysujemy wszystkie prostokąty bez podświetlenia
-                }
-            });
-
-            // Słuchacz dla mousedown - początek rysowania lub edycji
-            canvas.addEventListener('mousedown', (e) => {
-                const rect = canvas.getBoundingClientRect();
-                currentX = e.clientX - rect.left;
-                currentY = e.clientY - rect.top;
-
-                selectedRect = null;  // Resetujemy zaznaczony prostokąt
-                isDragging = false;
-                isResizing = false;
-
-                // Sprawdzamy, czy kliknięto na jakiś prostokąt lub uchwyt (od tyłu do przodu)
-                for (let i = rectangles.length - 1; i >= 0; i--) {
-                    const rectItem = rectangles[i];
-                    if (isMouseOnResizeHandle(currentX, currentY, rectItem)) {
-                        selectedRect = rectItem;
-                        isResizing = true;  // Jeśli kliknięto na uchwyt, zaczynamy zmianę rozmiaru
-                        break;
-                    } else if (isMouseOnRectangle(currentX, currentY, rectItem)) {
-                        selectedRect = rectItem;
-                        isDragging = true;  // Jeśli kliknięto na prostokąt, zaczynamy przeciąganie
-                        offsetX = currentX - selectedRect.x;  // Oblicz offset w poziomie
-                        offsetY = currentY - selectedRect.y;  // Oblicz offset w pionie
-                        break;
-                    }
-                }
-
-                if (!isDragging && !isResizing) {
-                    isDrawing = true;
-                    startX = currentX;
-                    startY = currentY;
-                }
-            });
-
-            // Słuchacz dla mousemove - rysowanie lub przeciąganie
-            canvas.addEventListener('mousemove', (e) => {
-                const rect = canvas.getBoundingClientRect();
-                currentX = e.clientX - rect.left;
-                currentY = e.clientY - rect.top;
-
-                if (isDrawing) {
-                    const width = Math.round(currentX - startX);
-                    const height = Math.round(currentY - startY);
-
-                    // Rysowanie wszystkich prostokątów na canvasie
-                    drawRectangles();
-
-                    ctx.fillStyle = 'rgba(135, 206, 250, 0.5)';
-                    ctx.fillRect(startX, startY, width, height);
-                    ctx.strokeStyle = 'black';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(startX, startY, width, height);
-                }
-
-                if (isDragging && selectedRect) {
-                    selectedRect.x = currentX - offsetX;
-                    selectedRect.y = currentY - offsetY;
-
-                    // Zaktualizuj formularz po przesunięciu prostokąta
-                    openHotspotForm(selectedRect);
-
-                    drawRectangles();
-                }
-
-                if (isResizing && selectedRect) {
-                    const deltaX = Math.round(currentX - (selectedRect.x + selectedRect.width));
-                    const deltaY = Math.round(currentY - (selectedRect.y + selectedRect.height));
-
-                    selectedRect.width += deltaX;
-                    selectedRect.height += deltaY;
-
-                    // Prevent negative width or height
-                    if (selectedRect.width < 0) selectedRect.width = 0;
-                    if (selectedRect.height < 0) selectedRect.height = 0;
-
-                    openHotspotForm(selectedRect);
-                    drawRectangles();
-                }
-            });
-
-            // Słuchacz dla mouseup - zakończenie rysowania lub przeciągania
-            canvas.addEventListener('mouseup', () => {
-                if (isDrawing) {
-                    const width = currentX - startX;
-                    const height = currentY - startY;
-                    if (Math.abs(width) > 0 && Math.abs(height) > 0) {
-                        rectangles.push({ x: Math.min(startX, currentX), y: Math.min(startY, currentY), width: Math.abs(width), height: Math.abs(height) });
-                        console.log("Nowy prostokąt dodany:", rectangles); // Logowanie po dodaniu nowego prostokąta
-                    }
-                    isDrawing = false;
-                    drawRectangles(); // Redraw after adding a new rectangle
-                }
-
-                isDragging = false;
-                isResizing = false;
-            });
-
-            // Słuchacz dla mouseout - kończy rysowanie, gdy kursor wyjdzie z canvas
-            canvas.addEventListener('mouseout', () => {
+                // 3) Resetujemy stany (na wszelki wypadek)
                 isDrawing = false;
                 isDragging = false;
                 isResizing = false;
+
+                // 4) Sprawdzamy, czy kliknięcie trafiło w uchwyt (resize), albo w wnętrze prostokąta (drag):
+                for (let i = rectangles.length - 1; i >= 0; i--) {
+                    const r = rectangles[i];
+                    if (isMouseOnResizeHandle(clickX, clickY, r)) {
+                        // Klik w uchwyt → zaczynamy RESIZE
+                        selectedRect = r;
+                        isResizing = true;
+                        return;
+                    }
+                    else if (isMouseOnRectangle(clickX, clickY, r)) {
+                        // Klik w prostokąt (ale nie w formularz, bo to już wyłapaliśmy w kroku 2)
+                        selectedRect = r;
+                        // Obliczamy przesunięcie (offset) względem lewego-górnego rogu prostokąta
+                        offsetX = clickX - r._px.pixelX;
+                        offsetY = clickY - r._px.pixelY;
+                        isDragging = true;
+                        // przenosimy ten rect na wierzch:
+                        rectangles = rectangles.filter(r2 => r2 !== r);
+                        rectangles.push(r);
+                        drawRectangles();
+                        openHotspotForm(r);
+                        return;
+                    }
+                }
+
+                // 5) Jeśli nie kliknięto w żaden prostokąt ani uchwyt → start rysowania nowego
+                selectedRect = null;
+                startX = clickX;
+                startY = clickY;
+                isDrawing = true;
+                drawRectangles();
+                document.getElementById('hotspot-form').style.display = 'none';
             });
 
-            // Logika przeciągania produktów z listy po prawej stronie
-            const productList = document.getElementById('product-list');
-            const productItems = productList.querySelectorAll('.product');
 
-            productItems.forEach((item) => {
+            canvas.addEventListener('mousemove', (e) => {
+                const rectBounds = canvas.getBoundingClientRect();
+                currentX = e.clientX - rectBounds.left;
+                currentY = e.clientY - rectBounds.top;
 
-                item.addEventListener('click', (e) => {
+                // ** 1. Drag (przeciąganie) istniejącego hotspotu **
+                if (isDragging && selectedRect) {
+                    // 1) Obliczamy nowe pikselowe X/Y względem lewego-górnego rogu canvasa:
+                    const newPixelX = currentX - offsetX;
+                    const newPixelY = currentY - offsetY;
+
+                    // 2) Przeliczamy te piksele na procenty względem wymiaru obrazka:
+                    const percent = convertCoordinates(
+                        newPixelX,               // x w px
+                        newPixelY,               // y w px
+                        selectedRect._px.pixelWidth,   // szerokość w px
+                        selectedRect._px.pixelHeight,  // wysokość w px
+                        image.width,             // oryginalna szerokość obrazka w px
+                        image.height,            // oryginalna wysokość obrazka w px
+                        true                     // zwracamy procenty
+                    );
+
+                    // 3) Ustawiamy wartości procentowe w rect.x / rect.y:
+                    selectedRect.x = percent.percentageX;
+                    selectedRect.y = percent.percentageY;
+
+                    // 4) Odświeżamy rysowanie i formularz:
+                    openHotspotForm(selectedRect);
+                    drawRectangles();
+                    return;
+                }
+
+
+                // ** 2. Resize (zmiana rozmiaru) istniejącego hotspotu **
+                if (isResizing && selectedRect) {
+                    const px = selectedRect._px;
+                    const newWidth = currentX - px.pixelX;
+                    const newHeight = currentY - px.pixelY;
+                    // przeliczamy na procenty, bo zmieniamy proporcje
+                    const percent = convertCoordinates(
+                        px.pixelX,
+                        px.pixelY,
+                        newWidth,
+                        newHeight,
+                        image.width,
+                        image.height,
+                        true
+                    );
+                    selectedRect.width = Math.max(percent.percentageWidth, 0);
+                    selectedRect.height = Math.max(percent.percentageHeight, 0);
+
+                    drawRectangles();
+                    openHotspotForm(selectedRect);
+                    return;
+                }
+
+                // ** 3. Drawing (rysowanie nowego prostokąta) **
+                if (isDrawing) {
+                    drawRectangles();
+                    const widthPx = currentX - startX;
+                    const heightPx = currentY - startY;
+                    ctx.fillStyle = 'rgba(135, 206, 250, 0.5)';
+                    ctx.fillRect(startX, startY, widthPx, heightPx);
+                    ctx.strokeStyle = 'black';
+                    ctx.strokeRect(startX, startY, widthPx, heightPx);
+                }
+            });
+
+
+            canvas.addEventListener('mouseup', () => {
+                // Jeżeli tworzyliśmy nowy prostokąt (isDrawing), dodajemy go w % do tablicy
+                if (isDrawing) {
+                    const widthPx = currentX - startX;
+                    const heightPx = currentY - startY;
+                    if (Math.abs(widthPx) > 3 && Math.abs(heightPx) > 3) {
+                        const percent = convertCoordinates(
+                            Math.min(startX, currentX),
+                            Math.min(startY, currentY),
+                            Math.abs(widthPx),
+                            Math.abs(heightPx),
+                            image.width,
+                            image.height,
+                            true
+                        );
+                        rectangles.push({
+                            x: percent.percentageX,
+                            y: percent.percentageY,
+                            width: percent.percentageWidth,
+                            height: percent.percentageHeight,
+                            image_width: image.width,
+                            image_height: image.height
+                        });
+                        console.log("Dodano nowy prostokąt w %:", rectangles[rectangles.length - 1]);
+                        drawRectangles();
+                    }
+                }
+                // wyłączamy wszystkie tryby
+                isDragging = false;
+                isResizing = false;
+                isDrawing = false;
+            });
+
+
+            canvas.addEventListener('mouseout', () => {
+                isDragging = false;
+                isResizing = false;
+                isDrawing = false;
+            });
+
+
+
+            const productItems = [...document.querySelectorAll('#product-list .product')];
+            productItems.forEach(item => {
+                item.addEventListener('click', () => {
                     const dataId = item.getAttribute('data-id');
                     activateRectangleForProduct(dataId);
                 });
-
-                item.addEventListener('dragstart', (e) => {
-                    const productId = item.getAttribute('data-product-id');
-                    const page_id = item.getAttribute('data-page-id');
-                    const productName = item.getAttribute('data-product-name');
-                    const valid_from = item.getAttribute('data-valid_from');
-                    const valid_to = item.getAttribute('data-valid_to');
-                    e.dataTransfer.setData("productId", productId); // Przechowujemy ID produktu w drag-and-drop
-                    e.dataTransfer.setData("page_id", page_id); // Przechowujemy ID produktu w drag-and-drop
-                    e.dataTransfer.setData("productName", productName); // Przechowujemy nazwę produktu
-                    e.dataTransfer.setData("valid_to", valid_to); // Przechowujemy ID valid_to w drag-and-drop
-                    e.dataTransfer.setData("valid_from", valid_from); // Przechowujemy nazwę valid_from
+                item.addEventListener('dragstart', e => {
+                    e.dataTransfer.setData("productId", item.dataset.productId);
+                    e.dataTransfer.setData("page_id", item.dataset.pageId);
+                    e.dataTransfer.setData("productName", item.dataset.productName);
+                    e.dataTransfer.setData("valid_from", item.dataset.valid_from);
+                    e.dataTransfer.setData("valid_to", item.dataset.valid_to);
                 });
             });
 
-            // Umożliwiamy przeciąganie produktu na canvas
-            canvas.addEventListener('dragover', (e) => {
-                e.preventDefault(); // Aby umożliwić upuszczenie
-            });
-
-            canvas.addEventListener('drop', (e) => {
+            canvas.addEventListener('dragover', e => e.preventDefault());
+            canvas.addEventListener('drop', e => {
                 e.preventDefault();
-                const rect = canvas.getBoundingClientRect();
-                const dropX = e.clientX - rect.left;
-                const dropY = e.clientY - rect.top;
-
+                const rectBounds = canvas.getBoundingClientRect();
+                const dropX = e.clientX - rectBounds.left;
+                const dropY = e.clientY - rectBounds.top;
                 const productId = e.dataTransfer.getData("productId");
                 const page_id = e.dataTransfer.getData("page_id");
                 const productName = e.dataTransfer.getData("productName");
-                const valid_to = e.dataTransfer.getData("valid_to");
                 const valid_from = e.dataTransfer.getData("valid_from");
-
-
-                // Sprawdzamy, czy upuszczono na zaznaczony prostokąt
+                const valid_to = e.dataTransfer.getData("valid_to");
                 if (selectedRect && isMouseOnRectangle(dropX, dropY, selectedRect)) {
-                    const product = {
-                        id: productId,
-                        page_id: page_id,
-                        name: productName,
-                        valid_from: valid_from,
-                        valid_to: valid_to
-                    };
-                    addProductToRectangle(product, selectedRect);
-                    selectedRect = null; // Reset selected rectangle after dropping
+                    selectedRect.product = { id: productId, page_id: page_id, name: productName, valid_from: valid_from, valid_to: valid_to };
+                    console.log("Produkt przypisany:", selectedRect.product);
+                    drawRectangles();
+                    selectedRect = null;
                 }
             });
 
-            // Dodanie możliwości usuwania prostokąta po kliknięciu z wciśniętym klawiszem Shift
-            canvas.addEventListener('mousedown', (e) => {
-                if (e.shiftKey) {
-                    const rect = canvas.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    const clickY = e.clientY - rect.top;
-                    deleteRectangle(clickX, clickY);
-                }
-            });
-
-            console.log("Początkowa tablica prostokątów:", rectangles); // Logowanie początkowego stanu tablicy
-            drawRectangles(); // Initial draw in case there are any pre-existing rectangles
+            drawRectangles();
         });
+
+        document.getElementById('fetch-product').addEventListener('click', function () {
+            const url = document.getElementById('url').value;
+
+            if (!url) {
+                alert('Podaj URL produktu!');
+                return;
+            }
+
+            fetch('{{ route('admin.leaflets.hotspots.fetch.data', ['leaflet' => $leaflet]) }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ url: url })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) return alert(data.error);
+
+                    document.getElementById('price').value = data.price || '';
+                    document.getElementById('promo_price').value = data.promo_price || '';
+                    document.getElementById('url').value = data.final_url || url;
+                })
+                .catch(() => alert('Błąd podczas pobierania danych'));
+        });
+
+
+
+
 
     </script>
 

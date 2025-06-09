@@ -46,4 +46,7 @@ return [
     'tradetracker' => [
     'token' => env('TRADETRACKER_ID'),
     ],
+    'vision' => [
+        'token' => env('VISION_AI_API'),
+    ],
 ];

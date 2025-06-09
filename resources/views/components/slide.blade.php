@@ -22,7 +22,7 @@
                @endif
 
                target="_blank"
-               style="top:{{($page->y / $page->image_height) * 100 }}%; left:{{($page->x / $page->image_width) * 100}}%; width:{{($page->width / $page->image_width ) * 100}}%; height:{{($page->height / $page->image_height) *100}}%; display: block;"
+               style="top:{{$page->y}}%; left:{{$page->x}}%; width:{{$page->width}}%; height:{{$page->height}}%; display: block;"
             >
                 <div class="absolute top-2 left-1 opacity-100 z-40 p-1 rounded-full bg-white flex justify-center">
                     <span class="absolute left-0 top-0 bg-blue-550 animate-ping h-6 w-6 rounded-full z-10 flex self-center"></span>

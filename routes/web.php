@@ -1,6 +1,18 @@
 <?php
 
 
+use App\Http\Controllers\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionController;
+use App\Http\Controllers\Admin\FixController as AdminFixController;
+use App\Http\Controllers\Admin\HotSpotController as AdminHotSpotController;
+use App\Http\Controllers\Admin\LeafletController as AdminLeafletController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProductDescriptionController as AdminProductDescriptionController;
+use App\Http\Controllers\Admin\ShopController as AdminShopController;
+use App\Http\Controllers\Admin\VisionController as AdminVisionController;
+use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
+use App\Http\Controllers\Admin\VoucherStoreController as AdminVoucherStoreController;
 use App\Http\Controllers\BackController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\ContactController;
@@ -16,20 +28,7 @@ use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\VoucherController;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\VoucherController as AdminVoucherController;
-use App\Http\Controllers\Admin\VoucherStoreController as AdminVoucherStoreController;
-use App\Http\Controllers\Admin\ShopController as AdminShopController;
-use App\Http\Controllers\Admin\LeafletController as AdminLeafletController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
-use App\Http\Controllers\Admin\ProductDescriptionController as AdminProductDescriptionController ;
-use App\Http\Controllers\Admin\PageController as AdminPageController; ;
-use App\Http\Controllers\Admin\HotSpotController as AdminHotSpotController;
-use App\Http\Controllers\Admin\BlogController as AdminBlogController;
-use App\Http\Controllers\Admin\DescriptionController as AdminDescriptionController;
-
 
 $mainDomain = config('app.main_domain');
 
@@ -44,7 +43,8 @@ Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('sear
 Route::get('/cron/aldi/{week}/{number}/{start}/{letter}', [SearchController::class, 'aldiCron'])->name('cron.aldi');
 
 
-
+Route::get('/vision/test',[AdminVisionController::class,'send'])->name('vision');
+Route::get('/fix/hotspots', [AdminFixController::class, 'fixHotSpots'])->name('fix.hotspots');
 
 
 //ZAPLECZE
@@ -233,6 +233,7 @@ Route::domain('{subdomain}.'.$mainDomain)->group(function () {
         ->where('address', '[a-z0-9_-]+') // tylko alfanumeryczne i myślniki
         ->name('subdomain.shop_address');
 
+    // w .htaccess jest przekierowanie na fizyczny plik
     Route::get('/robots.txt', function () {
         $subdomain = request()->route('subdomain');
         $domain = "$subdomain." . config('app.main_domain');
@@ -336,6 +337,7 @@ Route::domain($mainDomain)->group(function () {
 
     require __DIR__.'/auth.php';
 
+    // w .htaccess jest przekierowanie na fizyczny plik
     Route::get('/robots.txt', function () {
         $content = file_get_contents(public_path('robots.real.txt'));
 

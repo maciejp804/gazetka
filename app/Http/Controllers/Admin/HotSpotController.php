@@ -177,6 +177,7 @@ class HotSpotController extends Controller
             'image' => 'nullable|string'
         ]);
 
+
         $baseUrl = config('affmanager.production.programms.'.$leaflet->shop_id.'.link');
 
         if (!empty($validated['url']) && !str_starts_with($validated['url'], $baseUrl)) {
@@ -202,10 +203,10 @@ class HotSpotController extends Controller
             $result = app(ImageService::class)->cropAndStore(
                 $imagePath,
                 $pathWithoutExtension,
-                $validated['x'],
-                $validated['y'],
-                $validated['width'],
-                $validated['height'],
+                $validated['x'] * $validated['image_width'] / 100,
+                $validated['y'] * $validated['image_height'] / 100,
+                $validated['width']  * $validated['image_width'] / 100,
+                $validated['height']  * $validated['image_height'] / 100,
                 $validated['image_width'],
                 $validated['image_height']);
 
