@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\HotSpot;
 use App\Models\Leaflet;
 use App\Models\Page;
 use App\Models\Shop;
@@ -243,6 +244,11 @@ class PageController extends Controller
             $pagesToDelete = $leaflet->pages()->whereIn('pages.id', $toDelete)->get();
 
             foreach ($pagesToDelete as $page) {
+                $hotspots = HotSpot::where('page_id', $page->id)->get();
+                foreach ($hotspots as $hotspot) {
+                    Storage::disk('public')->delete([$hotspot->image . '.webp', $hotspot->image . '.jpg', $hotspot->image . '.avif']);
+                    $hotspot->delete();
+                }
                 Storage::disk('public')->delete([$page->image_path . '.webp', $page->image_path . '.jpg', $page->image_path . '.avif']);
                 $leaflet->pages()->detach($page->id);
                 $page->delete();

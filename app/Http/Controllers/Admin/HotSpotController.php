@@ -10,14 +10,24 @@ use App\Models\Page;
 use App\Models\PageClick;
 use App\Models\Product;
 use App\Services\ImageService;
+use App\Services\ScraperService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Image;
+use Symfony\Component\DomCrawler\Crawler;
 
 class HotSpotController extends Controller
 {
+
+    protected ScraperService $scraperService;
+
+    public function __construct(ScraperService $scraperService)
+    {
+        $this->scraperService = $scraperService;
+    }
+
     public function create(Leaflet $leaflet)
     {
 
@@ -36,6 +46,8 @@ class HotSpotController extends Controller
             ['label' => 'Opisz', 'url' => '']
 
         ];
+
+
         return view('admin.leaflet.page.edit_order.product.create',[
             'leaflet' => $leaflet,
             'breadcrumbs' => $breadcrumbs,
@@ -238,6 +250,19 @@ class HotSpotController extends Controller
 
     }
 
+    public function fetchProductData(Request $request, ScraperService $scraper)
+    {
+        $url = $request->input('url');
+        $data = $scraper->scrape($url);
+
+        if (!$data) {
+            return response()->json(['error' => 'Nie udało się pobrać danych.'], 422);
+        }
+
+        return response()->json($data);
+    }
+
+
     public function deleteHotSpot(Leaflet $leaflet, HotSpot $hotSpot)
     {
 
@@ -364,8 +389,7 @@ class HotSpotController extends Controller
     {
         // Format 2 import
         foreach ($data as $item) {
-            $pageId = $item['page_id'];
-            dd($pageId);
+
             // Znalezienie produktu na podstawie jego ID
             $product = Product::where('id', $item['product_id'])
                 ->where('status', 1)  // Tylko aktywne produkty
@@ -373,6 +397,13 @@ class HotSpotController extends Controller
 
             // Jeśli produkt istnieje, tworzymy HotSpot i LeafletProduct
             if ($product) {
+
+                $pageId = DB::table('leaflet_page')
+                    ->where('leaflet_id', $leaflet->id)
+                    ->where('sort_order', 1) // odpowiada "page": 1
+                    ->value('page_id');
+
+
                 // Tworzymy lub aktualizujemy HotSpot
                 HotSpot::updateOrCreate(
                     [
@@ -405,6 +436,8 @@ class HotSpotController extends Controller
 //                    ]
 //                );
             }
+            dd('done');
         }
     }
+
 }
