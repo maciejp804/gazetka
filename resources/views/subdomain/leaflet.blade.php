@@ -70,6 +70,16 @@
             />
         </div>
         <x-div-1060-leaftet>
+
+            {{-- Reklama pozioma mobile- 1--}}
+            <div class="flex justify-center my-5 min-h-70 mx-auto sm:hidden">
+                <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-0 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
+                <x-admanager
+                    slot-name="subdomain_middle_mobile_1"
+                    :overrides="['page' => 'subdomain.leaflet']"
+                />
+            </div>
+
             <x-section class="relative">
                 <x-skeleton.leaflet-subdomain-skeleton :is-mobile="$isMobile" swiperClass="swiper-container"/>
                 <x-leaflet-subdomain
@@ -189,14 +199,6 @@
             @endif
         @endif
 
-    </div>
-    {{-- Reklama pozioma nad footer --}}
-    <div class="hidden 3xs:flex min-h-25 my-5 mx-auto justify-center md:min-h-75 xl:min-h-96">
-        <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
-        <x-admanager
-            slot-name="homepage_footer"
-            :overrides="['page' => 'main.index']"
-        />
     </div>
     <x-slot:scripts>
         @vite(['resources/js/rating.js', 'resources/js/leaflet-swiper.js'])
