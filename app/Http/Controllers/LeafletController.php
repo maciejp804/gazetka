@@ -13,6 +13,7 @@ use App\Models\Shop;
 use App\Services\LeafletService;
 use App\Services\ProductService;
 use App\Services\SortOptionsService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
@@ -33,8 +34,8 @@ class LeafletController extends Controller
     public function index()
     {
         if (app()->environment('local')) {
-    Log::info('Current Route:', [Route::currentRouteName()]);
-}
+            Log::info('Current Route:', [Route::currentRouteName()]);
+        }
 
         $leaflets = $this->leafletService->getLeafletsSimplePaginate(15);
 
@@ -67,40 +68,38 @@ class LeafletController extends Controller
         ];
 
 
-
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
         $default_descriptions = Description::getDefaultLeaflets(Route::currentRouteName());
 
 
 //        dd($default_descriptions);
 
-        return view('main.leaflets.index', data:
-            [
+        return view('main.leaflets.index', data: [
 
-                // Opisy i dane globalne
-                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
-                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
-                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
-                'descriptions' => $descriptions,
-                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
-                'meta_robots' => 'noindex, follow',
-                'breadcrumbs' => $breadcrumbs,
+            // Opisy i dane globalne
+            'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+            'meta_title' => $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+            'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+            'descriptions' => $descriptions,
+            'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+            'meta_robots' => 'noindex, follow',
+            'breadcrumbs' => $breadcrumbs,
 
-                'place' => $place->name,
+            'place' => $place->name,
 
-                'leaflets' => $leaflets,
-                'leaflets_category' => $leaflets_category,
-                'leaflet_sort' => $leaflet_sort,
-                'products' => $products,
-                'product_categories' => $product_categories,
-            ]);
+            'leaflets' => $leaflets,
+            'leaflets_category' => $leaflets_category,
+            'leaflet_sort' => $leaflet_sort,
+            'products' => $products,
+            'product_categories' => $product_categories,
+        ]);
     }
 
     public function indexCategory($category)
     {
         if (app()->environment('local')) {
-    Log::info('Current Route:', [Route::currentRouteName()]);
-}
+            Log::info('Current Route:', [Route::currentRouteName()]);
+        }
         $product_categories = Category::where('status', 'active')
             ->where('type', 'product')
             ->where('parent_id', '=', null)
@@ -145,37 +144,37 @@ class LeafletController extends Controller
 
 //        dd($descriptions);
 
-        return view('main.leaflets.index_category', data:
-            [
-                'place' => $place->name,
+        return view('main.leaflets.index_category', data: [
+            'place' => $place->name,
 
-                // Opisy i dane globalne
-                'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
-                'meta_title'=> $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
-                'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
-                'descriptions' => $descriptions,
-                'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
-                'meta_robots' => 'noindex, follow',
+            // Opisy i dane globalne
+            'h1_title' => $descriptions->h1_title ?? $default_descriptions->h1_title ?? "DoMyślny",
+            'meta_title' => $descriptions->meta_title ?? $default_descriptions->meta_title ?? "DoMyślny",
+            'meta_description' => $descriptions->meta_description ?? $default_descriptions->meta_description ?? "DoMyślny",
+            'descriptions' => $descriptions,
+            'excerpt' => $descriptions->excerpt ?? $default_descriptions->excerpt ?? "DoMyślny",
+            'meta_robots' => 'noindex, follow',
 
-                'breadcrumbs' => $breadcrumbs,
-                'leaflets' => $leaflets,
-                'leaflets_category' => $leaflets_category,
-                'leaflet_sort' => $leaflet_sort,
-                'products' => $products,
-                'product_categories' => $product_categories,
-                'category' => $category,
-            ]);
+            'breadcrumbs' => $breadcrumbs,
+            'leaflets' => $leaflets,
+            'leaflets_category' => $leaflets_category,
+            'leaflet_sort' => $leaflet_sort,
+            'products' => $products,
+            'product_categories' => $product_categories,
+            'category' => $category,
+        ]);
     }
-    public function subdomainLeaflet($subdomain, $data, $id)
+
+    public function subdomainLeaflet($subdomain, $data, $id, Request $request)
     {
         if (app()->environment('local')) {
-        Log::info('Current Route:', [Route::currentRouteName()]);
+            Log::info('Current Route:', [Route::currentRouteName()]);
         }
 
 
         $shop = Shop::where('slug', $subdomain)->first();
 
-        $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds','products')
+        $leaflet = Leaflet::with('shop', 'pages.hotSpots', 'products', 'inserts.clicks', 'leafletAds', 'products')
             ->where('shop_id', $shop->id)
             ->find($id);
 
@@ -185,14 +184,23 @@ class LeafletController extends Controller
             abort(404, 'Gazetka nie została znaleziona');
         }
 
+        // Sprawdzamy, czy w sesji jest już ustawiony layout
+        if (!$request->session()->has('ad_layout')) {
+            // Losujemy: 0 lub 1 → A lub B
+            $layout = rand(0, 1) ? 'A' : 'B';
+            $request->session()->put('ad_layout', $layout);
+        } else {
+            $layout = $request->session()->get('ad_layout');
+        }
+
+
         $productIds = $leaflet->pages
-            ->flatMap(fn ($page) => $page->hotSpots)   // zbierz wszystkie hotspoty
+            ->flatMap(fn($page) => $page->hotSpots)   // zbierz wszystkie hotspoty
             ->pluck('product_id')                      // wyciągnij product_id
             ->unique()                                 // tylko unikalne ID
             ->filter();                                // usuń null, jeśli jakieś są
 
         $products = Product::whereIn('id', $productIds)->get();
-
 
 
         if (!$shop || !$leaflet) {
@@ -205,7 +213,7 @@ class LeafletController extends Controller
         $ads = $leaflet->leafletAds;
 
 
-        [$leaflets, $counter ] = $this->leafletService->getLeaflets('all', $shop->id);
+        [$leaflets, $counter] = $this->leafletService->getLeaflets('all', $shop->id);
 
         $leaflets = $leaflets->whereNotIn('id', $leaflet->id);
 
@@ -247,11 +255,10 @@ class LeafletController extends Controller
         $blogs = Blog::getAll();
 
 
-
         $breadcrumbs = [
             ['label' => 'Strona główna', 'url' => route('main.index')],
             ['label' => $shop->name, 'url' => route('subdomain.index', ['subdomain' => $subdomain])],
-            ['label' => 'Gazetka promocyjna '. $shop->name, 'url' => '']
+            ['label' => 'Gazetka promocyjna ' . $shop->name, 'url' => '']
         ];
 
         $descriptions = Description::getByRouteAndPlace(Route::currentRouteName());
@@ -260,27 +267,26 @@ class LeafletController extends Controller
 
         $products_excerpt = 'W ofercie znajdują się promocje na:';
 
-        if($products->count()){
+        if ($products->count()) {
             $count_products = count($products);
-            if ($count_products >= 5){
+            if ($count_products >= 5) {
                 $counter = 5;
             } else {
                 $counter = $count_products;
             }
 
-            for ($i = 0; $i < $counter; $i++){
-                if ($i == $counter - 1){
-                    $products_excerpt .= ' <strong>'.$products[$i]->name.'</strong>.';
+            for ($i = 0; $i < $counter; $i++) {
+                if ($i == $counter - 1) {
+                    $products_excerpt .= ' <strong>' . $products[$i]->name . '</strong>.';
                 } else {
-                    $products_excerpt .= ' <strong>'.$products[$i]->name.'</strong>,';
+                    $products_excerpt .= ' <strong>' . $products[$i]->name . '</strong>,';
                 }
             }
         } else {
-            $products_excerpt = 'Nie czekaj! Sprawdź, co jeszcze '. $shop->name .' ma do zaoferowania w ' .(monthReplace(date("Y-m-d"),'full_loc', 'm')).'!';
+            $products_excerpt = 'Nie czekaj! Sprawdź, co jeszcze ' . $shop->name . ' ma do zaoferowania w ' . (monthReplace(date("Y-m-d"), 'full_loc', 'm')) . '!';
         }
-
-        return view('subdomain.leaflet', data:
-            [
+        if ($layout === 'A') {
+            return view('subdomain.leaflet_a', data: [
                 'place' => $place,
                 'places' => $placesLimit40,
 
@@ -288,19 +294,19 @@ class LeafletController extends Controller
 
                 // Opisy i dane globalne
                 'h1_title' => $descriptions->h1_title ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
-                        [$leaflet->title,$shop->name, date('d.m.Y', strtotime($leaflet->valid_from)), monthReplace($leaflet->valid_to,'full_gen')],
+                        [$leaflet->title, $shop->name, date('d.m.Y', strtotime($leaflet->valid_from)), monthReplace($leaflet->valid_to, 'full_gen')],
                         $default_descriptions->h1_title) ?? "DoMyślny",
-                'meta_title'=> $descriptions->meta_title ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}'],
+                'meta_title' => $descriptions->meta_title ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
                         [$leaflet->title, $shop->name, date('d.m', strtotime($leaflet->valid_from)), date('d.m.Y', strtotime($leaflet->valid_to))],
                         $default_descriptions->meta_title) ?? "DoMyślny",
-                'meta_description' => $descriptions->meta_description ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}'],
-                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to,'full_gen', 'd-m')],
+                'meta_description' => $descriptions->meta_description ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
+                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to, 'full_gen', 'd-m')],
                         $default_descriptions->meta_description) ?? "DoMyślny",
                 'descriptions' => $descriptions,
-                'excerpt' => $descriptions->excerpt ?? str_replace(['{title}','{shop}', '{valid_from}', '{valid_to}', '{month}', '{products}'],
+                'excerpt' => $descriptions->excerpt ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}', '{month}', '{products}'],
                         [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'),
-                            monthReplace($leaflet->valid_to,'full_gen', 'd-m'),
-                            monthReplace($leaflet->valid_to,'full_loc', 'm'), $products_excerpt],
+                            monthReplace($leaflet->valid_to, 'full_gen', 'd-m'),
+                            monthReplace($leaflet->valid_to, 'full_loc', 'm'), $products_excerpt],
                         $default_descriptions->excerpt) ?? "DoMyślny",
                 'breadcrumbs' => $breadcrumbs,
 
@@ -329,9 +335,64 @@ class LeafletController extends Controller
                 //Blogs
                 'blogs' => $blogs,
 
-
-
+                //Testy
+                'layout' => $layout
             ]);
+        } else {
+            return view('subdomain.leaflet_b', data: [
+                'place' => $place,
+                'places' => $placesLimit40,
+
+                'shop' => $shop,
+
+                // Opisy i dane globalne
+                'h1_title' => $descriptions->h1_title ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
+                        [$leaflet->title, $shop->name, date('d.m.Y', strtotime($leaflet->valid_from)), monthReplace($leaflet->valid_to, 'full_gen')],
+                        $default_descriptions->h1_title) ?? "DoMyślny",
+                'meta_title' => $descriptions->meta_title ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
+                        [$leaflet->title, $shop->name, date('d.m', strtotime($leaflet->valid_from)), date('d.m.Y', strtotime($leaflet->valid_to))],
+                        $default_descriptions->meta_title) ?? "DoMyślny",
+                'meta_description' => $descriptions->meta_description ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}'],
+                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'), monthReplace($leaflet->valid_to, 'full_gen', 'd-m')],
+                        $default_descriptions->meta_description) ?? "DoMyślny",
+                'descriptions' => $descriptions,
+                'excerpt' => $descriptions->excerpt ?? str_replace(['{title}', '{shop}', '{valid_from}', '{valid_to}', '{month}', '{products}'],
+                        [$leaflet->title, $shop->name, monthReplace($leaflet->valid_from, 'full_gen', 'd-m'),
+                            monthReplace($leaflet->valid_to, 'full_gen', 'd-m'),
+                            monthReplace($leaflet->valid_to, 'full_loc', 'm'), $products_excerpt],
+                        $default_descriptions->excerpt) ?? "DoMyślny",
+                'breadcrumbs' => $breadcrumbs,
+
+                'isMobile' => $isMobile,
+                'pages' => $pages,
+                'inserts' => $inserts,
+
+                'ads' => $ads,
+                'subdomain' => $subdomain,
+                'id' => $id,
+
+
+                // Rating
+                'averageRating' => $averageRating,
+                'ratingCount' => $ratingCount,
+                'model' => "Shop",
+
+                //Gazetki
+                'leaflet' => $leaflet,
+                'leaflets' => $leaflets,
+                'similarLeaflets' => $similarLeaflets,
+
+                //Produkty
+                'products' => $products,
+
+                //Blogs
+                'blogs' => $blogs,
+
+                //Testy
+                'layout' => $layout
+            ]);
+        }
+
     }
 
 }

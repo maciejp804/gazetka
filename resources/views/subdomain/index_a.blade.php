@@ -10,7 +10,6 @@
     </x-slot:meta_description>
 
 
-
     <x-breadcrumbs class="mt-3" :breadcrumbs="$breadcrumbs"/>
 
     {{-- Reklama pozioma pod header --}}
@@ -18,7 +17,7 @@
         <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
         <x-admanager
             slot-name="homepage_header"
-            :overrides="['page' => 'subdomain.index']"
+            :overrides="['ad_layout' => $layout]"
         />
     </div>
 
@@ -29,7 +28,7 @@
             <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
             <x-admanager
                 slot-name="homepage_sidebar_left"
-                :overrides="['page' => 'subdomain.index']"
+                :overrides="['ad_layout' => $layout]"
             />
         </div>
 
@@ -52,7 +51,7 @@
                     <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
                     <x-admanager
                         slot-name="gp_desktop_subdomain_index_middle_1_gam"
-                        :overrides="['page' => 'subdomain.index']"
+                        :overrides="['ad_layout' => $layout]"
                     />
                 </div>
                 <x-h2-title class="flex" :see-more-status="false">Aktualne gazetki i katalogi</x-h2-title>
@@ -72,7 +71,7 @@
 
 {{--                </div>--}}
 
-                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets"/>
+                <x-section-filtr-results :ads-status="true" data-container-id="leaflet-container" :items="$leaflets" type="leaflets" :overrides="['ad_layout' => $layout]"/>
 
             </x-section>
 
@@ -93,7 +92,7 @@
                 <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
                 <x-admanager
                     slot-name="homepage_middle_2"
-                    :overrides="['page' => 'subdomain.index']"
+                    :overrides="['ad_layout' => $layout]"
                 />
             </div>
 
@@ -142,7 +141,7 @@
             <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
             <x-admanager
                 slot-name="homepage_sidebar_right"
-                :overrides="['page' => 'subdomain.index']"
+                :overrides="['ad_layout' => $layout]"
             />
         </div>
 
@@ -154,7 +153,7 @@
             <div class="relative before:content-['Reklama'] before:absolute before:-top-5 before:left-1/2 before:text-1xs before:uppercase before:tracking-wide before:text-gray-500"></div>
             <x-admanager
                 slot-name="homepage_footer"
-                :overrides="['page' => 'main.index']"
+                :overrides="['ad_layout' => $layout]"
             />
         </div>
         @if($descriptions != null)

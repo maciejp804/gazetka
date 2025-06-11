@@ -1,4 +1,4 @@
-@props(['adsStatus' => false, 'items', 'dataContainerId', 'type'])
+@props(['adsStatus' => false, 'items', 'dataContainerId', 'type', 'overrides' => ['page' => 'default']])
 
 @if($type == 'leaflets')
 
