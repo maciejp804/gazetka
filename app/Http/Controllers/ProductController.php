@@ -301,7 +301,9 @@ class ProductController extends Controller
     public function showSubdomain($subdomain, $slug)
     {
 
-        $shop = Shop::where('slug', $subdomain)->first();
+        $shop = Shop::where('slug', $subdomain)
+            ->where('status', 'active')
+            ->first();
 
         $product = Product::with(['category', 'descriptions' => function($q) use ($shop) {
             $q->where('shop_id', $shop->id);
