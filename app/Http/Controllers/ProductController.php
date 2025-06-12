@@ -304,7 +304,11 @@ class ProductController extends Controller
         $shop = Shop::where('slug', $subdomain)
             ->where('status', 'active')
             ->first();
-
+        if(!$shop)
+        {
+            abort(404);
+        }
+        
         $product = Product::with(['category', 'descriptions' => function($q) use ($shop) {
             $q->where('shop_id', $shop->id);
         }])
