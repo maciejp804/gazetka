@@ -41,17 +41,17 @@
         <div class="flex flex-col gap-x-2 sm:flex-row">
             <div class="flex flex-col w-full gap-x-2 1xs:flex-row sm:2/3">
                 <div class="flex flex-col text-sm text-gray-700 w-full">
-                    <span>{{$descriptions->excerpt ?? ''}}</span>
+                    <span>{!! $descriptions->excerpt ?? ''  !!}</span>
                 </div>
             </div>
         </div>
-        <div class="flex flex-col sm:flex-row my-5 gap-x-3">
-            <div class="flex justify-between w-full mb-2">
-                @if(isset($descriptions->parameters))
-                    <x-values-list :descriptions="$descriptions"/>
-                @endif
-            </div>
-        </div>
+{{--        <div class="flex flex-col sm:flex-row my-5 gap-x-3">--}}
+{{--            <div class="flex justify-between w-full mb-2">--}}
+{{--                @if(isset($descriptions->parameters))--}}
+{{--                    <x-values-list :descriptions="$descriptions"/>--}}
+{{--                @endif--}}
+{{--            </div>--}}
+{{--        </div>--}}
     </div>
 
     <div class="flex flex-col lg:w-2/6">

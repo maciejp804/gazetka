@@ -295,10 +295,10 @@ class SearchController extends Controller
     public function aldiCron($week, $number, $start, $letter)
     {
         set_time_limit(3200);
-        $data = json_decode(file_get_contents(storage_path('app\public\json\new_combinations_with_k_p_i_s_q_w_z.json')), true);
+        $data = json_decode(file_get_contents(storage_path('app\public\json\kombinacje.json')), true);
         $i = 0;
         $l = 356406;
-        foreach ($data['combinations'] as $combination) {
+        foreach ($data as $combination) {
             if ($i >= $start) {
 
                 if(str_contains($combination, $letter)) {
@@ -352,7 +352,7 @@ class SearchController extends Controller
     {
 
 
-        $letters = ["a", "b", "c", "d", "e", "f", "g", "h", "j", "o", "t", "k"];
+        $letters = ["a", "b", "c", "d", "e", "f", "g", "h", "j", "o", "t", "k", "p", "q", "r", "s", "t", "u", "w", "v","x", "y", "z"];
         $combinations = [];
 
 // Cztery zagnieżdżone pętle generują wszystkie 4-literowe ciągi

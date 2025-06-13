@@ -49,4 +49,7 @@ return [
     'vision' => [
         'token' => env('VISION_AI_API'),
     ],
+    'writesonic' => [
+        'token' => env('WRITESONIC_API'),
+    ],
 ];

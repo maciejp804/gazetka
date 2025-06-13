@@ -3,12 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\GenerateDescriptionJob;
 use App\Models\Category;
+use App\Models\HotSpot;
 use App\Models\Product;
 use App\Models\ProductDescription;
 use App\Models\Shop;
 use App\Services\ImageService;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ProductDescriptionController extends Controller
 {
@@ -467,6 +472,35 @@ class ProductDescriptionController extends Controller
 
         return redirect()->back()->with('success', 'Wpis został dodany.');
 
+    }
+
+    public function writesonicDescription(Request $request, Product $product, Shop $shop)
+    {
+        $products = Product::whereHas('hotSpots') // produkty z hotspotami
+        ->where(function ($query) {
+            $query->doesntHave('descriptions')
+                ->orWhereHas('descriptions', function ($q) {
+                    $q->whereNull('excerpt');
+                });
+        })
+            ->limit(20)
+            ->get()
+            ->unique('id')
+            ->values();
+
+
+        foreach ($products as $product) {
+            GenerateDescriptionJob::dispatch($product)->delay(now()->addSeconds(2));
+        }
+
+        // ✅ Logowanie informacji do laravel.log
+        Log::info('Zlecono generowanie opisów dla ' . $products->count() . ' produktów przez Writesonic.');
+
+
+        return response()->json([
+            'status' => 'ok',
+            'queued_jobs' => $products->count(),
+        ]);
     }
 
 

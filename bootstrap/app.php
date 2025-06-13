@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Middleware\TrailingSlashMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Console\Scheduling\Schedule;
+
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -23,7 +26,37 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->withSchedule(function (Schedule $schedule) {
+        $schedule->command('queue:work --stop-when-empty')
+            ->name('queue-worker')
+            ->everyMinute()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path('logs/queue.log'));
+
+        $schedule->call(function () {
+            try {
+
+                $response = Http::get(route('admin.products.writesonic'));
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    $total = $data['processed'] ?? 0;
+
+                    Log::info("[WritesonicSchedule] Wysłano {$total} produktów do opisania.");
+                } else {
+                    Log::error('[WritesonicSchedule] Błąd HTTP: ' . $response->status());
+                }
+            } catch (\Throwable $e) {
+                Log::error('[WritesonicSchedule] Wyjątek: ' . $e->getMessage());
+            }
+        })
+            ->name('Writesonic')
+            ->everyFifteenMinutes()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path('logs/writesonic.log'));
+    })
+    ->create();
 
 //$app->register(new Illuminatech\UrlTrailingSlash\RoutingServiceProvider($app)); // register trailing slashes routing
 //

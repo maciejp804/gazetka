@@ -266,9 +266,35 @@ class ProductController extends Controller
             ['label' => mb_ucfirst($product->name), 'url' => ''],
         ];
 
-        $descriptions = ProductDescription::getByProductAndShop($product->id);
 
+        $shops = collect($productInLeaflets)
+            ->pluck('shop_name')
+            ->unique()
+            ->map(fn($name) => "<strong>{$name}</strong>")
+            ->implode(', ');
+
+       if($shops != ''){
+           $cta_description = str_replace(
+               ['{shops}', '{product}'],
+               [$shops, '<strong>'.mb_strtolower($product->name).'</strong>'],
+               "W aktualnych gazetkach promocyjnych sieci {shops} często znajdziesz atrakcyjne oferty na {product} – sprawdź i zaplanuj zakupy!"
+           );
+       } else {
+           $cta_description = '';
+       }
+
+        $descriptions = ProductDescription::getByProductAndShop($product->id);
         $default_descriptions = ProductDescription::getDefaultProduct(Route::currentRouteName(), $product);
+
+        if ($descriptions && isset($descriptions->excerpt)) {
+            $descriptions->excerpt .= ' ' . $cta_description;
+        } elseif ($default_descriptions && isset($default_descriptions->excerpt)) {
+            $default_descriptions->excerpt .= ' ' . $cta_description;
+        }
+
+
+
+
 
         return view('main.products.show', data:
             [
@@ -300,15 +326,15 @@ class ProductController extends Controller
 
     public function showSubdomain($subdomain, $slug)
     {
-
         $shop = Shop::where('slug', $subdomain)
             ->where('status', 'active')
             ->first();
+
         if(!$shop)
         {
             abort(404);
         }
-        
+
         $product = Product::with(['category', 'descriptions' => function($q) use ($shop) {
             $q->where('shop_id', $shop->id);
         }])

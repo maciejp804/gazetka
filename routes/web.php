@@ -131,9 +131,11 @@ Route::prefix('/panel')->name('admin.')->group(function () {
 //PRODUCTS
     Route::prefix('products')->name('products.')->group(function () {
         Route::get('/', [AdminProductController::class, 'index'])->name('index');
+        Route::get('/writesonic', [AdminProductDescriptionController::class, 'writesonicDescription'])->name('writesonic');
         Route::get('/search', [AdminProductController::class, 'search'])->name('search'); //Wyszukiwarka produktów
         Route::get('/{product:slug}', [AdminProductController::class, 'manage'])->name('manage');
         Route::post('/{product}/upload-image', [AdminProductController::class, 'uploadImage'])->name('upload.image'); //Dodawanie, zmiana grafiki
+
 
         // DESCRIPTION
         Route::prefix('/{product:slug}/description')->name('description.')->group(function () {
