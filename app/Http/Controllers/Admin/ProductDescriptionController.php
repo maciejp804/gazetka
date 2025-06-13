@@ -483,7 +483,7 @@ class ProductDescriptionController extends Controller
                     $q->whereNull('excerpt');
                 });
         })
-            ->limit(20)
+            ->limit(30)
             ->get()
             ->unique('id')
             ->values();
