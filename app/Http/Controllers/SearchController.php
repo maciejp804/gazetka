@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Leaflet;
-use App\Models\PageClick;
 use App\Models\Place;
 use App\Models\Product;
 use App\Models\Shop;

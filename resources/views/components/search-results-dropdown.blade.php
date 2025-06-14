@@ -45,7 +45,7 @@
         ">Sklepy</div>
         @foreach($retailers as $retailer)
             <a href="{{route('subdomain.index', ['subdomain' => $retailer->slug])}}" class="block px-4 py-1 hover:bg-gray-100 cursor-pointer text-sm text-gray-700 item">
-                <img src="{{ $retailer['image'] }}" alt="{{ $retailer['name'] }} logo" class="inline-block w-6 h-6 mr-2">
+                <img src="{{ Storage::url($retailer['image'].'.webp') }}" alt="{{ $retailer['name'] }} logo" class="inline-block w-6 h-6 mr-2">
                 {{ $retailer['name'] }}
             </a>
         @endforeach
