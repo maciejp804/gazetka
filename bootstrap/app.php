@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\ProductDescriptionService;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -34,30 +35,32 @@ return Application::configure(basePath: dirname(__DIR__))
             ->withoutOverlapping()
             ->appendOutputTo(storage_path('logs/queue.log'));
 
-        $schedule->call(function () {
+        $schedule->call(function (ProductDescriptionService $productDescriptionService) {
             try {
-
-                $response = Http::get(route('admin.products.writesonic'));
-
-                if ($response->successful()) {
-                    $data = $response->json();
-                    $total = $data['processed'] ?? 0;
-
-                    Log::info("[WritesonicSchedule] Wysłano {$total} produktów do opisania.");
-                } else {
-                    Log::error('[WritesonicSchedule] Błąd HTTP: ' . $response->status());
-                }
+                $totalDispatched = $productDescriptionService->writesonicGeneral();
+                Log::info("[Writesonic General] Wysłano {$totalDispatched} produktów do opisania.");
             } catch (\Throwable $e) {
-                Log::error('[WritesonicSchedule] Wyjątek: ' . $e->getMessage());
+                Log::error('[Writesonic General] Wyjątek: ' . $e->getMessage());
             }
         })
-            ->name('Writesonic')
+            ->name('Writesonic General')
             ->everyFifteenMinutes()
+            ->at('00')
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path('logs/writesonic.log'));
+
+        $schedule->call(function (ProductDescriptionService $productDescriptionService) {
+            try {
+                $totalDispatched  = $productDescriptionService->writesonicShop();
+                Log::info("[Writesonic Shop] Wysłano -  {$totalDispatched} produktów do opisania.");
+            } catch (\Throwable $e) {
+                Log::error('[Writesonic Shop] Wyjątek: ' . $e->getMessage());
+            }
+        })
+            ->name('Writesonic Shop')
+            ->everyFifteenMinutes()
+            ->at('07')
             ->withoutOverlapping()
             ->appendOutputTo(storage_path('logs/writesonic.log'));
     })
     ->create();
-
-//$app->register(new Illuminatech\UrlTrailingSlash\RoutingServiceProvider($app)); // register trailing slashes routing
-//
-//return $app;
