@@ -45,7 +45,6 @@ return Application::configure(basePath: dirname(__DIR__))
         })
             ->name('Writesonic General')
             ->everyFifteenMinutes()
-            ->at('00')
             ->withoutOverlapping()
             ->appendOutputTo(storage_path('logs/writesonic.log'));
 
