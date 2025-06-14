@@ -53,7 +53,7 @@ class ProductDescriptionService
             ->whereNull('pd.excerpt')
             ->select('hs.product_id', 'l.shop_id')
             ->distinct()
-            ->limit(30)
+            ->limit(10)
             ->get();
 
 
