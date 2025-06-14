@@ -4,7 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Product;
 use App\Models\ProductDescription;
-use GuzzleHttp\Client;
+use App\Services\TextServices;
+use App\Services\WritesonicService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -21,15 +22,15 @@ class GenerateDescriptionJob implements ShouldQueue
     public function __construct(Product $product)
     {
         $this->product = $product;
+
     }
 
-    public function handle(): void
+    public function handle(WritesonicService $writesonicService, TextServices $textServices): void
     {
         try {
             $name = $this->product->name;
             $message = "Napisz krótki opis produktu \"{$name}\" (max 70 słów), zawrzyj informacje o zastosowaniu i promocji.";
 
-            $client = new Client();
             $payload = [
                 'tone_of_voice' => 'professional',
                 'product_name' => $name,
@@ -37,51 +38,20 @@ class GenerateDescriptionJob implements ShouldQueue
                 'primary_keyword' => $name,
             ];
 
-            $response = $client->post('https://api.writesonic.com/v2/business/content/product-descriptions?engine=premium&language=pl&num_copies=1', [
-                'json' => $payload,
-                'headers' => [
-                    'X-API-KEY' => config('services.writesonic.token'),
-                    'accept' => 'application/json',
-                ],
-            ]);
-
-            $data = json_decode($response->getBody()->getContents(), true);
+            $data = $writesonicService->generateProductDescription($payload);
 
             if (!empty($data[0]['text'])) {
                 ProductDescription::updateOrCreate(
                     ['product_id' => $this->product->id, 'shop_id' => null],
-                    ['excerpt' => $this->shorten($data[0]['text'])]
+                    ['excerpt' => $textServices->shorten($data[0]['text'])]
                 );
-
+                Log::info("Otrzymano opis i dodano do bazy danych {$name}");
             }
+
+
 
         } catch (\Throwable $e) {
             Log::error("Writesonic job failed for product ID {$this->product->id}: " . $e->getMessage());
         }
-    }
-
-    protected function shorten(string $text, int $maxWords = 80): string
-    {
-        // Usuń nadmiarowe białe znaki
-        $text = trim(preg_replace('/\s+/', ' ', $text));
-
-        // Podziel na zdania
-        $sentences = preg_split('/(?<=[.!?])\s+/', $text);
-
-        $shortText = '';
-        $wordCount = 0;
-
-        foreach ($sentences as $sentence) {
-            $wordsInSentence = str_word_count($sentence);
-
-            if (($wordCount + $wordsInSentence) > $maxWords) {
-                break;
-            }
-
-            $shortText .= $sentence . ' ';
-            $wordCount += $wordsInSentence;
-        }
-
-        return trim($shortText);
     }
 }

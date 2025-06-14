@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Scrapers\LidlScraper;
 use App\Services\Scrapers\MediaMarktScraper;
 use App\Services\ScraperService;
+use App\Services\WritesonicService;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -22,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
                 new MediaMarktScraper()
                 // Dodaj inne scraper strategie tutaj
             ]);
+        });
+
+        $this->app->singleton(WritesonicService::class, function ($app) {
+            return new WritesonicService();
         });
     }
 
