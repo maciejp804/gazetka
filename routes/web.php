@@ -58,8 +58,6 @@ Route::prefix('/panel')->name('admin.')->group(function () {
     Route::put('/vouchers/{voucher}/update', [AdminVoucherController::class, 'update'])->name('vouchers.update');
     Route::post('/vouchers/{voucher}/upload-image', [AdminVoucherController::class, 'uploadImage'])->name('vouchers.upload.image');
     Route::post('/vouchers/{voucher}/upload-logo', [AdminVoucherController::class, 'uploadLogo'])->name('vouchers.upload.logo');
-    Route::get('/vouchers/update/tradedoubler',[AdminVoucherController::class,'updateVouchersTradedoubler'])->name('vouchers.update.tradedoubler');
-    Route::get('/vouchers/update/tradetracker',[AdminVoucherController::class,'updateVouchersTradetracker'])->name('vouchers.update.tradetracker');
 
 
     Route::get('/vouchers/store/create', [AdminVoucherStoreController::class,'create'])->name('vouchers.store.create');
@@ -116,6 +114,7 @@ Route::prefix('/panel')->name('admin.')->group(function () {
         Route::prefix('{leaflet}/hotspots')->name('hotspots.')->group(function () {
             Route::get('/create', [AdminHotSpotController::class, 'create'])->name('create');
             Route::post('/add', [AdminHotSpotController::class, 'add'])->name('add');
+            Route::get('/add-auto', [AdminHotSpotController::class, 'addAuto'])->name('add.auto');
             Route::post('/import', [AdminHotSpotController::class, 'import'])->name('import');
             Route::get('/export', [AdminHotSpotController::class, 'export'])->name('export');
             Route::delete('/delete', [AdminHotSpotController::class, 'delete'])->name('delete');
