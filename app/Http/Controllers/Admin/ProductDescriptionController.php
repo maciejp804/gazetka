@@ -471,6 +471,8 @@ class ProductDescriptionController extends Controller
        ProductDescription::create([
            'product_id' => $product->id,
            'shop_id' => $shop->id,
+           'content' => [],
+           'faq' => [],
        ]);
 
         return redirect()->back()->with('success', 'Wpis został dodany.');
