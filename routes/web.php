@@ -41,7 +41,8 @@ Route::get('search/quadruple',[SearchController::class,'quadruple'])->name('sear
 
 
 Route::get('/cron/aldi/{week}/{number}/{start}/{letter}', [SearchController::class, 'aldiCron'])->name('cron.aldi');
-
+Route::get('/vision/openai', [AdminVisionController::class, 'chat'])->name('cron.openai');
+Route::get('/vision/openfood/{product}', [AdminVisionController::class, 'productsOpenFood'])->name('cron.openfood');
 
 Route::get('/vision/test',[AdminVisionController::class,'send'])->name('vision');
 Route::get('/fix/hotspots', [AdminFixController::class, 'fixHotSpots'])->name('fix.hotspots');
@@ -155,6 +156,10 @@ Route::prefix('/panel')->name('admin.')->group(function () {
                 Route::put('/{shop}/update', [AdminProductDescriptionController::class, 'updateShop'])->name('updateShop');
                 Route::get('/{shop:slug}/faq/edit', [AdminProductDescriptionController::class, 'editShopFaq'])->name('editShopFaq');
                 Route::put('/{shop}/faq/update', [AdminProductDescriptionController::class, 'updateShopFaq'])->name('updateShopFaq');
+                Route::get('/{shop:slug}/content/edit', [AdminProductDescriptionController::class, 'editShopContent'])->name('editShopContent');
+                Route::put('/{shop}/content/update', [AdminProductDescriptionController::class, 'updateShopContent'])->name('updateShopContent');
+                Route::put('/{shop}/image/{index}', [AdminProductDescriptionController::class, 'updateShopContentImage']) // Dodawanie, edycja zdjęcia w wpisie głownym
+                ->name('content.update.image');
                 Route::get('/{shop:slug}/create', [AdminProductDescriptionController::class, 'createShop'])->name('createShop');
                 Route::get('/{shop}/add', [AdminProductDescriptionController::class, 'addShop'])->name('addShop');
                 Route::get('/{shop:slug}', [AdminProductDescriptionController::class, 'manageShop'])->name('manageShop');

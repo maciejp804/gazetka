@@ -343,6 +343,8 @@ class ProductDescriptionController extends Controller
         $manage = [
             ['label' => 'Dane podstawowe', 'description' => 'nazwa, slug, meat_data (product, product_descriptions)',
                 'logo' => 'fa-solid fa-pen-to-square','url' => route('admin.products.description.shop.editShop', [$product, $shop])],
+            ['label' => 'Content', 'description' => 'dodawanie, edycja i usuwanie kontentu (product_descriptions)',
+                'logo' => 'fa-solid fa-file-lines','url' => route('admin.products.description.shop.editShopContent', [$product, $shop])],
             ['label' => 'FAQ', 'description' => 'dodawanie, edycja i usuwanie FAQ (product_descriptions)',
                 'logo' => 'fa-solid fa-circle-question','url' => route('admin.products.description.shop.editShopFaq', [$product, $shop])]
         ];
@@ -463,6 +465,115 @@ class ProductDescriptionController extends Controller
 
     }
 
+
+    public function editShopContent(Product $product, Shop $shop)
+    {
+        $product = Product::with('globalDescription', 'shopDescriptions')->where('id', $product->id)
+            ->first();
+
+        $shop = Shop::where('slug', $shop->slug)->first();
+
+        $product_description = ProductDescription::where('product_id', $product->id)
+            ->where('shop_id', $shop->id)->first();
+
+
+        $breadcrumbs = [
+            ['label' => 'Panel', 'url' => route('admin.index')],
+            ['label' => 'Produkty', 'url' => route('admin.products.index')],
+            ['label' => mb_ucfirst($product->name), 'url' => route('admin.products.manage', $product)],
+            ['label' => 'Sieci handlowe', 'url' => route('admin.products.description.shop.indexShop', $product)],
+            ['label' => $shop->name, 'url' => route('admin.products.description.shop.manageShop', [$product, $shop])],
+            ['label' => 'Content', 'url' => '']
+        ];
+
+        return view('admin.product.description.shop.edit_content', [
+            'product' => $product,
+            'breadcrumbs' => $breadcrumbs,
+            'shop' => $shop,
+            'product_description' => $product_description,
+
+
+        ]);
+    }
+
+    public function updateShopContent(Request $request, Product $product, Shop $shop)
+    {
+
+        $validated = $request->validate([
+            'content' => 'required|array',
+            'content.*.h2_title' => 'nullable|string|max:255',
+            'content.*.h3_title' => 'nullable|string|max:255',
+            'content.*.body' => 'nullable|string',
+            'content.*.image' => 'nullable|string|max:2048',
+        ]);
+
+        $blocks = [];
+
+        foreach ($validated['content'] as $index => $block) {
+
+            $data = [
+                'h2_title' => $block['h2_title'] ?? '',
+                'h3_title' => $block['h3_title'] ?? '',
+                'body' => $block['body'] ?? '',
+                'image' => $block['image'] ?? '',
+            ];
+
+            $blocks[] = $data;
+        }
+
+
+        $product_description = ProductDescription::where('product_id', $product->id)
+            ->where('shop_id', $shop->id)
+            ->first();
+
+        $product_description->update([
+            'content' => $blocks,
+        ]);
+
+        return redirect()->route('admin.products.description.shop.manageShop', [$product, $shop])->with('update', 'Faq produktu zaktualizowany.');
+
+    }
+
+
+    public function updateShopContentImage(Request $request, Product $product, Shop $shop, int $index)
+    {
+
+        $request->validate([
+            'image' => 'required|image|max:2048',
+        ]);
+
+        $description = ProductDescription::where('product_id', $product->id)->where('shop_id', $shop->id)->first();
+
+
+        if (!$description || !isset($description->content[$index])) {
+            return back()->withErrors(['error' => 'Nie znaleziono bloku do edycji.']);
+        }
+
+        $block = $description->content[$index];
+
+        // Przetwórz obrazek
+        $path = 'images/products/content/image_' . uniqid();
+        $result = app(ImageService::class)->convertAndStore(
+            $request->file('image')->getContent(),
+            $path,
+            1200,
+            800
+        );
+
+        if (!empty($result)) {
+            // Podmień tylko pole image w konkretnym bloku
+            $block['image'] = $path;
+
+            $content = $description->content;
+            $content[$index] = $block;
+
+            $description->update([
+                'content' => $content
+            ]);
+        }
+
+        return back()->with('success', 'Obrazek został zaktualizowany.');
+    }
 
 
     public function addShop(Request $request, Product $product, Shop $shop)

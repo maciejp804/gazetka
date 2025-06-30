@@ -25,7 +25,7 @@
                         border-orange-400
                         @endif
                         p-2 mb-2 relative">
-                            <form action="{{route('admin.leaflets.hotspots.deleteHotSpot',[$leaflet, $hotSpot])}}" method="POST" onsubmit="return confirm('Na pewno chcesz usunąć?')" class="absolute top-1 right-1">
+                            <form action="{{route('admin.leaflets.hotspots.deleteHotSpot',[$leaflet, $hotSpot])}}" method="POST" class="absolute top-1 right-1">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-sm p-1 rounded-full border border-gray-300">🗑️</button>
