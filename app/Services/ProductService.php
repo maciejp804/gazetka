@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\HotSpot;
+use App\Models\Lemma;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -193,6 +194,21 @@ class ProductService
                 ];
             });
     }
+
+    function lemmatTextLocal(string $tekst): string
+    {
+        $words = preg_split('/\s+/', strtolower($tekst));
+        $lammas = [];
+
+        foreach ($words as $word) {
+            $clear= preg_replace('/[^a-ząćęłńóśźż0-9]/u', '', $word);
+            $lemma = Lemma::where('name', $clear)->value('lemma') ?? $clear;
+            $lammas[] = $lemma;
+        }
+
+        return implode(' ', $lammas);
+    }
+
 
 
 }

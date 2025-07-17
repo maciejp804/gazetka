@@ -52,4 +52,7 @@ return [
     'writesonic' => [
         'token' => env('WRITESONIC_API'),
     ],
+    'openai' => [
+        'token' => env('OPEN_AI_API'),
+    ]
 ];

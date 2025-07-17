@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\SetRetailerContextFromLeaflet;
 use App\Services\ProductDescriptionService;
 use App\Services\VoucherService;
 use Illuminate\Foundation\Application;
@@ -16,6 +17,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->alias([
+            'retailer.from.leaflet' => SetRetailerContextFromLeaflet::class,
+        ]);
         $middleware->encryptCookies(except: [
             'user_location',
         ]);

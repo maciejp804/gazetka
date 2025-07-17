@@ -77,4 +77,20 @@ class Product extends Model
         return $this->hasMany(HotSpot::class);
     }
 
+
+    public function ngrams()
+    {
+        return $this->hasMany(Ngram::class);
+    }
+
+    public function unigrams()
+    {
+        return $this->hasMany(Unigram::class);
+    }
+
+    public function brands()
+    {
+        return $this->belongsToMany(Brand::class);
+    }
+
 }

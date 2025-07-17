@@ -138,8 +138,9 @@
             <div>
                 <form action="{{route('admin.leaflets.hotspots.import',['leaflet' => $leaflet])}}" method="POST" enctype="multipart/form-data">
                     @csrf
-
-                        <x-form.input-file type="file" name="file" id="import" required="required" label="Import"/>
+                    <input type="hidden" id="image_width_import" name="image_width_import">
+                    <input type="hidden" id="image_height_import" name="image_height_import">
+                    <x-form.input-file type="file" name="file" id="import" required="required" label="Import"/>
                     <!-- Przycisk do dodania stron -->
                     <x-form.submit label="Importuj strony" />
                 </form>
@@ -203,6 +204,10 @@
 
             canvas.width = image.width;
             canvas.height = image.height;
+
+            // Wypełnij ukryte pola importu obrazka
+            document.getElementById('image_width_import').value = canvas.width;
+            document.getElementById('image_height_import').value = canvas.height;
 
             let isDrawing = false;
             let isDragging = false;

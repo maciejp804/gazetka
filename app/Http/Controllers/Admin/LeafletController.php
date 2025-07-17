@@ -160,6 +160,8 @@ class LeafletController extends Controller
         $manage = [
             ['label' => 'Opisz', 'description' => 'przypisanie produktów do gazetki (leaflet_products)',
                 'logo' => 'fa-solid fa-keyboard','url' => route('admin.leaflets.hotspots.create', $leaflet->id)],
+            ['label' => 'Opisz OCR', 'description' => 'przypisanie produktów do gazetki (leaflet_products)',
+                'logo' => 'fa-solid fa-keyboard','url' => route('admin.leaflets.hotspots.add.auto', $leaflet->id)],
             ['label' => 'Strony', 'description' => 'zarządzanie stronami, dodawanie, usuwanie, kolejność (relacja leaflet_page z sort_order)',
                 'logo' => 'fa-solid fa-file','url' => route('admin.leaflets.page.manage', $leaflet->id)],
             ['label' => 'Klikalne obszary', 'description' => 'współrzędne i ceny produktów (relacja page_click z page_id, leaflet_product_id)',

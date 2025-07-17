@@ -28,18 +28,24 @@ abstract class BaseScraper implements ScraperStrategyInterface
         $crawler = new Crawler($html);
 
         $jsonLd = $crawler->filter('script[type="application/ld+json"]')->each(function ($node) {
-            $data = json_decode($node->text(), true);
+            $decoded = json_decode($node->text(), true);
 
-            if (!is_array($data)) return null;
+            if (!is_array($decoded)) {
+                return null;
+            }
 
-            if (($data['@type'] ?? null) === 'Product') return $data;
-
-            if (isset($data[0])) {
-                foreach ($data as $entry) {
+            // Jeśli blok zawiera wiele obiektów
+            if (isset($decoded[0])) {
+                foreach ($decoded as $entry) {
                     if (($entry['@type'] ?? null) === 'Product') {
                         return $entry;
                     }
                 }
+            }
+
+            // Jeśli pojedynczy obiekt
+            if (($decoded['@type'] ?? null) === 'Product') {
+                return $decoded;
             }
 
             return null;

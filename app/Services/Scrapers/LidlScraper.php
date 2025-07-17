@@ -18,8 +18,14 @@ class LidlScraper extends BaseScraper implements ScraperStrategyInterface
         if (!$html) {
             return null;
         }
+        $data = $this->extractProductJson($html);
+//        dd($data);
+        $response = array(
+                'promo_price' => $data['offers'][0]['price']
+        );
 
-        return $this->extractProductJson($html);
+
+        return $response;
     }
 
 

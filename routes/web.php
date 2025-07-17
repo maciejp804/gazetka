@@ -115,7 +115,9 @@ Route::prefix('/panel')->name('admin.')->group(function () {
         Route::prefix('{leaflet}/hotspots')->name('hotspots.')->group(function () {
             Route::get('/create', [AdminHotSpotController::class, 'create'])->name('create');
             Route::post('/add', [AdminHotSpotController::class, 'add'])->name('add');
-            Route::get('/add-auto', [AdminHotSpotController::class, 'addAuto'])->name('add.auto');
+
+            Route::get('/add-auto', [AdminHotSpotController::class, 'addAuto'])->name('add.auto')->middleware('retailer.from.leaflet');
+
             Route::post('/import', [AdminHotSpotController::class, 'import'])->name('import');
             Route::get('/export', [AdminHotSpotController::class, 'export'])->name('export');
             Route::delete('/delete', [AdminHotSpotController::class, 'delete'])->name('delete');

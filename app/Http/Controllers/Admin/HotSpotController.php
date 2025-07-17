@@ -3,29 +3,49 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\ImportLeafletHotSpotsJob;
 use App\Models\HotSpot;
 use App\Models\Leaflet;
-use App\Models\LeafletProduct;
 use App\Models\Page;
-use App\Models\PageClick;
 use App\Models\Product;
+use App\Services\HotSpotService;
 use App\Services\ImageService;
+use App\Services\Ocr\AbstractOcrService;
+use App\Services\Ocr\Groupers\GroupAndMergeService;
+use App\Services\Ocr\OcrPipelineService;
+use App\Services\Ocr\RetailerContext;
 use App\Services\ScraperService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Image;
-use Symfony\Component\DomCrawler\Crawler;
 
 class HotSpotController extends Controller
 {
 
     protected ScraperService $scraperService;
 
-    public function __construct(ScraperService $scraperService)
+    protected HotSpotService $hotSpotService;
+
+    protected AbstractOcrService $ocrService;
+
+    protected GroupAndMergeService  $groupAndMergeService;
+
+    protected OcrPipelineService  $ocrPipelineService;
+
+    public function __construct(ScraperService       $scraperService,
+                                AbstractOcrService  $ocrService,
+                                HotSpotService       $hotSpotService,
+                                GroupAndMergeService $groupAndMergeService,
+                                OcrPipelineService   $ocrPipelineService,
+    )
     {
         $this->scraperService = $scraperService;
+        $this->ocrService = $ocrService;
+        $this->hotSpotService = $hotSpotService;
+        $this->groupAndMergeService = $groupAndMergeService;
+        $this->ocrPipelineService = $ocrPipelineService;
     }
 
     public function create(Leaflet $leaflet)
@@ -66,22 +86,16 @@ class HotSpotController extends Controller
             'page_id' => 'required|exists:leaflets,id',
         ]);
 
+        $this->hotSpotService->addHotSpot(
+            $validated['page_id'],
+            $validated['product_id'],
+            $leaflet->valid_from,
+            $leaflet->valid_to,
+            5,5,5,5,
+            $request->input('promo_price', 0),
+            $request->input('price', 0)
+        );
 
-        // Tworzenie rekordu w tabeli HotSpot
-        HotSpot::create([
-            'page_id' => $validated['page_id'],
-            'product_id' => $validated['product_id'],
-            'status' => 'hidden',
-            'priority' => 'low',
-            'valid_from' => $leaflet->valid_from,
-            'valid_to' => $leaflet->valid_to,
-            'x' => 5,
-            'y' => 5,
-            'width' => 5,
-            'height' => 5,
-            'price' => $request->input('price', 0),
-            'promo_price' => $request->input('promo_price', 0),
-        ]);
 
 
 
@@ -89,11 +103,91 @@ class HotSpotController extends Controller
         return redirect()->back()->with('success', 'Produkt dodany');
     }
 
+    public function addAuto(Request $request, Leaflet $leaflet)
+    {
+        $verticalThreshold = 30;
+        $xTolerance = 50;
+
+        if (RetailerContext::current() == 'auchan') {
+            $verticalThreshold = 40;
+            $xTolerance = 95;
+        } elseif (RetailerContext::current() == 'biedronka')
+        {
+            $verticalThreshold = 25;
+            $xTolerance = 30;
+        }
+
+        foreach ($leaflet->pages as $page) {
+            if($page->pivot->sort_order == 17 ){
+
+//                $path = storage_path('app/public/leaflets/pages/' . basename($page->image_path) . '.webp');
+//                $imageData = base64_encode(file_get_contents($path));
+//
+//                $response = Http::withHeaders([
+//                    'Content-Type' => 'application/json',
+//                ])->post('https://vision.googleapis.com/v1/images:annotate?key=' . config('services.vision.token'), [
+//                    'requests' => [[
+//                        'image' => ['content' => $imageData],
+//                        'features' => [[
+//                            'type' => 'TEXT_DETECTION',
+//                            'maxResults' => 1
+//                        ]]
+//                    ]]
+//                ]);
+//                $json = $response->json();
+//            Storage::put("ocr/page-{$page->id}.json", $response);
+            $json = json_decode(Storage::get("ocr/page-{$page->id}.json"), true);
+
+                if (empty($json['responses'][0]['textAnnotations'])) {
+                    continue;
+                }
+
+                [$productDetails, $suggestions] =
+                    $this->ocrPipelineService
+                        ->ocrProcess(array_slice($json['responses'][0]['textAnnotations'], 1), $verticalThreshold, $xTolerance);
+
+//                $result = $this->groupAndMergeService->mergeDuplicateProductBlocks($productDetails, 300);
+
+                dd($productDetails);
+
+                // Nazwa pliku z timestampem
+//                $filename = 'ocr/' . now()->format('Y-m-d_H-i-s') . '_ocr_dump.json';
+//
+//                // Zapis do storage/app/ocr/
+//                Storage::put($filename, json_encode($productDetails, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+
+                foreach ($productDetails as $block) {
+                    if ($block['match_confidence'] > 6.5 && isset($block['product_id']) && $block['price'] ) {
+
+                        $this->hotSpotService->addHotSpot(
+                            $page->id,
+                            $block['product_id'],
+                            $leaflet->valid_from,
+                            $leaflet->valid_to,
+                            round($block['original_block']['startX'] / $page->width * 100, 2),
+                            round($block['original_block']['minY'] / $page->height * 100, 2),
+                            round(($block['original_block']['endX'] - $block['original_block']['startX']) / $page->width * 100, 2),
+                            round(($block['original_block']['maxY'] - $block['original_block']['minY']) / $page->height * 100, 2),
+                            $block['price_promo'] ?? 0,
+                            $block['price'] ?? 0,
+                            $block['brand']
+                        );
+                    }
+                }
+            }
+        }
+
+        return redirect()->back()->with('success', 'Produkty dodane');
+    }
+
     public function import(Request $request, Leaflet $leaflet)
     {
         // Walidacja pliku
         $validated = $request->validate([
             'file' => 'required|mimes:csv,json|max:2048',
+            'image_width_import' => 'required|required_with:image_height_import|integer',
+            'image_height_import' => 'required|required_with:image_width_import|integer',
         ]);
 
         // Odczytanie zawartości pliku JSON
@@ -104,12 +198,28 @@ class HotSpotController extends Controller
         if (isset($data[0]['page'])) {
             // Format 2: { "page": 1, "page_id": 146, ... }
             $this->importFormatTwo($data, $leaflet);
+            $message = 'Produkty zostały zaimportowane';
+        } elseif (isset($data['productOffers']))
+        {
+            $path = $request->file('file')->store('imports');
+
+            ImportLeafletHotSpotsJob::dispatch(
+                $path,
+                $leaflet,
+                $validated['image_width_import'],
+                $validated['image_height_import']
+            );
+
+            $message = 'Import rozpoczęty w tle.';
+
+
         } else {
             // Format 1: { "1": [ "44", "1881", ...] }
             $this->importFormatOne($data, $leaflet);
+            $message = 'Produkty zostały zaimportowane';
         }
 
-        return redirect()->back()->with('success', 'Produkty zostały zaimportowane');
+        return back()->with('success', $message);
     }
 
     public function export(Request $request, Leaflet $leaflet)
@@ -426,6 +536,114 @@ class HotSpotController extends Controller
                 );
 
             }
+
+        }
+    }
+
+    protected function importFormatThree(array $data, Leaflet $leaflet, $image_width, $image_height)
+    {
+        // Format 3 import
+        set_time_limit(0);
+        $chunks = array_chunk($data, 25);
+
+        foreach ($chunks as $chunkIndex => $chunk) {
+            foreach ($chunk as $index => $item) {
+
+
+                $merageBlocks = [['text' => $item['name']]];
+
+
+                [$productDetailsArray, $suggestions] = $this->ocrService->extractProductDetails($merageBlocks);
+
+                // Jeśli nic nie zwrócono — pomiń
+                if (empty($productDetailsArray[0]['product_id'])) {
+                    continue;
+                }
+
+                $productDetails = $productDetailsArray[0]; // tylko jeden element
+
+
+                if (isset($productDetails['product_id'])) {
+
+                    $productDetails['area']['x'] = (int)($item['area']['topLeftCorner']['x'] * 100);
+                    $productDetails['area']['y'] = (int)($item['area']['topLeftCorner']['y'] * 100);
+                    $productDetails['area']['width'] = (int)(($item['area']['bottomRightCorner']['x'] - $item['area']['topLeftCorner']['x']) * 100);
+                    $productDetails['area']['height'] = (int)(($item['area']['bottomRightCorner']['y'] - $item['area']['topLeftCorner']['y']) * 100);
+                    $productDetails['price_promo'] = (float)number_format(((int)$item['price']) / 100, 2, '.', '');
+                    $productDetails['pageNumber'] = $item['pageNumber'] + 1;
+                    $productDetails['valid_from'] = $item['dateStart']['date'];
+                    $productDetails['valid_to'] = $item['dateEnd']['date'];
+
+                    // Znalezienie produktu na podstawie jego ID
+                    $product = Product::where('id', $productDetails['product_id'])
+                        ->where('status', 1)  // Tylko aktywne produkty
+                        ->first();
+
+                    // Jeśli produkt istnieje, tworzymy HotSpot i LeafletProduct
+                    if ($product) {
+
+                        $pageId = DB::table('leaflet_page')
+                            ->where('leaflet_id', $leaflet->id)
+                            ->where('sort_order', $productDetails['pageNumber']) // odpowiada "page": 1
+                            ->value('page_id');
+
+                        $page = Page::where('id', $pageId)->first();
+
+
+                        $pathWithoutExtension = 'images/hotspots/offer/' . uniqid();
+
+                        $imagePath = public_path('storage/' . $page->image_path . '.webp');
+
+                        $result = app(ImageService::class)->cropAndStore(
+                            $imagePath,
+                            $pathWithoutExtension,
+                            $page->width * $productDetails['area']['x'] / 100,
+                            $page->height * $productDetails['area']['y'] / 100,
+                            $page->width * $productDetails['area']['width'] / 100,
+                            $page->height * $productDetails['area']['height'] / 100,
+                            $page->width,
+                            $page->height);
+
+                        if ($result['path']) {
+                            $image_path = $result['path'];
+                        } else {
+                            continue;
+                        }
+
+
+                        // Tworzymy lub aktualizujemy HotSpot
+                        HotSpot::create(
+                            [
+                                'page_id' => $pageId,
+                                'product_id' => $product->id,
+                                'status' => 'hidden',
+                                'priority' => 'low',
+                                'valid_from' => $productDetails['valid_from'],
+                                'valid_to' => $productDetails['valid_to'],
+                                'price' => 0.00,
+                                'promo_price' => $productDetails['price_promo'],
+                                'url' => null,
+                                'x' => $productDetails['area']['x'],
+                                'y' => $productDetails['area']['y'],
+                                'width' => $productDetails['area']['width'],
+                                'height' => $productDetails['area']['height'],
+                                'image_width' => $image_width,
+                                'image_height' => $image_height,
+                                'image' => $pathWithoutExtension  // Zapisz ścieżkę obrazu
+                            ]
+                        );
+
+                        if (empty($product->image)) {
+                            $product->update([
+                                'image' => $pathWithoutExtension,
+                            ]);
+                        }
+
+                    }
+                }
+
+            }
+
 
         }
     }

@@ -28,4 +28,33 @@ class TextServices
 
         return trim($shortText);
     }
+
+    public function generateAliases($brandName): array {
+        $brand = strtolower($brandName);
+        $aliases = [$brandName];
+
+        // bez polskich znaków
+        $noDiacritics = iconv('UTF-8', 'ASCII//TRANSLIT', $brandName);
+        if ($noDiacritics && $noDiacritics !== $brandName) {
+            $aliases[] = $noDiacritics;
+        }
+
+        // wersja bez spacji
+        $aliases[] = str_replace(' ', '', $brand);
+        $aliases[] = str_replace(' ', '-', $brand);
+
+        return array_unique($aliases);
+    }
+
+    public function slugify(string $name): string
+    {
+        $slug = iconv('UTF-8', 'ASCII//TRANSLIT', $name); // usuwa polskie znaki
+        $slug = preg_replace('/[^a-zA-Z0-9\s-]/', '', $slug); // usuwa znaki specjalne
+        $slug = strtolower(trim($slug));
+        $slug = preg_replace('/[\s-]+/', '-', $slug); // spacje → myślniki
+
+        return $slug;
+    }
+
+
 }
