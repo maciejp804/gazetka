@@ -22,3 +22,4 @@ yarn-error.log
 /config/affmanager.production.php
 /public/.htaccess
 /public/robots.txt
+/resources/views/vendor/pagination
